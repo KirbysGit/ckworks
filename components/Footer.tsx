@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Logo from "./ui/Logo";
 import { footerLinks, contactEmail } from "@/lib/data";
@@ -36,6 +37,13 @@ export default function Footer() {
           >
             {contactEmail}
           </a>
+          <Image
+            src="/svg/ck-initials-signature.svg"
+            alt=""
+            width={1805}
+            height={1397}
+            className="mt-4 h-12 w-auto"
+          />
         </div>
       </div>
 

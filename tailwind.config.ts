@@ -33,7 +33,7 @@ const config: Config = {
         "2xl": "1.375rem",
       },
       maxWidth: {
-        content: "1200px",
+        content: "1360px",
       },
     },
   },

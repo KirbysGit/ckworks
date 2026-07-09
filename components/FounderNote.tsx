@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { User } from "lucide-react";
 import SectionLabel from "./ui/SectionLabel";
@@ -45,7 +46,13 @@ export default function FounderNote() {
                 something new.
               </p>
             </div>
-            <p className="mt-6 font-serif text-3xl italic text-forest">Colin</p>
+            <Image
+              src="/svg/ck-full-signature.svg"
+              alt="Colin"
+              width={306}
+              height={119}
+              className="mt-6 h-16 w-auto"
+            />
           </div>
         </motion.div>
       </div>

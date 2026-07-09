@@ -6,22 +6,32 @@ import {
   MessageSquareText,
   Layers,
   Zap,
+  UserRound,
+  Sparkles,
+  Settings2,
+  MessageCircle,
   type LucideIcon,
 } from "lucide-react";
 
+// "/#anchor" form so links work from subpages like /work, not just the homepage.
 export const nav = [
-  { label: "Home", href: "#home" },
-  { label: "What I Do", href: "#what-i-do" },
-  { label: "Work", href: "#work" },
-  { label: "Process", href: "#process" },
-  { label: "About", href: "#about" },
+  { label: "Home", href: "/#home" },
+  { label: "What I Do", href: "/#what-i-do" },
+  { label: "Work", href: "/#work" },
+  { label: "Process", href: "/#process" },
+  { label: "About", href: "/#about" },
 ];
 
-export const trustChips = [
-  "Built for trust",
-  "Systems that scale",
-  "Designed to perform",
-  "Ongoing support",
+export type TrustChip = {
+  icon: LucideIcon;
+  label: string;
+};
+
+export const trustChips: TrustChip[] = [
+  { icon: UserRound, label: "Founder-led" },
+  { icon: Sparkles, label: "Clean design" },
+  { icon: Settings2, label: "Practical systems" },
+  { icon: MessageCircle, label: "Ongoing support" },
 ];
 
 export type Outcome = {
@@ -77,35 +87,6 @@ export const services: Service[] = [
   },
 ];
 
-export type Project = {
-  title: string;
-  tag: string;
-  description: string;
-  // Placeholder gradient used until real case-study imagery is ready.
-  accent: string;
-};
-
-export const projects: Project[] = [
-  {
-    title: "Ironwood Cabinetry",
-    tag: "Custom website",
-    description: "A refined portfolio site that lets the craftsmanship do the talking.",
-    accent: "from-[#3a4d3f] to-[#6d7d5f]",
-  },
-  {
-    title: "Northbridge Wellness",
-    tag: "Website + intake system",
-    description: "A calm patient experience backed by streamlined intake and scheduling.",
-    accent: "from-[#2F5B3F] to-[#4f7a58]",
-  },
-  {
-    title: "Ledger Lane",
-    tag: "Website + workflow automation",
-    description: "A modern presence with automations that cut hours of manual work.",
-    accent: "from-[#43524a] to-[#7a8a72]",
-  },
-];
-
 export type Step = {
   number: string;
   title: string;
@@ -141,11 +122,11 @@ export const steps: Step[] = [
 ];
 
 export const footerLinks = [
-  { label: "Work", href: "#work" },
-  { label: "Services", href: "#what-i-do" },
-  { label: "Process", href: "#process" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Work", href: "/work" },
+  { label: "Services", href: "/#what-i-do" },
+  { label: "Process", href: "/#process" },
+  { label: "About", href: "/#about" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export const contactEmail = "hello@ckworks.co";
