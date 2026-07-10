@@ -60,10 +60,10 @@ export const heroMockupLayout = {
 
   /** Space reserved around the browser for floating cards */
   stage: {
-    paddingTop: 40,
-    paddingRight: 120,
-    paddingBottom: 130,
-    paddingLeft: 120,
+    paddingTop: 48,
+    paddingRight: 140,
+    paddingBottom: 160,
+    paddingLeft: 140,
   },
 
   /** Main browser window */
@@ -86,87 +86,98 @@ export const heroMockupLayout = {
   },
 
   /**
-   * Ring layout: browser in the middle, cards floating around its edges
-   * with only a slight overlap. Browser edges sit at x = paddingLeft (120)
-   * from the left and 120 from the right — position cards relative to those.
+   * Outer ring: Project Overview (left), Systems (right), Code (bottom-left),
+   * Home Base (bottom-right), Ongoing Support (far bottom-left).
+   * Browser left edge ≈ paddingLeft (140); right edge ≈ paddingRight (140).
    */
   cards: {
-    // left-middle, hanging mostly outside the browser's left edge
     projectOverview: {
-      left: -20,
-      top: 150,
-      width: 176,
+      left: -8,
+      top: 120,
+      width: 188,
       delay: 0.15,
     } satisfies CardPlacement,
 
-    // top-right corner
     systems: {
-      right: -30,
-      top: 30,
-      width: 180,
+      right: -8,
+      top: 120,
+      width: 188,
       delay: 0.25,
     } satisfies CardPlacement,
 
-    // right-middle, below the systems card
-    dashboard: {
-      right: -50,
-      top: "58%",
-      width: 176,
-      translateY: "-50%",
-      delay: 0.2,
-    } satisfies CardPlacement,
-
-    // bottom-left, in the stage's bottom padding zone
     code: {
-      left: 0,
-      bottom: 100,
-      width: 256,
+      left: 40,
+      bottom: 24,
+      width: 248,
       delay: 0.35,
     } satisfies CardPlacement,
 
-    // bottom-right
-    stat: {
-      right: 30,
-      bottom: 44,
-      scale: 1.15,
+    homeBase: {
+      right: 40,
+      bottom: 36,
+      width: 220,
       delay: 0.45,
+    } satisfies CardPlacement,
+
+    support: {
+      left: -20,
+      bottom: 8,
+      delay: 0.5,
     } satisfies CardPlacement,
   },
 
+  /**
+   * First-pass connectors matching the reference ring.
+   * Tune waypoints with showDebugGrid: true.
+   */
   connectors: [
-    // LEFT LOOP: browser edge → out to the Project overview's center lane
-    // (x=68) → node at the card's top edge → behind the card → node below
-    // it → back into the browser edge. Same loop pattern as before, moved
-    // to the new geometry.
+    // Browser left edge → out → down into Project Overview top
     {
       points: [
-        [120, 70], // node on the browser's left edge (x = paddingLeft)
-        [68, 70], // corner above the Project overview card
-        [68, 150], // node at the card's top edge
-        [68, 340], // node at the card's bottom edge
-        [68, 430], // corner below the card
-        [120, 430], // node back on the browser's edge
+        [140, 100],
+        [86, 100],
+        [86, 120],
       ],
-      nodeAt: [0, 2, 3, 5],
-      cornerRadius: 12,
+      nodeAt: [0, 2],
+      cornerRadius: 10,
     },
-    // RIGHT LANE: short vertical link from the Systems card's bottom edge
-    // down to the Client Dashboard's top edge (x=60 from the right is both
-    // cards' shared center lane).
+    // Project Overview bottom → down → into Code card left
     {
-      anchor: { x: "right" },
       points: [
-        [60, 180],
-        [60, 280],
+        [86, 340],
+        [86, 420],
+        [140, 420],
+      ],
+      nodeAt: [0, 2],
+      cornerRadius: 10,
+    },
+    // Code right → Home Base left (bottom run)
+    {
+      anchor: { y: "bottom" },
+      points: [
+        [288, 100],
+        [420, 100],
       ],
       nodeAt: [0, 1],
     },
-    // BOTTOM RUN: code panel's right edge → stat card's left edge.
+    // Home Base top-right → up → into browser right edge
     {
-      anchor: { x: "right", y: "bottom" },
+      anchor: { x: "right" },
       points: [
-        [430, 80],
-        [300, 80],
+        [150, 380],
+        [150, 300],
+        [70, 300],
+        [70, 260],
+      ],
+      nodeAt: [0, 3],
+      cornerRadius: 10,
+    },
+    // Systems left edge → into browser right edge
+    {
+      anchor: { x: "right" },
+      points: [
+        [140, 140],
+        [70, 140],
       ],
       nodeAt: [0, 1],
     },

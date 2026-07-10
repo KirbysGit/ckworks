@@ -3,14 +3,19 @@
 import { motion } from "framer-motion";
 import {
   BarChart3,
-  Check,
   ClipboardList,
+  Code2,
   HeartHandshake,
   LayoutDashboard,
+  Lightbulb,
   Lock,
+  MessageCircle,
   MoreVertical,
+  PencilRuler,
   Plus,
-  Star,
+  Rocket,
+  Search,
+  Sparkles,
   TrendingUp,
   Users,
   Zap,
@@ -22,12 +27,18 @@ import {
 } from "@/lib/heroMockupLayout";
 import { floatIn } from "@/lib/motion";
 
-const projectSteps = ["Discovery", "Strategy", "Design", "Development", "Launch"];
+const projectSteps = [
+  { icon: Search, label: "Discovery" },
+  { icon: Lightbulb, label: "Strategy" },
+  { icon: PencilRuler, label: "Design" },
+  { icon: Code2, label: "Development" },
+  { icon: Rocket, label: "Launch" },
+];
 
 const systems = [
   { icon: ClipboardList, label: "Forms & Intake" },
-  { icon: LayoutDashboard, label: "Client Dashboard" },
   { icon: Zap, label: "Automations" },
+  { icon: LayoutDashboard, label: "Dashboard" },
   { icon: BarChart3, label: "Reporting" },
 ];
 
@@ -104,60 +115,12 @@ export default function HeroMockup() {
           >
             {showGrid && <DebugGrid />}
 
-            {/* Dashboard side panel — tucked behind the browser's right edge */}
-            <motion.div
-              variants={floatIn}
-              initial="hidden"
-              animate="show"
-              transition={{ delay: cards.dashboard.delay }}
-              style={cardPlacementStyle(cards.dashboard)}
-              className="absolute z-0 hidden rounded-xl border border-line bg-card p-3.5 shadow-soft lg:block"
-            >
-              <p className="text-[10px] font-semibold text-ink">Client Dashboard</p>
-              <svg viewBox="0 0 100 30" className="mt-2 w-full" aria-hidden>
-                <polyline
-                  points="0,26 15,20 30,23 45,13 60,17 78,7 100,4"
-                  fill="none"
-                  stroke="#2F5B3F"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-              <div className="mt-3 border-t border-line/70 pt-2.5">
-                <p className="text-[9px] text-muted">New Intakes</p>
-                <div className="flex items-end justify-between">
-                  <p className="text-sm font-semibold text-ink">24</p>
-                  <p className="text-[9px] font-medium text-forest">+18%</p>
-                </div>
-                <div className="mt-1.5 flex items-end gap-1" aria-hidden>
-                  {[10, 16, 8, 20, 14, 24].map((h, i) => (
-                    <span
-                      key={i}
-                      style={{ height: `${h}px` }}
-                      className="w-2.5 rounded-sm bg-forest-soft"
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="mt-3 border-t border-line/70 pt-2.5">
-                <p className="text-[9px] text-muted">Tasks</p>
-                <div className="mt-1.5 space-y-1.5" aria-hidden>
-                  <span className="block h-1.5 w-full rounded-full bg-sand" />
-                  <span className="block h-1.5 w-4/5 rounded-full bg-sand" />
-                  <span className="block h-1.5 w-3/5 rounded-full bg-sand" />
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Main browser window */}
+            {/* Main browser window — inner content unchanged */}
             <motion.div
               variants={floatIn}
               initial="hidden"
               animate="show"
               style={{
-                // Lay the content out at (slot width / scale), then shrink it
-                // back down — the browser gets visually smaller without its
-                // internal layout reflowing or overflowing.
                 width: `calc((100% + ${browser.expandX}px) / ${browser.scale})`,
                 marginLeft: -(browser.expandX / 2),
                 transform: `scale(${browser.scale})`,
@@ -247,9 +210,10 @@ export default function HeroMockup() {
                   <path
                     d={d}
                     fill="none"
-                    stroke="#DDD6C8"
-                    strokeWidth={2}
-                    strokeDasharray="0.1 6"
+                    stroke="#2F5B3F"
+                    strokeOpacity={0.45}
+                    strokeWidth={1.75}
+                    strokeDasharray="0.1 7"
                     strokeLinecap="round"
                   />
                   {dots.map((p, j) => (
@@ -257,11 +221,11 @@ export default function HeroMockup() {
                       key={j}
                       cx={p.x}
                       cy={p.y}
-                      r={4}
+                      r={3.5}
                       fill="#FFFDF8"
                       stroke="#2F5B3F"
-                      strokeOpacity={0.5}
-                      strokeWidth={2}
+                      strokeOpacity={0.55}
+                      strokeWidth={1.75}
                     />
                   ))}
                 </svg>
@@ -269,106 +233,121 @@ export default function HeroMockup() {
             })}
           </div>
 
+          {/* Project Overview — left middle */}
           <motion.div
             variants={floatIn}
             initial="hidden"
             animate="show"
             transition={{ delay: cards.projectOverview.delay }}
             style={cardPlacementStyle(cards.projectOverview)}
-            className="absolute z-20 hidden rounded-xl border border-line bg-card p-4 shadow-float sm:block"
+            className="absolute z-20 hidden rounded-2xl border border-line bg-card p-4 shadow-float sm:block"
           >
-            <p className="text-xs font-semibold text-ink">Project overview</p>
-            <ul className="mt-3 space-y-2">
-              {projectSteps.map((s) => (
-                <li key={s} className="flex items-center gap-2 text-[11px] text-muted">
-                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-forest-soft">
-                    <Check className="h-2.5 w-2.5 text-forest" />
+            <p className="text-xs font-semibold text-ink">Project Overview</p>
+            <ul className="mt-3 space-y-2.5">
+              {projectSteps.map(({ icon: Icon, label }) => (
+                <li
+                  key={label}
+                  className="flex items-center gap-2.5 text-[11px] text-muted"
+                >
+                  <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-forest-soft">
+                    <Icon className="h-3 w-3 text-forest" />
                   </span>
-                  {s}
+                  {label}
                 </li>
               ))}
             </ul>
           </motion.div>
 
+          {/* Systems that Scale — right middle, vertical list */}
           <motion.div
             variants={floatIn}
             initial="hidden"
             animate="show"
             transition={{ delay: cards.systems.delay }}
             style={cardPlacementStyle(cards.systems)}
-            className="absolute z-20 hidden rounded-xl border border-line bg-card p-4 shadow-float md:block"
+            className="absolute z-20 hidden rounded-2xl border border-line bg-card p-4 shadow-float md:block"
           >
-            <p className="text-xs font-semibold text-ink">Systems that scale</p>
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            <p className="text-xs font-semibold text-ink">Systems that Scale</p>
+            <ul className="mt-3 space-y-2.5">
               {systems.map(({ icon: Icon, label }) => (
-                <span
+                <li
                   key={label}
-                  className="flex flex-col gap-1.5 rounded-lg bg-sand px-2.5 py-2"
+                  className="flex items-center gap-2.5 text-[11px] text-muted"
                 >
-                  <Icon className="h-3.5 w-3.5 text-forest" />
-                  <span className="text-[10px] leading-tight text-muted">
-                    {label}
+                  <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-forest-soft">
+                    <Icon className="h-3 w-3 text-forest" />
                   </span>
-                </span>
+                  {label}
+                </li>
               ))}
-            </div>
+            </ul>
           </motion.div>
 
+          {/* Code panel — bottom left */}
           <motion.div
             variants={floatIn}
             initial="hidden"
             animate="show"
             transition={{ delay: cards.code.delay }}
             style={cardPlacementStyle(cards.code)}
-            className="absolute z-20 hidden overflow-hidden rounded-xl border border-panel/40 bg-panel shadow-float lg:block"
+            className="absolute z-20 hidden overflow-hidden rounded-2xl border border-panel/40 bg-panel shadow-float lg:block"
           >
-            <div className="flex gap-3 border-b border-white/10 px-3.5 py-2 text-[10px] text-white/50">
-              <span className="text-white/90">HTML</span>
-              <span>CSS</span>
-              <span>JS</span>
-            </div>
-            <pre className="px-3.5 py-3 text-[10px] leading-relaxed text-[#d9e2da]">
+            <pre className="px-4 py-3.5 text-[10px] leading-relaxed text-[#d9e2da]">
               <code>
                 <span className="text-[#8fd0a8]">&lt;section</span>{" "}
                 <span className="text-[#e6c17e]">class=&quot;hero&quot;</span>
                 <span className="text-[#8fd0a8]">&gt;</span>
                 {"\n  "}
-                <span className="text-[#8fd0a8]">&lt;div</span>{" "}
-                <span className="text-[#e6c17e]">class=&quot;container&quot;</span>
-                <span className="text-[#8fd0a8]">&gt;</span>
-                {"\n    "}
                 <span className="text-[#8fd0a8]">&lt;h1&gt;</span>
-                Clarity. Trust. Real change.
+                Clear message.
                 <span className="text-[#8fd0a8]">&lt;/h1&gt;</span>
-                {"\n    "}
-                <span className="text-[#8fd0a8]">&lt;a</span>{" "}
-                <span className="text-[#e6c17e]">class=&quot;btn&quot;</span>
-                <span className="text-[#8fd0a8]">&gt;</span>
-                Book a call
-                <span className="text-[#8fd0a8]">&lt;/a&gt;</span>
                 {"\n  "}
-                <span className="text-[#8fd0a8]">&lt;/div&gt;</span>
+                <span className="text-[#8fd0a8]">&lt;p&gt;</span>
+                Calm systems. Confident growth.
+                <span className="text-[#8fd0a8]">&lt;/p&gt;</span>
                 {"\n"}
                 <span className="text-[#8fd0a8]">&lt;/section&gt;</span>
               </code>
             </pre>
           </motion.div>
 
+          {/* Home Base — bottom right */}
           <motion.div
             variants={floatIn}
             initial="hidden"
             animate="show"
-            transition={{ delay: cards.stat.delay }}
-            style={cardPlacementStyle(cards.stat)}
-            className="absolute z-20 flex items-center gap-3.5 rounded-xl border border-line bg-card px-5 py-3.5 shadow-float"
+            transition={{ delay: cards.homeBase.delay }}
+            style={cardPlacementStyle(cards.homeBase)}
+            className="absolute z-20 hidden rounded-2xl border border-line bg-card p-4 shadow-float lg:block"
           >
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-forest text-ivory">
-              <TrendingUp className="h-5 w-5" />
+            <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-[#F3E6B8]">
+              <Sparkles className="h-3.5 w-3.5 text-[#C4A035]" />
             </span>
-            <div>
-              <p className="text-base font-semibold text-ink">+38%</p>
-              <p className="text-xs text-muted">increase in leads</p>
-            </div>
+            <p className="mt-3 font-serif text-sm font-semibold leading-snug text-ink">
+              One polished home base
+            </p>
+            <p className="mt-1.5 text-[11px] leading-relaxed text-muted">
+              Everything connected.
+              <br />
+              Everything makes sense.
+            </p>
+          </motion.div>
+
+          {/* Ongoing support pill — far bottom left */}
+          <motion.div
+            variants={floatIn}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: cards.support.delay }}
+            style={cardPlacementStyle(cards.support)}
+            className="absolute z-20 hidden items-center gap-2 rounded-full border border-line bg-card px-3.5 py-2 shadow-float lg:inline-flex"
+          >
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-forest-soft">
+              <MessageCircle className="h-3 w-3 text-forest" />
+            </span>
+            <span className="text-[11px] font-medium text-ink">
+              Ongoing support
+            </span>
           </motion.div>
         </div>
       </div>
