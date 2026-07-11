@@ -449,12 +449,17 @@ export default function HeroMockup() {
                 />
                 <div className="relative rounded-[34px] bg-[linear-gradient(145deg,#030403_0%,#0C0F0C_45%,#272D27_58%,#050605_100%)] p-[4px] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.16),inset_-2px_-2px_4px_rgba(0,0,0,0.82)]">
                   <div className="relative overflow-hidden rounded-[29px] bg-card shadow-[inset_0_0_0_1px_rgba(31,36,32,0.04)]">
-                    {/* Dynamic Island — the black pill at the top of the phone */}
+                    {/* Dynamic Island — pill + ear fillets into the bezel */}
                     <div
-                      className="pointer-events-none absolute left-1/2 top-[-2px] z-30 h-[18px] w-[70px] -translate-x-1/2 rounded-b-[14px] bg-[#050605] shadow-[inset_0_-1px_0_rgba(255,255,255,0.1),0_1px_0_rgba(5,6,5,0.95)]"
+                      className="pointer-events-none absolute left-1/2 top-[-7px] z-30 h-[21px] w-[70px] -translate-x-1/2"
                       aria-hidden
                     >
-                      <span className="absolute left-1/2 top-[6px] h-[2.5px] w-6 -translate-x-1/2 rounded-full bg-white/18" />
+                      <div className="relative h-full w-full rounded-b-[8px] bg-[#050605] shadow-[0_1px_0_rgba(5,6,5,0.95)]">
+                        {/* Ears — same 8px radius as the bottom corners, no top ledge */}
+                        <span className="absolute -left-[9px] top-0 h-2 w-2 rounded-br-lg shadow-[8px_0_0_0_#050605]" />
+                        <span className="absolute -right-[9px] top-0 h-2 w-2 rounded-bl-lg shadow-[-8px_0_0_0_#050605]" />
+                        <span className="absolute left-1/2 top-[9px] h-[2.5px] w-[23px] -translate-x-1/2 rounded-full bg-white/18" />
+                      </div>
                     </div>
                     <div className="relative min-h-[348px] bg-card">
                       <PhoneStatusBar />

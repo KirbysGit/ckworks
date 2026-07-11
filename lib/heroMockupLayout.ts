@@ -142,7 +142,7 @@ export const heroMockupLayout = {
         [10, 80],
         [10, 130],
       ],
-      nodeAt: [0, 2],
+      nodeAt: [2],
       cornerRadius: 10,
     },
     // Browser bottom → short link into Monthly Overview's top edge
