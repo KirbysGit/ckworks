@@ -1,11 +1,13 @@
 /**
  * Hero mockup layout controls.
  *
- * Tweak `scale` and card x/y values here to tune the composition.
- * Positions are in pixels relative to the composition root (top-left).
- * Use negative left/right/bottom to let cards peek outside the stage.
+ * The composition: Windermere Wellness browser (anchor, top), Project
+ * Overview card (left edge), phone mockup (right edge, overlapping),
+ * Monthly Overview dashboard (below browser), post-it note (bottom right).
  *
- * Set `showDebugGrid` to true in development to overlay an alignment grid.
+ * Card positions are px relative to the stage (the padded box around the
+ * browser). Negative left/right push a card outside the stage. Set
+ * `showDebugGrid: true` to overlay an 8px alignment grid while tuning.
  */
 
 import type { CSSProperties } from "react";
@@ -23,6 +25,8 @@ export type CardPlacement = {
   width?: number;
   /** Scale multiplier (e.g. 1.25 = 125% size) */
   scale?: number;
+  /** Rotation in degrees (e.g. 3 for the post-it tilt) */
+  rotate?: number;
   /** Extra transform, e.g. "-50%" to vertically center with top: "50%" */
   translateY?: string;
   /** Entrance animation delay (seconds) */
@@ -35,14 +39,9 @@ export type CardPlacement = {
  *
  * - `points`: [x, y] pairs in px, measured from the `anchor` corner of the
  *   stage (default top-left). With `anchor: { x: "right" }`, x values are
- *   distances from the stage's RIGHT edge — use that for paths near
- *   right-side cards so they survive responsive width changes. Same idea
- *   for `y: "bottom"`.
- * - `nodeAt`: indices into `points` that get a circular dot (0 = first
- *   point). Any waypoint can have one, not just the ends.
+ *   distances from the stage's RIGHT edge; same idea for `y: "bottom"`.
+ * - `nodeAt`: indices into `points` that get a circular dot.
  * - `cornerRadius`: how soft the turns are (px). 0 = sharp corners.
- *
- * Tip: set `showDebugGrid: true` above while tuning coordinates.
  */
 export type ConnectorPath = {
   anchor?: { x?: "left" | "right"; y?: "top" | "bottom" };
@@ -58,12 +57,15 @@ export const heroMockupLayout = {
   /** Show an 8px alignment grid over the composition (dev tuning aid) */
   showDebugGrid: false,
 
-  /** Space reserved around the browser for floating cards */
+  /**
+   * Space reserved around the browser. Left/right make room for the
+   * overview card and phone; bottom holds the dashboard + post-it row.
+   */
   stage: {
-    paddingTop: 48,
-    paddingRight: 140,
-    paddingBottom: 160,
-    paddingLeft: 140,
+    paddingTop: 16,
+    paddingRight: 110,
+    paddingBottom: 380,
+    paddingLeft: 96,
   },
 
   /** Main browser window */
@@ -76,108 +78,98 @@ export const heroMockupLayout = {
      * unscaled height, so lowering `scale` leaves slack below the browser;
      * compensate with stage.paddingBottom.
      */
-    scale: 0.88,
+    scale: 0.9,
   },
 
   /** Background grid texture bleed beyond the composition */
   texture: {
-    insetX: 56,
-    insetY: 32,
+    insetX: 130,
+    insetY: 90,
   },
 
-  /**
-   * Outer ring: Project Overview (left), Systems (right), Code (bottom-left),
-   * Home Base (bottom-right), Ongoing Support (far bottom-left).
-   * Browser left edge ≈ paddingLeft (140); right edge ≈ paddingRight (140).
-   */
   cards: {
+    // Left edge, vertically centered on the browser hero area
     projectOverview: {
-      left: -8,
-      top: 120,
-      width: 188,
+      left: -60,
+      top: 130,
+      width: 140,
       delay: 0.15,
     } satisfies CardPlacement,
 
-    systems: {
-      right: -8,
-      top: 120,
-      width: 188,
+    // Right edge, overlapping the browser's corner, extending below it
+    phone: {
+      right: -75,
+      top: 195,
+      width: 172,
       delay: 0.25,
     } satisfies CardPlacement,
 
-    code: {
-      left: 40,
-      bottom: 24,
-      width: 248,
+    // Directly below the browser, left-aligned with its edge (≈ paddingLeft + 12)
+    monthly: {
+      left: 108,
+      bottom: 75,
+      width: 400,
       delay: 0.35,
     } satisfies CardPlacement,
 
-    homeBase: {
-      right: 40,
-      bottom: 36,
-      width: 220,
+    // Bottom right; straight backing card, the note itself tilts (-rotate-2
+    // in HeroMockup). Blank until the hero-postit.svg text drops in.
+    postIt: {
+      right: -30,
+      bottom: 70,
+      width: 195,
       delay: 0.45,
-    } satisfies CardPlacement,
-
-    support: {
-      left: -20,
-      bottom: 8,
-      delay: 0.5,
     } satisfies CardPlacement,
   },
 
   /**
-   * First-pass connectors matching the reference ring.
-   * Tune waypoints with showDebugGrid: true.
+   * Connector draw-in: lines start AFTER the cards have landed, then all
+   * branch out together, each drawing from its first point to its last.
    */
+  connectorTiming: {
+    /** seconds before the draw starts (cards finish ≈ 1.15s) */
+    delay: 1.1,
+    /** seconds each line takes to draw */
+    duration: 0.8,
+  },
+
+  /** Connectors — tune with showDebugGrid: true */
   connectors: [
-    // Browser left edge → out → down into Project Overview top
+    // Browser top edge → out left → down into Project Overview's top edge
     {
       points: [
-        [140, 100],
-        [86, 100],
-        [86, 120],
+        [97, 80],
+        [10, 80],
+        [10, 130],
       ],
       nodeAt: [0, 2],
       cornerRadius: 10,
     },
-    // Project Overview bottom → down → into Code card left
-    {
-      points: [
-        [86, 340],
-        [86, 420],
-        [140, 420],
-      ],
-      nodeAt: [0, 2],
-      cornerRadius: 10,
-    },
-    // Code right → Home Base left (bottom run)
+    // Browser bottom → short link into Monthly Overview's top edge
     {
       anchor: { y: "bottom" },
       points: [
-        [288, 100],
-        [420, 100],
+        [300, 380],
+        [300, 346],
       ],
       nodeAt: [0, 1],
     },
-    // Home Base top-right → up → into browser right edge
+    // Phone top → up, loose end node
     {
       anchor: { x: "right" },
       points: [
-        [150, 380],
-        [150, 300],
-        [70, 300],
-        [70, 260],
+        [54, 100],
+        [8, 100],
+        [8, 194],
       ],
-      nodeAt: [0, 3],
-      cornerRadius: 10,
+      nodeAt: [0, 2],
     },
-    // Systems left edge → into browser right edge
+    // Monthly Overview right edge → across to the post-it
     {
-      anchor: { x: "right" },
+      anchor: { x: "right", y: "bottom" },
       points: [
-        [140, 140],
-        [70, 140],
+        [204, 190],
+        [150, 190],
       ],
       nodeAt: [0, 1],
     },
@@ -196,6 +188,7 @@ export function cardPlacementStyle(placement: CardPlacement): CSSProperties {
   const transforms: string[] = [];
   if (placement.translateY) transforms.push(`translateY(${placement.translateY})`);
   if (placement.scale) transforms.push(`scale(${placement.scale})`);
+  if (placement.rotate) transforms.push(`rotate(${placement.rotate}deg)`);
   if (transforms.length) style.transform = transforms.join(" ");
 
   if (placement.scale) {

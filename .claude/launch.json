@@ -5,6 +5,9 @@
       "name": "ckworks-dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--", "-p", "3200"],
+      "env": {
+        "NEXT_DIST_DIR": ".next-preview"
+      },
       "port": 3200
     }
   ]

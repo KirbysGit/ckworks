@@ -6,7 +6,6 @@ import {
   MessageSquareText,
   Layers,
   Zap,
-  UserRound,
   Sparkles,
   Settings2,
   MessageCircle,
@@ -28,7 +27,6 @@ export type TrustChip = {
 };
 
 export const trustChips: TrustChip[] = [
-  { icon: UserRound, label: "Founder-led" },
   { icon: Sparkles, label: "Clean design" },
   { icon: Settings2, label: "Practical systems" },
   { icon: MessageCircle, label: "Ongoing support" },
