@@ -3,16 +3,13 @@ import {
   Workflow,
   Plug,
   LifeBuoy,
-  MessageSquareText,
-  Layers,
-  Zap,
   Sparkles,
   Settings2,
   MessageCircle,
   type LucideIcon,
 } from "lucide-react";
 
-// "/#anchor" form so links work from subpages like /work, not just the homepage.
+// "/#anchor" form so links work from project pages, not just the homepage.
 export const nav = [
   { label: "Home", href: "/#home" },
   { label: "What I Do", href: "/#what-i-do" },
@@ -32,34 +29,13 @@ export const trustChips: TrustChip[] = [
   { icon: MessageCircle, label: "Ongoing support" },
 ];
 
-export type Outcome = {
-  icon: LucideIcon;
-  title: string;
-  body: string;
-};
-
-export const outcomes: Outcome[] = [
-  {
-    icon: MessageSquareText,
-    title: "Clearer messaging",
-    body: "Words and structure that quickly communicate what you do—and why it matters.",
-  },
-  {
-    icon: Layers,
-    title: "Stronger foundations",
-    body: "Design and systems built to be consistent, reliable, and aligned with the quality of your work.",
-  },
-  {
-    icon: Zap,
-    title: "Smoother workflows",
-    body: "Systems and automations that reduce busywork and keep everything moving.",
-  },
-];
-
 export type Service = {
   icon: LucideIcon;
   title: string;
   body: string;
+  tags?: string[];
+  visual?: "website" | "systems" | "integrations" | "support";
+  featured?: boolean;
 };
 
 export const services: Service[] = [
@@ -67,21 +43,30 @@ export const services: Service[] = [
     icon: LayoutTemplate,
     title: "Web Design",
     body: "Custom websites that look clean, work everywhere, and convert visitors.",
+    tags: ["Custom Design", "Responsive", "SEO"],
+    visual: "website",
   },
   {
     icon: Workflow,
     title: "Digital Systems",
     body: "Forms, dashboards, and workflows that save time and reduce errors.",
+    tags: ["Dashboards", "Automation", "Workflows"],
+    visual: "systems",
+    featured: true,
   },
   {
     icon: Plug,
     title: "Integrations",
-    body: "Connect the tools you use so data flows where it should—without the manual work.",
+    body: "Connect the tools you use so data flows where it should without the manual work.",
+    tags: ["APIs", "Zapier", "Data Sync"],
+    visual: "integrations",
   },
   {
     icon: LifeBuoy,
     title: "Ongoing Support",
     body: "Updates, tweaks, and technical support so your site and systems stay solid.",
+    tags: ["Maintenance", "Updates", "Support"],
+    visual: "support",
   },
 ];
 
@@ -100,7 +85,7 @@ export const steps: Step[] = [
   {
     number: "2",
     title: "Plan",
-    body: "I map the right solution—structure, systems, and tools that fit your business.",
+    body: "I map the right solution - structure, systems, and tools that fit your business.",
   },
   {
     number: "3",
@@ -120,7 +105,7 @@ export const steps: Step[] = [
 ];
 
 export const footerLinks = [
-  { label: "Work", href: "/work" },
+  { label: "Work", href: "/#work" },
   { label: "Services", href: "/#what-i-do" },
   { label: "Process", href: "/#process" },
   { label: "About", href: "/#about" },

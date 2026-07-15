@@ -19,15 +19,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const study = getCaseStudy(slug);
   if (!study) return {};
+
   return {
     title: study.name,
     description: study.oneLiner,
   };
 }
 
-/** Small uppercase heading + prose paragraphs. Skips itself when empty. */
 function Section({ label, paragraphs }: { label: string; paragraphs: string[] }) {
   if (paragraphs.length === 0) return null;
+
   return (
     <section className="border-t border-line/70 py-10">
       <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
@@ -53,13 +54,12 @@ export default async function CaseStudyPage({ params }: Props) {
     <>
       <Header />
       <main>
-        {/* 1. Project hero */}
         <section className="container-ck pb-12 pt-10 lg:pt-14">
           <Link
-            href="/work"
+            href="/#work"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-forest"
           >
-            <ArrowLeft className="h-4 w-4" /> All work
+            <ArrowLeft className="h-4 w-4" /> Selected work
           </Link>
 
           <div className="mx-auto mt-10 max-w-3xl">
@@ -73,7 +73,6 @@ export default async function CaseStudyPage({ params }: Props) {
               {study.oneLiner}
             </p>
 
-            {/* meta card */}
             <div className="mt-8 grid gap-6 rounded-2xl border border-line bg-card p-6 shadow-soft sm:grid-cols-3">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
@@ -102,7 +101,6 @@ export default async function CaseStudyPage({ params }: Props) {
             </div>
           </div>
 
-          {/* large screenshot / mockup placeholder */}
           <div
             className={`relative mx-auto mt-10 aspect-[16/8] w-full max-w-5xl overflow-hidden rounded-2xl border border-line bg-gradient-to-br shadow-soft ${study.accent}`}
           >
@@ -113,16 +111,11 @@ export default async function CaseStudyPage({ params }: Props) {
           </div>
         </section>
 
-        {/* Article body */}
         <article className="container-ck pb-16">
           <div className="mx-auto max-w-3xl">
-            {/* 2. The short version */}
             <Section label="The short version" paragraphs={study.shortVersion} />
-
-            {/* 3. The problem */}
             <Section label="The problem" paragraphs={study.problem} />
 
-            {/* 4. What I built — bullets, for clarity */}
             {study.built.length > 0 && (
               <section className="border-t border-line/70 py-10">
                 <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
@@ -144,7 +137,6 @@ export default async function CaseStudyPage({ params }: Props) {
               </section>
             )}
 
-            {/* 5–9 */}
             <Section label="Design decisions" paragraphs={study.designDecisions} />
             <Section
               label="Technical decisions"
@@ -157,7 +149,6 @@ export default async function CaseStudyPage({ params }: Props) {
               paragraphs={study.improveNext}
             />
 
-            {/* closing CTA */}
             <div className="mt-4 rounded-2xl border border-line bg-card p-8 text-center shadow-soft">
               <p className="font-serif text-2xl font-medium text-ink">
                 Have a project like this in mind?

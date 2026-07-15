@@ -1,32 +1,19 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import SectionLabel from "./ui/SectionLabel";
+import SectionHeader from "./ui/SectionHeader";
 import ProjectCard from "./ProjectCard";
 import { featuredCaseStudies, secondaryCaseStudies } from "@/lib/projects";
 import { fadeUp, stagger, inView } from "@/lib/motion";
 
 export default function WorkPreview() {
   return (
-    <section id="work" className="bg-sand py-20 lg:py-28">
+    <section id="work" className="bg-sand py-14 lg:py-20">
       <div className="container-ck">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div className="max-w-2xl">
-            <SectionLabel>Selected Work</SectionLabel>
-            <h2 className="mt-4 font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl">
-              A few things I&apos;ve built, designed, or helped bring into
-              shape.
-            </h2>
-          </div>
-          <Link
-            href="/work"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-forest hover:text-ink"
-          >
-            View all work <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+        <SectionHeader
+          label="Selected Work"
+          title="A few things I've built, designed, or helped bring into shape."
+        />
 
         {/* Featured case studies */}
         <motion.div
@@ -34,11 +21,11 @@ export default function WorkPreview() {
           initial="hidden"
           whileInView="show"
           viewport={inView}
-          className="mt-12 grid gap-6 md:grid-cols-2"
+          className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
         >
           {featuredCaseStudies.map((study) => (
             <motion.div key={study.slug} variants={fadeUp}>
-              <ProjectCard study={study} />
+              <ProjectCard study={study} variant="tile" />
             </motion.div>
           ))}
         </motion.div>

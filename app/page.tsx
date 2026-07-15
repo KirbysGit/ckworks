@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import OutcomeStrip from "@/components/OutcomeStrip";
+import TransformationSection from "@/components/TransformationSection";
 import Services from "@/components/Services";
 import WorkPreview from "@/components/WorkPreview";
 import Process from "@/components/Process";
@@ -14,7 +14,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <OutcomeStrip />
+        <TransformationSection />
         <Services />
         <WorkPreview />
         <Process />

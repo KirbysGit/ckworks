@@ -28,6 +28,7 @@ export type CaseStudy = {
   status: string;
   /** Placeholder gradient until real screenshots exist. */
   accent: string;
+  hidden?: boolean;
   shortVersion: string[];
   problem: string[];
   built: string[];
@@ -56,13 +57,14 @@ export const groups: { id: Group; title: string; blurb: string }[] = [
   },
 ];
 
-export const caseStudies: CaseStudy[] = [
+const allCaseStudies: CaseStudy[] = [
   {
     slug: "halo-reserve",
     name: "Halo Reserve",
     category: "Brand Identity / Wellness Direction",
     group: "client",
     featured: true,
+    hidden: true,
     oneLiner:
       "A premium wellness brand direction built around calm, routine, recovery, and trust.",
     teaser:
@@ -103,7 +105,7 @@ export const caseStudies: CaseStudy[] = [
     ],
   },
   {
-    slug: "tizirsso-racing",
+    slug: "tizirsso",
     name: "Tizirsso Racing",
     category: "Website Design & Development",
     group: "client",
@@ -150,7 +152,7 @@ export const caseStudies: CaseStudy[] = [
     ],
   },
   {
-    slug: "taylor-io",
+    slug: "taylor",
     name: "Taylor.io",
     category: "AI Product / Full-Stack System",
     group: "product",
@@ -251,6 +253,53 @@ export const caseStudies: CaseStudy[] = [
     ],
   },
   {
+    slug: "setlst",
+    name: "Setlst",
+    category: "Music Product / Event Workflow",
+    group: "product",
+    featured: true,
+    oneLiner:
+      "A music-focused product concept for organizing setlists, events, and the details performers need before showtime.",
+    teaser:
+      "A music workflow for organizing setlists, events, and show details in one place.",
+    workedOn: ["Product UX", "Workflow Design", "Dashboard Design", "Prototype"],
+    role: "Product Design, Development, Systems Thinking",
+    stack: ["React", "Tailwind CSS"],
+    status: "Personal Product / In Progress",
+    accent: "from-[#3f4f46] to-[#9a7f53]",
+    shortVersion: [
+      "Setlst came from noticing how much live performance planning still happens across notes apps, screenshots, text threads, and memory.",
+      "The idea is a cleaner home for the practical details around a set: what songs are being played, where the event is, what needs to be ready, and what changed since the last show.",
+    ],
+    problem: [
+      "Performers and small teams often have the information they need, but it is scattered across too many places.",
+      "The goal was to make the workflow feel lightweight enough to use before a show, while still structured enough that important details do not get lost.",
+    ],
+    built: [
+      "setlist organization flow",
+      "event and show detail structure",
+      "dashboard concept for upcoming performances",
+      "song and note management patterns",
+      "early product interface direction",
+    ],
+    designDecisions: [
+      "The interface needed to feel fast and calm. A music tool like this cannot feel like admin software first; it has to respect that the user is trying to get ready to perform.",
+      "I focused the concept around the next show, then let deeper song and planning details sit one level below that.",
+    ],
+    technicalDecisions: [
+      "The project is structured as a product prototype first, with the data model shaped around shows, songs, notes, and reusable setlist details.",
+    ],
+    challenges: [
+      "The main challenge is keeping the product simple. It is easy for a setlist app to become a full project-management tool, but the useful version needs to stay close to the moment of performance.",
+    ],
+    outcome: [
+      "Setlst is a strong example of how I think about workflow products: take a messy real-world process, identify the repeated decisions, and give them a calmer interface.",
+    ],
+    improveNext: [
+      "The next step would be tightening the core show-planning flow and adding real screenshots once the prototype is more visually complete.",
+    ],
+  },
+  {
     slug: "internal-automation-tool",
     name: "Internal Automation Tool",
     category: "Systems / Internal Tooling",
@@ -335,6 +384,7 @@ export const caseStudies: CaseStudy[] = [
   },
 ];
 
+export const caseStudies = allCaseStudies.filter((c) => !c.hidden);
 export const featuredCaseStudies = caseStudies.filter((c) => c.featured);
 export const secondaryCaseStudies = caseStudies.filter((c) => !c.featured);
 

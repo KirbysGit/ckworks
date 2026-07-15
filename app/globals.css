@@ -5,10 +5,16 @@
 @layer base {
   :root {
     color-scheme: light;
+    --site-header-height: 1.25rem;
+    --anchor-scroll-gap: 0rem;
+    --anchor-scroll-offset: calc(
+      var(--site-header-height) + var(--anchor-scroll-gap)
+    );
   }
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: var(--anchor-scroll-offset);
   }
 
   body {
@@ -16,8 +22,22 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  [id] {
+    scroll-margin-top: var(--anchor-scroll-offset);
+  }
+
   ::selection {
     @apply bg-forest-soft text-forest;
+  }
+}
+
+/* Redraws an SVG line on hover (pair with pathLength={1} + dasharray 1) */
+@keyframes spark-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }
 

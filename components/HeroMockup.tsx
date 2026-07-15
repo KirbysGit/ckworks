@@ -269,12 +269,17 @@ export default function HeroMockup() {
               <div className="flex items-center justify-between gap-6 px-6 py-4">
                 <WindermereBrand />
                 <div className="hidden items-center gap-4 text-[11px] text-muted sm:flex">
-                  <span>Services</span>
-                  <span>About</span>
-                  <span>Approach</span>
-                  <span>Resources</span>
-                  <span>Contact</span>
-                  <span className="rounded-md bg-forest px-3 py-1.5 text-ivory">
+                  {["Services", "About", "Approach", "Resources", "Contact"].map(
+                    (item) => (
+                      <span
+                        key={item}
+                        className="cursor-pointer transition-colors duration-150 hover:text-ink"
+                      >
+                        {item}
+                      </span>
+                    ),
+                  )}
+                  <span className="cursor-pointer rounded-md bg-forest px-3 py-1.5 text-ivory transition-all duration-150 hover:-translate-y-px hover:bg-[#3D6E4F] hover:shadow-sm">
                     Book a call
                   </span>
                 </div>
@@ -292,11 +297,14 @@ export default function HeroMockup() {
                     and couples in Windermere and the surrounding communities.
                   </p>
                   <div className="mt-4 flex items-center gap-3">
-                    <span className="rounded-md bg-forest px-3.5 py-2 text-[11px] font-medium text-ivory">
+                    <span className="cursor-pointer rounded-md bg-forest px-3.5 py-2 text-[11px] font-medium text-ivory transition-all duration-150 hover:-translate-y-px hover:bg-[#3D6E4F] hover:shadow-sm">
                       Book a call
                     </span>
-                    <span className="text-[11px] font-medium text-ink">
-                      Learn more →
+                    <span className="group cursor-pointer text-[11px] font-medium text-ink transition-colors duration-150 hover:text-forest">
+                      Learn more{" "}
+                      <span className="inline-block transition-transform duration-150 group-hover:translate-x-0.5">
+                        →
+                      </span>
                     </span>
                   </div>
                 </div>
@@ -314,14 +322,25 @@ export default function HeroMockup() {
               {/* feature row */}
               <div className="mt-4 grid grid-cols-3 gap-4 border-t border-line/70 px-6 py-5">
                 {features.map(({ icon: Icon, title, caption }) => (
-                  <div key={title} className="text-center">
-                    <Icon className="mx-auto h-4 w-4 text-forest" />
-                    <p className="mt-1.5 font-serif text-xs font-semibold text-ink">
-                      {title}
-                    </p>
-                    <p className="mx-auto mt-1 hidden max-w-[130px] text-[10px] leading-snug text-muted sm:block">
-                      {caption}
-                    </p>
+                  <div
+                    key={title}
+                    className="group relative -my-1.5 overflow-hidden rounded-lg px-1 py-1.5 text-center"
+                  >
+                    {/* green wash: fades in fast (300ms), dissolves slowly
+                        (1200ms) after the cursor leaves */}
+                    <div
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-br from-forest-soft/90 via-forest-soft/35 to-transparent opacity-0 transition-opacity duration-[1200ms] group-hover:opacity-100 group-hover:duration-300"
+                      aria-hidden
+                    />
+                    <div className="relative">
+                      <Icon className="mx-auto h-4 w-4 text-forest transition-transform duration-300 ease-out group-hover:-rotate-6 group-hover:scale-125" />
+                      <p className="mt-1.5 font-serif text-xs font-semibold text-ink">
+                        {title}
+                      </p>
+                      <p className="mx-auto mt-1 hidden max-w-[130px] text-[10px] leading-snug text-muted sm:block">
+                        {caption}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -338,13 +357,21 @@ export default function HeroMockup() {
                 buildConnector(connector);
               const { delay, duration } = connectorTiming;
               return (
-                <svg
+                /* opacity-0 class keeps pre-hydration frames clean; the
+                   fade lifts it right as the branch-out starts */
+                <motion.svg
                   key={i}
                   style={style}
                   width={width}
                   height={height}
-                  className="z-[15] hidden overflow-visible lg:block"
+                  className="z-[15] hidden opacity-0 overflow-visible lg:block"
                   aria-hidden
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{
+                    delay: Math.max(0, connectorTiming.delay - 0.05),
+                    duration: 0.2,
+                  }}
                 >
                   <defs>
                     {/* userSpaceOnUse: a straight line has a zero-area
@@ -398,7 +425,7 @@ export default function HeroMockup() {
                       }}
                     />
                   ))}
-                </svg>
+                </motion.svg>
               );
             })}
 
@@ -409,7 +436,7 @@ export default function HeroMockup() {
               animate="show"
               transition={{ delay: cards.projectOverview.delay }}
               style={cardPlacementStyle(cards.projectOverview)}
-              className="absolute z-20 hidden rounded-xl border border-line bg-card p-3.5 shadow-float lg:block"
+              className="pointer-events-auto absolute z-20 hidden rounded-xl border border-line bg-card p-3.5 shadow-float lg:block"
             >
               <p className="text-[11px] font-semibold text-ink">
                 Project Overview
@@ -418,12 +445,15 @@ export default function HeroMockup() {
                 {projectSteps.map(({ icon: Icon, label }) => (
                   <li
                     key={label}
-                    className="flex items-center gap-2 text-[10px] text-muted"
+                    className="group/step -mx-1.5 flex items-center gap-2 rounded-md px-1.5 py-0.5 text-[10px] text-muted transition-colors duration-200 hover:bg-sand/60 hover:text-ink"
                   >
-                    <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sand">
-                      <Icon className="h-3 w-3 text-forest" />
+                    {/* icon chip inverts: sand → forest, icon → ivory */}
+                    <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sand transition-colors duration-200 group-hover/step:bg-forest">
+                      <Icon className="h-3 w-3 text-forest transition-colors duration-200 group-hover/step:text-ivory" />
                     </span>
-                    {label}
+                    <span className="transition-transform duration-200 group-hover/step:translate-x-0.5">
+                      {label}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -436,9 +466,9 @@ export default function HeroMockup() {
               animate="show"
               transition={{ delay: cards.phone.delay }}
               style={cardPlacementStyle(cards.phone)}
-              className="absolute z-30 hidden lg:block"
+              className="pointer-events-auto absolute z-30 hidden lg:block"
             >
-              <div className="relative rounded-[36px] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] p-[2px] shadow-[0_24px_60px_-20px_rgba(17,23,20,0.72),0_9px_20px_-10px_rgba(17,23,20,0.85)]">
+              <div className="relative rounded-[36px] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] p-[2px] shadow-[0_16px_34px_-16px_rgba(17,23,20,0.58),0_5px_12px_-6px_rgba(17,23,20,0.48)]">
                 <span
                   className="pointer-events-none absolute inset-[1px] rounded-[35px] bg-[radial-gradient(circle_at_28%_7%,rgba(255,255,255,0.38),transparent_22%),linear-gradient(160deg,rgba(255,255,255,0.18),transparent_34%,rgba(0,0,0,0.42)_72%)] opacity-70"
                   aria-hidden
@@ -474,7 +504,7 @@ export default function HeroMockup() {
                           Care that feels personal. Support that fits{" "}
                           <em className="italic">your life</em>.
                         </p>
-                        <span className="mt-2 inline-block rounded bg-forest px-2 py-1 text-[7px] font-medium text-ivory shadow-[0_4px_10px_-6px_rgba(47,91,63,0.8)]">
+                        <span className="mt-2 inline-block cursor-pointer rounded bg-forest px-2 py-1 text-[7px] font-medium text-ivory shadow-[0_4px_10px_-6px_rgba(47,91,63,0.8)] transition-colors duration-150 hover:bg-[#3D6E4F]">
                           Book a call
                         </span>
                         <div className="relative mt-2.5 h-36 overflow-hidden rounded-lg shadow-[0_10px_22px_-18px_rgba(31,36,32,0.7)]">
@@ -509,7 +539,7 @@ export default function HeroMockup() {
               animate="show"
               transition={{ delay: cards.monthly.delay }}
               style={cardPlacementStyle(cards.monthly)}
-              className="absolute z-10 hidden rounded-xl border border-line bg-card p-4 shadow-float lg:block"
+              className="pointer-events-auto absolute z-10 hidden rounded-xl border border-line bg-card p-4 shadow-float lg:block"
             >
               <div className="flex items-baseline justify-between">
                 <p className="text-[13px] font-semibold text-ink">
@@ -524,32 +554,42 @@ export default function HeroMockup() {
                 {monthlyStats.map((stat) => (
                   <div
                     key={stat.label}
-                    className="rounded-lg border border-line/60 bg-sand/50 p-2"
+                    className="group relative overflow-hidden rounded-lg border border-line/60 bg-sand/50 p-2 transition-colors duration-200 hover:border-forest/30"
                   >
-                    <p className="truncate text-[8px] text-muted">
-                      {stat.label}
-                    </p>
-                    <p className="mt-0.5 text-sm font-semibold text-ink">
-                      {stat.value}{" "}
-                      <span className="text-[8px] font-medium text-forest">
-                        ↑ {stat.delta}
-                      </span>
-                    </p>
-                    <svg viewBox="0 0 60 20" className="mt-1 h-4 w-full" aria-hidden>
-                      <polyline
-                        points={stat.spark}
-                        fill="none"
-                        stroke="#2F5B3F"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    {/* soft wash, slow dissolve on leave */}
+                    <div
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-br from-forest-soft/70 to-transparent opacity-0 transition-opacity duration-[1200ms] group-hover:opacity-100 group-hover:duration-300"
+                      aria-hidden
+                    />
+                    <div className="relative">
+                      <p className="truncate text-[8px] text-muted">
+                        {stat.label}
+                      </p>
+                      <p className="mt-0.5 text-sm font-semibold text-ink">
+                        {stat.value}{" "}
+                        <span className="text-[8px] font-medium text-forest">
+                          ↑ {stat.delta}
+                        </span>
+                      </p>
+                      {/* sparkline redraws itself on hover */}
+                      <svg viewBox="0 0 60 20" className="mt-1 h-4 w-full" aria-hidden>
+                        <polyline
+                          points={stat.spark}
+                          pathLength={1}
+                          fill="none"
+                          stroke="#2F5B3F"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="[stroke-dasharray:1] group-hover:animate-[spark-draw_0.8s_ease-out]"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-3 border-t border-line/60 pt-2.5">
+              <div className="group/chart mt-3 border-t border-line/60 pt-2.5">
                 <p className="text-[9px] font-semibold text-ink">
                   Inquiries Over Time
                 </p>
@@ -559,15 +599,24 @@ export default function HeroMockup() {
                       <stop offset="0" stopColor="#2F5B3F" stopOpacity="0.28" />
                       <stop offset="1" stopColor="#2F5B3F" stopOpacity="0" />
                     </linearGradient>
+                    <linearGradient id="heroAreaDeep" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stopColor="#2F5B3F" stopOpacity="0.5" />
+                      <stop offset="1" stopColor="#2F5B3F" stopOpacity="0.04" />
+                    </linearGradient>
                   </defs>
                   {/* y labels */}
                   <text x="2" y="22" fontSize="7" fill="#5F665F">40</text>
                   <text x="2" y="52" fontSize="7" fill="#5F665F">20</text>
                   <text x="6" y="82" fontSize="7" fill="#5F665F">0</text>
-                  {/* area + line */}
+                  {/* area + hover-deepened area + line (redraws on hover) */}
                   <path
                     d="M18,74 C46,68 62,58 92,61 C122,64 137,50 166,52 C196,54 200,38 228,38 C254,38 260,26 289,28 C316,30 320,42 342,35 C348,33 353,31 356,30 L356,84 L18,84 Z"
                     fill="url(#heroArea)"
+                  />
+                  <path
+                    d="M18,74 C46,68 62,58 92,61 C122,64 137,50 166,52 C196,54 200,38 228,38 C254,38 260,26 289,28 C316,30 320,42 342,35 C348,33 353,31 356,30 L356,84 L18,84 Z"
+                    fill="url(#heroAreaDeep)"
+                    className="opacity-0 transition-opacity duration-[1200ms] group-hover/chart:opacity-100 group-hover/chart:duration-500"
                   />
                   <path
                     d="M18,74 C46,68 62,58 92,61 C122,64 137,50 166,52 C196,54 200,38 228,38 C254,38 260,26 289,28 C316,30 320,42 342,35 C348,33 353,31 356,30"
@@ -576,6 +625,8 @@ export default function HeroMockup() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    pathLength={1}
+                    className="[stroke-dasharray:1] group-hover/chart:animate-[spark-draw_1.1s_ease-out]"
                   />
                   {/* x labels */}
                   <text x="14" y="94" fontSize="7" fill="#5F665F" suppressHydrationWarning>{chartMonths[0]}</text>
@@ -594,9 +645,10 @@ export default function HeroMockup() {
               animate="show"
               transition={{ delay: cards.postIt.delay }}
               style={cardPlacementStyle(cards.postIt)}
-              className="absolute z-20 hidden lg:block"
+              className="pointer-events-auto absolute z-20 hidden lg:block"
             >
-              <div className="relative aspect-[0.92] w-full -rotate-2 rounded-xl border border-[#EDE6D0]/65 bg-gradient-to-br from-[#FEFCF5] via-[#FBF7EB] to-[#F5EFD9] shadow-float">
+              {/* hover deepens the tilt a touch — feels like nudging paper */}
+              <div className="relative aspect-[0.92] w-full -rotate-2 rounded-xl border border-[#EDE6D0]/65 bg-gradient-to-br from-[#FEFCF5] via-[#FBF7EB] to-[#F5EFD9] shadow-float transition-transform duration-300 hover:-rotate-3">
                 {/* subtle top "adhesive strip" */}
                 <div className="absolute inset-x-0 top-0 h-5 rounded-t-xl bg-white/30" />
                 {

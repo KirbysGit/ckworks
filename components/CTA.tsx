@@ -7,7 +7,7 @@ import { fadeUp, inView } from "@/lib/motion";
 
 export default function CTA() {
   return (
-    <section id="contact" className="container-ck py-20 lg:py-28">
+    <section id="contact" className="container-ck py-14 lg:py-20">
       <motion.div
         variants={fadeUp}
         initial="hidden"

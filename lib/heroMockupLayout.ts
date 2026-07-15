@@ -64,7 +64,7 @@ export const heroMockupLayout = {
   stage: {
     paddingTop: 16,
     paddingRight: 110,
-    paddingBottom: 380,
+    paddingBottom: 300,
     paddingLeft: 96,
   },
 
@@ -98,8 +98,8 @@ export const heroMockupLayout = {
 
     // Right edge, overlapping the browser's corner, extending below it
     phone: {
-      right: -75,
-      top: 195,
+      right: -100,
+      top: 170,
       width: 172,
       delay: 0.25,
     } satisfies CardPlacement,
@@ -159,8 +159,8 @@ export const heroMockupLayout = {
       anchor: { x: "right" },
       points: [
         [54, 100],
-        [8, 100],
-        [8, 194],
+        [-14, 100],
+        [-14, 170],
       ],
       nodeAt: [0, 2],
     },

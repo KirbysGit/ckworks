@@ -11,7 +11,7 @@ import { trustChips } from "@/lib/data";
 export default function Hero() {
   return (
     <section id="home" className="relative overflow-hidden">
-      <div className="container-ck grid items-start gap-4 pb-16 pt-6 sm:pt-8 lg:grid-cols-[0.8fr_1fr] lg:gap-4 lg:pb-20 lg:pt-10">
+      <div className="container-ck grid items-start gap-4 pb-2 pt-6 sm:pt-8 lg:grid-cols-[0.8fr_1fr] lg:gap-4 lg:pb-4 lg:pt-10">
         {/* Left: copy */}
         <motion.div
           variants={stagger}

@@ -50,14 +50,10 @@ export const metadata: Metadata = {
     description:
       "Clean websites and practical systems for growing businesses, built by Colin Kirby.",
   },
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
-  },
+  // Icons are auto-generated from the app/ file convention:
+  //   app/favicon.ico · app/icon.svg · app/icon.png · app/apple-icon.png
+  // Do NOT also declare an `icons` block here — that emits duplicate,
+  // conflicting <link> tags and the browser picks one at random.
 };
 
 export default function RootLayout({
