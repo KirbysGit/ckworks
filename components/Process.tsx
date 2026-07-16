@@ -1,14 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  ClipboardList,
-  Laptop,
-  Search,
-  Sprout,
-  type LucideIcon,
-} from "lucide-react";
-import SectionLabel from "./ui/SectionLabel";
+import SectionHeader from "./ui/SectionHeader";
 import { fadeUp, stagger, inView } from "@/lib/motion";
 
 type Chapter = {
@@ -16,8 +9,27 @@ type Chapter = {
   label: string;
   title: string;
   body: string;
-  note: string;
-  icon: LucideIcon;
+};
+
+type ChapterColumn = {
+  left: string;
+  top: string;
+  width: string;
+  bottom: string;
+  paddingX: string;
+  /** Title underline rotation in degrees */
+  underlineRotate: number;
+  /** Flip the underline horizontally so strokes don't match */
+  underlineFlip?: boolean;
+};
+
+type SectionDrawing = {
+  src: string;
+  left: string;
+  bottom: string;
+  width: string;
+  rotate: number;
+  opacity?: number;
 };
 
 const processChapters: Chapter[] = [
@@ -26,34 +38,163 @@ const processChapters: Chapter[] = [
     label: "Chapter 01",
     title: "We get clear.",
     body: "We start with your goals, your audience, and what the site actually needs to do.",
-    note: "Clarity first. Everything else builds from here.",
-    icon: Search,
   },
   {
     number: "2",
     label: "Chapter 02",
     title: "We shape the direction.",
     body: "We define the structure, messaging, and visual direction so the project has a strong foundation.",
-    note: "A clear plan makes everything easier.",
-    icon: ClipboardList,
   },
   {
     number: "3",
     label: "Chapter 03",
     title: "I build it out.",
     body: "I turn the direction into a real site, with thoughtful design, clean code, and the practical pieces behind it.",
-    note: "Intentional design. Reliable build. Made to work.",
-    icon: Laptop,
   },
   {
     number: "4",
     label: "Chapter 04",
     title: "We launch, respond, and improve.",
     body: "Once it is live, we test, refine, and keep improving what needs attention.",
-    note: "Launch is the beginning, not the end.",
-    icon: Sprout,
   },
 ];
+
+/**
+ * Book layout knobs - percentages of the book image box unless noted.
+ * Move columns and the center spine line here without touching markup.
+ */
+const bookLayout = {
+  /**
+   * Each chapter column can be moved independently.
+   * left/top/width/bottom are based on the full book image box.
+   */
+  columns: [
+    {
+      left: "9.2%",
+      top: "12%",
+      width: "20%",
+      bottom: "13%",
+      paddingX: "1.5%",
+      underlineRotate: 0, // straight
+    },
+    {
+      left: "29.5%",
+      top: "12%",
+      width: "20%",
+      bottom: "13%",
+      paddingX: "1.5%",
+      underlineRotate: -2, // positive slope
+    },
+    {
+      left: "51%",
+      top: "12%",
+      width: "20%",
+      bottom: "13%",
+      paddingX: "1.5%",
+      underlineRotate: -1.25, // very slight negative
+      underlineFlip: true,
+    },
+    {
+      left: "72%",
+      top: "12%",
+      width: "19%",
+      bottom: "13%",
+      paddingX: "1.5%",
+      underlineRotate: -2, // slight positive
+    },
+  ] satisfies ChapterColumn[],
+
+  /**
+   * Bottom drawings for the book pages.
+   * left/bottom/width are based on the full book image box.
+   */
+  sectionDrawings: [
+    {
+      src: "/images/process/svg/section-1.svg",
+      left: "18.2%",
+      bottom: "20.8%",
+      width: "25.4%",
+      rotate: -3,
+      opacity: 0.9,
+    },
+    {
+      src: "/images/process/svg/section-2.svg",
+      left: "39.3%",
+      bottom: "17.2%",
+      width: "24%",
+      rotate: 1,
+      opacity: 0.88,
+    },
+    {
+      src: "/images/process/svg/section-3.svg",
+      left: "62%",
+      bottom: "19.8%",
+      width: "23.8%",
+      rotate: -1,
+      opacity: 0.9,
+    },
+    {
+      src: "/images/process/svg/section-4.svg",
+      left: "83.3%",
+      bottom: "17.2%",
+      width: "25.2%",
+      rotate: 2,
+      opacity: 0.9,
+    },
+  ] satisfies SectionDrawing[],
+
+  /**
+   * Backing shadows behind the bottom of the SVG book.
+   * Use bottom/height/translateY to tuck the shadow into the book edge.
+   */
+  groundShadow: {
+    left: "4.5%",
+    right: "4.5%",
+    bottom: "0.4%",
+    height: "10.5%",
+    blur: 13,
+    opacity: 0.28,
+    translateY: "8%",
+  },
+  contactShadow: {
+    left: "5%",
+    right: "5%",
+    bottom: "11%",
+    height: "4%",
+    blur: 5,
+    opacity: 0.5,
+    translateY: "0%",
+  },
+
+  /**
+   * Soft top-edge shade so the book lifts off the page foundation.
+   * Sit just behind/under the top of the SVG.
+   */
+  topShadow: {
+    left: "5%",
+    right: "5%",
+    top: "1.5%",
+    height: "7%",
+    blur: 10,
+    opacity: 0.22,
+    translateY: "-35%",
+  },
+
+  /**
+   * Center spine shadow line - heavier fold mark you can slide.
+   * `left` is % across the book; `width`/`blur` are in px.
+   */
+  spine: {
+    left: "50%",
+    top: "8%",
+    bottom: "11%",
+    width: 12,
+    blur: 8,
+    spread: 2,
+    opacity: 0.34,
+    color: "rgba(31, 36, 32, 0.5)",
+  },
+} as const;
 
 export default function Process() {
   return (
@@ -64,28 +205,12 @@ export default function Process() {
         whileInView="show"
         viewport={inView}
       >
-        <motion.div
-          variants={fadeUp}
-          className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(20rem,0.62fr)_minmax(14rem,0.36fr)] lg:items-end"
-        >
-          <div>
-            <SectionLabel>The Approach</SectionLabel>
-            <h2 className="mt-5 max-w-[44rem] font-serif text-5xl font-medium leading-[0.95] text-ink sm:text-6xl lg:text-7xl">
-              A calm way projects take shape.
-            </h2>
-          </div>
-
-          <p className="max-w-md text-base leading-7 text-ink/80 sm:text-lg">
-            Every project is different, but the foundation is always the same:
-            clarity, thoughtful design, solid build, and ongoing care.
-          </p>
-
-          <p className="hidden rotate-[-7deg] justify-self-center font-serif text-2xl italic leading-tight text-forest/90 lg:block">
-            Thoughtful work
-            <br />
-            built to last.
-            <span className="mt-2 block h-px w-28 origin-left rotate-[-3deg] bg-forest/70" />
-          </p>
+        <motion.div variants={fadeUp}>
+          <SectionHeader
+            label="The Approach"
+            title="A calm way projects take shape."
+            subtitle="Every project is different, but the foundation is always the same: clarity, thoughtful design, solid build, and ongoing care."
+          />
         </motion.div>
 
         <ProcessBook />
@@ -114,134 +239,160 @@ export default function Process() {
 }
 
 function ProcessBook() {
-  return (
-    <motion.div variants={fadeUp} className="relative mt-12 hidden lg:block">
-      <div
-        className="pointer-events-none absolute inset-x-14 bottom-[-1.6rem] h-12 rounded-[50%] bg-ink/25 blur-2xl"
-        aria-hidden
-      />
+  const {
+    columns,
+    sectionDrawings,
+    groundShadow,
+    contactShadow,
+    topShadow,
+    spine,
+  } = bookLayout;
 
-      <div className="relative px-5 pb-5 pt-4">
+  return (
+    <motion.div variants={fadeUp} className="relative mt-6 hidden lg:block">
+      <div className="relative mx-auto max-w-[92rem]">
         <div
-          className="absolute inset-x-0 bottom-0 top-8 rounded-[2.2rem] bg-[linear-gradient(180deg,#23432f_0%,#102318_58%,#08120d_100%)] shadow-[0_18px_44px_-20px_rgba(7,14,10,0.78),inset_0_2px_0_rgba(255,255,255,0.12)]"
+          className="pointer-events-none absolute z-0 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(31,36,32,0.34)_0%,rgba(31,36,32,0.18)_44%,rgba(31,36,32,0)_74%)]"
+          aria-hidden
+          style={{
+            left: groundShadow.left,
+            right: groundShadow.right,
+            bottom: groundShadow.bottom,
+            height: groundShadow.height,
+            filter: `blur(${groundShadow.blur}px)`,
+            opacity: groundShadow.opacity,
+            transform: `translateY(${groundShadow.translateY})`,
+          }}
+        />
+
+        <div
+          className="pointer-events-none absolute z-[1] rounded-[50%] bg-[linear-gradient(90deg,rgba(31,36,32,0),rgba(31,36,32,0.36)_18%,rgba(31,36,32,0.42)_50%,rgba(31,36,32,0.36)_82%,rgba(31,36,32,0))]"
+          aria-hidden
+          style={{
+            left: contactShadow.left,
+            right: contactShadow.right,
+            bottom: contactShadow.bottom,
+            height: contactShadow.height,
+            filter: `blur(${contactShadow.blur}px)`,
+            opacity: contactShadow.opacity,
+            transform: `translateY(${contactShadow.translateY})`,
+          }}
+        />
+
+        {/* Top edge shade — keeps the book from blending into the page */}
+        <div
+          className="pointer-events-none absolute z-[1] rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(31,36,32,0.32)_0%,rgba(31,36,32,0.14)_48%,rgba(31,36,32,0)_76%)]"
+          aria-hidden
+          style={{
+            left: topShadow.left,
+            right: topShadow.right,
+            top: topShadow.top,
+            height: topShadow.height,
+            filter: `blur(${topShadow.blur}px)`,
+            opacity: topShadow.opacity,
+            transform: `translateY(${topShadow.translateY})`,
+          }}
+        />
+
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/process/svg/book-bg.svg"
+          alt=""
+          aria-hidden
+          className="relative z-[2] block w-full select-none"
+        />
+
+        {/* Soft page texture only; no center-container shadow. */}
+        <div
+          className="pointer-events-none absolute inset-[6%_8%_13%] z-[3] opacity-[0.13]"
+          aria-hidden
+          style={{
+            backgroundImage:
+              "radial-gradient(rgba(77,63,41,0.25) 0.55px, transparent 0.55px)",
+            backgroundSize: "7px 7px",
+          }}
+        />
+
+        {/* Movable spine / fold shadow line */}
+        <span
+          className="pointer-events-none absolute z-[4] -translate-x-1/2"
+          style={{
+            left: spine.left,
+            top: spine.top,
+            bottom: spine.bottom,
+            width: spine.width,
+            opacity: spine.opacity,
+            background: `linear-gradient(90deg, transparent 0%, ${spine.color} 48%, ${spine.color} 52%, transparent 100%)`,
+            filter: `blur(${spine.blur}px)`,
+            boxShadow: `0 0 ${spine.blur}px ${spine.spread}px ${spine.color}`,
+          }}
           aria-hidden
         />
-        <PageStack side="left" />
-        <PageStack side="right" />
 
-        <div className="relative min-h-[29rem] overflow-hidden rounded-[2rem] border border-[#d9d2c4] bg-[#fffcf4] shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_8px_28px_-20px_rgba(31,36,32,0.55)]">
-          <div
-            className="absolute inset-0 bg-[radial-gradient(circle_at_20%_3%,rgba(255,255,255,0.88),transparent_25%),radial-gradient(circle_at_82%_6%,rgba(255,255,255,0.76),transparent_28%),linear-gradient(90deg,rgba(77,63,41,0.08),transparent_10%,transparent_42%,rgba(31,36,32,0.08)_50%,transparent_58%,transparent_90%,rgba(77,63,41,0.08)),linear-gradient(180deg,#fffdf8_0%,#f8f1e5_100%)]"
+        {sectionDrawings.map((drawing) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={drawing.src}
+            src={drawing.src}
+            alt=""
             aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute inset-0 opacity-[0.22]"
-            aria-hidden
+            className="pointer-events-none absolute z-[9] block select-none object-contain mix-blend-multiply"
             style={{
-              backgroundImage:
-                "radial-gradient(rgba(77,63,41,0.22) 0.55px, transparent 0.55px)",
-              backgroundSize: "7px 7px",
+              left: drawing.left,
+              bottom: drawing.bottom,
+              width: drawing.width,
+              opacity: drawing.opacity ?? 1,
+              transform: `translateX(-50%) rotate(${drawing.rotate}deg)`,
             }}
           />
-          <div
-            className="absolute inset-x-8 top-0 h-12 rounded-[50%] border-t border-[#d8d0c0]/80"
-            aria-hidden
-          />
-          <div
-            className="absolute inset-x-8 bottom-0 h-10 rounded-[50%] border-b border-[#cfc5b4]/90"
-            aria-hidden
-          />
-          <div
-            className="absolute bottom-0 left-8 right-8 h-5 bg-[repeating-linear-gradient(0deg,rgba(65,56,42,0.2)_0_1px,rgba(255,255,255,0)_1px_3px)] opacity-70"
-            aria-hidden
-          />
-          <div
-            className="absolute bottom-0 left-1/2 z-20 h-full w-16 -translate-x-1/2 bg-[linear-gradient(90deg,transparent_0%,rgba(52,45,35,0.06)_22%,rgba(52,45,35,0.26)_49%,rgba(255,255,255,0.28)_51%,rgba(52,45,35,0.08)_76%,transparent_100%)]"
-            aria-hidden
-          />
-          <div
-            className="absolute bottom-[-1px] left-1/2 z-30 h-9 w-3 -translate-x-1/2 rounded-t-full bg-[#183322] shadow-[0_-2px_6px_rgba(7,14,10,0.38)]"
-            aria-hidden
-          />
+        ))}
 
-          <div className="relative z-10 grid min-h-[29rem] grid-cols-4 px-16 pb-14 pt-14">
-            {processChapters.map((chapter, index) => (
-              <BookChapter key={chapter.number} chapter={chapter} index={index} />
-            ))}
-          </div>
+        {/* Parameterized chapter columns */}
+        {processChapters.map((chapter, index) => {
+          const col = columns[index];
+          if (!col) return null;
 
-          <span className="absolute bottom-9 left-12 text-[11px] font-semibold uppercase tracking-[0.38em] text-ink/70">
-            CK Works
-          </span>
-          <span className="absolute bottom-9 right-12 text-[11px] font-semibold uppercase tracking-[0.28em] text-ink/70">
-            Built to last.
-          </span>
-        </div>
+          return (
+            <article
+              key={chapter.number}
+              className="absolute z-10 flex flex-col"
+              style={{
+                top: col.top,
+                bottom: col.bottom,
+                left: col.left,
+                width: col.width,
+                paddingLeft: col.paddingX,
+                paddingRight: col.paddingX,
+              }}
+            >
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-forest/85">
+                {chapter.label}
+              </p>
+
+              <h3 className="mt-[6%] font-serif text-[clamp(1.55rem,2vw,2.15rem)] font-medium leading-[0.98] text-ink">
+                {chapter.number}. {chapter.title}
+              </h3>
+
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/brand/svg/underline-straight.svg"
+                alt=""
+                aria-hidden
+                className="mx-auto mt-1.5 h-[10px] w-[72%] max-w-[10rem] origin-center select-none object-fill"
+                style={{
+                  transform: `${
+                    col.underlineFlip ? "scaleX(-1) " : ""
+                  }rotate(${col.underlineRotate}deg)`,
+                }}
+              />
+
+              <p className="mt-[6%] max-w-[14rem] text-[clamp(0.72rem,0.86vw,0.9rem)] leading-[1.7] text-ink/82">
+                {chapter.body}
+              </p>
+            </article>
+          );
+        })}
       </div>
     </motion.div>
-  );
-}
-
-function PageStack({ side }: { side: "left" | "right" }) {
-  return (
-    <div
-      className={`absolute bottom-3 top-11 z-0 w-12 bg-[repeating-linear-gradient(90deg,#f5eedf_0_2px,#d7cebd_2px_3px,#fff9ec_3px_5px)] opacity-95 shadow-[inset_0_0_10px_rgba(77,63,41,0.22)] ${
-        side === "left"
-          ? "left-3 rounded-l-[2rem]"
-          : "right-3 rounded-r-[2rem]"
-      }`}
-      aria-hidden
-    />
-  );
-}
-
-function BookChapter({ chapter, index }: { chapter: Chapter; index: number }) {
-  const Icon = chapter.icon;
-  const hasDivider = index === 0 || index === 2;
-
-  return (
-    <article
-      className={`relative flex min-h-[22rem] flex-col px-9 ${
-        hasDivider ? "border-r border-[#d8d0c2]" : ""
-      } ${index === 2 ? "pl-12" : ""}`}
-    >
-      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-forest/85">
-        {chapter.label}
-      </p>
-      <span className="mt-2 h-px w-8 bg-forest/60" aria-hidden />
-
-      <h3 className="mt-8 font-serif text-[2.15rem] font-medium leading-[0.98] text-ink">
-        {chapter.number}. {chapter.title}
-      </h3>
-      <span
-        className="mt-2 h-px w-[72%] origin-left rotate-[-4deg] bg-forest/70"
-        aria-hidden
-      />
-
-      <p className="mt-8 max-w-[14rem] text-sm leading-6 text-ink/82">
-        {chapter.body}
-      </p>
-
-      <div
-        className={`mt-auto flex items-end gap-4 pt-8 ${
-          index === 3 ? "justify-between" : "justify-center"
-        }`}
-      >
-        <Icon
-          className={`h-12 w-12 text-forest/75 ${index === 3 ? "h-10 w-10" : ""}`}
-          strokeWidth={1.35}
-          aria-hidden
-        />
-        <p
-          className={`max-w-[9.5rem] rotate-[-8deg] font-serif text-lg italic leading-tight text-forest/80 ${
-            index === 3
-              ? "rounded-[50%] border border-forest/55 px-4 py-3 text-center text-base"
-              : ""
-          }`}
-        >
-          {chapter.note}
-        </p>
-      </div>
-    </article>
   );
 }

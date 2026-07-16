@@ -15,6 +15,7 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: var(--anchor-scroll-offset);
+    scrollbar-color: #dde8d8 #faf7f0;
   }
 
   body {
@@ -28,6 +29,29 @@
 
   ::selection {
     @apply bg-forest-soft text-forest;
+  }
+
+  * {
+    scrollbar-width: thin;
+  }
+
+  *::-webkit-scrollbar {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #faf7f0;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #dde8d8;
+    border: 0.18rem solid #faf7f0;
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #cbdcc4;
   }
 }
 

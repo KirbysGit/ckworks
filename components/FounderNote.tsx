@@ -1,114 +1,171 @@
 "use client";
 
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { fadeUp, inView } from "@/lib/motion";
 
 const founderNoteLayout = {
-  portraitMaxWidth: 14.25,
-  drawingScale: 0.92,
-  drawingOpacity: 0.64,
-  drawingOffsetX: 0.35,
-  drawingOffsetY: 0.15,
+  stageMaxWidth: "92rem",
+  portrait: {
+    width: "18.5rem",
+    left: "-6rem",
+    top: "52%",
+    rotate: "-1.2deg",
+  },
+  drawingCard: {
+    width: "20.5rem",
+    height: "28rem",
+    right: "-6rem",
+    top: "3.75rem",
+    rotate: "2.4deg",
+  },
+  drawing: {
+    scale: 1.08,
+    opacity: 0.58,
+    offsetX: "0.15rem",
+    offsetY: "0.35rem",
+  },
 } as const;
 
 export default function FounderNote() {
-  const {
-    portraitMaxWidth,
-    drawingScale,
-    drawingOpacity,
-    drawingOffsetX,
-    drawingOffsetY,
-  } = founderNoteLayout;
+  const { stageMaxWidth, portrait, drawingCard, drawing } = founderNoteLayout;
 
   return (
-    <section id="about" className="bg-sand py-10 lg:py-14">
+    <section id="about" className="overflow-hidden bg-sand py-12 sm:py-14 lg:py-16">
       <div className="container-ck">
         <motion.div
           variants={fadeUp}
           initial="hidden"
           whileInView="show"
           viewport={inView}
-          className="overflow-hidden rounded-2xl border border-line bg-card shadow-soft"
+          className="relative mx-auto grid gap-5 lg:min-h-[32rem] lg:block"
+          style={{ maxWidth: stageMaxWidth }}
         >
-          <div className="grid items-stretch lg:grid-cols-[minmax(13rem,0.82fr)_minmax(0,1.18fr)_minmax(13rem,0.86fr)]">
-            <div className="flex items-center justify-center border-b border-line/70 p-4 sm:p-5 lg:border-b-0 lg:border-r">
-              <div
-                className="relative aspect-[4/5] w-full overflow-hidden rounded-xl border border-line/70 bg-forest-soft shadow-soft"
-                style={{ maxWidth: `${portraitMaxWidth}rem` }}
-              >
-                <Image
-                  src="/jpg/me.jpg"
-                  alt="Colin Kirby"
-                  fill
-                  sizes="(max-width: 1024px) 70vw, 230px"
-                  quality={92}
-                  className="object-cover object-[center_20%]"
-                />
+          <div
+            className="pointer-events-none absolute bottom-4 left-[12%] right-[12%] hidden h-14 rounded-[50%] bg-ink/18 blur-3xl lg:block"
+            aria-hidden
+          />
+
+          <div
+            className="order-3 relative z-0 mx-auto h-[24rem] w-full max-w-[25rem] overflow-hidden rounded-[1.8rem] border border-line/80 bg-card/75 shadow-soft lg:absolute lg:right-[var(--drawing-right)] lg:top-[var(--drawing-top)] lg:h-[var(--drawing-height)] lg:w-[var(--drawing-width)] lg:max-w-none lg:rotate-[var(--drawing-rotate)]"
+            style={{
+              "--drawing-width": drawingCard.width,
+              "--drawing-height": drawingCard.height,
+              "--drawing-right": drawingCard.right,
+              "--drawing-top": drawingCard.top,
+              "--drawing-rotate": drawingCard.rotate,
+            } as CSSProperties}
+          >
+            <div className="pointer-events-none absolute inset-3 rounded-[1.45rem] border border-line/45" />
+            <div
+              className="grid-texture pointer-events-none absolute inset-0 opacity-45 [mask-image:radial-gradient(circle_at_center,black_42%,transparent_88%)]"
+              aria-hidden
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/founder/svg/note-drawing.svg"
+              alt=""
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-1/2 max-w-none select-none object-contain mix-blend-multiply"
+              style={{
+                height: `${drawing.scale * 100}%`,
+                width: "auto",
+                opacity: drawing.opacity,
+                transform: `translate(calc(-50% + ${drawing.offsetX}), calc(-50% + ${drawing.offsetY}))`,
+              }}
+            />
+          </div>
+
+          <article className="relative z-20 order-1 mx-auto w-full max-w-[49rem] overflow-hidden rounded-[1.8rem] border border-line bg-card/95 px-6 py-8 shadow-lift sm:px-10 sm:py-10 lg:min-h-[30rem] lg:px-20 lg:py-11">
+            <div className="pointer-events-none absolute inset-2 rounded-[1.65rem] border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]" />
+            <div
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_4%,rgba(255,255,255,0.95),transparent_28%),radial-gradient(circle_at_90%_12%,rgba(255,255,255,0.7),transparent_30%),linear-gradient(180deg,rgba(255,253,248,0.9)_0%,rgba(250,247,240,0.45)_100%)]"
+              aria-hidden
+            />
+            <div
+              className="pointer-events-none absolute inset-x-8 inset-y-10 opacity-[0.18]"
+              aria-hidden
+              style={{
+                backgroundImage:
+                  "repeating-linear-gradient(180deg, transparent 0 31px, rgba(47,91,63,0.28) 32px, transparent 33px)",
+              }}
+            />
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-4">
+                <span className="h-px w-8 bg-forest" aria-hidden />
+                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-forest">
+                  A Note From Colin
+                </p>
               </div>
-            </div>
 
-            <div className="px-6 py-7 sm:px-8 sm:py-8 lg:px-8 lg:py-9">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-forest">
-                A Note From Colin
-              </p>
-
-              <h2 className="mt-3 font-serif text-3xl font-medium leading-tight text-ink sm:text-4xl">
-                Hi, I&apos;m Colin.
+              <h2 className="mt-6 font-serif text-[clamp(2.55rem,3.6vw,3.65rem)] font-medium leading-[0.95] text-ink">
+                Hi, I&apos;m{" "}
+                <span className="relative inline-block">
+                  Colin.
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/brand/svg/underline-straight.svg"
+                    alt=""
+                    aria-hidden
+                    className="absolute -bottom-3 left-1/2 h-3 w-[72%] -translate-x-1/2 object-fill"
+                  />
+                </span>
               </h2>
 
-              <div className="mt-4 space-y-2.5 text-sm leading-6 text-muted">
-                <p>I&apos;m the founder of CK Works.</p>
+              <div className="mt-8 max-w-[39rem] space-y-3.5 text-[0.98rem] leading-7 text-ink/82 sm:text-base sm:leading-8">
                 <p>
-                  I earned my B.S. in Computer Engineering from the University
-                  of Central Florida.
+                  I started CK Works because I kept noticing the same thing: good
+                  businesses doing real work, but showing up online with
+                  websites that felt outdated, unclear, or harder to use than
+                  they needed to be.
                 </p>
                 <p>
-                  I&apos;m based in Orlando, Florida, where I stay active,
-                  explore outdoors, and draw inspiration from the place I call
-                  home.
+                  My background is technical, but I care just as much about the
+                  creative side: the message, the layout, the feeling, and the
+                  details that make something easier to understand.
                 </p>
                 <p>
-                  I grew up drawing, taught myself guitar and piano, and
-                  I&apos;m always learning.
-                </p>
-                <p>
-                  I love the 0 to 1 process, taking an idea from a spark and
-                  building something meaningful.
+                  CK Works is my way of helping business owners close that gap
+                  with clearer websites, thoughtful design, and practical
+                  systems that support the work behind the scenes.
                 </p>
               </div>
 
-              <div className="mt-5">
+              <div className="mt-6">
                 <Image
-                  src="/svg/ck-full-signature.svg"
+                  src="/images/brand/svg/signature-full.svg"
                   alt="Colin Kirby"
                   width={306}
                   height={119}
-                  className="h-11 w-auto sm:h-12"
+                  className="h-12 w-auto sm:h-14"
                 />
-                <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink/55">
+                <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-ink/55">
                   Founder, CK Works
                 </p>
+                <span className="mt-3 block h-px w-7 bg-forest" aria-hidden />
               </div>
             </div>
+          </article>
 
-            <div className="relative min-h-[13rem] overflow-hidden border-t border-line/70 bg-ivory/45 lg:min-h-0 lg:border-l lg:border-t-0">
-              <div
-                className="grid-texture pointer-events-none absolute inset-0 opacity-55 [mask-image:radial-gradient(circle_at_center,black_38%,transparent_88%)]"
-                aria-hidden
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/svg/note-drawing.svg"
-                alt=""
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 max-w-none select-none object-contain"
-                style={{
-                  height: `${drawingScale * 100}%`,
-                  width: "auto",
-                  opacity: drawingOpacity,
-                  transform: `translate(calc(-50% + ${drawingOffsetX}rem), calc(-50% + ${drawingOffsetY}rem))`,
-                }}
+          <div
+            className="relative z-30 order-2 mx-auto w-full max-w-[24rem] rounded-[1.85rem] border border-line bg-card p-3 shadow-float lg:absolute lg:left-[var(--portrait-left)] lg:top-[var(--portrait-top)] lg:w-[var(--portrait-width)] lg:max-w-none lg:-translate-y-1/2 lg:rotate-[var(--portrait-rotate)]"
+            style={{
+              "--portrait-width": portrait.width,
+              "--portrait-left": portrait.left,
+              "--portrait-top": portrait.top,
+              "--portrait-rotate": portrait.rotate,
+            } as CSSProperties}
+          >
+            <div className="relative aspect-[4/5.15] overflow-hidden rounded-[1.35rem] bg-forest-soft">
+              <Image
+                src="/images/founder/jpg/portrait.jpg"
+                alt="Colin Kirby"
+                fill
+                sizes="(max-width: 1024px) 88vw, 384px"
+                quality={92}
+                className="object-cover object-[center_20%]"
               />
             </div>
           </div>

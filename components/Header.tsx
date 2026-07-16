@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { motion, useAnimationControls } from "framer-motion";
+import { useEffect, useState } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 import Logo from "./ui/Logo";
 import Button from "./ui/Button";
+import DrawUnderline from "./ui/DrawUnderline";
 import { nav } from "@/lib/data";
 
 export default function Header() {
@@ -47,13 +47,13 @@ export default function Header() {
                 onClick={() => setActiveHref(item.href)}
                 onMouseEnter={() => setHoveredHref(item.href)}
                 onMouseLeave={() => setHoveredHref(null)}
-                className={`border-r border-line/80 px-6 py-1 font-serif text-xl font-medium transition-colors duration-200 last:border-r-0 ${
+                className={`border-r border-line/80 px-6 py-1 font-sans text-sm font-medium tracking-wide transition-colors duration-200 last:border-r-0 ${
                   isActive ? "text-ink" : "text-ink/70 hover:text-ink"
                 }`}
               >
                 <span className="relative inline-block">
                   {item.label}
-                  <NavUnderline show={isActive || isHovered} />
+                  <DrawUnderline show={isActive || isHovered} />
                 </span>
               </Link>
             );
@@ -91,7 +91,7 @@ export default function Header() {
                   setActiveHref(item.href);
                   setOpen(false);
                 }}
-                className="rounded-lg px-2 py-2.5 font-serif text-lg text-ink hover:bg-forest-soft/50"
+                className="rounded-lg px-2 py-2.5 font-sans text-base text-ink hover:bg-forest-soft/50"
               >
                 {item.label}
               </Link>
@@ -103,58 +103,5 @@ export default function Header() {
         </div>
       )}
     </header>
-  );
-}
-
-/**
- * Hand-drawn underline from /svg/nav-underline.svg.
- * Writes left → right on show, erases left → right (off the far end) on hide.
- */
-function NavUnderline({ show }: { show: boolean }) {
-  const controls = useAnimationControls();
-  const shown = useRef(false);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function run() {
-      if (show && !shown.current) {
-        shown.current = true;
-        await controls.start({
-          clipPath: "inset(0 0% 0 0)",
-          transition: { duration: 0.38, ease: [0.22, 1, 0.36, 1] },
-        });
-      } else if (!show && shown.current) {
-        await controls.start({
-          clipPath: "inset(0 0 0 100%)",
-          transition: { duration: 0.32, ease: [0.4, 0, 1, 1] },
-        });
-        if (cancelled) return;
-        // Reset off-screen on the write side for the next draw-in
-        controls.set({ clipPath: "inset(0 100% 0 0)" });
-        shown.current = false;
-      }
-    }
-
-    void run();
-    return () => {
-      cancelled = true;
-    };
-  }, [show, controls]);
-
-  return (
-    <motion.span
-      initial={{ clipPath: "inset(0 100% 0 0)" }}
-      animate={controls}
-      className="pointer-events-none absolute -bottom-2.5 left-1/2 block h-[9px] w-[120%] -translate-x-1/2 overflow-hidden"
-      aria-hidden
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/svg/nav-underline.svg"
-        alt=""
-        className="h-full w-full select-none object-fill"
-      />
-    </motion.span>
   );
 }

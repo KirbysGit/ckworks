@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ExternalLink } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Button from "@/components/ui/Button";
@@ -99,15 +100,44 @@ export default async function CaseStudyPage({ params }: Props) {
                 </p>
               </div>
             </div>
+
+            {study.liveUrl && (
+              <a
+                href={study.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 flex flex-col gap-1 rounded-xl border border-line bg-card px-4 py-3 text-sm shadow-soft transition-colors duration-200 hover:border-forest/40 hover:bg-forest-soft/40 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <span className="font-medium text-muted">Live project</span>
+                <span className="inline-flex items-center gap-2 break-all font-medium text-forest">
+                  {study.liveUrl}
+                  <ExternalLink className="h-4 w-4 shrink-0" />
+                </span>
+              </a>
+            )}
           </div>
 
           <div
             className={`relative mx-auto mt-10 aspect-[16/8] w-full max-w-5xl overflow-hidden rounded-2xl border border-line bg-gradient-to-br shadow-soft ${study.accent}`}
           >
-            <div className="grid-texture absolute inset-0 opacity-25" />
-            <p className="absolute bottom-4 right-5 text-xs text-ivory/70">
-              Screenshot coming soon
-            </p>
+            {study.coverImage ? (
+              <Image
+                src={study.coverImage.src}
+                alt={study.coverImage.alt}
+                fill
+                priority
+                sizes="(min-width: 1024px) 80vw, 100vw"
+                className="object-contain"
+                style={{ objectPosition: study.coverImage.position ?? "center" }}
+              />
+            ) : (
+              <>
+                <div className="grid-texture absolute inset-0 opacity-25" />
+                <p className="absolute bottom-4 right-5 text-xs text-ivory/70">
+                  Screenshot coming soon
+                </p>
+              </>
+            )}
           </div>
         </section>
 
@@ -148,24 +178,52 @@ export default async function CaseStudyPage({ params }: Props) {
               label="What I'd improve next"
               paragraphs={study.improveNext}
             />
-
-            <div className="mt-4 rounded-2xl border border-line bg-card p-8 text-center shadow-soft">
-              <p className="font-serif text-2xl font-medium text-ink">
-                Have a project like this in mind?
-              </p>
-              <p className="mt-2 text-muted">
-                Let&apos;s talk about what&apos;s possible.
-              </p>
-              <div className="mt-5 flex justify-center">
-                <Button href="/#contact">
-                  Start a project <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
           </div>
+
+          <ProjectPageCta />
         </article>
       </main>
       <Footer />
     </>
+  );
+}
+
+function ProjectPageCta() {
+  return (
+    <section className="mx-auto mt-8 max-w-3xl rounded-[2rem] border border-line bg-card px-6 py-8 shadow-soft sm:px-8 lg:px-10 lg:py-10">
+      <div className="grid items-center gap-6 sm:grid-cols-[7.5rem_1fr] sm:gap-8">
+        <div className="flex justify-center sm:justify-start">
+          <Image
+            src="/images/cta/svg/sticky-note-cta.svg"
+            alt=""
+            width={220}
+            height={220}
+            className="h-auto w-28 rotate-[-3deg] drop-shadow-[0_18px_18px_rgba(31,36,32,0.16)] sm:w-32"
+            aria-hidden="true"
+          />
+        </div>
+
+        <div className="text-center sm:text-left">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-forest">
+            Let&apos;s Talk
+          </p>
+          <h2 className="mt-3 font-serif text-2xl font-medium leading-tight text-ink sm:text-3xl">
+            Want something like this for your business?
+          </h2>
+          <p className="mt-3 text-base leading-relaxed text-muted">
+            Whether it&apos;s a website, a system, or an idea that still feels a
+            little messy, I can help you figure out what makes sense next.
+          </p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-start">
+            <Button href="/#contact" className="min-w-44">
+              Start a project <ArrowRight className="h-4 w-4" />
+            </Button>
+            <Button href="/#contact" variant="secondary" className="min-w-44">
+              Send me a note
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

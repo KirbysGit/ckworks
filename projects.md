@@ -1,0 +1,25 @@
+tiziano rosso orcel . com  - 
+
+friend reached out with a connection, wanted to build a site out and knew i could build them. connected with client, got general goal amongst pro karting racer needing a web prescen for future career, discussed inspirations and general styling. went back and forth regarding initial designs and styling of logos and the color palette to focus, utilized ai designs to assist in general ideas for what we want to target then moved forward with designing them myself with figma. once settled on logo, moved forward with initial website designs, hosting a skeleton, providing them with variations of the site online, then it was really just clean up of my generalizations from the app and from there finalized our v1 and continued maintanence and hosting.
+
+taylor.io -
+
+during my job search process, at first when i was just cold applying with the same old resumes i was seeing no results, just tons of automated rejections. eventually i saw a stat online talking about how much value it adds to your resumes when you target more specific roles rather than spraying and praying and tailor your resume to that specific role. i began doing that utilizing ai tools, whichever i could like chatgpt or claude to help me figure out how to make my resume sound better per role i applied to. and i felt strongly that i was seeing more prominent results from these updates, however, when applying, it was still taking up so much time to adjust my education highlights, project entries and skill stacks, experience entry bullets to target more of a specific feel like design, or technical, or business oriented, and it got to a point where my process was pretty simple with ai. 
+
+notice keywords of job description / job role -> break down my strengths in reference to the job role -> use ai to optimize those strength's descriptions or narrative for the job role -> input back into resume with specific new styling -> submit resume
+
+after probably 150+ personally tailored resumes for myself and friends i began to think that this process could definitely be automated. so i decided to start building the pipeline out. and initially i wanted it to just be a simple power flow, like login, give me your story and info, tell me the job role you want and then output resume, but i got caught up in expansion because i had so many ideas to be associated with the site. like allowing users to save specific resume formats, or providing different templates for each user to choose from, or allowing users to give us their past resumes to expand off of. all of that kind of distracted me through the initial build, as well as the specifics of the design and theming moving forward. eventually i was able to put away my eagerness to keep making it closer to that "perfect" site to designate some success criteria which i then reached fairly quickly and deployed it out. currently its in an early stage, there is guaranteed to be imperfections, but i wanted to have it out there so i could learn more and i could have a reference to my growth.
+
+centi - 
+
+this site was the first full stack application i built outside of school. i really wanted to practice and stay "warm" with my coding skills from my senior design classes and wanted to practice stronger styling, but also wanted to build something i felt could be useful. and at the same time it was towards the latter half of my final semester at ucf and i wanted to budget better after college with my savings and understand my spending with a bit more insight, and i previously had used an app called mint to track how i was spending, but it was shut down so i decided to try and combine these two things in my life to build an app that helps me track my finances. started out really basic, how can i ingest my finacial data, went through basic regex, then found plaid, messed with that, and then building the frontend and organizing the data was a really fun unique challenge to organize data in simple ways and also make it look clean.
+
+ck-dev -
+
+this was my first portfolio piece, it started out just as a CSS playground for me to practice how i could make unique styles with rudimentary elements, and it just developed into a constant work cycle of me having a cool new idea i wanted to blend into the previous, and eventually i just decided to make it my portfolio as i wanted a way to showcase my work, its a bit stale now, but i really like the creative aspect of it and turning my indecisive-ness of theming to describe me into a super cool flow. 
+
+setlst -
+
+friend came to me with an idea for a gym app, we went back and forth about styling, goal behavior / app focus, and currently still in development to production but here are some styles and basic implementations we have. click here to let us know you'd like to see the app!
+
+then idk what else we should have but i just want you to have this : 

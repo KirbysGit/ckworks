@@ -51,49 +51,49 @@ function beforeY(y: number) {
 const notes: Note[] = [
   {
     label: "Who is this for?",
-    src: "/svg/before-sticky-who.svg",
+    src: "/images/transformation/svg/sticky-who.svg",
     tone: "sage",
     paper: { x: 18, y: 16, size: 18, rotate: -6 },
     text: { x: 11, y: 11, size: 80 },
   },
   {
     label: "Calm, foresty, earthy feel",
-    src: "/svg/before-sticky-calm.svg",
+    src: "/images/transformation/svg/sticky-calm.svg",
     tone: "cream",
     paper: { x: 42, y: 28, size: 18, rotate: 3 },
     text: { x: 2, y: 2, size: 95 },
   },
   {
     label: "Better intake flow for customers",
-    src: "/svg/before-sticky-better.svg",
+    src: "/images/transformation/svg/sticky-better.svg",
     tone: "sage",
     paper: { x: 66, y: 12, size: 18, rotate: 4 },
     text: { x: 8, y: 5, size: 88 },
   },
   {
     label: "Minimal layout, but stronger color",
-    src: "/svg/before-sticky-minimal.svg",
+    src: "/images/transformation/svg/sticky-minimal.svg",
     tone: "cream",
     paper: { x: 22, y: 60, size: 18, rotate: 5 },
     text: { x: 6, y: 6, size: 90 },
   },
   {
     label: "Make services clearer",
-    src: "/svg/before-sticky-make.svg",
+    src: "/images/transformation/svg/sticky-make.svg",
     tone: "sage",
     paper: { x: 47, y: 68, size: 18, rotate: 3 },
     text: { x: 7, y: 8, size: 88 },
   },
   {
     label: "Feels warm, not clinical",
-    src: "/svg/before-sticky-feels.svg",
+    src: "/images/transformation/svg/sticky-feels.svg",
     tone: "cream",
     paper: { x: 78, y: 42, size: 18, rotate: 4 },
     text: { x: 5, y: 3, size: 90 },
   },
   {
     label: "Easy booking",
-    src: "/svg/before-sticky-easy.svg",
+    src: "/images/transformation/svg/sticky-easy.svg",
     tone: "yellow",
     paper: { x: 72, y: 68, size: 18, rotate: -1 },
     text: { x: 8, y: 5, size: 88 },
@@ -128,7 +128,7 @@ type BeforeArrow = {
 
 const beforeAssets: BeforeAsset[] = [
   {
-    src: "/svg/before-forest.svg",
+    src: "/images/transformation/svg/forest.svg",
     alt: "",
     x: 0,
     y: 28,
@@ -137,7 +137,7 @@ const beforeAssets: BeforeAsset[] = [
     opacity: 0.64,
   },
   {
-    src: "/svg/before-site.svg",
+    src: "/images/transformation/svg/site.svg",
     alt: "",
     x: 3,
     y: 66,
@@ -146,7 +146,7 @@ const beforeAssets: BeforeAsset[] = [
     opacity: 0.58,
   },
   {
-    src: "/svg/before-checkbox.svg",
+    src: "/images/transformation/svg/checkbox.svg",
     alt: "",
     x: 90,
     y: 9,
@@ -155,7 +155,7 @@ const beforeAssets: BeforeAsset[] = [
     opacity: 0.66,
   },
   {
-    src: "/svg/before-fern.svg",
+    src: "/images/transformation/svg/fern.svg",
     alt: "",
     x: 88,
     y: 76,
@@ -564,7 +564,7 @@ function BrowserPreview() {
 
       <div className="relative min-h-[18.35rem] overflow-hidden">
         <Image
-          src="/png/landing-after-demo.png"
+          src="/images/transformation/png/after-demo.png"
           alt=""
           fill
           sizes="560px"
@@ -762,7 +762,7 @@ function MiniBrand({ compact = false }: { compact?: boolean }) {
   return (
     <span className="inline-flex items-center gap-1.5">
       <Image
-        src="/svg/hero-demo-logo.svg"
+        src="/images/hero/svg/demo-logo.svg"
         alt=""
         width={242}
         height={385}
@@ -828,7 +828,7 @@ function PhonePreview() {
 
               <div className="absolute inset-x-0 bottom-0 h-[116px] overflow-hidden">
                 <Image
-                  src="/png/landing-after-demo.png"
+                  src="/images/transformation/png/after-demo.png"
                   alt=""
                   fill
                   sizes="170px"

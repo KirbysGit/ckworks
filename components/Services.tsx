@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { animate, motion, useInView as useMotionInView } from "framer-motion";
 import { ArrowRight, CheckCircle2, Sparkle } from "lucide-react";
 import SectionHeader from "./ui/SectionHeader";
 import { services } from "@/lib/data";
@@ -32,6 +33,75 @@ const serviceDetails: Record<string, ServiceDetails> = {
     tags: ["Maintenance", "Updates", "Support"],
     visual: "support",
   },
+};
+
+// Integration card tuning: move boxes with x/y, move connectors with lines,
+// and nudge logos inside their squares with iconOffsetX/iconOffsetY.
+const integrationLayout = {
+  viewBox: "0 0 260 150",
+  lines: {
+    path: "M42 45 C92 45 80 72 130 72 M42 105 C92 105 80 78 130 78 M218 45 C168 45 180 72 130 72 M218 105 C168 105 180 78 130 78",
+    x: 0,
+    y: 0,
+    scale: 1,
+    strokeWidth: 2,
+    strokeOpacity: 0.5,
+    dash: "4 5",
+  },
+  center: {
+    x: "41.5%",
+    y: "32%",
+    size: 48,
+    iconSize: 20,
+    iconOffsetX: 0,
+    iconOffsetY: 0,
+  },
+  nodes: [
+    {
+      label: "Sheets",
+      icon: "/images/services/svg/excel-logo.svg",
+      x: "8%",
+      y: "18%",
+      size: 40,
+      iconSize: 30,
+      iconOffsetX: -1,
+      iconOffsetY: 0,
+      delay: 0.28,
+    },
+    {
+      label: "AI",
+      icon: "/images/services/svg/openai-logo.svg",
+      x: "8%",
+      y: "58%",
+      size: 40,
+      iconSize: 20,
+      iconOffsetX: 0,
+      iconOffsetY: 0,
+      delay: 0.4,
+    },
+    {
+      label: "Chat",
+      icon: "/images/services/svg/slack-logo.svg",
+      x: "77%",
+      y: "18%",
+      size: 40,
+      iconSize: 20,
+      iconOffsetX: 0,
+      iconOffsetY: 0,
+      delay: 0.52,
+    },
+    {
+      label: "Mail",
+      icon: "/images/services/svg/gmail-logo.svg",
+      x: "77%",
+      y: "58%",
+      size: 40,
+      iconSize: 20,
+      iconOffsetX: 0,
+      iconOffsetY: 0,
+      delay: 0.64,
+    },
+  ],
 };
 
 export default function Services() {
@@ -117,28 +187,59 @@ export default function Services() {
 function ServiceVisual({ kind }: { kind: VisualKind }) {
   if (kind === "website") {
     return (
-      <div className="mt-5 h-32 overflow-hidden rounded-lg border border-line bg-ivory/75">
+      <div className="relative mt-5 h-32 overflow-hidden rounded-lg border border-line bg-ivory/75">
+        <motion.span
+          className="pointer-events-none absolute inset-y-0 z-20 w-16 bg-gradient-to-r from-transparent via-white/70 to-transparent"
+          initial={{ x: "-140%" }}
+          whileInView={{ x: "520%" }}
+          viewport={inView}
+          transition={{ duration: 1.45, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          aria-hidden
+        />
         <div className="flex h-5 items-center gap-1.5 border-b border-line px-3">
           <span className="h-1.5 w-1.5 rounded-full bg-forest/35" />
           <span className="h-1.5 w-1.5 rounded-full bg-forest/25" />
           <span className="h-1.5 w-1.5 rounded-full bg-forest/20" />
-          <span className="ml-auto h-1.5 w-10 rounded-full bg-line" />
-          <span className="h-1.5 w-7 rounded-full bg-line" />
+          <AnimatedBar className="ml-auto h-1.5 rounded-full bg-line" width="2.5rem" delay={0.18} />
+          <AnimatedBar className="h-1.5 rounded-full bg-line" width="1.75rem" delay={0.26} />
         </div>
         <div className="grid gap-2 p-3">
           <div className="space-y-1.5">
-            <span className="block h-2 w-16 rounded-full bg-ink/70" />
-            <span className="block h-2 w-28 rounded-full bg-line" />
-            <span className="block h-2 w-20 rounded-full bg-line" />
+            <AnimatedBar className="block h-2 rounded-full bg-ink/70" width="4rem" delay={0.12} />
+            <AnimatedBar className="block h-2 rounded-full bg-line" width="7rem" delay={0.22} />
+            <AnimatedBar className="block h-2 rounded-full bg-line" width="5rem" delay={0.32} />
           </div>
           <div className="grid grid-cols-[1.2fr_0.8fr] gap-3">
-            <div className="h-10 rounded-md bg-forest-soft/70" />
-            <div className="h-10 rounded-md bg-sand" />
+            <motion.div
+              className="h-10 rounded-md bg-forest-soft/70"
+              initial={{ opacity: 0, scale: 0.96 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={inView}
+              transition={{ duration: 0.55, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
+            />
+            <motion.div
+              className="h-10 rounded-md bg-sand"
+              initial={{ opacity: 0, scale: 0.96 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={inView}
+              transition={{ duration: 0.55, delay: 0.48, ease: [0.22, 1, 0.36, 1] }}
+            />
           </div>
           <div className="grid grid-cols-3 gap-2">
-            <span className="h-5 rounded-md bg-sand" />
-            <span className="h-5 rounded-md bg-sand" />
-            <span className="h-5 rounded-md bg-sand" />
+            {[0, 1, 2].map((item) => (
+              <motion.span
+                key={item}
+                className="h-5 rounded-md bg-sand"
+                initial={{ opacity: 0, y: 4 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={inView}
+                transition={{
+                  duration: 0.45,
+                  delay: 0.56 + item * 0.08,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -160,9 +261,11 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
           <div>
             <p className="text-[10px] font-semibold text-ink">Overview</p>
             <div className="mt-2 grid grid-cols-3 gap-2">
-              {["128", "37", "12"].map((value) => (
+              {[128, 37, 12].map((value, index) => (
                 <div key={value} className="rounded-md border border-line bg-card p-2">
-                  <p className="text-sm font-semibold text-ink">{value}</p>
+                  <p className="text-sm font-semibold text-ink">
+                    <AnimatedNumber value={value} delay={0.2 + index * 0.12} />
+                  </p>
                   <span className="block h-1.5 w-10 rounded-full bg-line" />
                 </div>
               ))}
@@ -170,12 +273,16 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
             <div className="mt-2 grid grid-cols-[1.3fr_0.7fr] gap-2">
               <div className="rounded-md border border-line bg-card p-1.5">
                 <svg viewBox="0 0 116 44" className="h-9 w-full">
-                  <path
+                  <motion.path
                     d="M3 35 C18 15 31 41 45 24 S70 11 86 25 103 28 113 11"
                     fill="none"
                     stroke="#2F5B3F"
                     strokeLinecap="round"
                     strokeWidth="2"
+                    initial={{ pathLength: 0, opacity: 0.45 }}
+                    whileInView={{ pathLength: 1, opacity: 1 }}
+                    viewport={inView}
+                    transition={{ duration: 1.15, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   />
                 </svg>
               </div>
@@ -198,27 +305,50 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
     return (
       <div className="relative mt-5 h-32 overflow-hidden rounded-lg border border-line bg-ivory/75">
         <svg
-          viewBox="0 0 260 150"
+          viewBox={integrationLayout.viewBox}
           className="absolute inset-0 h-full w-full text-forest"
           aria-hidden
         >
-          <path
-            d="M55 40 C90 40 87 75 120 75 M55 110 C86 110 85 75 120 75 M205 38 C172 38 172 75 140 75 M205 112 C172 112 172 75 140 75"
+          <motion.path
+            d={integrationLayout.lines.path}
             fill="none"
             stroke="currentColor"
-            strokeDasharray="4 5"
+            strokeDasharray={integrationLayout.lines.dash}
             strokeLinecap="round"
-            strokeOpacity="0.5"
-            strokeWidth="2"
+            strokeOpacity={integrationLayout.lines.strokeOpacity}
+            strokeWidth={integrationLayout.lines.strokeWidth}
+            transform={`translate(${integrationLayout.lines.x} ${integrationLayout.lines.y}) scale(${integrationLayout.lines.scale})`}
+            initial={{ pathLength: 0, opacity: 0 }}
+            whileInView={{ pathLength: 1, opacity: 1 }}
+            viewport={inView}
+            transition={{ duration: 1.15, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
           />
         </svg>
-        <IntegrationNode className="left-5 top-5" label="Sheet" />
-        <IntegrationNode className="bottom-5 left-5" label="CRM" />
-        <IntegrationNode className="right-5 top-5" label="Chat" />
-        <IntegrationNode className="bottom-5 right-5" label="Mail" />
-        <div className="absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-xl border border-line bg-card shadow-soft">
-          <Sparkle className="h-5 w-5 text-forest" />
-        </div>
+        {integrationLayout.nodes.map((node) => (
+          <IntegrationNode key={node.label} {...node} />
+        ))}
+        <motion.div
+          className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-xl border border-line bg-card shadow-soft"
+          style={{
+            left: integrationLayout.center.x,
+            top: integrationLayout.center.y,
+            width: integrationLayout.center.size,
+            height: integrationLayout.center.size,
+          }}
+          initial={{ opacity: 0, scale: 0.82 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={inView}
+          transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Sparkle
+            className="text-forest"
+            style={{
+              width: integrationLayout.center.iconSize,
+              height: integrationLayout.center.iconSize,
+              transform: `translate(${integrationLayout.center.iconOffsetX}px, ${integrationLayout.center.iconOffsetY}px)`,
+            }}
+          />
+        </motion.div>
       </div>
     );
   }
@@ -227,9 +357,19 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
     <div className="mt-5 h-32 overflow-hidden rounded-lg border border-line bg-ivory/75 p-3">
       <p className="text-[11px] font-semibold text-ink">System Status</p>
       <div className="mt-2 rounded-md border border-line bg-card p-2.5">
-        <div className="flex items-center gap-2 rounded-md bg-forest-soft/65 px-2.5 py-1.5 text-[10px] font-medium text-forest">
-          <CheckCircle2 className="h-3.5 w-3.5" />
-          All systems operational
+        <div className="relative overflow-hidden rounded-md bg-forest-soft/65 px-2.5 py-1.5 text-[10px] font-medium text-forest">
+          <motion.span
+            className="pointer-events-none absolute inset-y-0 -left-8 w-10 bg-gradient-to-r from-transparent via-white/75 to-transparent"
+            initial={{ x: 0 }}
+            whileInView={{ x: 220 }}
+            viewport={inView}
+            transition={{ duration: 1.05, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            aria-hidden
+          />
+          <span className="relative flex items-center gap-2">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            All systems operational
+          </span>
         </div>
         <div className="mt-2.5 space-y-2">
           {["Website", "Automations", "Integrations"].map((item) => (
@@ -248,17 +388,97 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
 }
 
 function IntegrationNode({
-  className,
   label,
+  icon,
+  x,
+  y,
+  size,
+  iconSize,
+  iconOffsetX,
+  iconOffsetY,
+  delay,
 }: {
-  className: string;
   label: string;
+  icon: string;
+  x: string;
+  y: string;
+  size: number;
+  iconSize: number;
+  iconOffsetX: number;
+  iconOffsetY: number;
+  delay: number;
 }) {
   return (
-    <div
-      className={`absolute rounded-lg border border-line bg-card px-2.5 py-2 text-[10px] font-semibold text-forest shadow-soft ${className}`}
+    <motion.div
+      aria-label={label}
+      className="absolute z-10 flex items-center justify-center rounded-lg border border-line bg-card shadow-soft"
+      style={{
+        left: x,
+        top: y,
+        width: size,
+        height: size,
+      }}
+      initial={{ opacity: 0, scale: 0.72 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={inView}
+      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
     >
-      {label}
-    </div>
+      <img
+        src={icon}
+        alt=""
+        aria-hidden="true"
+        className="object-contain"
+        style={{
+          width: iconSize,
+          height: iconSize,
+          transform: `translate(${iconOffsetX}px, ${iconOffsetY}px)`,
+        }}
+      />
+    </motion.div>
   );
+}
+
+function AnimatedBar({
+  className,
+  width,
+  delay = 0,
+}: {
+  className: string;
+  width: string;
+  delay?: number;
+}) {
+  return (
+    <motion.span
+      className={`block ${className}`}
+      initial={{ width: 0, opacity: 0.45 }}
+      whileInView={{ width, opacity: 1 }}
+      viewport={inView}
+      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
+      aria-hidden
+    />
+  );
+}
+
+function AnimatedNumber({ value, delay = 0 }: { value: number; delay?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useMotionInView(ref, { once: true, amount: 0.7 });
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    const controls = animate(0, value, {
+      duration: 1.1,
+      delay,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate(latest) {
+        if (ref.current) {
+          ref.current.textContent = Math.round(latest).toString();
+        }
+      },
+    });
+
+    return () => controls.stop();
+  }, [delay, isInView, value]);
+
+  return <span ref={ref}>0</span>;
 }

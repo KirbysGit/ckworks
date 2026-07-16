@@ -14,10 +14,10 @@ type Props = {
 /**
  * Brand mark = constant clover icon + wordmark that swaps for dark mode.
  *
- *  - /svg/ck-icon.svg           green gradient clover — reads on any background,
+ *  - /images/brand/svg/icon.svg           green gradient clover — reads on any background,
  *                               so it stays the same in light and dark mode.
- *  - /svg/ck-lightwordmark.svg  near-black text, shown in LIGHT mode.
- *  - /svg/ck-dark-wordmark.svg  ivory text, shown in DARK mode (dark: variant).
+ *  - /images/brand/svg/wordmark-light.svg  near-black text, shown in LIGHT mode.
+ *  - /images/brand/svg/wordmark-dark.svg  ivory text, shown in DARK mode (dark: variant).
  *
  * Sized by height (w-auto) so each wordmark keeps its own aspect ratio.
  * Dark-mode swap is driven by the `dark` class on <html> (see tailwind.config).
@@ -66,7 +66,7 @@ export default function Logo({
         className="inline-flex will-change-transform"
       >
         <Image
-          src="/svg/ck-icon.svg"
+          src="/images/brand/svg/icon.svg"
           alt={showWordmark ? "" : "CK Works"}
           width={438}
           height={447}
@@ -79,7 +79,7 @@ export default function Logo({
         <>
           {/* light mode wordmark */}
           <Image
-            src="/svg/ck-lightwordmark.svg"
+            src="/images/brand/svg/wordmark-light.svg"
             alt="CK Works"
             width={898}
             height={278}
@@ -88,7 +88,7 @@ export default function Logo({
           />
           {/* dark mode wordmark */}
           <Image
-            src="/svg/ck-dark-wordmark.svg"
+            src="/images/brand/svg/wordmark-dark.svg"
             alt="CK Works"
             width={512}
             height={145}

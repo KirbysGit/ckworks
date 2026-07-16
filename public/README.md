@@ -1,30 +1,37 @@
 # Static assets (`/public`)
 
 Everything in this folder is served from the site root. A file at
-`public/work/ironwood.jpg` is referenced in code as `/work/ironwood.jpg`
-(never include `public` in the path).
+`public/images/hero/svg/demo-logo.svg` is referenced in code as
+`/images/hero/svg/demo-logo.svg` (never include `public` in the path).
 
 ## Folder layout
 
-| Folder     | What goes here                                             | Example reference          |
-| ---------- | --------------------------------------------------------- | -------------------------- |
-| `work/`    | Project / case-study images & mockups                     | `/work/ironwood.jpg`       |
-| `founder/` | Colin's portrait for the founder note                     | `/founder/colin.jpg`       |
-| `brand/`   | Logo files, clover mark, favicon source                   | `/brand/logo.svg`          |
-| `og/`      | Social share images (Open Graph / Twitter cards)          | `/og/default.jpg`          |
+Images live under `public/images/`, one folder per section of the site,
+with a type subfolder (`svg/`, `png/`, `jpg/`) inside each — only the types
+that section actually uses.
 
-Root-level files like `favicon.ico` also live directly in `public/`.
+| Folder                       | What goes here                                    | Used by                  |
+| ----------------------------- | -------------------------------------------------- | ------------------------- |
+| `images/brand/svg/`           | Logo, wordmarks (light/dark), signatures, shared underline | `ui/Logo.tsx`, `Footer.tsx`, `FounderNote.tsx`, `Process.tsx` |
+| `images/nav/svg/`              | Nav hover underline                                | `ui/DrawUnderline.tsx`     |
+| `images/hero/svg/`, `png/`     | Hero mockup art (demo logo, postit, underline, photo) | `Hero.tsx`, `HeroMockup.tsx` |
+| `images/transformation/svg/`, `png/` | Before/after board art, sticky notes, demo photo | `TransformationSection.tsx` |
+| `images/process/svg/`          | Book background, chapter illustrations             | `Process.tsx`              |
+| `images/founder/svg/`, `jpg/`  | Note drawing, portrait                             | `FounderNote.tsx`          |
+| `images/cta/svg/`               | Left/right flanking art                            | `CTA.tsx`                   |
+| `images/_unused/`               | Archived assets not currently referenced anywhere. Safe to delete once you're sure they won't come back — check with a repo-wide grep for the filename first. | — |
 
-## Suggested filenames (match the data in `lib/data.ts`)
+**A file used by more than one section** (e.g. the straight underline shared
+by Process and Founder) lives in `brand/` rather than being duplicated —
+`brand/` means "shared across sections," not strictly logo identity.
 
-- `work/ironwood.jpg`      — Ironwood Cabinetry
-- `work/northbridge.jpg`   — Northbridge Wellness
-- `work/ledger-lane.jpg`   — Ledger Lane
-- `founder/colin.jpg`      — founder portrait
-- `og/default.jpg`         — 1200×630 social preview
+## Adding a new image
+
+1. Drop it in the matching section folder (create one if it's a new section).
+2. Reference it from the component as `/images/<section>/<type>/<name>.<ext>`.
+3. If it's genuinely shared by 2+ sections, put it in `images/brand/` instead.
 
 ## Recommended formats & sizes
 
-- **Photos / mockups:** `.webp` or `.jpg`, ~1600px wide max, compressed.
-- **Logos / icons:** `.svg` (scales cleanly, tiny file size).
-- **OG image:** exactly **1200×630 px**.
+- **Photos / mockups:** `.jpg` or `.png`, ~1600px wide max, compressed.
+- **Illustrations / logos / icons:** `.svg` — scales cleanly, tiny file size.

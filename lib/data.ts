@@ -109,7 +109,6 @@ export const footerLinks = [
   { label: "Services", href: "/#what-i-do" },
   { label: "Process", href: "/#process" },
   { label: "About", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
 ];
 
 export const contactEmail = "hello@ckworks.co";

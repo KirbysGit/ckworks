@@ -41,7 +41,7 @@ export default function Hero() {
             <span className="relative inline-block">
               meant to
               <Image
-                src="/svg/hero-underline.svg"
+                src="/images/hero/svg/underline.svg"
                 alt=""
                 width={3785}
                 height={429}

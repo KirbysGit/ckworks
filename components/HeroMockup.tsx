@@ -79,7 +79,7 @@ function WindermereBrand({ compact = false }: { compact?: boolean }) {
   return (
     <span className="inline-flex items-center gap-1.5">
       <Image
-        src="/svg/hero-demo-logo.svg"
+        src="/images/hero/svg/demo-logo.svg"
         alt=""
         width={242}
         height={385}
@@ -207,11 +207,16 @@ export default function HeroMockup() {
 
   return (
     <div className="relative mx-auto w-full max-w-2xl lg:max-w-none">
+      {/* Whole composition scales to fit the column. The cards are fixed-px,
+          so without this they ride up into the browser at narrower widths /
+          browser zoom. --m shrinks everything together per breakpoint; the
+          width calc keeps it rendering at 100% of the column. Tune --m values
+          (or heroMockupLayout.scale for a global multiplier). */}
       <div
-        className="relative origin-top"
+        className="relative origin-top-left [--m:1] lg:[--m:0.8] xl:[--m:0.92] 2xl:[--m:1]"
         style={{
-          transform: `scale(${scale})`,
-          width: scale !== 1 ? `${100 / scale}%` : undefined,
+          transform: `scale(calc(${scale} * var(--m)))`,
+          width: `calc(100% / (${scale} * var(--m)))`,
         }}
       >
         <div className="relative">
@@ -310,7 +315,7 @@ export default function HeroMockup() {
                 </div>
                 <div className="relative hidden min-h-[190px] overflow-hidden rounded-xl sm:block">
                   <Image
-                    src="/png/hero-demo-graphic.png"
+                    src="/images/hero/png/demo-graphic.png"
                     alt=""
                     fill
                     sizes="300px"
@@ -509,7 +514,7 @@ export default function HeroMockup() {
                         </span>
                         <div className="relative mt-2.5 h-36 overflow-hidden rounded-lg shadow-[0_10px_22px_-18px_rgba(31,36,32,0.7)]">
                           <Image
-                            src="/png/hero-demo-graphic.png"
+                            src="/images/hero/png/demo-graphic.png"
                             alt=""
                             fill
                             sizes="160px"
@@ -653,7 +658,7 @@ export default function HeroMockup() {
                 <div className="absolute inset-x-0 top-0 h-5 rounded-t-xl bg-white/30" />
                 {
                   <Image
-                    src="/svg/hero-postit.svg"
+                    src="/images/hero/svg/postit.svg"
                     alt=""
                     fill
                     className="object-contain px-1"

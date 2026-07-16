@@ -64,7 +64,10 @@ export const heroMockupLayout = {
   stage: {
     paddingTop: 16,
     paddingRight: 110,
-    paddingBottom: 300,
+    // Extra room below the browser so the bottom-anchored cards (Monthly
+    // Overview / post-it) sit clear of the browser's feature row — they
+    // ride up into it at narrower widths without this gap.
+    paddingBottom: 380,
     paddingLeft: 96,
   },
 
