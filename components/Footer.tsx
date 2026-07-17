@@ -67,7 +67,7 @@ export default function Footer() {
 
       <div className="border-t border-line/70">
         <div className="container-ck py-6 text-center text-xs text-muted">
-          <p>© 2025 CK Works. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} CK Works. All rights reserved.</p>
         </div>
       </div>
     </footer>

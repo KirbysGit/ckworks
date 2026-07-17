@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
+import {
+  siteDescription,
+  siteName,
+  siteTagline,
+  siteUrl,
+} from "@/lib/site";
+import { contactEmail } from "@/lib/data";
 import "./globals.css";
 
 const serif = Cormorant_Garamond({
@@ -15,16 +22,13 @@ const sans = Inter({
   display: "swap",
 });
 
-const siteUrl = "https://ckworks.co";
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "CK Works — Websites. Systems. Clarity.",
-    template: "%s · CK Works",
+    default: `${siteName} — ${siteTagline}`,
+    template: `%s · ${siteName}`,
   },
-  description:
-    "CK Works is a small digital studio by Colin Kirby. Clean websites and practical systems for growing businesses—design, automations, and integrations built to fit the way you work.",
+  description: siteDescription,
   keywords: [
     "web design",
     "digital systems",
@@ -36,24 +40,45 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Colin Kirby" }],
   creator: "Colin Kirby",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     url: siteUrl,
-    title: "CK Works — Websites. Systems. Clarity.",
+    title: `${siteName} — ${siteTagline}`,
     description:
       "Clean websites and practical systems for growing businesses, built by Colin Kirby.",
-    siteName: "CK Works",
+    siteName,
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CK Works — Websites. Systems. Clarity.",
+    title: `${siteName} — ${siteTagline}`,
     description:
       "Clean websites and practical systems for growing businesses, built by Colin Kirby.",
   },
-  // Icons are auto-generated from the app/ file convention:
-  //   app/favicon.ico · app/icon.svg · app/icon.png · app/apple-icon.png
-  // Do NOT also declare an `icons` block here — that emits duplicate,
-  // conflicting <link> tags and the browser picks one at random.
+  robots: {
+    index: true,
+    follow: true,
+  },
+  // Icons: app/icon.svg · app/apple-icon.tsx · app/opengraph-image.tsx
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: siteName,
+  url: siteUrl,
+  email: contactEmail,
+  description: siteDescription,
+  slogan: siteTagline,
+  founder: {
+    "@type": "Person",
+    name: "Colin Kirby",
+  },
+  areaServed: "US",
+  sameAs: [] as string[],
 };
 
 export default function RootLayout({
@@ -63,7 +88,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${serif.variable} ${sans.variable}`}>
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

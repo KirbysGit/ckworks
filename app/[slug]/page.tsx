@@ -24,6 +24,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: study.name,
     description: study.oneLiner,
+    alternates: {
+      canonical: `/${study.slug}`,
+    },
+    openGraph: {
+      title: study.name,
+      description: study.oneLiner,
+      url: `/${study.slug}`,
+      type: "article",
+      ...(study.coverImage
+        ? {
+            images: [
+              {
+                url: study.coverImage.src,
+                alt: study.coverImage.alt,
+              },
+            ],
+          }
+        : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: study.name,
+      description: study.oneLiner,
+    },
   };
 }
 

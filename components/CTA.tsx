@@ -4,6 +4,7 @@ import { type CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Button from "./ui/Button";
+import { contactEmail } from "@/lib/data";
 import { fadeUp, inView } from "@/lib/motion";
 
 /**
@@ -84,10 +85,10 @@ export default function CTA() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button href="mailto:hello@ckworks.co">
+            <Button href={`mailto:${contactEmail}`}>
               Start a project <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button href="mailto:hello@ckworks.co" variant="secondary">
+            <Button href={`mailto:${contactEmail}`} variant="secondary">
               Send me a note
             </Button>
           </div>

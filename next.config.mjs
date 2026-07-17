@@ -25,12 +25,29 @@ const distDir =
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  poweredByHeader: false,
   // Pin the workspace root to this project. Without this, a stray
   // package-lock.json in a parent folder makes Next guess the wrong root.
   outputFileTracingRoot: __dirname,
   // Separate build dir per server so a second dev instance (e.g. Claude's
   // preview on :3200) never corrupts the main one's .next cache.
   distDir,
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
