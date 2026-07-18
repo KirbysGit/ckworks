@@ -1,125 +1,201 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import {
+  ArrowRight,
+  Briefcase,
+  Calendar,
+  Database,
+  ExternalLink,
+  Globe2,
+  Layers3,
+  Monitor,
+  Smartphone,
+} from "lucide-react";
 import type { CaseStudy } from "@/lib/projects";
 
 type Props = {
   study: CaseStudy;
-  /** featured = large image card; tile = tight homepage card; compact = image row card */
+  /** featured = large image card; tile = selected-work card; compact = horizontal row */
   variant?: "featured" | "tile" | "compact";
+};
+
+type MetaItem = {
+  label: string;
+  icon: typeof Globe2;
 };
 
 const groupLabels: Record<CaseStudy["group"], string> = {
   client: "Client Work",
-  product: "Product",
+  product: "Project",
   prototype: "Prototype",
 };
 
+const groupIcons: Record<CaseStudy["group"], typeof Globe2> = {
+  client: Briefcase,
+  product: Layers3,
+  prototype: Monitor,
+};
+
+const displayNames: Record<string, string> = {
+  tizirsso: "Tizirsso Racing",
+  taylor: "Taylor.io",
+  centi: "Centi",
+  setlst: "SETLST",
+};
+
+const featuredDescriptions: Record<string, string> = {
+  tizirsso:
+    "Turned a professional karting career into a clearer story for fans, sponsors, and future opportunities.",
+  taylor:
+    "Built guided resume workflows and structured data to help users create stronger, more targeted resumes.",
+  centi:
+    "Connected accounts, uploaded transactions, and clearer insights into spending, savings, and financial goals.",
+  setlst:
+    "Explores how live music activity, workout consistency, and social features can come together in one app.",
+};
+
+const cardMeta: Record<string, MetaItem[]> = {
+  tizirsso: [
+    { label: "Web", icon: Globe2 },
+    { label: "2026", icon: Calendar },
+  ],
+  taylor: [
+    { label: "Web", icon: Globe2 },
+    { label: "Full-Stack", icon: Layers3 },
+    { label: "2026", icon: Calendar },
+  ],
+  centi: [
+    { label: "Web", icon: Globe2 },
+    { label: "API Integrations", icon: Database },
+    { label: "2025", icon: Calendar },
+  ],
+  setlst: [
+    { label: "Mobile", icon: Smartphone },
+    { label: "iOS / Android", icon: Monitor },
+    { label: "2026", icon: Calendar },
+  ],
+};
+
 export default function ProjectCard({ study, variant = "featured" }: Props) {
-  if (variant === "tile") {
-    return (
-      <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift">
-        <ProjectImage study={study} className="h-32" />
-        <span className="absolute left-3 top-3 rounded-full bg-ivory/90 px-2.5 py-1 text-[10px] font-medium text-forest">
-          {groupLabels[study.group]}
-        </span>
-
-        <div className="flex flex-1 flex-col p-5">
-          <p className="text-[11px] font-medium text-forest">
-            {study.category}
-          </p>
-          <h3 className="mt-2 font-serif text-xl font-semibold leading-tight text-ink">
-            {study.name}
-          </h3>
-          <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-muted">
-            {study.teaser}
-          </p>
-          <p className="mt-4 text-[11px] font-medium text-ink/80">
-            {study.workedOn.slice(0, 2).join(" / ")}
-          </p>
-          <ProjectActions study={study} className="mt-4" />
-        </div>
-      </article>
-    );
-  }
-
   if (variant === "compact") {
-    return (
-      <article className="group grid gap-4 rounded-2xl border border-line bg-card p-4 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:shadow-lift sm:grid-cols-[9rem_1fr] sm:items-stretch">
-        <ProjectImage study={study} className="min-h-28 rounded-xl sm:h-full" />
-        <div className="flex flex-col py-1">
-          <p className="text-xs font-medium text-forest">{study.category}</p>
-          <h3 className="mt-2 font-serif text-2xl font-semibold text-ink">
-            {study.name}
-          </h3>
-          <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
-            {study.teaser}
-          </p>
-          <ProjectActions study={study} className="mt-5" />
-        </div>
-      </article>
-    );
+    return <CompactProjectRow study={study} />;
   }
+
+  return <FeaturedProjectCard study={study} />;
+}
+
+function FeaturedProjectCard({ study }: { study: CaseStudy }) {
+  const meta = cardMeta[study.slug] ?? [
+    { label: groupLabels[study.group], icon: Briefcase },
+  ];
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-1 hover:shadow-lift">
-      <ProjectImage study={study} className="aspect-[16/9]" />
-      <span className="absolute left-4 top-4 rounded-full bg-ivory/90 px-3 py-1 text-[11px] font-medium text-forest">
-        {study.category}
-      </span>
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-1 hover:shadow-lift">
+      <ProjectImage
+        study={study}
+        className="h-56"
+        sizes="(min-width: 1024px) 24vw, (min-width: 640px) 48vw, 100vw"
+        showLiveIcon
+      />
 
-      <div className="flex flex-1 flex-col p-7">
-        <h3 className="font-serif text-2xl font-semibold text-ink">
-          {study.name}
-        </h3>
-        <p className="mt-2.5 text-sm leading-relaxed text-muted">
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="min-w-0 font-serif text-2xl font-semibold leading-tight text-ink">
+            {displayNames[study.slug] ?? study.name}
+          </h3>
+          <ProjectTypePill study={study} />
+        </div>
+        <p className="mt-2 text-xs font-medium text-forest">
+          {study.category}
+        </p>
+        <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-muted">
+          {featuredDescriptions[study.slug] ?? study.teaser}
+        </p>
+
+        <ProjectMeta items={meta} />
+        <ProjectActions study={study} className="mt-5" />
+      </div>
+    </article>
+  );
+}
+
+function CompactProjectRow({ study }: { study: CaseStudy }) {
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift">
+      <ProjectImage
+        study={study}
+        className="aspect-square"
+        sizes="(min-width: 1280px) 16vw, (min-width: 640px) 45vw, 100vw"
+      />
+
+      <div className="flex flex-1 flex-col p-4">
+        <div className="min-w-0">
+          <h3 className="font-serif text-2xl font-semibold leading-tight text-ink">
+            {displayNames[study.slug] ?? study.name}
+          </h3>
+          <p className="mt-1.5 line-clamp-2 text-[11px] font-medium leading-relaxed text-forest">
+            {study.category}
+          </p>
+        </div>
+        <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-muted">
           {study.teaser}
         </p>
 
-        <div className="mt-5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
-            What I worked on
-          </p>
-          <p className="mt-1.5 text-sm text-ink">
-            {study.workedOn.join(" / ")}
-          </p>
-        </div>
-
-        <ProjectActions study={study} className="mt-6" breakdown />
+        <Link
+          href={`/${study.slug}`}
+          className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-forest transition-colors duration-200 hover:text-ink"
+        >
+          View project
+          <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+        </Link>
       </div>
     </article>
+  );
+}
+
+function ProjectMeta({ items }: { items: MetaItem[] }) {
+  return (
+    <div className="mt-5 flex flex-nowrap items-center justify-center overflow-hidden text-[11px] text-muted">
+      {items.map(({ label, icon: Icon }, index) => (
+        <span
+          key={`${label}-${index}`}
+          className="flex shrink-0 items-center gap-1.5 whitespace-nowrap border-line pr-2.5 last:pr-0 [&:not(:last-child)]:mr-2.5 [&:not(:last-child)]:border-r"
+        >
+          <Icon className="h-3 w-3 text-ink/70" />
+          {label}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function ProjectTypePill({ study }: { study: CaseStudy }) {
+  const Icon = groupIcons[study.group];
+
+  return (
+    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-forest-soft/75 px-2.5 py-1 text-[11px] font-medium text-forest">
+      <Icon className="h-3 w-3" />
+      {groupLabels[study.group]}
+    </span>
   );
 }
 
 function ProjectActions({
   study,
   className = "",
-  breakdown = false,
 }: {
   study: CaseStudy;
   className?: string;
-  breakdown?: boolean;
 }) {
   return (
-    <div className={`flex flex-wrap items-center gap-2 ${className}`}>
+    <div className={className}>
       <Link
         href={`/${study.slug}`}
-        className="inline-flex items-center gap-1.5 rounded-md bg-forest px-3 py-2 text-sm font-medium text-ivory transition-colors duration-200 hover:bg-ink"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-forest px-4 py-2.5 text-sm font-medium text-ivory transition-colors duration-200 hover:bg-ink"
       >
-        {breakdown ? "Read the breakdown" : "View project"}
+        View project
         <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
       </Link>
-      {study.liveUrl && (
-        <a
-          href={study.liveUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-1.5 rounded-md border border-line bg-card px-3 py-2 text-sm font-medium text-forest transition-colors duration-200 hover:border-forest/40 hover:bg-forest-soft"
-        >
-          Live site
-          <ExternalLink className="h-3.5 w-3.5" />
-        </a>
-      )}
     </div>
   );
 }
@@ -127,9 +203,13 @@ function ProjectActions({
 function ProjectImage({
   study,
   className,
+  sizes,
+  showLiveIcon = false,
 }: {
   study: CaseStudy;
   className: string;
+  sizes: string;
+  showLiveIcon?: boolean;
 }) {
   return (
     <div
@@ -141,7 +221,7 @@ function ProjectImage({
             src={study.coverImage.src}
             alt={study.coverImage.alt}
             fill
-            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+            sizes={sizes}
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             style={{ objectPosition: study.coverImage.position ?? "center" }}
           />
@@ -149,6 +229,17 @@ function ProjectImage({
         </>
       ) : (
         <div className="grid-texture absolute inset-0 opacity-25" />
+      )}
+      {showLiveIcon && study.liveUrl && (
+        <a
+          href={study.liveUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Open ${study.name} live site`}
+          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-ivory/90 text-forest shadow-soft transition-colors duration-200 hover:bg-forest hover:text-ivory"
+        >
+          <ExternalLink className="h-4 w-4" />
+        </a>
       )}
     </div>
   );
