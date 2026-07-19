@@ -18,6 +18,8 @@ type Note = {
   label: string;
   src: string;
   tone: "sage" | "cream" | "yellow";
+  /** Whether this sticky has a small lifted paper corner. */
+  peel?: boolean;
   /** Paper placement/size as percentages of the before board. */
   paper: {
     x: number;
@@ -52,6 +54,7 @@ const notes: Note[] = [
     label: "Who is this for?",
     src: "/images/transformation/svg/sticky-who.svg",
     tone: "sage",
+    peel: true,
     paper: { x: 18, y: 16, size: 18, rotate: -6 },
     text: { x: 11, y: 11, size: 80 },
   },
@@ -66,6 +69,7 @@ const notes: Note[] = [
     label: "Better intake flow for customers",
     src: "/images/transformation/svg/sticky-better.svg",
     tone: "sage",
+    peel: true,
     paper: { x: 66, y: 12, size: 18, rotate: 4 },
     text: { x: 8, y: 5, size: 88 },
   },
@@ -73,6 +77,7 @@ const notes: Note[] = [
     label: "Minimal layout, but stronger color",
     src: "/images/transformation/svg/sticky-minimal.svg",
     tone: "cream",
+    peel: true,
     paper: { x: 22, y: 60, size: 18, rotate: 5 },
     text: { x: 6, y: 6, size: 90 },
   },
@@ -87,6 +92,7 @@ const notes: Note[] = [
     label: "Feels warm, not clinical",
     src: "/images/transformation/svg/sticky-feels.svg",
     tone: "cream",
+    peel: true,
     paper: { x: 78, y: 42, size: 18, rotate: 4 },
     text: { x: 5, y: 3, size: 90 },
   },
@@ -379,7 +385,7 @@ function PostIt({ note, compact = false }: { note: Note; compact?: boolean }) {
     <div
       className={`${compact ? "relative" : "absolute z-20"} ${
         noteTones[note.tone]
-      } group aspect-square w-full max-w-[8.5rem] rounded-[3px] shadow-[0_2px_4px_rgba(31,36,32,0.07),0_14px_18px_-17px_rgba(31,36,32,0.62)]`}
+      } group aspect-square w-full max-w-[8.5rem] rounded-[3px] shadow-[0_2px_4px_rgba(31,36,32,0.07),0_14px_18px_-17px_rgba(31,36,32,0.62)] transition-shadow duration-300 hover:shadow-[0_4px_8px_rgba(31,36,32,0.08),0_20px_26px_-19px_rgba(31,36,32,0.76)]`}
       style={
         compact
           ? undefined
@@ -408,10 +414,12 @@ function PostIt({ note, compact = false }: { note: Note; compact?: boolean }) {
         className="pointer-events-none absolute bottom-[-1px] left-[10%] right-[20%] h-4 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(31,36,32,0.1),transparent_68%)] blur-sm"
         aria-hidden
       />
-      <span
-        className="absolute bottom-0 right-0 h-5 w-5 rounded-tl-sm bg-[linear-gradient(135deg,rgba(31,36,32,0.14),rgba(255,255,255,0.36)_48%,rgba(255,255,255,0.02)_50%)]"
-        aria-hidden
-      />
+      {note.peel && (
+        <span
+          className="absolute bottom-0 right-0 h-5 w-5 rounded-tl-sm bg-[linear-gradient(135deg,rgba(31,36,32,0.14),rgba(255,255,255,0.36)_48%,rgba(255,255,255,0.02)_50%)]"
+          aria-hidden
+        />
+      )}
 
       <span
         className="pointer-events-none absolute z-10 flex items-center justify-center"
@@ -843,7 +851,9 @@ function PhonePreview() {
 
               <div className="flex items-center justify-between px-3.5 pt-1">
                 <MiniBrand compact />
-                <Menu className="h-3.5 w-3.5 text-muted" />
+                <span className="inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-muted transition-colors duration-150 hover:bg-forest/10 hover:text-forest">
+                  <Menu className="h-3.5 w-3.5" />
+                </span>
               </div>
 
               <div className="px-3.5 pb-3.5 pt-9">

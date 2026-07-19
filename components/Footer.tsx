@@ -11,7 +11,7 @@ export default function Footer() {
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
 
   return (
-    <footer className="border-t border-line bg-ivory">
+    <footer className="border-t border-line bg-[#E8EFE3]">
       <div className="container-ck grid gap-10 py-14 md:grid-cols-[1fr_auto_1fr] md:items-start">
         <div className="max-w-xs">
           <Logo />

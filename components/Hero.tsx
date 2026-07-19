@@ -153,20 +153,18 @@ export default function Hero() {
 
           <motion.div
             variants={fadeUp}
-            className="mt-8 flex flex-wrap items-center justify-start gap-5"
+            className="mt-8 flex flex-wrap items-center justify-start gap-4"
           >
             <a
               href="#contact"
-              className="inline-flex min-h-14 items-center justify-center gap-5 rounded-full bg-forest py-2 pl-7 pr-2 text-base font-semibold text-ivory shadow-lift transition-colors duration-200 hover:bg-ink"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-forest px-6 py-3 text-sm font-semibold text-ivory shadow-lift transition-colors duration-200 hover:bg-ink"
             >
               Start a project
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-ivory text-forest">
-                <ArrowRight className="h-5 w-5" />
-              </span>
+              <ArrowRight className="h-4 w-4" />
             </a>
             <a
               href="#what-i-do"
-              className="inline-flex min-h-14 items-center justify-center rounded-full border-2 border-forest/80 bg-transparent px-9 text-base font-semibold text-forest transition-colors duration-200 hover:bg-forest-soft"
+              className="inline-flex min-h-12 items-center justify-center rounded-xl border-2 border-forest/80 bg-transparent px-6 py-3 text-sm font-semibold text-forest transition-colors duration-200 hover:bg-forest-soft"
             >
               See what I do
             </a>
@@ -174,14 +172,14 @@ export default function Hero() {
 
           <motion.ul
             variants={fadeUp}
-            className="mt-12 grid max-w-2xl gap-5 rounded-xl border border-line/50 bg-ink/[0.02] p-5 shadow-soft backdrop-blur-[2px] sm:grid-cols-3 sm:gap-0 sm:px-6 sm:py-5"
+            className="mt-8 grid max-w-2xl gap-5 border-t border-line/50 pt-8 sm:grid-cols-3 sm:gap-0"
           >
             {heroTrustItems.map(({ icon: Icon, title, body }, index) => (
               <li
                 key={title}
                 className={`text-left ${
                   index > 0
-                    ? "sm:border-l sm:border-line sm:pl-5"
+                    ? "sm:border-l sm:border-line/50 sm:pl-5"
                     : ""
                 } ${index < heroTrustItems.length - 1 ? "sm:pr-5" : ""}`}
               >

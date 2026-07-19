@@ -1,7 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { animate, motion, useInView as useMotionInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import {
+  animate,
+  AnimatePresence,
+  motion,
+  useInView as useMotionInView,
+} from "framer-motion";
 import { ArrowRight, CheckCircle2, Sparkle } from "lucide-react";
 import SectionHeader from "./ui/SectionHeader";
 import { services } from "@/lib/data";
@@ -17,22 +22,49 @@ type ServiceDetails = {
 
 const serviceDetails: Record<string, ServiceDetails> = {
   "Web Design": {
-    tags: ["Custom Design", "Responsive", "SEO"],
+    tags: ["Websites", "Mobile-ready", "Messaging"],
     visual: "website",
   },
   "Digital Systems": {
-    tags: ["Dashboards", "Automation", "Workflows"],
+    tags: ["Dashboards", "Internal tools", "Workflows"],
     visual: "systems",
     featured: true,
   },
   Integrations: {
-    tags: ["APIs", "Zapier", "Data Sync"],
+    tags: ["Forms", "APIs", "Email + SMS"],
     visual: "integrations",
   },
   "Ongoing Support": {
-    tags: ["Maintenance", "Updates", "Support"],
+    tags: ["Updates", "Fixes", "Improvements"],
     visual: "support",
   },
+};
+
+const serviceIncludes: Record<string, string[]> = {
+  "Web Design": [
+    "Landing pages, portfolio sites, and small business websites",
+    "Page structure, layout, and visual direction",
+    "Mobile-friendly responsive design",
+    "Clear calls-to-action and content organization",
+  ],
+  "Digital Systems": [
+    "Internal dashboards and admin views",
+    "Workflow cleanup for repetitive tasks",
+    "Simple tools for tracking, organizing, or managing information",
+    "Systems designed around how the business actually works",
+  ],
+  Integrations: [
+    "Form submissions routed to the right place",
+    "API connections between tools or databases",
+    "Auth, accounts, or data connection flows where needed",
+    "Email or SMS notifications for important actions",
+  ],
+  "Ongoing Support": [
+    "Website updates and small content changes",
+    "Bug fixes and technical cleanup",
+    "Post-launch testing and improvements",
+    "Ongoing adjustments as the business grows",
+  ],
 };
 
 // Integration card tuning: move boxes with x/y, move connectors with lines,
@@ -105,6 +137,8 @@ const integrationLayout = {
 };
 
 export default function Services() {
+  const [openService, setOpenService] = useState<string | null>(null);
+
   return (
     <section id="what-i-do" className="bg-ivory py-14 lg:py-20">
       <div className="container-ck">
@@ -119,10 +153,11 @@ export default function Services() {
           initial="hidden"
           whileInView="show"
           viewport={inView}
-          className="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+          className="mt-12 grid items-start gap-4 sm:grid-cols-2 xl:grid-cols-4"
         >
           {services.map((service) => {
             const { icon: Icon, title, body } = service;
+            const isOpen = openService === title;
             const details = {
               ...serviceDetails[title],
               tags: service.tags ?? serviceDetails[title].tags,
@@ -131,10 +166,9 @@ export default function Services() {
             };
 
             return (
-              <motion.div key={title} variants={fadeUp} className="h-full">
-                <a
-                  href="#contact"
-                  className={`group relative flex h-full min-h-[27rem] flex-col overflow-hidden rounded-2xl border bg-card p-5 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:shadow-lift ${
+              <motion.div key={title} variants={fadeUp}>
+                <article
+                  className={`group relative flex min-h-[22.5rem] flex-col overflow-hidden rounded-2xl border bg-card p-5 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:shadow-lift ${
                     details.featured
                       ? "border-forest/60"
                       : "border-line hover:border-forest/30"
@@ -153,11 +187,11 @@ export default function Services() {
                 <h3 className="mt-5 font-serif text-2xl font-semibold leading-tight text-ink">
                   {title}
                 </h3>
-                <p className="mt-2 min-h-[4.5rem] text-sm leading-relaxed text-muted">
+                <p className="mt-2 text-sm leading-relaxed text-muted">
                   {body}
                 </p>
 
-                <div className="mt-5 flex flex-wrap gap-2">
+                <div className="mt-3 flex flex-wrap gap-2">
                   {details.tags.map((tag) => (
                     <span
                       key={tag}
@@ -170,11 +204,53 @@ export default function Services() {
 
                 <ServiceVisual kind={details.visual} />
 
-                <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-medium text-forest">
-                  Learn more
-                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-                </span>
-                </a>
+                <div className="mt-auto pt-5">
+                  <button
+                    type="button"
+                    aria-expanded={isOpen}
+                    aria-controls={`service-includes-${title}`}
+                    onClick={() =>
+                      setOpenService((current) =>
+                        current === title ? null : title,
+                      )
+                    }
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-forest transition-colors duration-200 hover:text-ink"
+                  >
+                    What this includes
+                    <motion.span
+                      animate={{ rotate: isOpen ? 90 : 0 }}
+                      transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <ArrowRight className="h-4 w-4" />
+                    </motion.span>
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        id={`service-includes-${title}`}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <ul className="mt-4 space-y-2 border-t border-line/80 pt-4">
+                          {serviceIncludes[title].map((item) => (
+                            <li
+                              key={item}
+                              className="flex gap-2 text-xs leading-relaxed text-muted"
+                            >
+                              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-forest/70" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                </article>
               </motion.div>
             );
           })}
@@ -187,7 +263,7 @@ export default function Services() {
 function ServiceVisual({ kind }: { kind: VisualKind }) {
   if (kind === "website") {
     return (
-      <div className="relative mt-5 h-32 overflow-hidden rounded-lg border border-line bg-ivory/75">
+      <div className="relative mt-5 h-36 overflow-hidden rounded-lg border border-line bg-ivory/75">
         <motion.span
           className="pointer-events-none absolute inset-y-0 z-20 w-16 bg-gradient-to-r from-transparent via-white/70 to-transparent"
           initial={{ x: "-140%" }}
@@ -248,7 +324,7 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
 
   if (kind === "systems") {
     return (
-      <div className="mt-5 h-32 overflow-hidden rounded-lg border border-line bg-ivory/75 p-3">
+      <div className="mt-5 h-36 overflow-hidden rounded-lg border border-line bg-ivory/75 p-3">
         <div className="grid grid-cols-[1.6rem_1fr] gap-3">
           <div className="space-y-3 border-r border-line pr-2 pt-1">
             {[0, 1, 2].map((item) => (
@@ -303,7 +379,7 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
 
   if (kind === "integrations") {
     return (
-      <div className="relative mt-5 h-32 overflow-hidden rounded-lg border border-line bg-ivory/75">
+      <div className="relative mt-5 h-36 overflow-hidden rounded-lg border border-line bg-ivory/75">
         <svg
           viewBox={integrationLayout.viewBox}
           className="absolute inset-0 h-full w-full text-forest"
@@ -354,36 +430,95 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
   }
 
   return (
-    <div className="mt-5 h-32 overflow-hidden rounded-lg border border-line bg-ivory/75 p-3">
+    <div className="mt-5 h-36 overflow-hidden rounded-lg border border-line bg-ivory/75 p-3">
       <p className="text-[11px] font-semibold text-ink">System Status</p>
       <div className="mt-2 rounded-md border border-line bg-card p-2.5">
-        <div className="relative overflow-hidden rounded-md bg-forest-soft/65 px-2.5 py-1.5 text-[10px] font-medium text-forest">
+        <div className="relative h-[1.75rem] overflow-hidden rounded-md bg-forest-soft/65 px-2.5 py-1.5 text-[10px] font-medium text-forest">
           <motion.span
-            className="pointer-events-none absolute inset-y-0 -left-8 w-10 bg-gradient-to-r from-transparent via-white/75 to-transparent"
-            initial={{ x: 0 }}
-            whileInView={{ x: 220 }}
+            className="absolute inset-0 flex items-center gap-2 px-2.5"
+            initial={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 0, y: -8 }}
             viewport={inView}
-            transition={{ duration: 1.05, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            aria-hidden
-          />
-          <span className="relative flex items-center gap-2">
-            <CheckCircle2 className="h-3.5 w-3.5" />
+            transition={{ duration: 0.28, delay: 0.82, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Checking systems
+            <LoadingDots />
+          </motion.span>
+          <motion.span
+            className="absolute inset-0 flex items-center gap-2 px-2.5"
+            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={inView}
+            transition={{ duration: 0.38, delay: 1.02, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.span
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={inView}
+              transition={{ duration: 0.32, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <CheckCircle2 className="h-3.5 w-3.5" />
+            </motion.span>
             All systems operational
-          </span>
+          </motion.span>
         </div>
         <div className="mt-2.5 space-y-2">
-          {["Website", "Automations", "Integrations"].map((item) => (
+          {["Website", "Automations", "Integrations"].map((item, index) => (
             <div key={item} className="flex items-center gap-3">
               <span className="w-20 text-[10px] font-medium text-ink">
                 {item}
               </span>
-              <span className="h-1.5 flex-1 rounded-full bg-line" />
-              <CheckCircle2 className="h-3.5 w-3.5 text-forest" />
+              <motion.span
+                className="h-1.5 flex-1 rounded-full bg-line"
+                initial={{ opacity: 0.55, scaleX: 0.7 }}
+                whileInView={{ opacity: 1, scaleX: 1 }}
+                viewport={inView}
+                transition={{
+                  duration: 0.42,
+                  delay: 1.12 + index * 0.14,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                style={{ transformOrigin: "left" }}
+              />
+              <motion.span
+                initial={{ opacity: 0, scale: 0.35, rotate: -20 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                viewport={inView}
+                transition={{
+                  duration: 0.38,
+                  delay: 1.24 + index * 0.16,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-forest" />
+              </motion.span>
             </div>
           ))}
         </div>
       </div>
     </div>
+  );
+}
+
+function LoadingDots() {
+  return (
+    <span className="inline-flex items-center gap-1" aria-hidden>
+      {[0, 1, 2].map((dot) => (
+        <motion.span
+          key={dot}
+          className="h-1 w-1 rounded-full bg-forest"
+          initial={{ opacity: 0.35, y: 0 }}
+          whileInView={{ opacity: [0.35, 1, 0.35], y: [0, -2, 0] }}
+          viewport={inView}
+          transition={{
+            duration: 0.55,
+            delay: 0.18 + dot * 0.11,
+            repeat: 2,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </span>
   );
 }
 
