@@ -215,14 +215,14 @@ export default async function CaseStudyPage({ params }: Props) {
 function ProjectPageCta() {
   return (
     <section className="mx-auto mt-8 max-w-3xl rounded-[2rem] border border-line bg-card px-6 py-8 shadow-soft sm:px-8 lg:px-10 lg:py-10">
-      <div className="grid items-center gap-6 sm:grid-cols-[7.5rem_1fr] sm:gap-8">
+      <div className="grid items-center gap-6 sm:grid-cols-[9rem_1fr] sm:gap-8">
         <div className="flex justify-center sm:justify-start">
           <Image
             src="/images/cta/svg/sticky-note-cta.svg"
             alt=""
-            width={220}
-            height={220}
-            className="h-auto w-28 rotate-[-3deg] drop-shadow-[0_18px_18px_rgba(31,36,32,0.16)] sm:w-32"
+            width={240}
+            height={240}
+            className="h-auto w-40 rotate-[-3deg] drop-shadow-[0_18px_18px_rgba(31,36,32,0.16)] sm:w-full"
             aria-hidden="true"
           />
         </div>

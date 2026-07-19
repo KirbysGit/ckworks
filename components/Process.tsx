@@ -30,6 +30,8 @@ type SectionDrawing = {
   width: string;
   rotate: number;
   opacity?: number;
+  revealDelay?: number;
+  revealDirection?: "bl-tr" | "tl-br" | "t-b" | "tr-bl";
 };
 
 const processChapters: Chapter[] = [
@@ -116,6 +118,8 @@ const bookLayout = {
       width: "25.4%",
       rotate: -3,
       opacity: 0.9,
+      revealDelay: 0.12,
+      revealDirection: "bl-tr",
     },
     {
       src: "/images/process/svg/section-2.svg",
@@ -124,6 +128,8 @@ const bookLayout = {
       width: "24%",
       rotate: 1,
       opacity: 0.88,
+      revealDelay: 0.9,
+      revealDirection: "tl-br",
     },
     {
       src: "/images/process/svg/section-3.svg",
@@ -132,6 +138,8 @@ const bookLayout = {
       width: "23.8%",
       rotate: -1,
       opacity: 0.9,
+      revealDelay: 1.68,
+      revealDirection: "t-b",
     },
     {
       src: "/images/process/svg/section-4.svg",
@@ -140,8 +148,24 @@ const bookLayout = {
       width: "25.2%",
       rotate: 2,
       opacity: 0.9,
+      revealDelay: 2.46,
+      revealDirection: "tr-bl",
     },
   ] satisfies SectionDrawing[],
+
+  /**
+   * Drawing animation knobs.
+   * revealDuration: how long the SVG reveal takes.
+   * sweepDuration: how long the soft blur takes to move across.
+   * sweepDelayOffset: negative starts before the drawing, positive starts after.
+   * sweepOpacity: peak opacity of the floating blur.
+   */
+  drawingReveal: {
+    revealDuration: 2.7,
+    sweepDuration: 2.75,
+    sweepDelayOffset: 0,
+    sweepOpacity: 0.5,
+  },
 
   /**
    * Backing shadows behind the bottom of the SVG book.
@@ -196,6 +220,52 @@ const bookLayout = {
   },
 } as const;
 
+function drawingRevealClip(
+  direction: SectionDrawing["revealDirection"] = "tl-br",
+) {
+  if (direction === "bl-tr") {
+    return "polygon(0 100%, 0 78%, 22% 100%)";
+  }
+  if (direction === "t-b") {
+    return "polygon(0 0, 100% 0, 100% 9%, 0 9%)";
+  }
+  if (direction === "tr-bl") {
+    return "polygon(100% 0, 78% 0, 100% 22%)";
+  }
+  return "polygon(0 0, 22% 0, 0 22%)";
+}
+
+function drawingSweepMotion(
+  direction: SectionDrawing["revealDirection"] = "tl-br",
+) {
+  if (direction === "bl-tr") {
+    return {
+      rotate: 45,
+      hidden: { x: "-85%", y: "70%", opacity: 0 },
+      show: { x: "130%", y: "-80%", opacity: [0, 0.42, 0] },
+    };
+  }
+  if (direction === "t-b") {
+    return {
+      rotate: 0,
+      hidden: { x: "0%", y: "-70%", opacity: 0 },
+      show: { x: "0%", y: "118%", opacity: [0, 0.36, 0] },
+    };
+  }
+  if (direction === "tr-bl") {
+    return {
+      rotate: -45,
+      hidden: { x: "120%", y: "-70%", opacity: 0 },
+      show: { x: "-95%", y: "82%", opacity: [0, 0.42, 0] },
+    };
+  }
+  return {
+    rotate: -45,
+    hidden: { x: "-85%", y: "-70%", opacity: 0 },
+    show: { x: "126%", y: "82%", opacity: [0, 0.42, 0] },
+  };
+}
+
 export default function Process() {
   return (
     <section id="process" className="container-ck py-14 lg:py-20">
@@ -242,6 +312,7 @@ function ProcessBook() {
   const {
     columns,
     sectionDrawings,
+    drawingReveal,
     groundShadow,
     contactShadow,
     topShadow,
@@ -329,22 +400,74 @@ function ProcessBook() {
           aria-hidden
         />
 
-        {sectionDrawings.map((drawing) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+        {sectionDrawings.map((drawing, index) => (
+          <div
             key={drawing.src}
-            src={drawing.src}
-            alt=""
-            aria-hidden
-            className="pointer-events-none absolute z-[9] block select-none object-contain mix-blend-multiply"
+            className="pointer-events-none absolute z-[9] block select-none overflow-hidden mix-blend-multiply"
             style={{
               left: drawing.left,
               bottom: drawing.bottom,
               width: drawing.width,
-              opacity: drawing.opacity ?? 1,
               transform: `translateX(-50%) rotate(${drawing.rotate}deg)`,
+              transformOrigin: "50% 70%",
             }}
-          />
+            aria-hidden
+          >
+            <motion.div
+              className="overflow-hidden"
+              variants={{
+                hidden: {
+                  opacity: 0.01,
+                  y: 10,
+                  clipPath: drawingRevealClip(drawing.revealDirection),
+                },
+                show: {
+                  opacity: drawing.opacity ?? 1,
+                  y: 0,
+                  clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+                  transition: {
+                    duration: drawingReveal.revealDuration,
+                    delay: drawing.revealDelay ?? 0.12 + index * 0.14,
+                    ease: [0.22, 1, 0.36, 1],
+                  },
+                },
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={drawing.src}
+                alt=""
+                className="block w-full select-none object-contain"
+              />
+            </motion.div>
+            {(() => {
+              const sweep = drawingSweepMotion(drawing.revealDirection);
+
+              return (
+                <motion.span
+                  className="absolute left-0 top-0 h-[205%] w-[48%] rounded-full bg-forest/20 blur-[24px]"
+                  style={{
+                    transformOrigin: "50% 50%",
+                    rotate: sweep.rotate,
+                  }}
+                  variants={{
+                    hidden: sweep.hidden,
+                    show: {
+                      ...sweep.show,
+                      opacity: [0, drawingReveal.sweepOpacity, 0],
+                      transition: {
+                        duration: drawingReveal.sweepDuration,
+                        delay:
+                          (drawing.revealDelay ?? 0.12 + index * 0.14) +
+                          drawingReveal.sweepDelayOffset,
+                        ease: [0.22, 1, 0.36, 1],
+                      },
+                    },
+                  }}
+                />
+              );
+            })()}
+          </div>
         ))}
 
         {/* Parameterized chapter columns */}
@@ -353,7 +476,7 @@ function ProcessBook() {
           if (!col) return null;
 
           return (
-            <article
+            <motion.article
               key={chapter.number}
               className="absolute z-10 flex flex-col"
               style={{
@@ -363,6 +486,14 @@ function ProcessBook() {
                 width: col.width,
                 paddingLeft: col.paddingX,
                 paddingRight: col.paddingX,
+              }}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={inView}
+              transition={{
+                duration: 0.65,
+                delay: 0.12 + index * 0.12,
+                ease: [0.22, 1, 0.36, 1],
               }}
             >
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-forest/85">
@@ -389,7 +520,7 @@ function ProcessBook() {
               <p className="mt-[6%] max-w-[14rem] text-[clamp(0.72rem,0.86vw,0.9rem)] leading-[1.7] text-ink/82">
                 {chapter.body}
               </p>
-            </article>
+            </motion.article>
           );
         })}
       </div>

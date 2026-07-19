@@ -11,6 +11,8 @@ export type Group = "client" | "product" | "prototype";
 export type CaseStudy = {
   slug: string;
   name: string;
+  /** Short card pill — what the work actually is, not a vague bucket. */
+  badge: string;
   category: string;
   group: Group;
   featured: boolean;
@@ -64,6 +66,7 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "halo-reserve",
     name: "Halo Reserve",
+    badge: "Brand Identity",
     category: "Brand Identity / Wellness Direction",
     group: "client",
     featured: false,
@@ -119,6 +122,7 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "tizirsso",
     name: "Tizirsso Racing",
+    badge: "Client Site",
     category: "Website Design & Development",
     group: "client",
     featured: true,
@@ -183,7 +187,8 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "taylor",
     name: "Taylor.io",
-    category: "AI Resume Platform / Full-Stack System",
+    badge: "Full-Stack Product",
+    category: "AI Resume Platform",
     group: "product",
     featured: true,
     oneLiner:
@@ -260,7 +265,8 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "centi",
     name: "Centi",
-    category: "Personal Finance Dashboard / API Integration",
+    badge: "Finance Dashboard",
+    category: "Personal Finance · API Integrations",
     group: "product",
     featured: true,
     oneLiner:
@@ -334,7 +340,8 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "setlst",
     name: "SETLST",
-    category: "Music-Driven Fitness App / Product Concept",
+    badge: "Product Concept",
+    category: "Music-Driven Fitness App",
     group: "product",
     featured: true,
     oneLiner:
@@ -402,7 +409,8 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "ck-dev",
     name: "CK Dev",
-    category: "Creative Portfolio / Frontend Experiment",
+    badge: "Portfolio Site",
+    category: "Creative Frontend Portfolio",
     group: "prototype",
     featured: false,
     oneLiner:
@@ -462,7 +470,8 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "sentiment-trader",
     name: "SentimentTrader",
-    category: "Financial Data / Machine Learning Pipeline",
+    badge: "Data Pipeline",
+    category: "Financial NLP · Market Data",
     group: "prototype",
     featured: false,
     oneLiner:
@@ -541,7 +550,8 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "internal-automation-tool",
     name: "Internal Automation Tool",
-    category: "Professional Systems / Internal Tooling",
+    badge: "Internship Build",
+    category: "Internal Automation Platform",
     group: "product",
     featured: false,
     oneLiner:
@@ -600,7 +610,8 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "securescape",
     name: "SecureScape",
-    category: "Portable Security System / Senior Design Prototype",
+    badge: "Senior Design",
+    category: "Portable Security · Embedded Systems",
     group: "prototype",
     featured: false,
     oneLiner:

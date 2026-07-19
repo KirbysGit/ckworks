@@ -39,22 +39,21 @@ export default function WorkPreview() {
         </motion.div>
 
         {secondaryCaseStudies.length > 0 && (
-          <div className="mt-14 grid gap-8 lg:grid-cols-[16rem_1fr] lg:gap-12">
+          <div className="mt-14">
             <motion.div
               variants={fadeUp}
               initial="hidden"
               whileInView="show"
               viewport={inView}
+              className="max-w-[80rem]"
             >
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
                 More Things I&apos;ve Built
               </p>
-              <h3 className="mt-7 font-serif text-4xl font-medium leading-[0.95] text-ink sm:text-5xl lg:text-4xl">
-                More things
-                <br /> I&apos;ve built
+              <h3 className="mt-4 font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl">
+                More things I&apos;ve built
               </h3>
-              <span className="mt-6 block h-px w-16 bg-forest" />
-              <p className="mt-6 text-sm leading-relaxed text-muted">
+              <p className="mt-3 max-w-4xl text-base leading-7 text-muted sm:text-lg">
                 A few extra builds, experiments, and systems that show the
                 range of what I like working on.
               </p>
@@ -65,7 +64,7 @@ export default function WorkPreview() {
               initial="hidden"
               whileInView="show"
               viewport={inView}
-              className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+              className="mt-8 grid items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-4"
             >
               {secondaryCaseStudies.map((study) => (
                 <motion.div key={study.slug} variants={fadeUp}>

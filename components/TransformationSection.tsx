@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import {
   ArrowRight,
   CalendarCheck,
-  Check,
   Lock,
   Menu,
   MoreVertical,
@@ -533,7 +532,7 @@ function AfterBoard() {
 
 function BrowserPreview() {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-line bg-card shadow-float">
+    <div className="relative overflow-hidden rounded-2xl border border-line bg-card shadow-float transition-shadow duration-300 hover:shadow-lift">
       <div className="flex items-center gap-3 border-b border-line/80 px-4 py-3">
         <div className="flex gap-1.5">
           <span className="h-2.5 w-2.5 rounded-full bg-[#E5766D]" />
@@ -553,10 +552,15 @@ function BrowserPreview() {
         <div className="hidden items-center gap-3 text-[10px] text-muted md:flex">
           {["Services", "About", "Approach", "Resources", "Contact"].map(
             (item) => (
-              <span key={item}>{item}</span>
+              <span
+                key={item}
+                className="cursor-pointer transition-colors duration-150 hover:text-ink"
+              >
+                {item}
+              </span>
             ),
           )}
-          <span className="rounded-md bg-forest px-3 py-1.5 text-ivory">
+          <span className="cursor-pointer rounded-md bg-forest px-3 py-1.5 text-ivory transition-all duration-150 hover:-translate-y-px hover:bg-[#3D6E4F] hover:shadow-sm">
             Book a call
           </span>
         </div>
@@ -586,7 +590,7 @@ function BrowserPreview() {
           <p className="mt-4 max-w-[15rem] text-xs leading-5 text-ink/75 sm:text-sm sm:leading-6">
             Whole-person care for stress, sleep, and everyday balance.
           </p>
-          <span className="mt-5 inline-flex w-fit items-center gap-2 rounded-md bg-forest px-4 py-2.5 text-xs font-medium text-ivory shadow-soft">
+          <span className="mt-5 inline-flex w-fit cursor-pointer items-center gap-2 rounded-md bg-forest px-4 py-2.5 text-xs font-medium text-ivory shadow-soft transition-all duration-150 hover:-translate-y-px hover:bg-[#3D6E4F] hover:shadow-sm">
             Book a call
             <ArrowRight className="h-3.5 w-3.5" />
           </span>
@@ -596,15 +600,39 @@ function BrowserPreview() {
   );
 }
 
+function InquiryCheck({ delayMs }: { delayMs: number }) {
+  return (
+    <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-forest">
+      <svg
+        viewBox="0 0 16 16"
+        className="h-2.5 w-2.5 text-ivory"
+        fill="none"
+        aria-hidden
+      >
+        <path
+          d="M3.2 8.2L6.5 11.3L12.8 4.4"
+          stroke="currentColor"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          pathLength={1}
+          className="[stroke-dasharray:1] [stroke-dashoffset:0] group-hover/inquiry:animate-[spark-draw_0.42s_ease-out_both]"
+          style={{ animationDelay: `${delayMs}ms` }}
+        />
+      </svg>
+    </span>
+  );
+}
+
 function InquiryCard() {
   return (
-    <div className="absolute left-[-1.5rem] top-[22.35rem] z-30 hidden w-[13.5rem] rounded-xl border border-line bg-card/95 p-3 shadow-float backdrop-blur sm:block">
+    <div className="group/inquiry absolute left-[-1.5rem] top-[22.35rem] z-30 hidden w-[13.5rem] rounded-xl border border-line bg-card/95 p-3 shadow-float backdrop-blur transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-lift sm:block">
       <div className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
-          <UserRound className="h-3.5 w-3.5 shrink-0 text-ink/70" />
+          <UserRound className="h-3.5 w-3.5 shrink-0 text-ink/70 transition-colors duration-200 group-hover/inquiry:text-forest" />
           <p className="text-[10px] font-semibold text-ink">New inquiry</p>
         </div>
-        <span className="shrink-0 rounded-full bg-forest-soft px-2 py-1 text-[8px] font-semibold text-forest">
+        <span className="shrink-0 rounded-full bg-forest-soft px-2 py-1 text-[8px] font-semibold text-forest transition-transform duration-300 group-hover/inquiry:scale-[1.04]">
           Received
         </span>
       </div>
@@ -612,22 +640,26 @@ function InquiryCard() {
       <div className="mt-2.5 border-t border-line/80" />
 
       <ul className="mt-2.5 space-y-2">
-        {inquirySteps.map(({ label, done, icon: Icon, badge }) => (
-          <li key={label} className="grid grid-cols-[1rem_1fr_auto] items-center gap-x-2">
+        {inquirySteps.map(({ label, done, icon: Icon, badge }, index) => (
+          <li
+            key={label}
+            className="grid grid-cols-[1rem_1fr_auto] items-center gap-x-2"
+          >
             {done ? (
-              <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-forest">
-                <Check className="h-2.5 w-2.5 text-ivory" strokeWidth={3} />
-              </span>
+              <InquiryCheck delayMs={index * 95} />
             ) : Icon ? (
-              <Icon className="h-4 w-4 text-ink/55" strokeWidth={1.75} />
+              <Icon
+                className="h-4 w-4 text-ink/55 transition-colors duration-200 group-hover/inquiry:text-forest"
+                strokeWidth={1.75}
+              />
             ) : (
               <span className="h-4 w-4" />
             )}
-            <span className="truncate text-[9px] font-medium leading-none text-ink/80">
+            <span className="truncate text-[9px] font-medium leading-none text-ink/80 transition-colors duration-200 group-hover/inquiry:text-ink">
               {label}
             </span>
             {badge ? (
-              <span className="rounded-full bg-forest-soft px-2 py-0.5 text-[8px] font-semibold text-forest">
+              <span className="rounded-full bg-forest-soft px-2 py-0.5 text-[8px] font-semibold text-forest transition-transform duration-300 group-hover/inquiry:scale-[1.04]">
                 {badge}
               </span>
             ) : (
@@ -783,8 +815,8 @@ function MiniBrand({ compact = false }: { compact?: boolean }) {
 
 function PhonePreview() {
   return (
-    <div className="absolute right-[-1.1rem] top-[7.45rem] z-40 hidden w-[172px] sm:block lg:right-[-2.15rem]">
-      <div className="relative rounded-[36px] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] p-[2px] shadow-[0_16px_34px_-16px_rgba(17,23,20,0.58),0_5px_12px_-6px_rgba(17,23,20,0.48)]">
+    <div className="group absolute right-[-1.1rem] top-[7.45rem] z-40 hidden w-[172px] sm:block lg:right-[-2.15rem]">
+      <div className="relative rounded-[36px] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] p-[2px] shadow-[0_16px_34px_-16px_rgba(17,23,20,0.58),0_5px_12px_-6px_rgba(17,23,20,0.48)] transition-shadow duration-300 group-hover:shadow-[0_20px_38px_-16px_rgba(17,23,20,0.62),0_6px_14px_-6px_rgba(17,23,20,0.5)]">
         <span
           className="pointer-events-none absolute inset-[1px] rounded-[35px] bg-[radial-gradient(circle_at_28%_7%,rgba(255,255,255,0.38),transparent_22%),linear-gradient(160deg,rgba(255,255,255,0.18),transparent_34%,rgba(0,0,0,0.42)_72%)] opacity-70"
           aria-hidden
@@ -821,18 +853,25 @@ function PhonePreview() {
                 <p className="mt-3 text-[7.5px] leading-snug text-ink/75">
                   Whole-person care for stress, sleep, and everyday balance.
                 </p>
-                <span className="mt-3 block rounded bg-forest px-2 py-1.5 text-center text-[7px] font-medium text-ivory shadow-[0_4px_10px_-6px_rgba(47,91,63,0.8)]">
+                <span className="mt-3 block cursor-pointer rounded bg-forest px-2 py-1.5 text-center text-[7px] font-medium text-ivory shadow-[0_4px_10px_-6px_rgba(47,91,63,0.8)] transition-colors duration-150 hover:bg-[#3D6E4F]">
                   Book a call
                 </span>
               </div>
 
+              {/* bottom-anchored photo: top edge fades into the card
+                  background instead of clipping the image with a hard
+                  rectangle edge */}
               <div className="absolute inset-x-0 bottom-0 h-[116px] overflow-hidden">
                 <Image
                   src="/images/transformation/png/after-demo.png"
                   alt=""
                   fill
                   sizes="170px"
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                />
+                <div
+                  className="pointer-events-none absolute inset-x-0 top-0 h-9 bg-gradient-to-b from-card to-transparent"
+                  aria-hidden
                 />
               </div>
             </div>

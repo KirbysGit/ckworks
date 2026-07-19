@@ -32,8 +32,19 @@ export default function FounderNote() {
   const { stageMaxWidth, portrait, drawingCard, drawing } = founderNoteLayout;
 
   return (
-    <section id="about" className="overflow-hidden bg-sand py-12 sm:py-14 lg:py-16">
-      <div className="container-ck">
+    <section
+      id="about"
+      className="relative overflow-hidden bg-sand py-12 sm:py-14 lg:py-16"
+    >
+      {/* full-bleed section background art */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/founder/svg/note-bg.svg"
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover opacity-80"
+      />
+      <div className="container-ck relative">
         <motion.div
           variants={fadeUp}
           initial="hidden"
@@ -48,7 +59,7 @@ export default function FounderNote() {
           />
 
           <div
-            className="order-3 relative z-0 mx-auto h-[24rem] w-full max-w-[25rem] overflow-hidden rounded-[1.8rem] border border-line/80 bg-card/75 shadow-soft lg:absolute lg:right-[var(--drawing-right)] lg:top-[var(--drawing-top)] lg:h-[var(--drawing-height)] lg:w-[var(--drawing-width)] lg:max-w-none lg:rotate-[var(--drawing-rotate)]"
+            className="order-3 relative z-0 mx-auto h-[24rem] w-full max-w-[25rem] overflow-hidden rounded-[1.8rem] border border-line/80 bg-card/75 shadow-lift lg:absolute lg:right-[var(--drawing-right)] lg:top-[var(--drawing-top)] lg:h-[var(--drawing-height)] lg:w-[var(--drawing-width)] lg:max-w-none lg:rotate-[var(--drawing-rotate)]"
             style={{
               "--drawing-width": drawingCard.width,
               "--drawing-height": drawingCard.height,
@@ -77,7 +88,7 @@ export default function FounderNote() {
             />
           </div>
 
-          <article className="relative z-20 order-1 mx-auto w-full max-w-[49rem] overflow-hidden rounded-[1.8rem] border border-line bg-card/95 px-6 py-8 shadow-lift sm:px-10 sm:py-10 lg:min-h-[30rem] lg:px-20 lg:py-11">
+          <article className="relative z-20 order-1 mx-auto w-full max-w-[49rem] overflow-hidden rounded-[1.8rem] border border-line bg-card/95 px-6 py-8 shadow-float sm:px-10 sm:py-10 lg:min-h-[30rem] lg:px-20 lg:py-11">
             <div className="pointer-events-none absolute inset-2 rounded-[1.65rem] border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]" />
             <div
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_4%,rgba(255,255,255,0.95),transparent_28%),radial-gradient(circle_at_90%_12%,rgba(255,255,255,0.7),transparent_30%),linear-gradient(180deg,rgba(255,253,248,0.9)_0%,rgba(250,247,240,0.45)_100%)]"
@@ -150,7 +161,7 @@ export default function FounderNote() {
           </article>
 
           <div
-            className="relative z-30 order-2 mx-auto w-full max-w-[24rem] rounded-[1.85rem] border border-line bg-card p-3 shadow-float lg:absolute lg:left-[var(--portrait-left)] lg:top-[var(--portrait-top)] lg:w-[var(--portrait-width)] lg:max-w-none lg:-translate-y-1/2 lg:rotate-[var(--portrait-rotate)]"
+            className="relative z-30 order-2 mx-auto w-full max-w-[24rem] rounded-[1.85rem] border border-line bg-card p-3 shadow-[0_22px_60px_-18px_rgba(31,36,32,0.34)] lg:absolute lg:left-[var(--portrait-left)] lg:top-[var(--portrait-top)] lg:w-[var(--portrait-width)] lg:max-w-none lg:-translate-y-1/2 lg:rotate-[var(--portrait-rotate)]"
             style={{
               "--portrait-width": portrait.width,
               "--portrait-left": portrait.left,

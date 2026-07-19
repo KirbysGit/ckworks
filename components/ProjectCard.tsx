@@ -9,7 +9,11 @@ import {
   Globe2,
   Layers3,
   Monitor,
+  Palette,
+  ShieldCheck,
   Smartphone,
+  TrendingUp,
+  Workflow,
 } from "lucide-react";
 import type { CaseStudy } from "@/lib/projects";
 
@@ -22,12 +26,6 @@ type Props = {
 type MetaItem = {
   label: string;
   icon: typeof Globe2;
-};
-
-const groupLabels: Record<CaseStudy["group"], string> = {
-  client: "Client Work",
-  product: "Project",
-  prototype: "Prototype",
 };
 
 const groupIcons: Record<CaseStudy["group"], typeof Globe2> = {
@@ -76,6 +74,13 @@ const cardMeta: Record<string, MetaItem[]> = {
   ],
 };
 
+const compactIcons: Record<string, typeof Globe2> = {
+  "ck-dev": Palette,
+  "sentiment-trader": TrendingUp,
+  "internal-automation-tool": Workflow,
+  securescape: ShieldCheck,
+};
+
 export default function ProjectCard({ study, variant = "featured" }: Props) {
   if (variant === "compact") {
     return <CompactProjectRow study={study} />;
@@ -86,7 +91,7 @@ export default function ProjectCard({ study, variant = "featured" }: Props) {
 
 function FeaturedProjectCard({ study }: { study: CaseStudy }) {
   const meta = cardMeta[study.slug] ?? [
-    { label: groupLabels[study.group], icon: Briefcase },
+    { label: study.badge, icon: Briefcase },
   ];
 
   return (
@@ -120,24 +125,29 @@ function FeaturedProjectCard({ study }: { study: CaseStudy }) {
 }
 
 function CompactProjectRow({ study }: { study: CaseStudy }) {
-  return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift">
-      <ProjectImage
-        study={study}
-        className="aspect-square"
-        sizes="(min-width: 1280px) 16vw, (min-width: 640px) 45vw, 100vw"
-      />
+  const Icon = compactIcons[study.slug] ?? groupIcons[study.group];
 
-      <div className="flex flex-1 flex-col p-4">
-        <div className="min-w-0">
-          <h3 className="font-serif text-2xl font-semibold leading-tight text-ink">
+  return (
+    <article className="group flex h-full min-h-72 flex-col rounded-xl border border-line bg-card p-5 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift">
+      <div className="flex items-start justify-between gap-3">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-forest-soft text-forest">
+          <Icon className="h-5 w-5" />
+        </span>
+        <span className="rounded-full bg-sand px-2.5 py-1 text-[10px] font-medium text-forest">
+          {study.badge}
+        </span>
+      </div>
+
+      <div className="mt-5 flex min-h-0 flex-1 flex-col">
+        <div>
+          <h3 className="font-serif text-xl font-semibold leading-tight text-ink">
             {displayNames[study.slug] ?? study.name}
           </h3>
-          <p className="mt-1.5 line-clamp-2 text-[11px] font-medium leading-relaxed text-forest">
+          <p className="mt-2 text-[11px] font-medium leading-relaxed text-forest">
             {study.category}
           </p>
         </div>
-        <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-muted">
+        <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
           {study.teaser}
         </p>
 
@@ -175,7 +185,7 @@ function ProjectTypePill({ study }: { study: CaseStudy }) {
   return (
     <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-forest-soft/75 px-2.5 py-1 text-[11px] font-medium text-forest">
       <Icon className="h-3 w-3" />
-      {groupLabels[study.group]}
+      {study.badge}
     </span>
   );
 }
