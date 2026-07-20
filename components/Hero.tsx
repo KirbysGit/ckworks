@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, LayoutTemplate, MessageSquareText, Workflow } from "lucide-react";
 import HeroMockup from "./HeroMockup";
+import ProjectInquiryTrigger from "./ProjectInquiryTrigger";
 import { fadeUp, stagger } from "@/lib/motion";
 
 /**
@@ -155,13 +156,13 @@ export default function Hero() {
             variants={fadeUp}
             className="mt-8 flex flex-wrap items-center justify-start gap-4"
           >
-            <a
-              href="#contact"
+            <ProjectInquiryTrigger
+              source="hero"
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-forest px-6 py-3 text-sm font-semibold text-ivory shadow-lift transition-colors duration-200 hover:bg-ink"
             >
               Start a project
               <ArrowRight className="h-4 w-4" />
-            </a>
+            </ProjectInquiryTrigger>
             <a
               href="#what-i-do"
               className="inline-flex min-h-12 items-center justify-center rounded-xl border-2 border-forest/80 bg-transparent px-6 py-3 text-sm font-semibold text-forest transition-colors duration-200 hover:bg-forest-soft"

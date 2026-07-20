@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Check, ExternalLink } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Button from "@/components/ui/Button";
+import ProjectInquiryTrigger from "@/components/ProjectInquiryTrigger";
 import { caseStudies, getCaseStudy } from "@/lib/projects";
 
 type Props = {
@@ -239,12 +239,16 @@ function ProjectPageCta() {
             little messy, I can help you figure out what makes sense next.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-start">
-            <Button href="/#contact" className="min-w-44">
+            <ProjectInquiryTrigger source="work-cta" className="min-w-44">
               Start a project <ArrowRight className="h-4 w-4" />
-            </Button>
-            <Button href="/#contact" variant="secondary" className="min-w-44">
+            </ProjectInquiryTrigger>
+            <ProjectInquiryTrigger
+              source="work-cta-note"
+              variant="secondary"
+              className="min-w-44"
+            >
               Send me a note
-            </Button>
+            </ProjectInquiryTrigger>
           </div>
         </div>
       </div>

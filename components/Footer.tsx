@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import Logo from "./ui/Logo";
 import DrawUnderline from "./ui/DrawUnderline";
+import ProjectInquiryTrigger from "./ProjectInquiryTrigger";
 import { footerLinks, contactEmail } from "@/lib/data";
 
 export default function Footer() {
@@ -48,7 +49,13 @@ export default function Footer() {
         </nav>
 
         <div className="text-sm md:justify-self-end">
-          <p className="text-muted">Say hello</p>
+          <ProjectInquiryTrigger
+            source="footer-hello"
+            variant="ghost"
+            className="p-0 text-muted hover:text-forest"
+          >
+            Say hello
+          </ProjectInquiryTrigger>
           <a
             href={`mailto:${contactEmail}`}
             className="mt-1 inline-block font-medium text-forest hover:text-ink"

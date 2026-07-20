@@ -6,6 +6,7 @@ import {
   siteTagline,
   siteUrl,
 } from "@/lib/site";
+import { ProjectInquiryProvider } from "@/components/ProjectInquiryProvider";
 import { contactEmail } from "@/lib/data";
 import "./globals.css";
 
@@ -94,7 +95,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {children}
+        <ProjectInquiryProvider>{children}</ProjectInquiryProvider>
       </body>
     </html>
   );

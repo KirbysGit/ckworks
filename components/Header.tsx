@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 import Logo from "./ui/Logo";
-import Button from "./ui/Button";
 import DrawUnderline from "./ui/DrawUnderline";
+import ProjectInquiryTrigger from "./ProjectInquiryTrigger";
 import { nav } from "@/lib/data";
 
 export default function Header() {
@@ -61,9 +61,9 @@ export default function Header() {
         </nav>
 
         <div className="hidden lg:block">
-          <Button href="/#contact">
+          <ProjectInquiryTrigger source="header">
             Start a project <ArrowRight className="h-4 w-4" />
-          </Button>
+          </ProjectInquiryTrigger>
         </div>
 
         <button
@@ -96,9 +96,13 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
-            <Button href="/#contact" className="mt-3 w-full">
+            <ProjectInquiryTrigger
+              source="mobile-header"
+              className="mt-3 w-full"
+              onOpen={() => setOpen(false)}
+            >
               Start a project <ArrowRight className="h-4 w-4" />
-            </Button>
+            </ProjectInquiryTrigger>
           </nav>
         </div>
       )}
