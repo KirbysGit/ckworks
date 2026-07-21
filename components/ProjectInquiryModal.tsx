@@ -564,7 +564,7 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
   return (
     <motion.div
       key="success"
-      className="relative flex min-h-[31rem] flex-col items-center justify-center py-4 text-center sm:min-h-[34rem] sm:py-8"
+      className="relative mx-auto flex w-full max-w-[31rem] flex-col items-center py-1 text-center sm:py-2"
       initial={{ opacity: 0, y: 18, filter: "blur(3px)" }}
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       exit={{ opacity: 0, y: 12, filter: "blur(2px)" }}
@@ -583,7 +583,7 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
 
       <motion.h2
         id="project-inquiry-title"
-        className="mt-4 font-serif text-[3.2rem] font-medium leading-none text-forest sm:text-[4rem]"
+        className="mt-2 font-serif text-[2.6rem] font-medium leading-none text-forest sm:text-[3.15rem]"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.36, delay: 0.46, ease: [0.22, 1, 0.36, 1] }}
@@ -592,7 +592,7 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
       </motion.h2>
 
       <motion.p
-        className="mx-auto mt-4 max-w-[27rem] text-base leading-7 text-ink sm:text-lg"
+        className="mx-auto mt-3 max-w-[25rem] text-sm leading-6 text-ink sm:text-base"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.36, delay: 0.58, ease: [0.22, 1, 0.36, 1] }}
@@ -608,7 +608,7 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
       <motion.button
         type="button"
         onClick={onClose}
-        className="mt-8 inline-flex min-h-12 w-full max-w-[31rem] items-center justify-center border border-forest bg-transparent px-8 py-3 text-sm font-bold text-forest transition-colors hover:bg-forest hover:text-ivory"
+        className="mt-5 inline-flex min-h-11 w-full max-w-[28rem] items-center justify-center border border-forest bg-transparent px-8 py-2.5 text-sm font-bold text-forest transition-colors hover:bg-forest hover:text-ivory"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.36, delay: 1, ease: [0.22, 1, 0.36, 1] }}
@@ -622,7 +622,7 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
 function SuccessCheckGraphic() {
   return (
     <motion.div
-      className="relative mt-4 flex h-28 w-36 items-center justify-center sm:h-32 sm:w-40"
+      className="relative mt-3 flex h-20 w-24 items-center justify-center sm:h-24 sm:w-28"
       initial={{ opacity: 0, y: 8, scale: 0.88, rotate: -2 }}
       animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
       transition={{ duration: 0.42, delay: 0.26, ease: [0.22, 1, 0.36, 1] }}
@@ -649,7 +649,7 @@ function SuccessSteps() {
 
   return (
     <motion.ol
-      className="mt-10 grid w-full max-w-[34rem] grid-cols-3 items-start gap-3"
+      className="mt-6 grid w-full max-w-[29rem] grid-cols-3 items-start gap-2"
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.36, delay: 0.72, ease: [0.22, 1, 0.36, 1] }}
@@ -658,7 +658,7 @@ function SuccessSteps() {
         <li key={step} className="relative text-center">
           {index < steps.length - 1 && (
             <motion.span
-              className="absolute left-[58%] top-5 hidden h-px w-[84%] border-t border-dotted border-forest/80 sm:block"
+              className="absolute left-[58%] top-4 hidden h-px w-[84%] border-t border-dotted border-forest/80 sm:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{
@@ -671,7 +671,7 @@ function SuccessSteps() {
             />
           )}
           <motion.span
-            className="relative z-10 mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-forest text-sm font-semibold text-ivory shadow-soft"
+            className="relative z-10 mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-forest text-xs font-semibold text-ivory shadow-soft"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{
@@ -682,7 +682,7 @@ function SuccessSteps() {
           >
             {index + 1}
           </motion.span>
-          <p className="mt-3 text-sm font-bold leading-snug text-ink">{step}</p>
+          <p className="mt-2 text-xs font-bold leading-snug text-ink sm:text-sm">{step}</p>
         </li>
       ))}
     </motion.ol>
@@ -692,7 +692,7 @@ function SuccessSteps() {
 function SuccessHandwritingGraphic() {
   return (
     <motion.div
-      className="mt-8 flex min-h-20 w-full max-w-[31rem] items-center justify-center overflow-hidden px-4"
+      className="mt-4 flex min-h-16 w-full max-w-[26rem] items-center justify-center overflow-hidden px-4"
       initial={{ opacity: 0, y: 10, clipPath: "inset(0 100% 0 0)" }}
       animate={{ opacity: 1, y: 0, clipPath: "inset(0 0% 0 0)" }}
       transition={{ duration: 0.85, delay: 0.88, ease: [0.22, 1, 0.36, 1] }}
