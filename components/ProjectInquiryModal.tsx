@@ -3,6 +3,7 @@
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronDown, Loader2, X } from "lucide-react";
+import Logo from "./ui/Logo";
 import { contactEmail } from "@/lib/data";
 
 type ProjectInquiryModalProps = {
@@ -570,14 +571,14 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
       exit={{ opacity: 0, y: 12, filter: "blur(2px)" }}
       transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
     >
-      <motion.p
-        className="text-sm font-bold text-forest"
+      <motion.div
+        className="flex justify-center"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
       >
-        CK Works
-      </motion.p>
+        <Logo size="sm" />
+      </motion.div>
 
       <SuccessCheckGraphic />
 
@@ -588,7 +589,7 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.36, delay: 0.46, ease: [0.22, 1, 0.36, 1] }}
       >
-        Got it.
+        Got it!
       </motion.h2>
 
       <motion.p
@@ -622,7 +623,7 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
 function SuccessCheckGraphic() {
   return (
     <motion.div
-      className="relative mt-3 flex h-20 w-24 items-center justify-center sm:h-24 sm:w-28"
+      className="relative mt-5 flex h-24 w-28 items-center justify-center sm:mt-6 sm:h-28 sm:w-32"
       initial={{ opacity: 0, y: 8, scale: 0.88, rotate: -2 }}
       animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
       transition={{ duration: 0.42, delay: 0.26, ease: [0.22, 1, 0.36, 1] }}
@@ -649,7 +650,7 @@ function SuccessSteps() {
 
   return (
     <motion.ol
-      className="mt-6 grid w-full max-w-[29rem] grid-cols-3 items-start gap-2"
+      className="mt-8 grid w-full max-w-[29rem] grid-cols-3 items-start gap-2"
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.36, delay: 0.72, ease: [0.22, 1, 0.36, 1] }}
@@ -692,7 +693,7 @@ function SuccessSteps() {
 function SuccessHandwritingGraphic() {
   return (
     <motion.div
-      className="mt-4 flex min-h-16 w-full max-w-[26rem] items-center justify-center overflow-hidden px-4"
+      className="mt-3 flex h-14 w-full max-w-[24rem] items-center justify-center overflow-hidden px-2 sm:h-16"
       initial={{ opacity: 0, y: 10, clipPath: "inset(0 100% 0 0)" }}
       animate={{ opacity: 1, y: 0, clipPath: "inset(0 0% 0 0)" }}
       transition={{ duration: 0.85, delay: 0.88, ease: [0.22, 1, 0.36, 1] }}
@@ -702,7 +703,7 @@ function SuccessHandwritingGraphic() {
       <img
         src="/images/modal/modal-after-note.svg"
         alt=""
-        className="h-auto w-full select-none"
+        className="h-auto w-[118%] max-w-none -translate-y-[12%] select-none sm:w-[112%]"
       />
     </motion.div>
   );

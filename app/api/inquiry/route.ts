@@ -179,52 +179,116 @@ function buildInquiryText(inquiry: NormalizedInquiry) {
 }
 
 function buildInquiryHtml(inquiry: NormalizedInquiry) {
-  const rows = [
-    ["Name", inquiry.name],
-    ["Email", inquiry.email],
-    ["Business / project", inquiry.businessName],
+  const projectDetails = [
     ["Project type", inquiry.projectType],
     ["Timeline", inquiry.timeline],
     ["Budget", inquiry.budget],
+  ];
+  const contactDetails = [
+    ["Name", inquiry.name],
+    ["Email", inquiry.email],
+    ["Business / project", inquiry.businessName],
     ["Submitted from", inquiry.sourcePage],
     ["Source", inquiry.source],
-    ["Submitted at", inquiry.submittedAt],
+    ["Submitted at", formatSubmittedAt(inquiry.submittedAt)],
   ];
 
   return `
-    <div style="background:#faf7f0;padding:32px;font-family:Inter,Arial,sans-serif;color:#1f2420;">
-      <div style="max-width:640px;margin:0 auto;background:#fffdf8;border:1px solid #ddd6c8;padding:28px;">
-        <p style="margin:0 0 8px;text-transform:uppercase;letter-spacing:0.16em;font-size:12px;color:#2f5b3f;font-weight:700;">
-          CK Works Inquiry
-        </p>
-        <h1 style="margin:0 0 22px;font-family:Georgia,serif;font-size:32px;font-weight:500;color:#1f2420;">
-          New project inquiry from ${escapeHtml(inquiry.name)}
-        </h1>
-        <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
-          <tbody>
-            ${rows
-              .map(
-                ([label, value]) => `
-                  <tr>
-                    <td style="width:38%;padding:10px 12px;border-top:1px solid #eee6d8;font-size:13px;color:#5f665f;font-weight:700;">
-                      ${escapeHtml(label)}
-                    </td>
-                    <td style="padding:10px 12px;border-top:1px solid #eee6d8;font-size:14px;color:#1f2420;">
-                      ${escapeHtml(value)}
-                    </td>
-                  </tr>
-                `,
-              )
-              .join("")}
-          </tbody>
-        </table>
-        <div style="border-top:1px solid #ddd6c8;padding-top:20px;">
-          <p style="margin:0 0 8px;font-size:13px;color:#5f665f;font-weight:700;">Message</p>
-          <p style="margin:0;white-space:pre-line;font-size:15px;line-height:1.7;color:#1f2420;">${escapeHtml(
-            inquiry.message,
-          )}</p>
+    <div style="margin:0;background:#f3efe5;padding:36px 18px;font-family:Inter,Arial,sans-serif;color:#1f2420;">
+      <div style="max-width:680px;margin:0 auto;">
+        <div style="height:10px;background:#2f5b3f;border:1px solid #274b36;border-bottom:0;border-radius:18px 18px 0 0;"></div>
+        <div style="background:#fffdf8;border:1px solid #d8cdbd;border-top:0;border-radius:0 0 18px 18px;box-shadow:0 22px 42px rgba(31,36,32,0.12);overflow:hidden;">
+          <div style="padding:30px 32px 24px;background:#fffaf0;border-bottom:1px solid #e6ddce;">
+            <p style="margin:0 0 10px;text-transform:uppercase;letter-spacing:0.18em;font-size:11px;color:#2f5b3f;font-weight:800;">
+              CK Works Inquiry
+            </p>
+            <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:34px;line-height:1.12;font-weight:500;color:#1f2420;">
+              New note from ${escapeHtml(inquiry.name)}
+            </h1>
+            <p style="margin:14px 0 0;font-size:15px;line-height:1.65;color:#5f665f;">
+              A project inquiry came through from the CK Works site.
+            </p>
+          </div>
+
+          <div style="padding:26px 32px 30px;">
+            <div style="background:#f7f3ea;border:1px solid #ded4c5;border-radius:14px;padding:20px 22px;margin-bottom:22px;">
+              <p style="margin:0 0 8px;text-transform:uppercase;letter-spacing:0.14em;font-size:11px;color:#2f5b3f;font-weight:800;">
+                Message
+              </p>
+              <p style="margin:0;white-space:pre-line;font-family:Georgia,'Times New Roman',serif;font-size:21px;line-height:1.55;color:#1f2420;">
+                ${escapeHtml(inquiry.message)}
+              </p>
+            </div>
+
+            <table role="presentation" style="width:100%;border-collapse:separate;border-spacing:0 12px;margin:0 0 20px;">
+              <tbody>
+                <tr>
+                  ${projectDetails
+                    .map(
+                      ([label, value]) => `
+                        <td style="width:33.333%;vertical-align:top;padding:0 8px 0 0;">
+                          <div style="min-height:76px;border:1px solid #ded4c5;background:#fffaf0;border-radius:12px;padding:14px;">
+                            <p style="margin:0 0 8px;text-transform:uppercase;letter-spacing:0.12em;font-size:10px;color:#5f665f;font-weight:800;">
+                              ${escapeHtml(label)}
+                            </p>
+                            <p style="margin:0;font-size:15px;line-height:1.35;color:#1f2420;font-weight:700;">
+                              ${escapeHtml(value)}
+                            </p>
+                          </div>
+                        </td>
+                      `,
+                    )
+                    .join("")}
+                </tr>
+              </tbody>
+            </table>
+
+            <table role="presentation" style="width:100%;border-collapse:collapse;margin:0 0 24px;">
+              <tbody>
+                ${contactDetails
+                  .map(
+                    ([label, value]) => `
+                      <tr>
+                        <td style="width:38%;padding:11px 12px;border-top:1px solid #eee6d8;font-size:12px;color:#5f665f;font-weight:800;">
+                          ${escapeHtml(label)}
+                        </td>
+                        <td style="padding:11px 12px;border-top:1px solid #eee6d8;font-size:14px;color:#1f2420;">
+                          ${escapeHtml(value)}
+                        </td>
+                      </tr>
+                    `,
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+
+            <a href="mailto:${escapeHtml(
+              inquiry.email,
+            )}" style="display:block;text-align:center;background:#2f5b3f;color:#fffdf8;text-decoration:none;border-radius:12px;padding:14px 20px;font-size:14px;font-weight:800;">
+              Reply to ${escapeHtml(inquiry.name)}
+            </a>
+
+            <p style="margin:18px 0 0;text-align:center;font-size:12px;line-height:1.6;color:#7a8078;">
+              Sent from ${escapeHtml(inquiry.sourcePage)} via ${escapeHtml(
+                inquiry.source,
+              )}. Replying to this email will go to ${escapeHtml(
+                inquiry.email,
+              )}.
+            </p>
+          </div>
         </div>
       </div>
     </div>
   `;
+}
+
+function formatSubmittedAt(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "America/New_York",
+  }).format(date);
 }
