@@ -141,10 +141,10 @@ export default async function CaseStudyPage({ params }: Props) {
             )}
           </div>
 
-          <div
-            className={`relative mx-auto mt-10 aspect-[16/8] w-full max-w-5xl overflow-hidden rounded-2xl border border-line bg-gradient-to-br shadow-soft ${study.accent}`}
-          >
-            {study.coverImage ? (
+          {study.coverImage && (
+            <div
+              className={`relative mx-auto mt-10 aspect-[16/8] w-full max-w-5xl overflow-hidden rounded-2xl border border-line bg-gradient-to-br shadow-soft ${study.accent}`}
+            >
               <Image
                 src={study.coverImage.src}
                 alt={study.coverImage.alt}
@@ -154,15 +154,8 @@ export default async function CaseStudyPage({ params }: Props) {
                 className="object-contain"
                 style={{ objectPosition: study.coverImage.position ?? "center" }}
               />
-            ) : (
-              <>
-                <div className="grid-texture absolute inset-0 opacity-25" />
-                <p className="absolute bottom-4 right-5 text-xs text-ivory/70">
-                  Screenshot coming soon
-                </p>
-              </>
-            )}
-          </div>
+            </div>
+          )}
         </section>
 
         <article className="container-ck pb-16">
