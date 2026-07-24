@@ -49,26 +49,28 @@ export default function Footer() {
         </nav>
 
         <div className="text-sm md:justify-self-end">
-          <ProjectInquiryTrigger
-            source="footer-hello"
-            variant="ghost"
-            className="p-0 text-muted hover:text-forest"
-          >
-            Say hello
-          </ProjectInquiryTrigger>
-          <a
-            href={`mailto:${contactEmail}`}
-            className="mt-1 inline-block font-medium text-forest hover:text-ink"
-          >
-            {contactEmail}
-          </a>
-          <Image
-            src="/images/brand/svg/signature-initials.svg"
-            alt=""
-            width={1805}
-            height={1397}
-            className="mt-4 h-12 w-auto"
-          />
+          <div className="inline-flex flex-col items-center text-center">
+            <ProjectInquiryTrigger
+              source="footer-hello"
+              variant="ghost"
+              className="p-0 text-muted hover:text-forest"
+            >
+              Say hello
+            </ProjectInquiryTrigger>
+            <a
+              href={`mailto:${contactEmail}`}
+              className="mt-1 font-medium text-forest hover:text-ink"
+            >
+              {contactEmail}
+            </a>
+            <Image
+              src="/images/brand/svg/signature-initials.svg"
+              alt=""
+              width={1805}
+              height={1397}
+              className="mt-4 h-12 w-auto"
+            />
+          </div>
         </div>
       </div>
 

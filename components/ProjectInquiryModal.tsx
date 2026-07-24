@@ -10,6 +10,8 @@ type ProjectInquiryModalProps = {
   isOpen: boolean;
   onClose: () => void;
   source?: string;
+  /** Dev-only: open straight to the success screen (no email send). */
+  debugSuccess?: boolean;
 };
 
 type FormState = {
@@ -70,6 +72,7 @@ export default function ProjectInquiryModal({
   isOpen,
   onClose,
   source,
+  debugSuccess = false,
 }: ProjectInquiryModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState<FormState>(initialForm);
@@ -110,6 +113,11 @@ export default function ProjectInquiryModal({
 
     return () => window.clearTimeout(resetTimer);
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen || !debugSuccess) return;
+    setStatus("success");
+  }, [isOpen, debugSuccess]);
 
   function updateField(field: keyof FormState, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
@@ -565,7 +573,7 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
   return (
     <motion.div
       key="success"
-      className="relative mx-auto flex w-full max-w-[31rem] flex-col items-center py-1 text-center sm:py-2"
+      className="relative mx-auto flex w-full max-w-[28rem] flex-col items-center text-center"
       initial={{ opacity: 0, y: 18, filter: "blur(3px)" }}
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       exit={{ opacity: 0, y: 12, filter: "blur(2px)" }}
@@ -577,14 +585,14 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
       >
-        <Logo size="sm" />
+        <Logo size="md" />
       </motion.div>
 
       <SuccessCheckGraphic />
 
       <motion.h2
         id="project-inquiry-title"
-        className="mt-2 font-serif text-[2.6rem] font-medium leading-none text-forest sm:text-[3.15rem]"
+        className="mt-2 font-serif text-[2.35rem] font-medium leading-none text-forest sm:text-[2.75rem]"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.36, delay: 0.46, ease: [0.22, 1, 0.36, 1] }}
@@ -593,7 +601,7 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
       </motion.h2>
 
       <motion.p
-        className="mx-auto mt-3 max-w-[25rem] text-sm leading-6 text-ink sm:text-base"
+        className="mx-auto mt-2.5 max-w-[24rem] text-sm leading-6 text-ink sm:text-[0.95rem]"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.36, delay: 0.58, ease: [0.22, 1, 0.36, 1] }}
@@ -609,7 +617,7 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
       <motion.button
         type="button"
         onClick={onClose}
-        className="mt-5 inline-flex min-h-11 w-full max-w-[28rem] items-center justify-center border border-forest bg-transparent px-8 py-2.5 text-sm font-bold text-forest transition-colors hover:bg-forest hover:text-ivory"
+        className="mt-4 inline-flex min-h-10 w-full max-w-[26rem] items-center justify-center border border-forest bg-transparent px-8 py-2 text-sm font-bold text-forest transition-colors hover:bg-forest hover:text-ivory"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.36, delay: 1, ease: [0.22, 1, 0.36, 1] }}
@@ -623,7 +631,7 @@ function SuccessMessage({ onClose }: { onClose: () => void }) {
 function SuccessCheckGraphic() {
   return (
     <motion.div
-      className="relative mt-5 flex h-24 w-28 items-center justify-center sm:mt-6 sm:h-28 sm:w-32"
+      className="relative mt-4 flex h-24 w-28 items-center justify-center sm:mt-5 sm:h-28 sm:w-32"
       initial={{ opacity: 0, y: 8, scale: 0.88, rotate: -2 }}
       animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
       transition={{ duration: 0.42, delay: 0.26, ease: [0.22, 1, 0.36, 1] }}
@@ -650,7 +658,7 @@ function SuccessSteps() {
 
   return (
     <motion.ol
-      className="mt-8 grid w-full max-w-[29rem] grid-cols-3 items-start gap-2"
+      className="mt-5 grid w-full max-w-[26rem] grid-cols-3 items-start gap-2"
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.36, delay: 0.72, ease: [0.22, 1, 0.36, 1] }}
@@ -693,18 +701,25 @@ function SuccessSteps() {
 function SuccessHandwritingGraphic() {
   return (
     <motion.div
-      className="mt-3 flex h-14 w-full max-w-[24rem] items-center justify-center overflow-hidden px-2 sm:h-16"
-      initial={{ opacity: 0, y: 10, clipPath: "inset(0 100% 0 0)" }}
-      animate={{ opacity: 1, y: 0, clipPath: "inset(0 0% 0 0)" }}
-      transition={{ duration: 0.85, delay: 0.88, ease: [0.22, 1, 0.36, 1] }}
+      className="mt-4 w-full max-w-[19rem] px-4 sm:mt-5"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.88, ease: [0.22, 1, 0.36, 1] }}
       aria-hidden
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/images/modal/modal-after-note.svg"
-        alt=""
-        className="h-auto w-[118%] max-w-none -translate-y-[12%] select-none sm:w-[112%]"
-      />
+      <motion.div
+        className="w-full overflow-hidden"
+        initial={{ clipPath: "inset(0 100% 0 0)" }}
+        animate={{ clipPath: "inset(0 0% 0 0)" }}
+        transition={{ duration: 0.85, delay: 0.88, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/modal/modal-after-note.svg"
+          alt=""
+          className="h-auto w-full select-none"
+        />
+      </motion.div>
     </motion.div>
   );
 }

@@ -5,6 +5,7 @@ import {
   type ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -21,10 +22,12 @@ export function ProjectInquiryProvider({ children }: { children: ReactNode }) {
   const openerRef = useRef<HTMLElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [source, setSource] = useState<string | undefined>();
+  const [debugSuccess, setDebugSuccess] = useState(false);
 
   const openInquiry = useCallback(
     (nextSource?: string, opener?: HTMLElement | null) => {
       openerRef.current = opener ?? null;
+      setDebugSuccess(false);
       setSource(nextSource);
       setIsOpen(true);
     },
@@ -39,12 +42,26 @@ export function ProjectInquiryProvider({ children }: { children: ReactNode }) {
     }, 220);
   }, []);
 
+  // Dev helper: visit /?inquirySuccess=1 to preview the completion screen
+  // without submitting the form / sending email.
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("inquirySuccess") !== "1") return;
+
+    setDebugSuccess(true);
+    setSource("debug-success");
+    setIsOpen(true);
+  }, []);
+
   return (
     <InquiryContext.Provider value={{ openInquiry, closeInquiry }}>
       {children}
       <ProjectInquiryModal
         isOpen={isOpen}
         source={source}
+        debugSuccess={debugSuccess}
         onClose={closeInquiry}
       />
     </InquiryContext.Provider>

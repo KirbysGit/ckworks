@@ -111,4 +111,4 @@ export const footerLinks = [
   { label: "About", href: "/#about" },
 ];
 
-export const contactEmail = "hello@ckworks.co";
+export const contactEmail = "hello@ckworks.studio";
