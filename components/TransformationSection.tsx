@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, type ReactNode } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
   CalendarCheck,
@@ -279,6 +280,292 @@ const inquirySteps = [
 ];
 
 
+/* ── Mobile idea → output swipe carousel ───────────────────────────────
+   Phones get a 2-slide horizontal swipe instead of the side-by-side view:
+   slide 1 is the messy sticky-note board WITH its arrows (the idea), slide 2
+   is the finished site + phone (the output). Native CSS scroll-snap gives a
+   real momentum swipe, and vertical page scrolling stays unaffected. The
+   desktop composition (BeforeBoard / AfterBoard) is untouched. */
+
+const swipeSlides = [
+  {
+    id: "input",
+    label: "Input",
+    caption: "Scattered notes, arrows, and a rough sense of direction.",
+    dot: "#c9b47e",
+  },
+  {
+    id: "output",
+    label: "Output",
+    caption: "One clean, connected site - desktop and mobile.",
+    dot: "#2F5B3F",
+  },
+] as const;
+
+function SwipeSlide({
+  label,
+  dot,
+  children,
+}: {
+  label: string;
+  dot: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="w-full">
+      <div className="flex items-center gap-2">
+        <span
+          className="h-2 w-2 rounded-full"
+          style={{ backgroundColor: dot }}
+        />
+        <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-forest">
+          {label}
+        </span>
+      </div>
+      <div className="mt-3">{children}</div>
+    </div>
+  );
+}
+
+const swipePanelVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 56 : -56,
+    opacity: 0,
+    rotate: direction > 0 ? 2 : -2,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    rotate: 0,
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? -72 : 72,
+    opacity: 0,
+    rotate: direction > 0 ? -3 : 3,
+  }),
+};
+
+/** Compact clean-site browser card (the "output" hero). */
+function CleanBrowserCard() {
+  return (
+    <div className="overflow-hidden rounded-xl border border-line bg-card shadow-[0_20px_42px_-24px_rgba(31,36,32,0.55)]">
+      <div className="flex items-center gap-2 border-b border-line/80 px-3 py-2">
+        <div className="flex gap-1">
+          <span className="h-2 w-2 rounded-full bg-[#E5766D]" />
+          <span className="h-2 w-2 rounded-full bg-[#E8B54D]" />
+          <span className="h-2 w-2 rounded-full bg-[#58A66B]" />
+        </div>
+        <div className="flex flex-1 items-center justify-center gap-1 rounded bg-sand px-2 py-1 text-[8px] text-muted">
+          <Lock className="h-2.5 w-2.5" />
+          windermerewellness.com
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between px-3 py-2">
+        <MiniBrand compact />
+        <span className="rounded bg-forest px-2 py-1 text-[7px] font-medium text-ivory">
+          Book a call
+        </span>
+      </div>
+
+      <div className="relative h-[10rem] overflow-hidden">
+        <Image
+          src="/images/transformation/png/after-demo.png"
+          alt="Clean Windermere Wellness website"
+          fill
+          sizes="360px"
+          className="object-cover object-center"
+        />
+        <div
+          className="absolute inset-0 bg-[linear-gradient(90deg,#FFFDF8_0%,rgba(255,253,248,0.95)_28%,rgba(255,253,248,0.58)_52%,rgba(255,253,248,0.04)_82%,transparent_100%)]"
+          aria-hidden
+        />
+        <div className="relative z-10 flex h-full max-w-[64%] flex-col justify-center px-4">
+          <h4 className="font-serif text-lg font-medium leading-tight text-ink">
+            Calm. Clarity. Real change.
+          </h4>
+          <p className="mt-2 text-[10px] leading-4 text-ink/75">
+            Whole-person care for stress, sleep, and everyday balance.
+          </p>
+          <span className="mt-3 inline-flex w-fit items-center gap-1.5 rounded-md bg-forest px-3 py-1.5 text-[10px] font-medium text-ivory shadow-soft">
+            Book a call
+            <ArrowRight className="h-3 w-3" />
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Small phone that overlaps the browser card in the "output" slide. */
+function MiniPhone() {
+  return (
+    <div className="rounded-[1.5rem] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] p-[2px] shadow-[0_16px_30px_-14px_rgba(17,23,20,0.62)]">
+      <div className="rounded-[1.4rem] bg-[linear-gradient(145deg,#030403_0%,#0C0F0C_45%,#272D27_58%,#050605_100%)] p-[3px]">
+        <div className="relative overflow-hidden rounded-[1.2rem] bg-card">
+          <div
+            className="pointer-events-none absolute left-1/2 top-[-4px] z-20 h-[14px] w-[46px] -translate-x-1/2 rounded-b-[7px] bg-[#050605]"
+            aria-hidden
+          />
+          <PhoneStatusBar />
+          <div className="flex items-center justify-between px-3 pt-0.5">
+            <MiniBrand compact />
+            <Menu className="h-3 w-3 text-muted" />
+          </div>
+          <div className="px-3 pb-2.5 pt-3.5">
+            <h5 className="font-serif text-[1.05rem] font-medium leading-[0.98] text-ink">
+              Calm. Clarity. Real change.
+            </h5>
+            <span className="mt-2 block rounded bg-forest px-2 py-1 text-center text-[6.5px] font-medium text-ivory">
+              Book a call
+            </span>
+          </div>
+          <div className="relative h-[86px] overflow-hidden">
+            <Image
+              src="/images/transformation/png/after-demo.png"
+              alt=""
+              fill
+              sizes="150px"
+              className="object-cover"
+            />
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-card to-transparent"
+              aria-hidden
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function IdeaOutputSwipe() {
+  const [active, setActive] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [swiped, setSwiped] = useState(false);
+  const reduceMotion = useReducedMotion();
+
+  function goTo(index: number) {
+    const next = Math.max(0, Math.min(swipeSlides.length - 1, index));
+    if (next === active) return;
+    setDirection(next > active ? 1 : -1);
+    setActive(next);
+    setSwiped(true);
+  }
+
+  function handleDragEnd(
+    _: MouseEvent | TouchEvent | PointerEvent,
+    info: { offset: { x: number }; velocity: { x: number } },
+  ) {
+    const swipePower = Math.abs(info.offset.x) * info.velocity.x;
+
+    if (info.offset.x < -46 || swipePower < -420) {
+      goTo(active + 1);
+    } else if (info.offset.x > 46 || swipePower > 420) {
+      goTo(active - 1);
+    }
+  }
+
+  const activeSlide = swipeSlides[active] ?? swipeSlides[0];
+
+  return (
+    <div className="relative">
+      <div className="overflow-hidden px-1 pb-1">
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <motion.div
+            key={activeSlide.id}
+            custom={direction}
+            variants={swipePanelVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { duration: 0.34, ease: [0.22, 1, 0.36, 1] },
+              opacity: { duration: 0.22 },
+              rotate: { duration: 0.34, ease: [0.22, 1, 0.36, 1] },
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.18}
+            onDragStart={() => setSwiped(true)}
+            onDragEnd={handleDragEnd}
+            whileDrag={reduceMotion ? undefined : { scale: 0.985 }}
+            className="touch-pan-y cursor-grab active:cursor-grabbing"
+          >
+            {activeSlide.id === "input" ? (
+              <>
+        {/* Slide 1 — the idea (messy board + arrows) */}
+        <SwipeSlide label={activeSlide.label} dot={activeSlide.dot}>
+          <div className="relative aspect-[1.08] w-full overflow-hidden rounded-xl border border-line/70 bg-sand shadow-soft">
+            <div
+              className="grid-texture pointer-events-none absolute inset-0 opacity-30"
+              aria-hidden
+            />
+            <BeforeBoardGraphic className="absolute inset-x-[-6%] inset-y-[-4%]" />
+          </div>
+        </SwipeSlide>
+              </>
+            ) : (
+              <>
+
+        {/* Slide 2 — the output (site + phone) */}
+        <SwipeSlide label={activeSlide.label} dot={activeSlide.dot}>
+          <div className="relative pb-8 pr-8">
+            <CleanBrowserCard />
+            <div className="absolute -bottom-1 right-0 w-[40%] max-w-[8.5rem]">
+              <MiniPhone />
+            </div>
+          </div>
+        </SwipeSlide>
+              </>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* pager dots + caption */}
+      <div className="mt-4 flex items-center justify-center gap-2">
+        {swipeSlides.map((slide, index) => (
+          <button
+            key={slide.id}
+            type="button"
+            onClick={() => goTo(index)}
+            aria-label={`Show ${slide.label}`}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              active === index ? "w-5 bg-forest" : "w-2 bg-line"
+            }`}
+          />
+        ))}
+      </div>
+      <p className="mt-2 text-center text-xs text-muted">
+        {activeSlide.caption}
+      </p>
+
+      {/* swipe hint — points at the peeking next slide, fades after first swipe */}
+      <AnimatePresence>
+        {!swiped && (
+          <motion.div
+            className="pointer-events-none absolute right-3 top-[40%] z-10 flex -translate-y-1/2 items-center gap-1.5 rounded-full bg-ink/85 px-3 py-1.5 text-[11px] font-medium text-ivory shadow-lift backdrop-blur"
+            initial={{ opacity: 0, x: 8 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={{ duration: 0.3 }}
+          >
+            Swipe
+            <motion.span
+              aria-hidden
+              animate={reduceMotion ? undefined : { x: [0, 4, 0] }}
+              transition={{ repeat: Infinity, duration: 1.3, ease: "easeInOut" }}
+            >
+              <ArrowRight className="h-3.5 w-3.5" />
+            </motion.span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function TransformationSection() {
   return (
     <section className="overflow-hidden bg-ivory pb-14 pt-6 lg:pb-20 lg:pt-8">
@@ -294,10 +581,17 @@ export default function TransformationSection() {
               label="The Difference"
               title="From scattered ideas to a clearer digital presence."
               subtitle="We turn ideas into intentional, calming experiences that connect with your audience and drive real results."
+              className="text-center [&_h2]:mx-auto [&_p]:mx-auto"
             />
           </motion.div>
 
-          <div className="mt-8 grid gap-8 xl:grid-cols-[minmax(0,0.95fr)_3.5rem_minmax(0,1.05fr)] xl:items-start">
+          {/* Phones: idea → output swipe carousel */}
+          <motion.div variants={fadeUp} className="mt-8 sm:hidden">
+            <IdeaOutputSwipe />
+          </motion.div>
+
+          {/* Tablet + desktop: full side-by-side composition */}
+          <div className="mt-8 hidden gap-8 sm:grid xl:grid-cols-[minmax(0,0.95fr)_3.5rem_minmax(0,1.05fr)] xl:items-start">
             <motion.div variants={fadeUp}>
               <BeforeBoard />
             </motion.div>
@@ -332,17 +626,25 @@ function BeforeBoard() {
         ))}
       </div>
 
-      <div className="relative mt-3 hidden h-[31.5rem] sm:block">
-        {beforeAssets.map((asset) => (
-          <BeforeAssetImage key={asset.src} asset={asset} />
-        ))}
+      <BeforeBoardGraphic className="relative mt-3 hidden h-[31.5rem] sm:block" />
+    </div>
+  );
+}
 
-        <BeforeArrows />
+/** The scattered sticky-note board (doodles + arrows + notes). Position and
+ *  size come from the caller's className so it can be reused at any scale. */
+function BeforeBoardGraphic({ className = "" }: { className?: string }) {
+  return (
+    <div className={className}>
+      {beforeAssets.map((asset) => (
+        <BeforeAssetImage key={asset.src} asset={asset} />
+      ))}
 
-        {notes.map((note) => (
-          <PostIt key={note.label} note={note} />
-        ))}
-      </div>
+      <BeforeArrows />
+
+      {notes.map((note) => (
+        <PostIt key={note.label} note={note} />
+      ))}
     </div>
   );
 }
@@ -378,7 +680,16 @@ function BetweenArrow() {
   );
 }
 
-function PostIt({ note, compact = false }: { note: Note; compact?: boolean }) {
+function PostIt({
+  note,
+  compact = false,
+  noShift = false,
+}: {
+  note: Note;
+  compact?: boolean;
+  /** Skip the before-board vertical shift — use raw paper.y (swipe panel). */
+  noShift?: boolean;
+}) {
   const { paper, text } = note;
 
   return (
@@ -391,7 +702,7 @@ function PostIt({ note, compact = false }: { note: Note; compact?: boolean }) {
           ? undefined
           : {
               left: `${paper.x}%`,
-              top: `${beforeY(paper.y)}%`,
+              top: `${noShift ? paper.y : beforeY(paper.y)}%`,
               width: `${paper.size}%`,
               transform: `rotate(${paper.rotate}deg)`,
             }

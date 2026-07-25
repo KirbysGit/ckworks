@@ -7,7 +7,7 @@ import {
   motion,
   useInView as useMotionInView,
 } from "framer-motion";
-import { ArrowRight, CheckCircle2, Sparkle } from "lucide-react";
+import { ArrowRight, CheckCircle2, Minus, Plus, Sparkle } from "lucide-react";
 import SectionHeader from "./ui/SectionHeader";
 import { services } from "@/lib/data";
 import { fadeUp, stagger, inView } from "@/lib/motion";
@@ -66,6 +66,24 @@ const serviceIncludes: Record<string, string[]> = {
     "Ongoing adjustments as the business grows",
   ],
 };
+
+function getServiceDetails(service: (typeof services)[number]) {
+  const details = serviceDetails[service.title];
+
+  return {
+    ...details,
+    tags: service.tags ?? details.tags,
+    visual: service.visual ?? details.visual,
+    featured: service.featured ?? details.featured,
+  };
+}
+
+function getServicePanelId(scope: "mobile" | "desktop", title: string) {
+  return `${scope}-service-includes-${title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")}`;
+}
 
 // Integration card tuning: move boxes with x/y, move connectors with lines,
 // and nudge logos inside their squares with iconOffsetX/iconOffsetY.
@@ -138,14 +156,18 @@ const integrationLayout = {
 
 export default function Services() {
   const [openService, setOpenService] = useState<string | null>(null);
+  const [openMobileService, setOpenMobileService] = useState<string | null>(
+    services[0]?.title ?? null,
+  );
 
   return (
-    <section id="what-i-do" className="bg-ivory py-14 lg:py-20">
+    <section id="what-i-do" className="bg-ivory py-12 md:py-14 lg:py-20">
       <div className="container-ck">
         <SectionHeader
           label="What I Do"
           title="A few ways I can help your business."
           subtitle="From clean, conversion-focused websites to smart systems and ongoing support, I build the digital foundation your business can grow on."
+          className="text-center md:text-left [&_h2]:mx-auto [&_p]:mx-auto md:[&_h2]:mx-0 md:[&_p]:mx-0"
         />
 
         <motion.div
@@ -153,17 +175,120 @@ export default function Services() {
           initial="hidden"
           whileInView="show"
           viewport={inView}
-          className="mt-12 grid items-start gap-4 sm:grid-cols-2 xl:grid-cols-4"
+          className="mt-8 space-y-3 md:hidden"
+        >
+          {services.map((service) => {
+            const { icon: Icon, title, body } = service;
+            const isOpen = openMobileService === title;
+            const details = getServiceDetails(service);
+            const panelId = getServicePanelId("mobile", title);
+
+            return (
+              <motion.article
+                key={title}
+                variants={fadeUp}
+                className={`overflow-hidden rounded-2xl border border-line bg-card shadow-soft transition-shadow duration-200 ${
+                  isOpen ? "shadow-lift" : ""
+                }`}
+              >
+                <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
+                  onClick={() =>
+                    setOpenMobileService((current) =>
+                      current === title ? null : title,
+                    )
+                  }
+                  className="flex w-full items-center gap-4 p-4 text-left"
+                >
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-forest-soft/75">
+                    <Icon className="h-6 w-6 text-forest" strokeWidth={1.8} />
+                  </span>
+
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-xl font-semibold leading-tight text-ink">
+                      {title}
+                    </span>
+                    <span className="mt-1.5 block text-sm leading-6 text-muted">
+                      {body}
+                    </span>
+                  </span>
+
+                  <motion.span
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest-soft/75 text-forest"
+                    aria-hidden
+                  >
+                    {isOpen ? (
+                      <Minus className="h-5 w-5" />
+                    ) : (
+                      <Plus className="h-5 w-5" />
+                    )}
+                  </motion.span>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      id={panelId}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{
+                        duration: 0.26,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-4 pb-5">
+                        <ServiceVisual kind={details.visual} />
+
+                        <div className="mt-5">
+                          <div className="flex items-center gap-3">
+                            <h4 className="shrink-0 text-xs font-semibold uppercase tracking-[0.18em] text-forest">
+                              What's included
+                            </h4>
+                            <span
+                              className="h-px flex-1 bg-line/80"
+                              aria-hidden
+                            />
+                          </div>
+
+                          <ul className="mt-3 space-y-2.5">
+                            {serviceIncludes[title].slice(0, 3).map((item) => (
+                              <li
+                                key={item}
+                                className="flex items-start gap-3 text-sm leading-6 text-muted"
+                              >
+                                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-forest" />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.article>
+            );
+          })}
+        </motion.div>
+
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={inView}
+          className="mt-12 hidden items-start gap-4 md:grid md:grid-cols-2 xl:grid-cols-4"
         >
           {services.map((service) => {
             const { icon: Icon, title, body } = service;
             const isOpen = openService === title;
-            const details = {
-              ...serviceDetails[title],
-              tags: service.tags ?? serviceDetails[title].tags,
-              visual: service.visual ?? serviceDetails[title].visual,
-              featured: service.featured ?? serviceDetails[title].featured,
-            };
+            const details = getServiceDetails(service);
+            const panelId = getServicePanelId("desktop", title);
 
             return (
               <motion.div key={title} variants={fadeUp}>
@@ -208,7 +333,7 @@ export default function Services() {
                   <button
                     type="button"
                     aria-expanded={isOpen}
-                    aria-controls={`service-includes-${title}`}
+                    aria-controls={panelId}
                     onClick={() =>
                       setOpenService((current) =>
                         current === title ? null : title,
@@ -228,7 +353,7 @@ export default function Services() {
                   <AnimatePresence initial={false}>
                     {isOpen && (
                       <motion.div
-                        id={`service-includes-${title}`}
+                        id={panelId}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}

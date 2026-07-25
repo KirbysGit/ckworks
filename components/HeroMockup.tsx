@@ -75,7 +75,7 @@ function getRecentMonthLabels() {
 }
 
 /** Small caps Windermere Wellness brand lockup (leaf + stacked wordmark). */
-function WindermereBrand({ compact = false }: { compact?: boolean }) {
+export function WindermereBrand({ compact = false }: { compact?: boolean }) {
   return (
     <span className="inline-flex items-center gap-1.5">
       <Image
@@ -100,7 +100,7 @@ function WindermereBrand({ compact = false }: { compact?: boolean }) {
 
 function CellularSignal() {
   return (
-    <span className="flex h-[6px] items-end gap-px" aria-hidden>
+    <span className="flex h-[6px] w-[7px] shrink-0 items-end gap-px" aria-hidden>
       {[1.5, 2.5, 3.5, 5].map((height, index) => (
         <span
           key={height}
@@ -116,7 +116,7 @@ function WifiSignal() {
   return (
     <svg
       viewBox="0 0 14 10"
-      className="h-[5px] w-[7px] text-ink"
+      className="h-[5px] w-[7px] shrink-0 text-ink"
       fill="none"
       aria-hidden
     >
@@ -144,7 +144,7 @@ function WifiSignal() {
 
 function BatteryIcon() {
   return (
-    <span className="relative inline-flex h-[4px] w-[9px]" aria-hidden>
+    <span className="relative inline-flex h-[4px] w-[9px] shrink-0" aria-hidden>
       <span className="absolute inset-0 rounded-[1px] border border-ink/80" />
       <span className="absolute bottom-[1px] right-[-1.5px] top-[1px] w-px rounded-r bg-ink/70" />
       <span className="absolute bottom-[1px] left-[1px] top-[1px] w-[5.5px] rounded-[0.5px] bg-ink" />
@@ -158,7 +158,7 @@ function PhoneStatusBar() {
       <span className="pl-0.5 text-[5.5px] font-semibold leading-none text-ink">
         9:41
       </span>
-      <span className="flex items-center justify-end gap-[1px]">
+      <span className="flex shrink-0 items-center justify-end gap-[2.5px]">
         <CellularSignal />
         <WifiSignal />
         <BatteryIcon />
