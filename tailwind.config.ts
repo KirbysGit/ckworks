@@ -22,6 +22,7 @@ const config: Config = {
       fontFamily: {
         serif: ["var(--font-serif)", "Georgia", "serif"],
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Didot", "Bodoni MT", "serif"],
       },
       boxShadow: {
         soft: "0 1px 2px rgba(31,36,32,0.04), 0 12px 32px -12px rgba(31,36,32,0.14)",

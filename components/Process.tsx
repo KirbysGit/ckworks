@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Sparkle } from "lucide-react";
 import SectionHeader from "./ui/SectionHeader";
 import { fadeUp, stagger, inView } from "@/lib/motion";
 
@@ -32,6 +33,15 @@ type SectionDrawing = {
   opacity?: number;
 };
 
+type MobileChapterDrawing = {
+  src: string;
+  size: string;
+  scale?: number;
+  rotate: number;
+  offsetX?: string;
+  offsetY?: string;
+};
+
 const processChapters: Chapter[] = [
   {
     number: "1",
@@ -58,6 +68,85 @@ const processChapters: Chapter[] = [
     body: "Once it is live, we test, refine, and keep improving what needs attention.",
   },
 ];
+
+const mobileChapterDrawings: MobileChapterDrawing[] = [
+  {
+    src: "/images/process/svg/section-1.svg",
+    size: "18rem",
+    scale: 1,
+    rotate: -3,
+    offsetX: "-2rem",
+  },
+  {
+    src: "/images/process/svg/section-2.svg",
+    size: "22rem",
+    scale: 1,
+    rotate: 2,
+    offsetX: "-1.5rem",
+  },
+  {
+    src: "/images/process/svg/section-3.svg",
+    size: "22rem",
+    scale: 1,
+    rotate: -1,
+    offsetX: "-1.5rem",
+  },
+];
+
+/**
+ * Mobile chapter drawing layout knobs.
+ *   gapFromText - vertical space between the paragraph and sketch
+ *   canvasWidth - visual drawing area; can exceed the text column
+ *   maxWidth    - optional cap relative to the chapter text column
+ *   opacity     - overall drawing strength
+ *
+ * Use maxWidth: "none" when you want the per-image size values to control
+ * the drawing without being capped by the text column.
+ * If size feels capped by the viewport/SVG artboard, increase scale per image.
+ *
+ * Per-image size and x/y nudges live in mobileChapterDrawings above.
+ */
+const mobileChapterDrawingLayout = {
+  gapFromText: "-0.25rem",
+  canvasWidth: "calc(100vw - 5.75rem)",
+  maxWidth: "none",
+  opacity: 0.85,
+} as const;
+
+/**
+ * Mobile chapter title underline knobs.
+ *   offsetX  — positive nudges right, negative left (e.g. "0.35rem" or "6px")
+ *   offsetY  — positive nudges down
+ *   width    — relative to the title block (e.g. "85%")
+ *   maxWidth — hard cap so long titles don't stretch it forever
+ *   rotate   — degrees; negative tilts left
+ */
+const mobileChapterUnderline = {
+  offsetX: "0px",
+  offsetY: "0px",
+  width: "85%",
+  maxWidth: "9rem",
+  rotate: 0,
+} as const;
+
+/**
+ * Mobile timeline (dot + vertical connector under Chapter / 01).
+ * The line is anchored to the column center; use offsetX to fine-tune.
+ *   offsetX   — positive nudges right of center, negative left
+ *   top       — where the connector starts (below the dot)
+ *   height    — how far it runs (can use calc)
+ *   width     — line thickness
+ *   dotSize   — outer ring size
+ *   innerSize — filled center dot size
+ */
+const mobileTimeline = {
+  offsetX: "0px",
+  top: "7.45rem",
+  height: "calc(100% + 2rem)",
+  width: "1px",
+  dotSize: "2rem",
+  innerSize: "0.75rem",
+} as const;
 
 /**
  * Book layout knobs - percentages of the book image box unless noted.
@@ -210,31 +299,125 @@ export default function Process() {
             label="The Approach"
             title="A calm way projects take shape."
             subtitle="Every project is different, but the foundation is always the same: clarity, thoughtful design, solid build, and ongoing care."
+            className="text-center lg:text-left [&_h2]:mx-auto [&_p]:mx-auto lg:[&_h2]:mx-0 lg:[&_p]:mx-0"
           />
         </motion.div>
 
         <ProcessBook />
-
-        <motion.ol variants={fadeUp} className="mt-10 space-y-3 lg:hidden">
-          {processChapters.map((chapter) => (
-            <li
-              key={chapter.number}
-              className="rounded-xl border border-line bg-card p-5 shadow-soft"
-            >
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-forest">
-                {chapter.label}
-              </p>
-              <h3 className="mt-3 font-serif text-3xl font-medium leading-tight text-ink">
-                {chapter.number}. {chapter.title}
-              </h3>
-              <p className="mt-3 text-sm leading-6 text-muted">
-                {chapter.body}
-              </p>
-            </li>
-          ))}
-        </motion.ol>
+        <MobileProcessTimeline />
       </motion.div>
     </section>
+  );
+}
+
+function MobileProcessTimeline() {
+  return (
+    <motion.div variants={fadeUp} className="mt-12 lg:hidden">
+      <ol>
+        {processChapters.map((chapter, index) => {
+          const drawing = mobileChapterDrawings[index];
+          const chapterNumber = chapter.number.padStart(2, "0");
+          const isLast = index === processChapters.length - 1;
+
+          return (
+            <li
+              key={chapter.number}
+              className="grid grid-cols-[5.25rem_minmax(0,1fr)] gap-2.5 border-b border-line/80 py-8 first:pt-0 last:border-b-0"
+            >
+              <div className="relative flex min-h-full flex-col items-center text-center">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-forest">
+                  Chapter
+                </p>
+                <p className="mt-2 font-display text-5xl font-medium leading-none tracking-tight text-forest">
+                  {chapterNumber}
+                </p>
+                <span
+                  className="mt-5 flex items-center justify-center rounded-full bg-forest-soft"
+                  style={{
+                    width: mobileTimeline.dotSize,
+                    height: mobileTimeline.dotSize,
+                  }}
+                >
+                  <span
+                    className="rounded-full bg-forest"
+                    style={{
+                      width: mobileTimeline.innerSize,
+                      height: mobileTimeline.innerSize,
+                    }}
+                  />
+                </span>
+                {!isLast && (
+                  <span
+                    className="absolute -translate-x-1/2 bg-line"
+                    style={{
+                      left: `calc(50% + ${mobileTimeline.offsetX})`,
+                      top: mobileTimeline.top,
+                      height: mobileTimeline.height,
+                      width: mobileTimeline.width,
+                    }}
+                    aria-hidden
+                  />
+                )}
+              </div>
+
+              <div className="flex min-w-0 flex-col">
+                <div className="min-w-0">
+                  <div className="w-fit max-w-full">
+                    <h3 className="font-serif text-[2rem] font-medium leading-[1.05] text-ink">
+                      {chapter.title}
+                    </h3>
+                    <img
+                      src="/images/hero/svg/underline.svg"
+                      alt=""
+                      aria-hidden
+                      className="mr-auto mt-1.5 block h-auto select-none"
+                      style={{
+                        width: mobileChapterUnderline.width,
+                        maxWidth: mobileChapterUnderline.maxWidth,
+                        transformOrigin: "left center",
+                        transform: `translate(${mobileChapterUnderline.offsetX}, ${mobileChapterUnderline.offsetY}) rotate(${mobileChapterUnderline.rotate}deg)`,
+                      }}
+                    />
+                  </div>
+                  <p className="mt-5 text-[0.95rem] leading-7 text-ink/82">
+                    {chapter.body}
+                  </p>
+                </div>
+
+                {drawing && (
+                  <div
+                    className="flex justify-start overflow-visible"
+                    style={{
+                      marginTop: mobileChapterDrawingLayout.gapFromText,
+                      width: mobileChapterDrawingLayout.canvasWidth,
+                    }}
+                  >
+                    <img
+                      src={drawing.src}
+                      alt=""
+                      aria-hidden
+                      className="block select-none object-contain mix-blend-multiply"
+                      style={{
+                        width: drawing.size,
+                        minWidth: drawing.size,
+                        maxWidth: mobileChapterDrawingLayout.maxWidth,
+                        opacity: mobileChapterDrawingLayout.opacity,
+                        transformOrigin: "left top",
+                        transform: `translate(${drawing.offsetX ?? "0px"}, ${
+                          drawing.offsetY ?? "0px"
+                        }) rotate(${drawing.rotate}deg) scale(${
+                          drawing.scale ?? 1
+                        })`,
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </motion.div>
   );
 }
 

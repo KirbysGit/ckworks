@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
 import Logo from "./ui/Logo";
 import DrawUnderline from "./ui/DrawUnderline";
@@ -77,35 +78,77 @@ export default function Header() {
         </button>
       </div>
 
-      {open && (
-        <div className="border-t border-line bg-ivory lg:hidden">
-          <nav
-            className="container-ck flex flex-col gap-1 py-4"
-            aria-label="Mobile"
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="mobile-nav"
+            className="overflow-hidden border-t border-line bg-ivory lg:hidden"
+            initial={{ height: 0, opacity: 0, y: -8 }}
+            animate={{ height: "auto", opacity: 1, y: 0 }}
+            exit={{ height: 0, opacity: 0, y: -8 }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
           >
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => {
-                  setActiveHref(item.href);
-                  setOpen(false);
-                }}
-                className="rounded-lg px-2 py-2.5 font-sans text-base text-ink hover:bg-forest-soft/50"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <ProjectInquiryTrigger
-              source="mobile-header"
-              className="mt-3 w-full"
-              onOpen={() => setOpen(false)}
+            <motion.nav
+              className="container-ck flex flex-col gap-1 py-4"
+              aria-label="Mobile"
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={{
+                open: {
+                  transition: {
+                    staggerChildren: 0.035,
+                    delayChildren: 0.04,
+                  },
+                },
+                closed: {
+                  transition: {
+                    staggerChildren: 0.02,
+                    staggerDirection: -1,
+                  },
+                },
+              }}
             >
-              Start a project <ArrowRight className="h-4 w-4" />
-            </ProjectInquiryTrigger>
-          </nav>
-        </div>
-      )}
+              {nav.map((item) => (
+                <motion.div
+                  key={item.href}
+                  variants={{
+                    open: { opacity: 1, y: 0 },
+                    closed: { opacity: 0, y: -6 },
+                  }}
+                  transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <Link
+                    href={item.href}
+                    onClick={() => {
+                      setActiveHref(item.href);
+                      setOpen(false);
+                    }}
+                    className="block rounded-lg px-2 py-2.5 font-sans text-base text-ink hover:bg-forest-soft/50"
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
+              ))}
+              <motion.div
+                variants={{
+                  open: { opacity: 1, y: 0 },
+                  closed: { opacity: 0, y: -6 },
+                }}
+                transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <ProjectInquiryTrigger
+                  source="mobile-header"
+                  className="mt-3 w-full"
+                  onOpen={() => setOpen(false)}
+                >
+                  Start a project <ArrowRight className="h-4 w-4" />
+                </ProjectInquiryTrigger>
+              </motion.div>
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

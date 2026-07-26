@@ -64,7 +64,7 @@ const focusableSelector =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 const inputClasses =
-  "mt-1.5 h-10 w-full rounded-none border bg-[#fbf6eb]/70 px-3 text-[13px] text-ink outline-none transition-colors placeholder:text-muted/65 focus:border-forest focus:ring-2 focus:ring-forest/15";
+  "mt-1 h-9 min-w-0 w-full rounded-[0.35rem] border bg-[#fbf6eb]/78 px-2.5 text-[12px] text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-forest focus:ring-2 focus:ring-forest/15 sm:mt-1.5 sm:h-10 sm:rounded-none sm:bg-[#fbf6eb]/70 sm:px-3 sm:text-[13px]";
 
 const fieldBorder = "border-[#cfc5b5]";
 
@@ -85,7 +85,9 @@ export default function ProjectInquiryModal({
     if (!isOpen) return;
 
     const previousOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
 
     const focusTimer = window.setTimeout(() => {
       const firstField =
@@ -98,6 +100,7 @@ export default function ProjectInquiryModal({
 
     return () => {
       document.body.style.overflow = previousOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
       window.clearTimeout(focusTimer);
     };
   }, [isOpen]);
@@ -195,11 +198,11 @@ export default function ProjectInquiryModal({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-[#211f19]/62 px-3 py-4 backdrop-blur-[3px] sm:px-6 sm:py-6"
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden overscroll-contain bg-[#17140f]/72 px-4 py-[max(1rem,env(safe-area-inset-top))] backdrop-blur-[4px] sm:bg-[#211f19]/62 sm:px-6 sm:py-6 sm:backdrop-blur-[3px]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
           onMouseDown={onClose}
           onKeyDown={(event) => {
             if (event.key === "Escape") onClose();
@@ -211,11 +214,11 @@ export default function ProjectInquiryModal({
             aria-modal="true"
             aria-labelledby="project-inquiry-title"
             tabIndex={-1}
-            className="relative w-full max-w-[41rem] outline-none"
-            initial={{ opacity: 0, y: 28, scale: 0.982, rotate: -0.45 }}
+            className="relative min-w-0 w-full max-w-[21rem] outline-none sm:max-w-[41rem]"
+            initial={{ opacity: 0, y: 28, scale: 0.965, rotate: -0.4 }}
             animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, y: 18, scale: 0.985 }}
-            transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0, y: 16, scale: 0.98, rotate: 0.2 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             onMouseDown={(event) => event.stopPropagation()}
             onKeyDown={handleTrapFocus}
           >
@@ -238,9 +241,9 @@ export default function ProjectInquiryModal({
             />
             <PaperClip />
 
-            <div className="relative overflow-visible rounded-[0.4rem] border border-[#d8cdbd] bg-[#fffaf0] px-5 pb-5 pt-9 shadow-[0_28px_70px_rgba(10,9,7,0.34),0_2px_8px_rgba(10,9,7,0.12)] sm:px-14 sm:pb-7 sm:pt-12">
+            <div className="relative max-h-[calc(100dvh-2rem)] overflow-x-hidden overflow-y-auto rounded-[0.65rem] border border-[#d8cdbd] bg-[#fffaf0] px-4 pb-4 pt-7 shadow-[0_22px_48px_rgba(10,9,7,0.32),0_2px_8px_rgba(10,9,7,0.1)] sm:max-h-none sm:overflow-visible sm:rounded-[0.4rem] sm:px-14 sm:pb-7 sm:pt-12 sm:shadow-[0_28px_70px_rgba(10,9,7,0.34),0_2px_8px_rgba(10,9,7,0.12)]">
               <div
-                className="pointer-events-none absolute inset-0 rounded-[0.4rem] opacity-[0.55]"
+                className="pointer-events-none absolute inset-0 rounded-[0.65rem] opacity-[0.32] sm:rounded-[0.4rem] sm:opacity-[0.55]"
                 style={{
                   backgroundImage:
                     "radial-gradient(rgba(104,84,55,0.12) 0.55px, transparent 0.75px), linear-gradient(rgba(47,91,63,0.035) 1px, transparent 1px)",
@@ -252,10 +255,10 @@ export default function ProjectInquiryModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="absolute right-5 top-5 z-10 inline-flex h-11 w-11 items-center justify-center text-ink transition-colors hover:text-forest sm:right-7 sm:top-7"
+                className="absolute right-3 top-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#fffaf0]/80 text-ink transition-colors hover:text-forest sm:right-7 sm:top-7 sm:h-11 sm:w-11 sm:rounded-none sm:bg-transparent"
                 aria-label="Close project inquiry"
               >
-                <X className="h-8 w-8" strokeWidth={1.6} />
+                <X className="h-5 w-5 sm:h-8 sm:w-8" strokeWidth={1.8} />
               </button>
 
               <AnimatePresence mode="wait">
@@ -265,7 +268,12 @@ export default function ProjectInquiryModal({
                   <motion.div
                     key="form"
                     className="relative"
-                    initial={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                    initial={{
+                      opacity: 0,
+                      y: 10,
+                      scale: 0.992,
+                      filter: "blur(2px)",
+                    }}
                     animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                     exit={{
                       opacity: 0,
@@ -273,23 +281,33 @@ export default function ProjectInquiryModal({
                       scale: 0.985,
                       filter: "blur(2px)",
                     }}
-                    transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{
+                      duration: 0.32,
+                      delay: 0.08,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                   >
-                    <p className="inline-block border-b border-forest/35 pb-1 text-[11px] font-bold uppercase tracking-[0.22em] text-forest sm:ml-10">
+                    <p className="inline-block border-b border-forest/35 pb-1 text-[9px] font-bold uppercase tracking-[0.2em] text-forest sm:ml-10 sm:text-[11px] sm:tracking-[0.22em]">
                       Start a project
                     </p>
                     <h2
                       id="project-inquiry-title"
-                      className="mt-4 pr-12 font-serif text-[2.15rem] font-medium leading-[1.02] text-ink sm:text-[2.35rem]"
+                      className="mt-2.5 pr-8 font-serif text-[1.8rem] font-medium leading-[1.02] text-ink sm:mt-4 sm:pr-12 sm:text-[2.35rem]"
                     >
-                      Got a project in mind?
+                      <span className="sm:hidden">
+                        Tell me about your project.
+                      </span>
+                      <span className="hidden sm:inline">
+                        Got a project in mind?
+                      </span>
                     </h2>
-                    <p className="mt-2 text-sm leading-6 text-ink/80 sm:text-base">
-                      Tell me what you&apos;re working on. No perfect brief needed.
+                    <p className="mt-1.5 max-w-[19rem] text-[0.8rem] leading-5 text-ink/78 sm:mt-2 sm:max-w-none sm:text-base sm:leading-6">
+                      Fill out a few details so I can understand what you&apos;re
+                      working on. No perfect brief needed.
                     </p>
 
-                    <form onSubmit={handleSubmit} className="mt-5 space-y-3">
-                      <div className="grid gap-3 sm:grid-cols-2">
+                    <form onSubmit={handleSubmit} className="mt-3.5 min-w-0 space-y-2.5 sm:mt-5 sm:space-y-3">
+                      <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3">
                         <TextField
                           label="Name"
                           required
@@ -310,11 +328,11 @@ export default function ProjectInquiryModal({
                         />
                       </div>
 
-                      <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3">
                         <TextField
-                          label="Business / project name"
+                          label="Business"
                           value={form.businessName}
-                          placeholder="Business or project name"
+                          placeholder="Business name"
                           onChange={(value) =>
                             updateField("businessName", value)
                           }
@@ -328,7 +346,7 @@ export default function ProjectInquiryModal({
                         />
                       </div>
 
-                      <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3">
                         <SelectField
                           label="Timeline"
                           value={form.timeline}
@@ -346,7 +364,7 @@ export default function ProjectInquiryModal({
                       </div>
 
                       <label className="block">
-                        <span className="text-xs font-bold text-ink">
+                        <span className="text-[11px] font-bold text-ink sm:text-xs">
                           Message <span className="text-forest">*</span>
                         </span>
                         <textarea
@@ -355,8 +373,8 @@ export default function ProjectInquiryModal({
                             updateField("message", event.target.value)
                           }
                           placeholder="Tell me about the site, system, idea, or update you have in mind."
-                          rows={3}
-                          className={`mt-1.5 w-full resize-none rounded-none border bg-[#fbf6eb]/70 px-3 py-2 text-[13px] leading-5 text-ink outline-none transition-colors placeholder:text-muted/65 focus:border-forest focus:ring-2 focus:ring-forest/15 ${
+                          rows={2}
+                          className={`mt-1 h-[4.4rem] w-full resize-none rounded-[0.35rem] border bg-[#fbf6eb]/78 px-2.5 py-2 text-[12px] leading-5 text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-forest focus:ring-2 focus:ring-forest/15 sm:mt-1.5 sm:h-auto sm:rounded-none sm:bg-[#fbf6eb]/70 sm:px-3 sm:text-[13px] ${
                             errors.message ? "border-red-400" : fieldBorder
                           }`}
                         />
@@ -382,7 +400,7 @@ export default function ProjectInquiryModal({
                       <button
                         type="submit"
                         disabled={status === "sending"}
-                        className="inline-flex min-h-12 w-full items-center justify-center gap-3 bg-forest px-7 py-3 text-xs font-bold uppercase tracking-[0.2em] text-ivory shadow-[0_10px_22px_rgba(20,49,33,0.24)] transition-colors hover:bg-ink disabled:cursor-not-allowed disabled:opacity-70"
+                        className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-[0.45rem] bg-forest px-6 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] text-ivory shadow-[0_10px_22px_rgba(20,49,33,0.24)] transition-colors hover:bg-ink disabled:cursor-not-allowed disabled:opacity-70 sm:min-h-12 sm:gap-3 sm:rounded-none sm:px-7 sm:py-3 sm:text-xs sm:tracking-[0.2em]"
                       >
                         {status === "sending" ? (
                           <>
@@ -429,8 +447,8 @@ function TextField({
   autoFocusMarker?: boolean;
 }) {
   return (
-    <label className="block">
-      <span className="text-xs font-bold text-ink">
+    <label className="block min-w-0">
+      <span className="block truncate text-[11px] font-bold text-ink sm:text-xs">
         {label} {required && <span className="text-forest">*</span>}
       </span>
       <input
@@ -473,7 +491,7 @@ function SelectField({
   return (
     <div
       ref={wrapperRef}
-      className="relative block"
+      className="relative block min-w-0"
       onBlur={(event) => {
         const nextTarget = event.relatedTarget;
         if (!nextTarget || !event.currentTarget.contains(nextTarget as Node)) {
@@ -481,7 +499,9 @@ function SelectField({
         }
       }}
     >
-      <span className="text-xs font-bold text-ink">{label}</span>
+      <span className="block truncate text-[11px] font-bold text-ink sm:text-xs">
+        {label}
+      </span>
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
@@ -497,11 +517,11 @@ function SelectField({
             firstOption?.focus();
           }
         }}
-        className={`${inputClasses} ${fieldBorder} flex items-center justify-between gap-3 text-left transition-all hover:border-forest/55 hover:bg-forest-soft/20`}
+        className={`${inputClasses} ${fieldBorder} flex min-w-0 items-center justify-between gap-2 text-left transition-all hover:border-forest/55 hover:bg-forest-soft/20 sm:gap-3`}
         aria-haspopup="listbox"
         aria-expanded={open}
       >
-        <span className={value ? "text-ink" : "text-muted/65"}>
+        <span className={`min-w-0 truncate ${value ? "text-ink" : "text-muted/65"}`}>
           {selectedLabel}
         </span>
         <ChevronDown
@@ -553,7 +573,7 @@ function FieldError({ children }: { children: string }) {
 function ModalBottomNote() {
   return (
     <motion.div
-      className="pointer-events-none mx-auto -mt-1 flex w-full justify-center"
+      className="pointer-events-none mx-auto -mt-1 hidden w-full justify-center sm:flex"
       initial={{ opacity: 0, y: 4, rotate: -0.6 }}
       animate={{ opacity: 1, y: 0, rotate: -0.6 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
@@ -725,12 +745,15 @@ function SuccessHandwritingGraphic() {
 }
 function PaperClip() {
   return (
-    <div
+    <motion.div
       className="pointer-events-none absolute -top-6 left-6 z-20 hidden h-24 w-10 sm:block"
+      initial={{ opacity: 0, y: -18, rotate: 8, scale: 0.92 }}
+      animate={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
+      transition={{ duration: 0.42, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
       aria-hidden
     >
       <div className="absolute left-2 top-0 h-24 w-6 rounded-full border-[3px] border-[#9a7b34] shadow-[0_2px_4px_rgba(31,36,32,0.26)]" />
       <div className="absolute left-[1.2rem] top-3 h-[4.9rem] w-3 rounded-full border-[2px] border-[#c5a850]" />
-    </div>
+    </motion.div>
   );
 }

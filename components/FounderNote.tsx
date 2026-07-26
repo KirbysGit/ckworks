@@ -26,10 +26,22 @@ const founderNoteLayout = {
     offsetX: "0.15rem",
     offsetY: "0.35rem",
   },
+  /**
+   * Mobile-only note panel over the mountain/forest background.
+   * Tune the wash so type stays readable without hiding the art.
+   */
+  mobilePanel: {
+    maxWidth: "34rem",
+    overlay: "rgba(250, 247, 240, 0.78)",
+    blur: "6px",
+    paddingX: "1.35rem",
+    paddingY: "1.75rem",
+  },
 } as const;
 
 export default function FounderNote() {
-  const { stageMaxWidth, portrait, drawingCard, drawing } = founderNoteLayout;
+  const { stageMaxWidth, portrait, drawingCard, drawing, mobilePanel } =
+    founderNoteLayout;
 
   return (
     <section
@@ -58,15 +70,18 @@ export default function FounderNote() {
             aria-hidden
           />
 
+          {/* Map / drawing — desktop only */}
           <div
-            className="order-3 relative z-0 mx-auto h-[24rem] w-full max-w-[25rem] overflow-hidden rounded-[1.8rem] border border-line/80 bg-card/75 shadow-lift lg:absolute lg:right-[var(--drawing-right)] lg:top-[var(--drawing-top)] lg:h-[var(--drawing-height)] lg:w-[var(--drawing-width)] lg:max-w-none lg:rotate-[var(--drawing-rotate)]"
-            style={{
-              "--drawing-width": drawingCard.width,
-              "--drawing-height": drawingCard.height,
-              "--drawing-right": drawingCard.right,
-              "--drawing-top": drawingCard.top,
-              "--drawing-rotate": drawingCard.rotate,
-            } as CSSProperties}
+            className="relative z-0 mx-auto hidden h-[24rem] w-full max-w-[25rem] overflow-hidden rounded-[1.8rem] border border-line/80 bg-card/75 shadow-lift lg:absolute lg:right-[var(--drawing-right)] lg:top-[var(--drawing-top)] lg:block lg:h-[var(--drawing-height)] lg:w-[var(--drawing-width)] lg:max-w-none lg:rotate-[var(--drawing-rotate)]"
+            style={
+              {
+                "--drawing-width": drawingCard.width,
+                "--drawing-height": drawingCard.height,
+                "--drawing-right": drawingCard.right,
+                "--drawing-top": drawingCard.top,
+                "--drawing-rotate": drawingCard.rotate,
+              } as CSSProperties
+            }
           >
             <div className="pointer-events-none absolute inset-3 rounded-[1.45rem] border border-line/45" />
             <div
@@ -88,14 +103,35 @@ export default function FounderNote() {
             />
           </div>
 
-          <article className="relative z-20 order-1 mx-auto w-full max-w-[49rem] overflow-hidden rounded-[1.8rem] border border-line bg-card/95 px-6 py-8 shadow-float sm:px-10 sm:py-10 lg:min-h-[30rem] lg:px-20 lg:py-11">
-            <div className="pointer-events-none absolute inset-2 rounded-[1.65rem] border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]" />
+          <article
+            className="relative z-20 mx-auto w-full max-w-[var(--mobile-max)] overflow-hidden rounded-[1.35rem] px-[var(--mobile-pad-x)] py-[var(--mobile-pad-y)] lg:max-w-[49rem] lg:min-h-[30rem] lg:rounded-[1.8rem] lg:border lg:border-line lg:bg-card/95 lg:px-20 lg:py-11 lg:shadow-float"
+            style={
+              {
+                ["--mobile-max" as string]: mobilePanel.maxWidth,
+                ["--mobile-pad-x" as string]: mobilePanel.paddingX,
+                ["--mobile-pad-y" as string]: mobilePanel.paddingY,
+              } as CSSProperties
+            }
+          >
+            {/* Mobile: soft wash so the note sits over the forest art */}
             <div
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_4%,rgba(255,255,255,0.95),transparent_28%),radial-gradient(circle_at_90%_12%,rgba(255,255,255,0.7),transparent_30%),linear-gradient(180deg,rgba(255,253,248,0.9)_0%,rgba(250,247,240,0.45)_100%)]"
+              className="pointer-events-none absolute inset-0 rounded-[1.35rem] lg:hidden"
+              aria-hidden
+              style={{
+                backgroundColor: mobilePanel.overlay,
+                backdropFilter: `blur(${mobilePanel.blur})`,
+                WebkitBackdropFilter: `blur(${mobilePanel.blur})`,
+              }}
+            />
+
+            {/* Desktop card chrome */}
+            <div className="pointer-events-none absolute inset-2 hidden rounded-[1.65rem] border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] lg:block" />
+            <div
+              className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(circle_at_22%_4%,rgba(255,255,255,0.95),transparent_28%),radial-gradient(circle_at_90%_12%,rgba(255,255,255,0.7),transparent_30%),linear-gradient(180deg,rgba(255,253,248,0.9)_0%,rgba(250,247,240,0.45)_100%)] lg:block"
               aria-hidden
             />
             <div
-              className="pointer-events-none absolute inset-x-8 inset-y-10 opacity-[0.18]"
+              className="pointer-events-none absolute inset-x-8 inset-y-10 hidden opacity-[0.18] lg:block"
               aria-hidden
               style={{
                 backgroundImage:
@@ -103,12 +139,13 @@ export default function FounderNote() {
               }}
             />
 
-            <div className="relative z-10">
-              <div className="flex items-center gap-4">
+            <div className="relative z-10 text-center lg:text-left">
+              <div className="flex items-center justify-center gap-4 lg:justify-start">
                 <span className="h-px w-8 bg-forest" aria-hidden />
                 <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-forest">
                   A Note From Colin
                 </p>
+                <span className="h-px w-8 bg-forest lg:hidden" aria-hidden />
               </div>
 
               <h2 className="mt-6 font-serif text-[clamp(2.55rem,3.6vw,3.65rem)] font-medium leading-[0.95] text-ink">
@@ -125,7 +162,7 @@ export default function FounderNote() {
                 </span>
               </h2>
 
-              <div className="mt-8 max-w-[39rem] space-y-3.5 text-[0.98rem] leading-7 text-ink/82 sm:text-base sm:leading-8">
+              <div className="mx-auto mt-8 max-w-[39rem] space-y-3.5 text-justify text-[0.98rem] leading-7 text-ink/82 sm:text-base sm:leading-8 lg:mx-0 lg:text-left">
                 <p>
                   I started CK Works because I kept noticing the same thing: good
                   businesses doing real work, but showing up online with
@@ -144,7 +181,7 @@ export default function FounderNote() {
                 </p>
               </div>
 
-              <div className="mt-6">
+              <div className="mt-6 flex flex-col items-center lg:items-start">
                 <Image
                   src="/images/brand/svg/signature-full.svg"
                   alt="Colin Kirby"
@@ -160,14 +197,17 @@ export default function FounderNote() {
             </div>
           </article>
 
+          {/* Portrait — desktop only */}
           <div
-            className="relative z-30 order-2 mx-auto w-full max-w-[24rem] rounded-[1.85rem] border border-line bg-card p-3 shadow-[0_22px_60px_-18px_rgba(31,36,32,0.34)] lg:absolute lg:left-[var(--portrait-left)] lg:top-[var(--portrait-top)] lg:w-[var(--portrait-width)] lg:max-w-none lg:-translate-y-1/2 lg:rotate-[var(--portrait-rotate)]"
-            style={{
-              "--portrait-width": portrait.width,
-              "--portrait-left": portrait.left,
-              "--portrait-top": portrait.top,
-              "--portrait-rotate": portrait.rotate,
-            } as CSSProperties}
+            className="relative z-30 mx-auto hidden w-full max-w-[24rem] rounded-[1.85rem] border border-line bg-card p-3 shadow-[0_22px_60px_-18px_rgba(31,36,32,0.34)] lg:absolute lg:left-[var(--portrait-left)] lg:top-[var(--portrait-top)] lg:block lg:w-[var(--portrait-width)] lg:max-w-none lg:-translate-y-1/2 lg:rotate-[var(--portrait-rotate)]"
+            style={
+              {
+                "--portrait-width": portrait.width,
+                "--portrait-left": portrait.left,
+                "--portrait-top": portrait.top,
+                "--portrait-rotate": portrait.rotate,
+              } as CSSProperties
+            }
           >
             <div className="relative aspect-[4/5.15] overflow-hidden rounded-[1.35rem] bg-forest-soft">
               <Image

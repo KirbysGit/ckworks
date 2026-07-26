@@ -13,7 +13,24 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-line bg-[#E8EFE3]">
-      <div className="container-ck grid gap-10 py-14 md:grid-cols-[1fr_auto_1fr] md:items-start">
+      <div className="container-ck flex flex-col items-center py-10 text-center md:hidden">
+        <Logo size="md" />
+        <p className="mt-4 max-w-[18rem] text-sm leading-6 text-ink/70">
+          Clean websites and practical systems, built with care.
+        </p>
+        <Image
+          src="/images/brand/svg/signature-full.svg"
+          alt=""
+          width={1805}
+          height={1397}
+          className="mt-6 h-14 w-auto opacity-90"
+        />
+        <p className="mt-5 text-[11px] uppercase tracking-[0.22em] text-forest/75">
+          CK Works
+        </p>
+      </div>
+
+      <div className="container-ck hidden gap-10 py-14 md:grid md:grid-cols-[1fr_auto_1fr] md:items-start">
         <div className="max-w-xs">
           <Logo />
           <p className="mt-4 text-sm leading-relaxed text-muted">
@@ -75,7 +92,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-line/70">
-        <div className="container-ck py-6 text-center text-xs text-muted">
+        <div className="container-ck py-5 text-center text-xs text-muted md:py-6">
           <p>© {new Date().getFullYear()} CK Works. All rights reserved.</p>
         </div>
       </div>

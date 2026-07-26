@@ -85,73 +85,194 @@ function getServicePanelId(scope: "mobile" | "desktop", title: string) {
     .replace(/(^-|-$)/g, "")}`;
 }
 
+type IntegrationSurface = "desktop" | "mobile";
+
+type IntegrationNodeLayout = {
+  label: string;
+  icon: string;
+  x: string;
+  y: string;
+  size: number;
+  iconSize: number;
+  iconOffsetX: number;
+  iconOffsetY: number;
+  delay: number;
+};
+
+type IntegrationLayout = {
+  viewBox: string;
+  /** Stretch SVG to the card so path % matches node % (fixes mobile gaps). */
+  preserveAspectRatio: string;
+  lines: {
+    path: string;
+    x: number;
+    y: number;
+    /** Uniform scale around the hub (1 = no change). */
+    scale: number;
+    /** Horizontal reach around the hub — bump this on mobile if lines fall short. */
+    scaleX: number;
+    scaleY: number;
+    strokeWidth: number;
+    strokeOpacity: number;
+    dash: string;
+  };
+  center: {
+    x: string;
+    y: string;
+    size: number;
+    iconSize: number;
+    iconOffsetX: number;
+    iconOffsetY: number;
+  };
+  nodes: IntegrationNodeLayout[];
+};
+
 // Integration card tuning: move boxes with x/y, move connectors with lines,
 // and nudge logos inside their squares with iconOffsetX/iconOffsetY.
-const integrationLayout = {
-  viewBox: "0 0 260 150",
-  lines: {
-    path: "M42 45 C92 45 80 72 130 72 M42 105 C92 105 80 78 130 78 M218 45 C168 45 180 72 130 72 M218 105 C168 105 180 78 130 78",
-    x: 0,
-    y: 0,
-    scale: 1,
-    strokeWidth: 2,
-    strokeOpacity: 0.5,
-    dash: "4 5",
+// Use the `mobile` block for accordion / narrow cards.
+const integrationLayouts: Record<IntegrationSurface, IntegrationLayout> = {
+  desktop: {
+    viewBox: "0 0 260 150",
+    // Letterbox like before — desktop positions were tuned against this.
+    preserveAspectRatio: "xMidYMid meet",
+    lines: {
+      path: "M42 45 C92 45 80 72 130 72 M42 105 C92 105 80 78 130 78 M218 45 C168 45 180 72 130 72 M218 105 C168 105 180 78 130 78",
+      x: 0,
+      y: 0,
+      scale: 1,
+      scaleX: 1,
+      scaleY: 1,
+      strokeWidth: 2,
+      strokeOpacity: 0.5,
+      dash: "4 5",
+    },
+    center: {
+      x: "41.5%",
+      y: "32%",
+      size: 48,
+      iconSize: 20,
+      iconOffsetX: 0,
+      iconOffsetY: 0,
+    },
+    nodes: [
+      {
+        label: "Sheets",
+        icon: "/images/services/svg/excel-logo.svg",
+        x: "8%",
+        y: "18%",
+        size: 40,
+        iconSize: 30,
+        iconOffsetX: -1,
+        iconOffsetY: 0,
+        delay: 0.28,
+      },
+      {
+        label: "AI",
+        icon: "/images/services/svg/openai-logo.svg",
+        x: "8%",
+        y: "58%",
+        size: 40,
+        iconSize: 20,
+        iconOffsetX: 0,
+        iconOffsetY: 0,
+        delay: 0.4,
+      },
+      {
+        label: "Chat",
+        icon: "/images/services/svg/slack-logo.svg",
+        x: "77%",
+        y: "18%",
+        size: 40,
+        iconSize: 20,
+        iconOffsetX: 0,
+        iconOffsetY: 0,
+        delay: 0.52,
+      },
+      {
+        label: "Mail",
+        icon: "/images/services/svg/gmail-logo.svg",
+        x: "77%",
+        y: "58%",
+        size: 40,
+        iconSize: 20,
+        iconOffsetX: 0,
+        iconOffsetY: 0,
+        delay: 0.64,
+      },
+    ],
   },
-  center: {
-    x: "41.5%",
-    y: "32%",
-    size: 48,
-    iconSize: 20,
-    iconOffsetX: 0,
-    iconOffsetY: 0,
+  mobile: {
+    viewBox: "0 0 260 150",
+    // Stretch to the card so connectors track the icon % positions.
+    preserveAspectRatio: "none",
+    lines: {
+      path: "M36 42 C90 42 80 72 130 72 M36 108 C90 108 80 78 130 78 M224 42 C170 42 180 72 130 72 M224 108 C170 108 180 78 130 78",
+      x: 0,
+      y: 0,
+      scale: 1,
+      /** Primary mobile knob: >1 reaches farther toward the outer icons. */
+      scaleX: 1.06,
+      scaleY: 1.02,
+      strokeWidth: 2,
+      strokeOpacity: 0.5,
+      dash: "4 5",
+    },
+    center: {
+      x: "43.5%",
+      y: "33%",
+      size: 48,
+      iconSize: 20,
+      iconOffsetX: 0,
+      iconOffsetY: 0,
+    },
+    nodes: [
+      {
+        label: "Sheets",
+        icon: "/images/services/svg/excel-logo.svg",
+        // Nudge inward if lines overshoot; outward if they still fall short.
+        x: "7%",
+        y: "16%",
+        size: 40,
+        iconSize: 30,
+        iconOffsetX: -1,
+        iconOffsetY: 0,
+        delay: 0.28,
+      },
+      {
+        label: "AI",
+        icon: "/images/services/svg/openai-logo.svg",
+        x: "7%",
+        y: "58%",
+        size: 40,
+        iconSize: 20,
+        iconOffsetX: 0,
+        iconOffsetY: 0,
+        delay: 0.4,
+      },
+      {
+        label: "Chat",
+        icon: "/images/services/svg/slack-logo.svg",
+        x: "78%",
+        y: "16%",
+        size: 40,
+        iconSize: 20,
+        iconOffsetX: 0,
+        iconOffsetY: 0,
+        delay: 0.52,
+      },
+      {
+        label: "Mail",
+        icon: "/images/services/svg/gmail-logo.svg",
+        x: "78%",
+        y: "58%",
+        size: 40,
+        iconSize: 20,
+        iconOffsetX: 0,
+        iconOffsetY: 0,
+        delay: 0.64,
+      },
+    ],
   },
-  nodes: [
-    {
-      label: "Sheets",
-      icon: "/images/services/svg/excel-logo.svg",
-      x: "8%",
-      y: "18%",
-      size: 40,
-      iconSize: 30,
-      iconOffsetX: -1,
-      iconOffsetY: 0,
-      delay: 0.28,
-    },
-    {
-      label: "AI",
-      icon: "/images/services/svg/openai-logo.svg",
-      x: "8%",
-      y: "58%",
-      size: 40,
-      iconSize: 20,
-      iconOffsetX: 0,
-      iconOffsetY: 0,
-      delay: 0.4,
-    },
-    {
-      label: "Chat",
-      icon: "/images/services/svg/slack-logo.svg",
-      x: "77%",
-      y: "18%",
-      size: 40,
-      iconSize: 20,
-      iconOffsetX: 0,
-      iconOffsetY: 0,
-      delay: 0.52,
-    },
-    {
-      label: "Mail",
-      icon: "/images/services/svg/gmail-logo.svg",
-      x: "77%",
-      y: "58%",
-      size: 40,
-      iconSize: 20,
-      iconOffsetX: 0,
-      iconOffsetY: 0,
-      delay: 0.64,
-    },
-  ],
 };
 
 export default function Services() {
@@ -243,7 +364,7 @@ export default function Services() {
                       className="overflow-hidden"
                     >
                       <div className="px-4 pb-5">
-                        <ServiceVisual kind={details.visual} />
+                        <ServiceVisual kind={details.visual} surface="mobile" />
 
                         <div className="mt-5">
                           <div className="flex items-center gap-3">
@@ -327,7 +448,7 @@ export default function Services() {
                   ))}
                 </div>
 
-                <ServiceVisual kind={details.visual} />
+                <ServiceVisual kind={details.visual} surface="desktop" />
 
                 <div className="mt-auto pt-5">
                   <button
@@ -385,7 +506,13 @@ export default function Services() {
   );
 }
 
-function ServiceVisual({ kind }: { kind: VisualKind }) {
+function ServiceVisual({
+  kind,
+  surface = "desktop",
+}: {
+  kind: VisualKind;
+  surface?: IntegrationSurface;
+}) {
   if (kind === "website") {
     return (
       <div className="relative mt-5 h-36 overflow-hidden rounded-lg border border-line bg-ivory/75">
@@ -503,38 +630,49 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
   }
 
   if (kind === "integrations") {
+    const layout = integrationLayouts[surface];
+    const { lines, center, nodes } = layout;
+    // Scale connectors around the hub (130, 75) so scaleX/scaleY don't drift the star join.
+    const lineTransform = [
+      `translate(${lines.x} ${lines.y})`,
+      "translate(130 75)",
+      `scale(${lines.scale * lines.scaleX} ${lines.scale * lines.scaleY})`,
+      "translate(-130 -75)",
+    ].join(" ");
+
     return (
       <div className="relative mt-5 h-36 overflow-hidden rounded-lg border border-line bg-ivory/75">
         <svg
-          viewBox={integrationLayout.viewBox}
+          viewBox={layout.viewBox}
+          preserveAspectRatio={layout.preserveAspectRatio}
           className="absolute inset-0 h-full w-full text-forest"
           aria-hidden
         >
           <motion.path
-            d={integrationLayout.lines.path}
+            d={lines.path}
             fill="none"
             stroke="currentColor"
-            strokeDasharray={integrationLayout.lines.dash}
+            strokeDasharray={lines.dash}
             strokeLinecap="round"
-            strokeOpacity={integrationLayout.lines.strokeOpacity}
-            strokeWidth={integrationLayout.lines.strokeWidth}
-            transform={`translate(${integrationLayout.lines.x} ${integrationLayout.lines.y}) scale(${integrationLayout.lines.scale})`}
+            strokeOpacity={lines.strokeOpacity}
+            strokeWidth={lines.strokeWidth}
+            transform={lineTransform}
             initial={{ pathLength: 0, opacity: 0 }}
             whileInView={{ pathLength: 1, opacity: 1 }}
             viewport={inView}
             transition={{ duration: 1.15, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
           />
         </svg>
-        {integrationLayout.nodes.map((node) => (
+        {nodes.map((node) => (
           <IntegrationNode key={node.label} {...node} />
         ))}
         <motion.div
           className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-xl border border-line bg-card shadow-soft"
           style={{
-            left: integrationLayout.center.x,
-            top: integrationLayout.center.y,
-            width: integrationLayout.center.size,
-            height: integrationLayout.center.size,
+            left: center.x,
+            top: center.y,
+            width: center.size,
+            height: center.size,
           }}
           initial={{ opacity: 0, scale: 0.82 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -544,9 +682,9 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
           <Sparkle
             className="text-forest"
             style={{
-              width: integrationLayout.center.iconSize,
-              height: integrationLayout.center.iconSize,
-              transform: `translate(${integrationLayout.center.iconOffsetX}px, ${integrationLayout.center.iconOffsetY}px)`,
+              width: center.iconSize,
+              height: center.iconSize,
+              transform: `translate(${center.iconOffsetX}px, ${center.iconOffsetY}px)`,
             }}
           />
         </motion.div>

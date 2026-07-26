@@ -302,6 +302,14 @@ const swipeSlides = [
   },
 ] as const;
 
+const mobileWhiteboardMarker = {
+  x: "2%",
+  y: "9%",
+  width: "5.35rem",
+  rotate: -12,
+  opacity: 0.92,
+} as const;
+
 function SwipeSlide({
   label,
   dot,
@@ -312,7 +320,7 @@ function SwipeSlide({
   children: ReactNode;
 }) {
   return (
-    <div className="w-full">
+    <div className="flex h-full w-full flex-col">
       <div className="flex items-center gap-2">
         <span
           className="h-2 w-2 rounded-full"
@@ -322,7 +330,7 @@ function SwipeSlide({
           {label}
         </span>
       </div>
-      <div className="mt-3">{children}</div>
+      <div className="mt-3 flex-1">{children}</div>
     </div>
   );
 }
@@ -368,7 +376,7 @@ function CleanBrowserCard() {
         </span>
       </div>
 
-      <div className="relative h-[10rem] overflow-hidden">
+      <div className="relative h-[11.25rem] overflow-hidden">
         <Image
           src="/images/transformation/png/after-demo.png"
           alt="Clean Windermere Wellness website"
@@ -380,8 +388,8 @@ function CleanBrowserCard() {
           className="absolute inset-0 bg-[linear-gradient(90deg,#FFFDF8_0%,rgba(255,253,248,0.95)_28%,rgba(255,253,248,0.58)_52%,rgba(255,253,248,0.04)_82%,transparent_100%)]"
           aria-hidden
         />
-        <div className="relative z-10 flex h-full max-w-[64%] flex-col justify-center px-4">
-          <h4 className="font-serif text-lg font-medium leading-tight text-ink">
+        <div className="relative z-10 flex h-full max-w-[61%] flex-col justify-center px-4">
+          <h4 className="font-serif text-[1.05rem] font-medium leading-tight text-ink">
             Calm. Clarity. Real change.
           </h4>
           <p className="mt-2 text-[10px] leading-4 text-ink/75">
@@ -400,38 +408,42 @@ function CleanBrowserCard() {
 /** Small phone that overlaps the browser card in the "output" slide. */
 function MiniPhone() {
   return (
-    <div className="rounded-[1.5rem] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] p-[2px] shadow-[0_16px_30px_-14px_rgba(17,23,20,0.62)]">
-      <div className="rounded-[1.4rem] bg-[linear-gradient(145deg,#030403_0%,#0C0F0C_45%,#272D27_58%,#050605_100%)] p-[3px]">
-        <div className="relative overflow-hidden rounded-[1.2rem] bg-card">
+    <div className="rounded-[1.85rem] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] p-[2px] shadow-[0_18px_32px_-14px_rgba(17,23,20,0.66)]">
+      <div className="rounded-[1.72rem] bg-[linear-gradient(145deg,#030403_0%,#0C0F0C_45%,#272D27_58%,#050605_100%)] p-[3px]">
+        <div className="relative overflow-hidden rounded-[1.52rem] bg-card">
           <div
-            className="pointer-events-none absolute left-1/2 top-[-4px] z-20 h-[14px] w-[46px] -translate-x-1/2 rounded-b-[7px] bg-[#050605]"
+            className="pointer-events-none absolute left-1/2 top-[-5px] z-20 h-[16px] w-[52px] -translate-x-1/2 rounded-b-[8px] bg-[#050605]"
             aria-hidden
           />
-          <PhoneStatusBar />
-          <div className="flex items-center justify-between px-3 pt-0.5">
-            <MiniBrand compact />
-            <Menu className="h-3 w-3 text-muted" />
-          </div>
-          <div className="px-3 pb-2.5 pt-3.5">
-            <h5 className="font-serif text-[1.05rem] font-medium leading-[0.98] text-ink">
-              Calm. Clarity. Real change.
-            </h5>
-            <span className="mt-2 block rounded bg-forest px-2 py-1 text-center text-[6.5px] font-medium text-ivory">
-              Book a call
-            </span>
-          </div>
-          <div className="relative h-[86px] overflow-hidden">
-            <Image
-              src="/images/transformation/png/after-demo.png"
-              alt=""
-              fill
-              sizes="150px"
-              className="object-cover"
-            />
-            <div
-              className="pointer-events-none absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-card to-transparent"
-              aria-hidden
-            />
+          <div className="relative min-h-[16rem] bg-card">
+            <PhoneStatusBar compact />
+            <div className="flex items-center justify-between gap-2 px-3 pt-1.5">
+              <MiniBrand compact />
+              <Menu className="h-3.5 w-3.5 shrink-0 text-muted" />
+            </div>
+            <div className="relative z-10 px-3 pb-2.5 pt-4">
+              <h5 className="font-serif text-[1.02rem] font-medium leading-[1.03] text-ink">
+                Calm. Clarity.
+                <br />
+                Real change.
+              </h5>
+              <span className="mt-2.5 inline-flex rounded bg-forest px-3 py-1.5 text-center text-[6.5px] font-medium text-ivory shadow-[0_4px_10px_-6px_rgba(47,91,63,0.8)]">
+                Book a call
+              </span>
+            </div>
+            <div className="absolute inset-x-0 bottom-0 h-[7.35rem] overflow-hidden">
+              <Image
+                src="/images/transformation/png/after-demo.png"
+                alt=""
+                fill
+                sizes="170px"
+                className="object-cover object-center"
+              />
+              <div
+                className="pointer-events-none absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-card via-card/65 to-transparent"
+                aria-hidden
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -470,7 +482,7 @@ function IdeaOutputSwipe() {
 
   return (
     <div className="relative">
-      <div className="overflow-hidden px-1 pb-1">
+      <div className="h-[22.7rem] overflow-hidden px-1 pb-1">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={activeSlide.id}
@@ -485,39 +497,49 @@ function IdeaOutputSwipe() {
               rotate: { duration: 0.34, ease: [0.22, 1, 0.36, 1] },
             }}
             drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.18}
+            dragConstraints={{ left: -112, right: 112 }}
+            dragElastic={0.28}
             onDragStart={() => setSwiped(true)}
             onDragEnd={handleDragEnd}
             whileDrag={reduceMotion ? undefined : { scale: 0.985 }}
-            className="touch-pan-y cursor-grab active:cursor-grabbing"
+            className="h-full touch-pan-y cursor-grab active:cursor-grabbing"
           >
             {activeSlide.id === "input" ? (
-              <>
-        {/* Slide 1 — the idea (messy board + arrows) */}
-        <SwipeSlide label={activeSlide.label} dot={activeSlide.dot}>
-          <div className="relative aspect-[1.08] w-full overflow-hidden rounded-xl border border-line/70 bg-sand shadow-soft">
-            <div
-              className="grid-texture pointer-events-none absolute inset-0 opacity-30"
-              aria-hidden
-            />
-            <BeforeBoardGraphic className="absolute inset-x-[-6%] inset-y-[-4%]" />
-          </div>
-        </SwipeSlide>
-              </>
+              <SwipeSlide label={activeSlide.label} dot={activeSlide.dot}>
+                <div className="relative h-[19.25rem] w-full overflow-hidden rounded-2xl border border-line/80 bg-card shadow-soft">
+                  <div
+                    className="grid-texture pointer-events-none absolute inset-0 opacity-30"
+                    aria-hidden
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-3 rounded-xl border border-line/55 bg-ivory/55 shadow-[inset_0_1px_8px_rgba(31,36,32,0.04)]"
+                    aria-hidden
+                  />
+                  <img
+                    src="/images/transformation/svg/mobile-whiteboard-marker.svg"
+                    alt=""
+                    className="pointer-events-none absolute z-20 select-none object-contain drop-shadow-[0_5px_7px_rgba(31,36,32,0.12)]"
+                    style={{
+                      left: mobileWhiteboardMarker.x,
+                      top: mobileWhiteboardMarker.y,
+                      width: mobileWhiteboardMarker.width,
+                      opacity: mobileWhiteboardMarker.opacity,
+                      transform: `rotate(${mobileWhiteboardMarker.rotate}deg)`,
+                    }}
+                    aria-hidden
+                  />
+                  <BeforeBoardGraphic className="absolute left-[48%] top-[56%] h-[80%] w-[84%] -translate-x-1/2 -translate-y-1/2" />
+                </div>
+              </SwipeSlide>
             ) : (
-              <>
-
-        {/* Slide 2 — the output (site + phone) */}
-        <SwipeSlide label={activeSlide.label} dot={activeSlide.dot}>
-          <div className="relative pb-8 pr-8">
-            <CleanBrowserCard />
-            <div className="absolute -bottom-1 right-0 w-[40%] max-w-[8.5rem]">
-              <MiniPhone />
-            </div>
-          </div>
-        </SwipeSlide>
-              </>
+              <SwipeSlide label={activeSlide.label} dot={activeSlide.dot}>
+                <div className="relative h-[19.25rem] pb-10 pt-1">
+                  <CleanBrowserCard />
+                  <div className="absolute bottom-2 right-0 w-[8.15rem] rotate-[1.5deg]">
+                    <MiniPhone />
+                  </div>
+                </div>
+              </SwipeSlide>
             )}
           </motion.div>
         </AnimatePresence>
@@ -1042,7 +1064,7 @@ function AfterConnector() {
 
 function CellularSignal() {
   return (
-    <span className="flex h-[6px] items-end gap-px" aria-hidden>
+    <span className="flex h-[6px] w-[7px] shrink-0 items-end gap-px" aria-hidden>
       {[1.5, 2.5, 3.5, 5].map((height, index) => (
         <span
           key={height}
@@ -1058,7 +1080,7 @@ function WifiSignal() {
   return (
     <svg
       viewBox="0 0 14 10"
-      className="h-[5px] w-[7px] text-ink"
+      className="h-[5px] w-[7px] shrink-0 text-ink"
       fill="none"
       aria-hidden
     >
@@ -1086,7 +1108,7 @@ function WifiSignal() {
 
 function BatteryIcon() {
   return (
-    <span className="relative inline-flex h-[4px] w-[9px]" aria-hidden>
+    <span className="relative inline-flex h-[4px] w-[9px] shrink-0" aria-hidden>
       <span className="absolute inset-0 rounded-[1px] border border-ink/80" />
       <span className="absolute bottom-[1px] right-[-1.5px] top-[1px] w-px rounded-r bg-ink/70" />
       <span className="absolute bottom-[1px] left-[1px] top-[1px] w-[5.5px] rounded-[0.5px] bg-ink" />
@@ -1094,13 +1116,25 @@ function BatteryIcon() {
   );
 }
 
-function PhoneStatusBar() {
+function PhoneStatusBar({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="relative z-20 flex h-[18px] items-center justify-between px-4 pt-0.5">
-      <span className="pl-0.5 text-[5.5px] font-semibold leading-none text-ink">
+    <div
+      className={`relative z-20 flex items-center justify-between pt-0.5 ${
+        compact ? "h-[17px] px-3" : "h-[18px] px-4"
+      }`}
+    >
+      <span
+        className={`pl-0.5 font-semibold leading-none text-ink ${
+          compact ? "text-[5px]" : "text-[5.5px]"
+        }`}
+      >
         9:41
       </span>
-      <span className="flex items-center justify-end gap-[1px]">
+      <span
+        className={`flex shrink-0 origin-right items-center justify-end ${
+          compact ? "scale-[0.76] gap-[2px]" : "gap-[2.5px]"
+        }`}
+      >
         <CellularSignal />
         <WifiSignal />
         <BatteryIcon />
@@ -1111,17 +1145,23 @@ function PhoneStatusBar() {
 
 function MiniBrand({ compact = false }: { compact?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-1.5">
+    <span
+      className={`inline-flex min-w-0 items-center ${
+        compact ? "gap-1" : "gap-1.5"
+      }`}
+    >
       <Image
         src="/images/hero/svg/demo-logo.svg"
         alt=""
         width={242}
         height={385}
-        className={compact ? "h-4 w-auto" : "h-5 w-auto"}
+        className={compact ? "h-3.5 w-auto shrink-0" : "h-5 w-auto"}
       />
       <span
-        className={`font-serif font-semibold leading-tight tracking-[0.22em] text-ink ${
-          compact ? "text-[6px]" : "text-[8px]"
+        className={`font-serif font-semibold leading-tight text-ink ${
+          compact
+            ? "text-[5.25px] tracking-[0.16em]"
+            : "text-[8px] tracking-[0.22em]"
         }`}
       >
         WINDERMERE
