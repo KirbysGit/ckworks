@@ -22,7 +22,7 @@ const founderNoteLayout = {
   },
   drawing: {
     scale: 1.08,
-    opacity: 0.58,
+    opacity: 0.82,
     offsetX: "0.15rem",
     offsetY: "0.35rem",
   },
@@ -46,7 +46,7 @@ export default function FounderNote() {
   return (
     <section
       id="about"
-      className="relative overflow-hidden bg-sand py-12 sm:py-14 lg:py-16"
+      className="relative overflow-hidden bg-sand py-12 text-ink [color-scheme:only_light] [forced-color-adjust:none] sm:py-14 lg:py-16"
     >
       {/* full-bleed section background art */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -72,7 +72,7 @@ export default function FounderNote() {
 
           {/* Map / drawing — desktop only */}
           <div
-            className="relative z-0 mx-auto hidden h-[24rem] w-full max-w-[25rem] overflow-hidden rounded-[1.8rem] border border-line/80 bg-card/75 shadow-lift lg:absolute lg:right-[var(--drawing-right)] lg:top-[var(--drawing-top)] lg:block lg:h-[var(--drawing-height)] lg:w-[var(--drawing-width)] lg:max-w-none lg:rotate-[var(--drawing-rotate)]"
+            className="relative z-0 mx-auto hidden h-[24rem] w-full max-w-[25rem] overflow-hidden rounded-[1.8rem] border border-line bg-card shadow-lift lg:absolute lg:right-[var(--drawing-right)] lg:top-[var(--drawing-top)] lg:block lg:h-[var(--drawing-height)] lg:w-[var(--drawing-width)] lg:max-w-none lg:rotate-[var(--drawing-rotate)]"
             style={
               {
                 "--drawing-width": drawingCard.width,
@@ -93,7 +93,7 @@ export default function FounderNote() {
               src="/images/founder/svg/note-drawing.svg"
               alt=""
               aria-hidden
-              className="pointer-events-none absolute left-1/2 top-1/2 max-w-none select-none object-contain mix-blend-multiply"
+              className="pointer-events-none absolute left-1/2 top-1/2 max-w-none select-none object-contain"
               style={{
                 height: `${drawing.scale * 100}%`,
                 width: "auto",

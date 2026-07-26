@@ -73,7 +73,10 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  // Icons: app/icon.svg · app/apple-icon.tsx · app/opengraph-image.tsx
+  other: {
+    "color-scheme": "light only",
+  },
+  // Icons: app/icon.svg · app/apple-icon.png · app/opengraph-image.tsx
 };
 
 const jsonLd = {

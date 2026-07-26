@@ -287,7 +287,10 @@ const bookLayout = {
 
 export default function Process() {
   return (
-    <section id="process" className="container-ck py-14 lg:py-20">
+    <section
+      id="process"
+      className="container-ck bg-ivory py-14 text-ink [color-scheme:only_light] [forced-color-adjust:none] lg:py-20"
+    >
       <motion.div
         variants={stagger}
         initial="hidden"
@@ -396,7 +399,7 @@ function MobileProcessTimeline() {
                       src={drawing.src}
                       alt=""
                       aria-hidden
-                      className="block select-none object-contain mix-blend-multiply"
+                      className="block select-none object-contain"
                       style={{
                         width: drawing.size,
                         minWidth: drawing.size,
@@ -432,7 +435,10 @@ function ProcessBook() {
   } = bookLayout;
 
   return (
-    <motion.div variants={fadeUp} className="relative mt-6 hidden lg:block">
+    <motion.div
+      variants={fadeUp}
+      className="relative mt-6 hidden bg-ivory text-ink [color-scheme:only_light] [forced-color-adjust:none] lg:block"
+    >
       <div className="relative mx-auto max-w-[92rem]">
         <div
           className="pointer-events-none absolute z-0 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(31,36,32,0.34)_0%,rgba(31,36,32,0.18)_44%,rgba(31,36,32,0)_74%)]"
@@ -515,7 +521,7 @@ function ProcessBook() {
         {sectionDrawings.map((drawing) => (
           <div
             key={drawing.src}
-            className="pointer-events-none absolute z-[9] block select-none mix-blend-multiply"
+            className="pointer-events-none absolute z-[9] block select-none"
             style={{
               left: drawing.left,
               bottom: drawing.bottom,

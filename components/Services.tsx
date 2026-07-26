@@ -648,6 +648,11 @@ function ServiceVisual({
           className="absolute inset-0 h-full w-full text-forest"
           aria-hidden
         >
+          {/*
+            Don't animate pathLength here: Framer uses stroke-dasharray for that,
+            which fights our dotted dash pattern and often leaves the lines
+            invisible on iOS Safari (especially inside the mobile accordion).
+          */}
           <motion.path
             d={lines.path}
             fill="none"
@@ -656,11 +661,11 @@ function ServiceVisual({
             strokeLinecap="round"
             strokeOpacity={lines.strokeOpacity}
             strokeWidth={lines.strokeWidth}
+            vectorEffect="non-scaling-stroke"
             transform={lineTransform}
-            initial={{ pathLength: 0, opacity: 0 }}
-            whileInView={{ pathLength: 1, opacity: 1 }}
-            viewport={inView}
-            transition={{ duration: 1.15, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
           />
         </svg>
         {nodes.map((node) => (
@@ -675,9 +680,8 @@ function ServiceVisual({
             height: center.size,
           }}
           initial={{ opacity: 0, scale: 0.82 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={inView}
-          transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
         >
           <Sparkle
             className="text-forest"
@@ -817,8 +821,7 @@ function IntegrationNode({
         height: size,
       }}
       initial={{ opacity: 0, scale: 0.72 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={inView}
+      animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       <img

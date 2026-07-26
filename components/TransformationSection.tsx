@@ -603,7 +603,7 @@ export default function TransformationSection() {
               label="The Difference"
               title="From scattered ideas to a clearer digital presence."
               subtitle="We turn ideas into intentional, calming experiences that connect with your audience and drive real results."
-              className="text-center [&_h2]:mx-auto [&_p]:mx-auto"
+              className="text-center sm:text-left [&_h2]:mx-auto [&_p]:mx-auto sm:[&_h2]:mx-0 sm:[&_p]:mx-0"
             />
           </motion.div>
 

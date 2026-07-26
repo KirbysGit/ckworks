@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    color-scheme: light;
+    color-scheme: only light;
     --site-header-height: 1.25rem;
     --anchor-scroll-gap: 0rem;
     --anchor-scroll-offset: calc(
@@ -13,6 +13,7 @@
   }
 
   html {
+    color-scheme: only light;
     scroll-behavior: smooth;
     scroll-padding-top: var(--anchor-scroll-offset);
     scrollbar-color: #9bb8a0 #faf7f0;
