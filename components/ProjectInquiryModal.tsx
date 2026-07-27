@@ -22,6 +22,7 @@ type FormState = {
   timeline: string;
   budget: string;
   message: string;
+  website: string;
 };
 
 type Errors = Partial<Record<keyof FormState, string>>;
@@ -34,6 +35,7 @@ const initialForm: FormState = {
   timeline: "",
   budget: "",
   message: "",
+  website: "",
 };
 
 const projectTypes = [
@@ -76,6 +78,7 @@ export default function ProjectInquiryModal({
 }: ProjectInquiryModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState<FormState>(initialForm);
+  const [formStartedAt, setFormStartedAt] = useState<number | null>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">(
     "idle",
@@ -83,6 +86,8 @@ export default function ProjectInquiryModal({
 
   useEffect(() => {
     if (!isOpen) return;
+
+    setFormStartedAt(Date.now());
 
     const previousOverflow = document.body.style.overflow;
     const previousHtmlOverflow = document.documentElement.style.overflow;
@@ -112,6 +117,7 @@ export default function ProjectInquiryModal({
       setForm(initialForm);
       setErrors({});
       setStatus("idle");
+      setFormStartedAt(null);
     }, 220);
 
     return () => window.clearTimeout(resetTimer);
@@ -159,6 +165,7 @@ export default function ProjectInquiryModal({
         body: JSON.stringify({
           ...form,
           submittedAt: new Date().toISOString(),
+          formStartedAt: String(formStartedAt ?? Date.now()),
           sourcePage:
             typeof window === "undefined" ? source : window.location.pathname,
           source,
@@ -307,6 +314,26 @@ export default function ProjectInquiryModal({
                     </p>
 
                     <form onSubmit={handleSubmit} className="mt-3.5 min-w-0 space-y-2.5 sm:mt-5 sm:space-y-3">
+                      <div
+                        className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden"
+                        aria-hidden="true"
+                      >
+                        <label htmlFor="project-inquiry-website">
+                          Website
+                        </label>
+                        <input
+                          id="project-inquiry-website"
+                          name="website"
+                          type="text"
+                          tabIndex={-1}
+                          autoComplete="off"
+                          value={form.website}
+                          onChange={(event) =>
+                            updateField("website", event.target.value)
+                          }
+                        />
+                      </div>
+
                       <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3">
                         <TextField
                           label="Name"

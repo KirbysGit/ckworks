@@ -10,12 +10,19 @@ type InquiryPayload = {
   timeline?: string;
   budget?: string;
   message?: string;
+  website?: string;
+  formStartedAt?: string;
   submittedAt?: string;
   sourcePage?: string;
   source?: string;
 };
 
-type NormalizedInquiry = Required<InquiryPayload>;
+type NormalizedInquiry = Required<
+  Omit<InquiryPayload, "website" | "formStartedAt">
+>;
+
+const minFormFillMs = 2500;
+const maxFormAgeMs = 1000 * 60 * 60 * 24;
 
 export const runtime = "nodejs";
 
@@ -29,6 +36,10 @@ export async function POST(request: Request) {
       { error: "Invalid inquiry payload." },
       { status: 400 },
     );
+  }
+
+  if (isLikelySpam(payload)) {
+    return NextResponse.json({ ok: true });
   }
 
   if (!payload.name || !payload.email || !payload.message) {
@@ -142,6 +153,16 @@ function parseEmailList(value?: string) {
 
 function isValidEmail(value?: string) {
   return Boolean(value && /^\S+@\S+\.\S+$/.test(value));
+}
+
+function isLikelySpam(payload: InquiryPayload) {
+  if (clean(payload.website)) return true;
+
+  const startedAt = Number(payload.formStartedAt);
+  if (!Number.isFinite(startedAt)) return true;
+
+  const elapsed = Date.now() - startedAt;
+  return elapsed < minFormFillMs || elapsed > maxFormAgeMs;
 }
 
 function toTagValue(value: string) {
