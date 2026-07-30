@@ -36,8 +36,8 @@ const display = Bodoni_Moda({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteName} — ${siteTagline}`,
-    template: `%s · ${siteName}`,
+    default: `${siteName} | ${siteTagline}`,
+    template: `%s | ${siteName}`,
   },
   description: siteDescription,
   keywords: [
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: siteUrl,
-    title: `${siteName} — ${siteTagline}`,
+    title: `${siteName} | ${siteTagline}`,
     description:
       "Clean websites and practical systems for growing businesses, built by Colin Kirby.",
     siteName,
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteName} — ${siteTagline}`,
+    title: `${siteName} | ${siteTagline}`,
     description:
       "Clean websites and practical systems for growing businesses, built by Colin Kirby.",
   },
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
   other: {
     "color-scheme": "light only",
   },
-  // Icons: app/icon.svg · app/apple-icon.png · app/opengraph-image.tsx
+  // Icons: app/icon.png · app/apple-icon.png · app/opengraph-image.tsx
 };
 
 const organizationId = `${siteUrl}/#organization`;
@@ -102,7 +102,7 @@ const jsonLd = {
       email: contactEmail,
       description: siteDescription,
       slogan: siteTagline,
-      logo: `${siteUrl}/icon.svg`,
+      logo: `${siteUrl}/icon.png`,
       image: `${siteUrl}/opengraph-image`,
       founder: {
         "@type": "Person",

@@ -8,4 +8,4 @@ export const siteName = "CK Works";
 export const siteTagline = "Websites. Systems. Clarity.";
 
 export const siteDescription =
-  "CK Works is a small digital studio by Colin Kirby. Clean websites and practical systems for growing businesses—design, automations, and integrations built to fit the way you work.";
+  "CK Works is a small digital studio by Colin Kirby. Clean websites and practical systems for growing businesses: design, automations, and integrations built to fit the way you work.";

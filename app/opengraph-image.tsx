@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "CK Works — Websites. Systems. Clarity.";
+export const alt = "CK Works | Websites. Systems. Clarity.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -75,7 +75,7 @@ export default function OpenGraphImage() {
             fontWeight: 600,
           }}
         >
-          ckworks.co
+          ckworks.studio
         </div>
       </div>
     ),
