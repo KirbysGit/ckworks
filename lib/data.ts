@@ -16,6 +16,7 @@ export const nav = [
   { label: "Work", href: "/#work" },
   { label: "Process", href: "/#process" },
   { label: "About", href: "/#about" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export type TrustChip = {
@@ -109,6 +110,7 @@ export const footerLinks = [
   { label: "Services", href: "/#what-i-do" },
   { label: "Process", href: "/#process" },
   { label: "About", href: "/#about" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export const contactEmail = "hello@ckworks.studio";

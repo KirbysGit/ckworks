@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
   animate,
-  AnimatePresence,
   motion,
   useInView as useMotionInView,
 } from "framer-motion";
@@ -350,49 +349,49 @@ export default function Services() {
                   </motion.span>
                 </button>
 
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      id={panelId}
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.26,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-4 pb-5">
-                        <ServiceVisual kind={details.visual} surface="mobile" />
+                <motion.div
+                  id={panelId}
+                  initial={false}
+                  animate={
+                    isOpen
+                      ? { height: "auto", opacity: 1 }
+                      : { height: 0, opacity: 0 }
+                  }
+                  transition={{
+                    duration: 0.26,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="overflow-hidden"
+                  aria-hidden={!isOpen}
+                >
+                  <div className="px-4 pb-5">
+                    <ServiceVisual kind={details.visual} surface="mobile" />
 
-                        <div className="mt-5">
-                          <div className="flex items-center gap-3">
-                            <h4 className="shrink-0 text-xs font-semibold uppercase tracking-[0.18em] text-forest">
-                              What's included
-                            </h4>
-                            <span
-                              className="h-px flex-1 bg-line/80"
-                              aria-hidden
-                            />
-                          </div>
-
-                          <ul className="mt-3 space-y-2.5">
-                            {serviceIncludes[title].slice(0, 3).map((item) => (
-                              <li
-                                key={item}
-                                className="flex items-start gap-3 text-sm leading-6 text-muted"
-                              >
-                                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-forest" />
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                    <div className="mt-5">
+                      <div className="flex items-center gap-3">
+                        <h4 className="shrink-0 text-xs font-semibold uppercase tracking-[0.18em] text-forest">
+                          What's included
+                        </h4>
+                        <span
+                          className="h-px flex-1 bg-line/80"
+                          aria-hidden
+                        />
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+
+                      <ul className="mt-3 space-y-2.5">
+                        {serviceIncludes[title].slice(0, 3).map((item) => (
+                          <li
+                            key={item}
+                            className="flex items-start gap-3 text-sm leading-6 text-muted"
+                          >
+                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-forest" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </motion.div>
               </motion.article>
             );
           })}
@@ -471,30 +470,30 @@ export default function Services() {
                     </motion.span>
                   </button>
 
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        id={panelId}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <ul className="mt-4 space-y-2 border-t border-line/80 pt-4">
-                          {serviceIncludes[title].map((item) => (
-                            <li
-                              key={item}
-                              className="flex gap-2 text-xs leading-relaxed text-muted"
-                            >
-                              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-forest/70" />
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <motion.div
+                    id={panelId}
+                    initial={false}
+                    animate={
+                      isOpen
+                        ? { height: "auto", opacity: 1 }
+                        : { height: 0, opacity: 0 }
+                    }
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden"
+                    aria-hidden={!isOpen}
+                  >
+                    <ul className="mt-4 space-y-2 border-t border-line/80 pt-4">
+                      {serviceIncludes[title].map((item) => (
+                        <li
+                          key={item}
+                          className="flex gap-2 text-xs leading-relaxed text-muted"
+                        >
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-forest/70" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
                 </div>
                 </article>
               </motion.div>

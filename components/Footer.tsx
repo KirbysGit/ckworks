@@ -18,6 +18,12 @@ export default function Footer() {
         <p className="mt-4 max-w-[18rem] text-sm leading-6 text-ink/70">
           Clean websites and practical systems, built with care.
         </p>
+        <a
+          href={`mailto:${contactEmail}`}
+          className="mt-4 text-sm font-medium text-forest hover:text-ink"
+        >
+          {contactEmail}
+        </a>
         <Image
           src="/images/brand/svg/signature-full.svg"
           alt=""

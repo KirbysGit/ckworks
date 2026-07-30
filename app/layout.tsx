@@ -8,7 +8,7 @@ import {
   siteUrl,
 } from "@/lib/site";
 import { ProjectInquiryProvider } from "@/components/ProjectInquiryProvider";
-import { contactEmail } from "@/lib/data";
+import { contactEmail, services } from "@/lib/data";
 import "./globals.css";
 
 const serif = Cormorant_Garamond({
@@ -79,20 +79,69 @@ export const metadata: Metadata = {
   // Icons: app/icon.svg · app/apple-icon.png · app/opengraph-image.tsx
 };
 
+const organizationId = `${siteUrl}/#organization`;
+const websiteId = `${siteUrl}/#website`;
+
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  name: siteName,
-  url: siteUrl,
-  email: contactEmail,
-  description: siteDescription,
-  slogan: siteTagline,
-  founder: {
-    "@type": "Person",
-    name: "Colin Kirby",
-  },
-  areaServed: "US",
-  sameAs: [] as string[],
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      url: siteUrl,
+      name: siteName,
+      description: siteDescription,
+      inLanguage: "en-US",
+      publisher: { "@id": organizationId },
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": organizationId,
+      name: siteName,
+      url: siteUrl,
+      email: contactEmail,
+      description: siteDescription,
+      slogan: siteTagline,
+      logo: `${siteUrl}/icon.svg`,
+      image: `${siteUrl}/opengraph-image`,
+      founder: {
+        "@type": "Person",
+        name: "Colin Kirby",
+        jobTitle: "Founder",
+        url: siteUrl,
+      },
+      areaServed: {
+        "@type": "Country",
+        name: "United States",
+      },
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: contactEmail,
+        availableLanguage: ["English"],
+      },
+      knowsAbout: [
+        "Web design",
+        "Digital systems",
+        "Business automations",
+        "Software integrations",
+        "Website support",
+      ],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "CK Works services",
+        itemListElement: services.map((service, index) => ({
+          "@type": "Offer",
+          position: index + 1,
+          itemOffered: {
+            "@type": "Service",
+            name: service.title,
+            description: service.body,
+          },
+        })),
+      },
+    },
+  ],
 };
 
 export default function RootLayout({
