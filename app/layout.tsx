@@ -102,7 +102,7 @@ const jsonLd = {
       email: contactEmail,
       description: siteDescription,
       slogan: siteTagline,
-      logo: `${siteUrl}/icon.png`,
+      logo: `${siteUrl}/images/brand/ck-icon-logo.png`,
       image: `${siteUrl}/opengraph-image`,
       founder: {
         "@type": "Person",

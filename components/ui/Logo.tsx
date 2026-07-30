@@ -14,7 +14,7 @@ type Props = {
 /**
  * Brand mark = constant clover icon + wordmark that swaps for dark mode.
  *
- *  - /images/brand/svg/icon.svg           green gradient clover — reads on any background,
+ *  - /images/brand/ck-icon-logo.png       brand mark — reads on any background,
  *                               so it stays the same in light and dark mode.
  *  - /images/brand/svg/wordmark-light.svg  near-black text, shown in LIGHT mode.
  *  - /images/brand/svg/wordmark-dark.svg  ivory text, shown in DARK mode (dark: variant).
@@ -66,10 +66,10 @@ export default function Logo({
         className="inline-flex will-change-transform"
       >
         <Image
-          src="/images/brand/svg/icon.svg"
+          src="/images/brand/ck-icon-logo.png"
           alt={showWordmark ? "" : "CK Works"}
-          width={438}
-          height={447}
+          width={761}
+          height={777}
           priority
           className={`${s.icon} w-auto`}
         />

@@ -1,10 +1,17 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 export const alt = "CK Works | Websites. Systems. Clarity.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  const logoData = await readFile(
+    join(process.cwd(), "public/images/brand/ck-icon-logo.png"),
+  );
+  const logoSrc = `data:image/png;base64,${logoData.toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -15,7 +22,8 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px 80px",
-          background: "linear-gradient(145deg, #FAF7F0 0%, #E8F0E4 48%, #DDE8D8 100%)",
+          background:
+            "linear-gradient(145deg, #FAF7F0 0%, #E8F0E4 48%, #DDE8D8 100%)",
           color: "#1F2420",
           fontFamily: "Georgia, 'Times New Roman', serif",
         }}
@@ -30,13 +38,12 @@ export default function OpenGraphImage() {
             letterSpacing: "-0.02em",
           }}
         >
-          <div
-            style={{
-              width: 52,
-              height: 52,
-              borderRadius: 999,
-              background: "linear-gradient(145deg, #A0CC75 0%, #3B8846 100%)",
-            }}
+          <img
+            src={logoSrc}
+            width={52}
+            height={52}
+            alt=""
+            style={{ borderRadius: 10 }}
           />
           CK Works
         </div>
