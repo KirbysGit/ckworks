@@ -8,6 +8,7 @@ import {
 } from "framer-motion";
 import { ArrowRight, CheckCircle2, Minus, Plus, Sparkle } from "lucide-react";
 import SectionHeader from "./ui/SectionHeader";
+import { trackEvent } from "@/lib/analytics";
 import { services } from "@/lib/data";
 import { fadeUp, stagger, inView } from "@/lib/motion";
 
@@ -316,9 +317,18 @@ export default function Services() {
                   aria-expanded={isOpen}
                   aria-controls={panelId}
                   onClick={() =>
-                    setOpenMobileService((current) =>
-                      current === title ? null : title,
-                    )
+                    setOpenMobileService((current) => {
+                      const next = current === title ? null : title;
+
+                      if (next) {
+                        trackEvent("service_viewed", {
+                          service: title,
+                          surface: "mobile",
+                        });
+                      }
+
+                      return next;
+                    })
                   }
                   className="flex w-full items-center gap-4 p-4 text-left"
                 >
@@ -455,9 +465,18 @@ export default function Services() {
                     aria-expanded={isOpen}
                     aria-controls={panelId}
                     onClick={() =>
-                      setOpenService((current) =>
-                        current === title ? null : title,
-                      )
+                      setOpenService((current) => {
+                        const next = current === title ? null : title;
+
+                        if (next) {
+                          trackEvent("service_viewed", {
+                            service: title,
+                            surface: "desktop",
+                          });
+                        }
+
+                        return next;
+                      })
                     }
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-forest transition-colors duration-200 hover:text-ink"
                   >

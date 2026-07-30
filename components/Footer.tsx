@@ -6,6 +6,7 @@ import { useState } from "react";
 import Logo from "./ui/Logo";
 import DrawUnderline from "./ui/DrawUnderline";
 import ProjectInquiryTrigger from "./ProjectInquiryTrigger";
+import { trackEvent } from "@/lib/analytics";
 import { footerLinks, contactEmail } from "@/lib/data";
 
 export default function Footer() {
@@ -20,6 +21,11 @@ export default function Footer() {
         </p>
         <a
           href={`mailto:${contactEmail}`}
+          onClick={() =>
+            trackEvent("email_clicked", {
+              location: "mobile_footer",
+            })
+          }
           className="mt-4 text-sm font-medium text-forest hover:text-ink"
         >
           {contactEmail}
@@ -82,6 +88,11 @@ export default function Footer() {
             </ProjectInquiryTrigger>
             <a
               href={`mailto:${contactEmail}`}
+              onClick={() =>
+                trackEvent("email_clicked", {
+                  location: "desktop_footer",
+                })
+              }
               className="mt-1 font-medium text-forest hover:text-ink"
             >
               {contactEmail}

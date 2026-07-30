@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Check, ExternalLink } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CaseStudyViewed from "@/components/CaseStudyViewed";
 import ProjectInquiryTrigger from "@/components/ProjectInquiryTrigger";
 import { caseStudies, getCaseStudy } from "@/lib/projects";
 
@@ -78,6 +79,7 @@ export default async function CaseStudyPage({ params }: Props) {
   return (
     <>
       <Header />
+      <CaseStudyViewed name={study.name} slug={study.slug} />
       <main>
         <section className="container-ck pb-12 pt-10 lg:pt-14">
           <Link

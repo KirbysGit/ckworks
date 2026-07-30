@@ -10,6 +10,7 @@ import {
   useState,
 } from "react";
 import ProjectInquiryModal from "./ProjectInquiryModal";
+import { trackEvent } from "@/lib/analytics";
 
 type InquiryContextValue = {
   openInquiry: (source?: string, opener?: HTMLElement | null) => void;
@@ -29,6 +30,9 @@ export function ProjectInquiryProvider({ children }: { children: ReactNode }) {
       openerRef.current = opener ?? null;
       setDebugSuccess(false);
       setSource(nextSource);
+      trackEvent("project_inquiry_opened", {
+        source: nextSource ?? "unknown",
+      });
       setIsOpen(true);
     },
     [],

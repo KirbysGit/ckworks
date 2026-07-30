@@ -4,6 +4,7 @@ import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronDown, Loader2, X } from "lucide-react";
 import Logo from "./ui/Logo";
+import { trackEvent } from "@/lib/analytics";
 import { contactEmail } from "@/lib/data";
 
 type ProjectInquiryModalProps = {
@@ -79,6 +80,7 @@ export default function ProjectInquiryModal({
   const modalRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState<FormState>(initialForm);
   const [formStartedAt, setFormStartedAt] = useState<number | null>(null);
+  const [hasTrackedFormStart, setHasTrackedFormStart] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">(
     "idle",
@@ -118,6 +120,7 @@ export default function ProjectInquiryModal({
       setErrors({});
       setStatus("idle");
       setFormStartedAt(null);
+      setHasTrackedFormStart(false);
     }, 220);
 
     return () => window.clearTimeout(resetTimer);
@@ -130,6 +133,13 @@ export default function ProjectInquiryModal({
 
   function updateField(field: keyof FormState, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
+    if (field !== "website" && value.trim() && !hasTrackedFormStart) {
+      setHasTrackedFormStart(true);
+      trackEvent("contact_form_started", {
+        source: source ?? "unknown",
+        first_field: field,
+      });
+    }
     if (errors[field]) {
       setErrors((current) => ({ ...current, [field]: undefined }));
     }
@@ -174,6 +184,12 @@ export default function ProjectInquiryModal({
 
       if (!response.ok) throw new Error("Inquiry request failed");
 
+      trackEvent("contact_form_submitted", {
+        source: source ?? "unknown",
+        project_type: form.projectType || "not_provided",
+        timeline: form.timeline || "not_provided",
+        budget: form.budget || "not_provided",
+      });
       setStatus("success");
     } catch {
       setStatus("error");
@@ -416,6 +432,11 @@ export default function ProjectInquiryModal({
                           directly at{" "}
                           <a
                             href={`mailto:${contactEmail}`}
+                            onClick={() =>
+                              trackEvent("email_clicked", {
+                                location: "inquiry_error",
+                              })
+                            }
                             className="font-semibold underline"
                           >
                             {contactEmail}
