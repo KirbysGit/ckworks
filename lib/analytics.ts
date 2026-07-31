@@ -6,7 +6,9 @@ type AnalyticsEventName =
   | "email_clicked"
   | "service_viewed"
   | "case_study_viewed"
-  | "project_inquiry_opened";
+  | "project_inquiry_opened"
+  | "linkedin_clicked"
+  | "whatsapp_clicked";
 
 type AnalyticsPayloadValue = string | number | boolean | null;
 type AnalyticsPayload = Record<

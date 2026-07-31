@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CaseStudyViewed from "@/components/CaseStudyViewed";
 import ProjectInquiryTrigger from "@/components/ProjectInquiryTrigger";
+import WhatsAppContactLink from "@/components/WhatsAppContactLink";
 import { caseStudies, getCaseStudy } from "@/lib/projects";
 
 type Props = {
@@ -244,6 +245,12 @@ function ProjectPageCta() {
             >
               Send me a note
             </ProjectInquiryTrigger>
+            <WhatsAppContactLink
+              location="work_cta"
+              className="inline-flex min-w-44 items-center justify-center gap-2 rounded-xl border border-forest/50 bg-transparent px-6 py-3 text-sm font-medium text-forest transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest-soft/40 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:ring-offset-ivory"
+            >
+              WhatsApp
+            </WhatsAppContactLink>
           </div>
         </div>
       </div>

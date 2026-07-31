@@ -10,7 +10,13 @@ import {
 } from "@/lib/site";
 import { ProjectInquiryProvider } from "@/components/ProjectInquiryProvider";
 import { gtmId } from "@/lib/analytics";
-import { contactEmail, services } from "@/lib/data";
+import {
+  contactEmail,
+  contactLinkedInUrl,
+  contactPhoneE164,
+  contactWhatsAppUrl,
+  services,
+} from "@/lib/data";
 import "./globals.css";
 
 const serif = Cormorant_Garamond({
@@ -106,11 +112,13 @@ const jsonLd = {
       slogan: siteTagline,
       logo: `${siteUrl}/images/brand/ck-icon-logo.png`,
       image: `${siteUrl}/opengraph-image`,
+      sameAs: [contactLinkedInUrl],
       founder: {
         "@type": "Person",
         name: "Colin Kirby",
         jobTitle: "Founder",
         url: siteUrl,
+        sameAs: [contactLinkedInUrl],
       },
       areaServed: {
         "@type": "Country",
@@ -120,6 +128,8 @@ const jsonLd = {
         "@type": "ContactPoint",
         contactType: "sales",
         email: contactEmail,
+        telephone: contactPhoneE164,
+        url: contactWhatsAppUrl,
         availableLanguage: ["English"],
       },
       knowsAbout: [

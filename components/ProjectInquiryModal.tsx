@@ -4,6 +4,7 @@ import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronDown, Loader2, X } from "lucide-react";
 import Logo from "./ui/Logo";
+import WhatsAppContactLink from "./WhatsAppContactLink";
 import { trackEvent } from "@/lib/analytics";
 import { contactEmail } from "@/lib/data";
 
@@ -441,6 +442,14 @@ export default function ProjectInquiryModal({
                           >
                             {contactEmail}
                           </a>
+                          , or{" "}
+                          <WhatsAppContactLink
+                            location="inquiry_error"
+                            className="inline-flex items-center gap-1 font-semibold underline"
+                            iconClassName="h-3.5 w-3.5"
+                          >
+                            message me on WhatsApp
+                          </WhatsAppContactLink>
                           .
                         </div>
                       )}
