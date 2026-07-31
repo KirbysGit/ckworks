@@ -6,15 +6,22 @@ type InquiryPayload = {
   name?: string;
   email?: string;
   businessName?: string;
+  currentWebsite?: string;
   projectType?: string;
   timeline?: string;
   budget?: string;
+  heardAbout?: string;
   message?: string;
   website?: string;
   formStartedAt?: string;
   submittedAt?: string;
   sourcePage?: string;
   source?: string;
+  landingPage?: string;
+  referrer?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
 };
 
 type NormalizedInquiry = Required<
@@ -130,13 +137,20 @@ function normalizeInquiry(payload: InquiryPayload): NormalizedInquiry {
     name: clean(payload.name),
     email: clean(payload.email),
     businessName: clean(payload.businessName) || "Not provided",
+    currentWebsite: clean(payload.currentWebsite) || "Not provided",
     projectType: clean(payload.projectType) || "Not provided",
     timeline: clean(payload.timeline) || "Not provided",
     budget: clean(payload.budget) || "Not provided",
+    heardAbout: clean(payload.heardAbout) || "Not provided",
     message: clean(payload.message),
     submittedAt: clean(payload.submittedAt) || new Date().toISOString(),
     sourcePage: clean(payload.sourcePage) || "Not provided",
     source: clean(payload.source) || "site",
+    landingPage: clean(payload.landingPage) || "Not provided",
+    referrer: clean(payload.referrer) || "Not provided",
+    utmSource: clean(payload.utmSource) || "Not provided",
+    utmMedium: clean(payload.utmMedium) || "Not provided",
+    utmCampaign: clean(payload.utmCampaign) || "Not provided",
   };
 }
 
@@ -187,11 +201,18 @@ function buildInquiryText(inquiry: NormalizedInquiry) {
     `Name: ${inquiry.name}`,
     `Email: ${inquiry.email}`,
     `Business / project: ${inquiry.businessName}`,
+    `Current website: ${inquiry.currentWebsite}`,
     `Project type: ${inquiry.projectType}`,
     `Timeline: ${inquiry.timeline}`,
     `Budget: ${inquiry.budget}`,
+    `Heard about CK Works: ${inquiry.heardAbout}`,
     `Submitted from: ${inquiry.sourcePage}`,
     `Source: ${inquiry.source}`,
+    `Landing page: ${inquiry.landingPage}`,
+    `Referrer: ${inquiry.referrer}`,
+    `UTM source: ${inquiry.utmSource}`,
+    `UTM medium: ${inquiry.utmMedium}`,
+    `UTM campaign: ${inquiry.utmCampaign}`,
     `Submitted at: ${inquiry.submittedAt}`,
     "",
     "Message:",
@@ -209,9 +230,18 @@ function buildInquiryHtml(inquiry: NormalizedInquiry) {
     ["Name", inquiry.name],
     ["Email", inquiry.email],
     ["Business / project", inquiry.businessName],
+    ["Current website", inquiry.currentWebsite],
+    ["Heard about CK Works", inquiry.heardAbout],
     ["Submitted from", inquiry.sourcePage],
     ["Source", inquiry.source],
     ["Submitted at", formatSubmittedAt(inquiry.submittedAt)],
+  ];
+  const attributionDetails = [
+    ["Landing page", inquiry.landingPage],
+    ["Referrer", inquiry.referrer],
+    ["UTM source", inquiry.utmSource],
+    ["UTM medium", inquiry.utmMedium],
+    ["UTM campaign", inquiry.utmCampaign],
   ];
 
   return `
@@ -282,6 +312,30 @@ function buildInquiryHtml(inquiry: NormalizedInquiry) {
                   .join("")}
               </tbody>
             </table>
+
+            <div style="background:#fffaf0;border:1px solid #eee6d8;border-radius:14px;padding:16px 18px;margin:0 0 24px;">
+              <p style="margin:0 0 10px;text-transform:uppercase;letter-spacing:0.14em;font-size:11px;color:#2f5b3f;font-weight:800;">
+                Attribution
+              </p>
+              <table role="presentation" style="width:100%;border-collapse:collapse;">
+                <tbody>
+                  ${attributionDetails
+                    .map(
+                      ([label, value]) => `
+                        <tr>
+                          <td style="width:38%;padding:8px 0;border-top:1px solid #eee6d8;font-size:12px;color:#5f665f;font-weight:800;">
+                            ${escapeHtml(label)}
+                          </td>
+                          <td style="padding:8px 0;border-top:1px solid #eee6d8;font-size:13px;color:#1f2420;">
+                            ${escapeHtml(value)}
+                          </td>
+                        </tr>
+                      `,
+                    )
+                    .join("")}
+                </tbody>
+              </table>
+            </div>
 
             <a href="mailto:${escapeHtml(
               inquiry.email,

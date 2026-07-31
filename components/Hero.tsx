@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -10,7 +11,6 @@ import {
   Workflow,
 } from "lucide-react";
 import HeroMockup, { WindermereBrand } from "./HeroMockup";
-import ProjectInquiryTrigger from "./ProjectInquiryTrigger";
 import { fadeUp, stagger } from "@/lib/motion";
 
 /**
@@ -383,19 +383,19 @@ export default function Hero() {
             variants={fadeUp}
             className="mx-auto mt-7 flex max-w-[22rem] flex-col items-stretch justify-center gap-3 md:mx-0 md:mt-8 md:flex-row md:flex-wrap md:items-center md:justify-start md:gap-4"
           >
-            <ProjectInquiryTrigger
-              source="hero"
+            <Link
+              href="/contact"
               className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-forest px-4 py-3 text-sm font-semibold text-ivory shadow-lift transition-colors duration-200 hover:bg-ink md:w-auto md:flex-none md:px-6"
             >
               Start a project
               <ArrowRight className="h-4 w-4" />
-            </ProjectInquiryTrigger>
-            <a
-              href="#what-i-do"
+            </Link>
+            <Link
+              href="/services"
               className="inline-flex min-h-12 w-full items-center justify-center rounded-xl border-2 border-forest/80 bg-transparent px-4 py-3 text-sm font-semibold text-forest transition-colors duration-200 hover:bg-forest-soft md:w-auto md:flex-none md:px-6"
             >
               See what I do
-            </a>
+            </Link>
           </motion.div>
 
           <MobileHeroPreview />

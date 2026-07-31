@@ -3,7 +3,7 @@
 import { type CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import ProjectInquiryTrigger from "./ProjectInquiryTrigger";
+import Button from "./ui/Button";
 import WhatsAppContactLink from "./WhatsAppContactLink";
 import { fadeUp, inView } from "@/lib/motion";
 
@@ -85,12 +85,12 @@ export default function CTA() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <ProjectInquiryTrigger source="site-cta">
+            <Button href="/contact">
               Start a project <ArrowRight className="h-4 w-4" />
-            </ProjectInquiryTrigger>
-            <ProjectInquiryTrigger source="site-cta-note" variant="secondary">
+            </Button>
+            <Button href="/contact" variant="secondary">
               Send me a note
-            </ProjectInquiryTrigger>
+            </Button>
             <WhatsAppContactLink
               location="site_cta"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-forest/50 bg-transparent px-6 py-3 text-sm font-medium text-forest transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest-soft/40 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:ring-offset-ivory"

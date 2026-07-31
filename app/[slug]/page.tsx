@@ -6,9 +6,11 @@ import { ArrowLeft, ArrowRight, Check, ExternalLink } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CaseStudyViewed from "@/components/CaseStudyViewed";
-import ProjectInquiryTrigger from "@/components/ProjectInquiryTrigger";
 import WhatsAppContactLink from "@/components/WhatsAppContactLink";
+import Button from "@/components/ui/Button";
+import SchemaMarkup from "@/components/page/SchemaMarkup";
 import { caseStudies, getCaseStudy } from "@/lib/projects";
+import { absoluteUrl } from "@/lib/seo";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -80,11 +82,58 @@ export default async function CaseStudyPage({ params }: Props) {
   return (
     <>
       <Header />
+      <SchemaMarkup
+        id={`${study.slug}-case-study-schema`}
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "CreativeWork",
+              name: study.name,
+              url: absoluteUrl(`/${study.slug}`),
+              description: study.oneLiner,
+              genre: study.category,
+              creator: {
+                "@type": "Organization",
+                name: "CK Works",
+                url: absoluteUrl("/"),
+              },
+              ...(study.liveUrl
+                ? {
+                    sameAs: study.liveUrl,
+                  }
+                : {}),
+              ...(study.coverImage
+                ? {
+                    image: absoluteUrl(study.coverImage.src),
+                  }
+                : {}),
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Work",
+                  item: absoluteUrl("/work"),
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: study.name,
+                  item: absoluteUrl(`/${study.slug}`),
+                },
+              ],
+            },
+          ],
+        }}
+      />
       <CaseStudyViewed name={study.name} slug={study.slug} />
       <main>
         <section className="container-ck pb-12 pt-10 lg:pt-14">
           <Link
-            href="/#work"
+            href="/work"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-forest"
           >
             <ArrowLeft className="h-4 w-4" /> Selected work
@@ -235,16 +284,12 @@ function ProjectPageCta() {
             little messy, I can help you figure out what makes sense next.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-start">
-            <ProjectInquiryTrigger source="work-cta" className="min-w-44">
+            <Button href="/contact" className="min-w-44">
               Start a project <ArrowRight className="h-4 w-4" />
-            </ProjectInquiryTrigger>
-            <ProjectInquiryTrigger
-              source="work-cta-note"
-              variant="secondary"
-              className="min-w-44"
-            >
+            </Button>
+            <Button href="/contact" variant="secondary" className="min-w-44">
               Send me a note
-            </ProjectInquiryTrigger>
+            </Button>
             <WhatsAppContactLink
               location="work_cta"
               className="inline-flex min-w-44 items-center justify-center gap-2 rounded-xl border border-forest/50 bg-transparent px-6 py-3 text-sm font-medium text-forest transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest-soft/40 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:ring-offset-ivory"

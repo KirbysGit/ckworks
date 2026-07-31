@@ -2,18 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import Logo from "./ui/Logo";
-import DrawUnderline from "./ui/DrawUnderline";
 import WhatsAppContactLink from "./WhatsAppContactLink";
 import { trackEvent } from "@/lib/analytics";
-import { contactEmail, contactLinkedInUrl, footerLinks } from "@/lib/data";
+import { contactEmail, contactLinkedInUrl } from "@/lib/data";
+import { footerGroups } from "@/lib/navigation";
 
 export default function Footer() {
-  const [hoveredHref, setHoveredHref] = useState<string | null>(null);
-
   return (
     <footer className="border-t border-line bg-[#E8EFE3]">
       <div className="container-ck flex flex-col items-center py-6 text-center md:hidden">
@@ -61,7 +58,7 @@ export default function Footer() {
         </p>
       </div>
 
-      <div className="container-ck hidden gap-12 py-14 md:grid md:grid-cols-[minmax(16rem,1fr)_auto_minmax(18rem,1fr)] md:items-center lg:py-16">
+      <div className="container-ck hidden gap-10 py-14 md:grid md:grid-cols-[minmax(14rem,0.75fr)_minmax(0,1.25fr)] lg:grid-cols-[minmax(14rem,0.85fr)_minmax(28rem,1.3fr)_minmax(18rem,0.9fr)] lg:py-16">
         <div className="max-w-sm">
           <Logo />
           <p className="mt-7 max-w-xs text-base leading-8 text-muted">
@@ -69,35 +66,33 @@ export default function Footer() {
           </p>
         </div>
 
-        <nav
-          className="flex items-center justify-center self-center"
-          aria-label="Footer"
-        >
-          {footerLinks.map((link) => {
-            const isHovered = hoveredHref === link.href;
-
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                onMouseEnter={() => setHoveredHref(link.href)}
-                onMouseLeave={() => setHoveredHref(null)}
-                className="border-r border-forest/20 px-6 py-2 font-sans text-base text-ink/80 transition-colors last:border-r-0 hover:text-forest"
-              >
-                <span className="relative inline-block">
-                  {link.label}
-                  <DrawUnderline
-                    show={isHovered}
-                    className="pointer-events-none absolute -bottom-2 left-1/2 block h-[7px] w-[125%] -translate-x-1/2 overflow-hidden"
-                  />
-                </span>
-              </Link>
-            );
-          })}
+        <nav className="grid grid-cols-3 gap-8" aria-label="Footer">
+          {footerGroups.map((group) => (
+            <div key={group.title}>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.22em] text-forest">
+                {group.title}
+              </h2>
+              <ul className="mt-4 space-y-2.5">
+                {group.links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm leading-6 text-ink/75 transition-colors hover:text-forest"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </nav>
 
-        <div className="md:justify-self-end">
+        <div className="md:col-span-2 md:justify-self-start lg:col-span-1 lg:justify-self-end">
           <div className="w-full min-w-[20rem] max-w-[24rem]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-forest">
+              Connect
+            </p>
             <a
               href={`mailto:${contactEmail}`}
               onClick={() =>
@@ -105,7 +100,7 @@ export default function Footer() {
                   location: "desktop_footer",
                 })
               }
-              className="block text-base font-semibold text-forest transition-colors hover:text-ink"
+              className="mt-4 block text-base font-semibold text-forest transition-colors hover:text-ink"
             >
               {contactEmail}
             </a>
