@@ -23,6 +23,11 @@ const config: Config = {
         serif: ["var(--font-serif)", "Georgia", "serif"],
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         display: ["var(--font-display)", "Didot", "Bodoni MT", "serif"],
+        "source-serif-display": [
+          "var(--font-source-serif-display)",
+          "Georgia",
+          "serif",
+        ],
       },
       boxShadow: {
         soft: "0 1px 2px rgba(31,36,32,0.04), 0 12px 32px -12px rgba(31,36,32,0.14)",

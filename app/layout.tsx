@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Bodoni_Moda, Cormorant_Garamond, Inter } from "next/font/google";
+import {
+  Bodoni_Moda,
+  Cormorant_Garamond,
+  Inter,
+  Source_Serif_4,
+} from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import {
   siteDescription,
@@ -38,6 +43,15 @@ const display = Bodoni_Moda({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-display",
+  display: "swap",
+});
+
+/** Sturdy old-style serif with optical sizing (good for badge numerals). */
+const sourceSerifDisplay = Source_Serif_4({
+  subsets: ["latin"],
+  weight: "variable",
+  axes: ["opsz"],
+  variable: "--font-source-serif-display",
   display: "swap",
 });
 
@@ -164,7 +178,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${serif.variable} ${sans.variable} ${display.variable}`}
+      className={`${serif.variable} ${sans.variable} ${display.variable} ${sourceSerifDisplay.variable}`}
     >
       <body>
         <noscript>

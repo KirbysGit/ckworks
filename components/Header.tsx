@@ -4,10 +4,72 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X, ArrowRight, ChevronDown } from "lucide-react";
+import {
+  Menu,
+  X,
+  ArrowRight,
+  ChevronDown,
+  Monitor,
+  Search,
+  ChartColumnIncreasing,
+  Puzzle,
+  Headphones,
+  type LucideIcon,
+} from "lucide-react";
 import Logo from "./ui/Logo";
 import DrawUnderline from "./ui/DrawUnderline";
 import { primaryNav } from "@/lib/navigation";
+import type { ServiceArea, ServiceSlug } from "@/lib/services";
+
+type ServiceDropdownItem = {
+  number: string;
+  description: string;
+  icon: LucideIcon;
+  blockyIcon?: boolean;
+};
+
+/**
+ * Services dropdown tuning knobs.
+ * x/y are relative to the Services nav item:
+ *   x: negative moves left, positive moves right
+ *   y: controls the gap below the nav row
+ */
+const servicesDropdownLayout = {
+  width: "26rem",
+  x: "-1.85rem",
+  y: "0.8rem",
+  padding: "1.25rem",
+  notchSize: "0.9rem",
+} as const;
+
+const serviceDropdownItems: Record<ServiceSlug, ServiceDropdownItem> = {
+  "web-design-development": {
+    number: "01",
+    description: "Fast, modern sites built to convert.",
+    icon: Monitor,
+  },
+  "search-ai-visibility": {
+    number: "02",
+    description: "Get found in search and AI results.",
+    icon: Search,
+  },
+  "analytics-lead-tracking": {
+    number: "03",
+    description: "Measure what matters. Improve results.",
+    icon: ChartColumnIncreasing,
+  },
+  "digital-systems-integrations": {
+    number: "04",
+    description: "Connect tools. Automate workflows.",
+    icon: Puzzle,
+    blockyIcon: true,
+  },
+  "ongoing-support": {
+    number: "05",
+    description: "Reliable care for long-term growth.",
+    icon: Headphones,
+  },
+};
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -66,46 +128,7 @@ export default function Header() {
                 {hasChildren && (
                   <AnimatePresence>
                     {isHovered && (
-                      <motion.div
-                        key={`${item.href}-menu`}
-                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                        transition={{
-                          duration: 0.18,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                        className="absolute left-1/2 top-full z-50 mt-4 w-[22rem] -translate-x-1/2 rounded-2xl border border-line bg-card p-3 shadow-lift"
-                      >
-                        <Link
-                          href="/services"
-                          className="block rounded-xl px-4 py-3 transition-colors hover:bg-forest-soft/45"
-                        >
-                          <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-forest">
-                            Services
-                          </span>
-                          <span className="mt-1 block text-sm leading-6 text-muted">
-                            Explore the CK Works service structure.
-                          </span>
-                        </Link>
-                        <div className="mt-1 grid gap-1">
-                          {item.children?.map((service) => (
-                            <Link
-                              key={service.slug}
-                              href={service.href}
-                              className="group rounded-xl px-4 py-2.5 transition-colors hover:bg-forest-soft/45"
-                            >
-                              <span className="flex items-center justify-between gap-3 text-sm font-medium text-ink">
-                                {service.title}
-                                <ArrowRight className="h-3.5 w-3.5 text-forest transition-transform duration-200 group-hover:translate-x-1" />
-                              </span>
-                              <span className="mt-0.5 block text-xs leading-5 text-muted">
-                                {service.description}
-                              </span>
-                            </Link>
-                          ))}
-                        </div>
-                      </motion.div>
+                      <ServicesDropdown services={item.children ?? []} />
                     )}
                   </AnimatePresence>
                 )}
@@ -217,5 +240,96 @@ export default function Header() {
         )}
       </AnimatePresence>
     </header>
+  );
+}
+
+function ServicesDropdown({ services }: { services: ServiceArea[] }) {
+  const dropdownX = `calc(-50% + ${servicesDropdownLayout.x})`;
+
+  return (
+    <motion.div
+      key="services-menu"
+      initial={{ opacity: 0, x: dropdownX, y: 10, scale: 0.985 }}
+      animate={{ opacity: 1, x: dropdownX, y: 0, scale: 1 }}
+      exit={{ opacity: 0, x: dropdownX, y: 10, scale: 0.985 }}
+      transition={{
+        duration: 0.2,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="absolute left-1/2 top-full z-50 overflow-hidden rounded-[1.1rem] border border-line bg-card shadow-[0_24px_60px_-28px_rgba(31,36,32,0.32)]"
+      style={{
+        width: servicesDropdownLayout.width,
+        marginTop: servicesDropdownLayout.y,
+      }}
+    >
+      <span
+        className="absolute left-1/2 -translate-x-1/2 rotate-45 border-l border-t border-line bg-card"
+        style={{
+          top: `calc(${servicesDropdownLayout.notchSize} / -2)`,
+          width: servicesDropdownLayout.notchSize,
+          height: servicesDropdownLayout.notchSize,
+        }}
+        aria-hidden
+      />
+
+      <div
+        className="relative"
+        style={{ padding: servicesDropdownLayout.padding }}
+      >
+        <p className="text-[0.64rem] font-semibold uppercase tracking-[0.28em] text-forest/85">
+          Services
+        </p>
+
+        <Link
+          href="/services"
+          className="group relative mt-3.5 flex items-center gap-2.5 pb-1"
+        >
+          <span className="font-serif text-xl font-bold leading-none text-ink">
+            All Services
+          </span>
+          <ArrowRight className="h-4 w-4 text-ink transition-transform duration-200 group-hover:translate-x-1" />
+        </Link>
+      </div>
+
+      <div className="border-t border-line/80">
+        {services.map((service) => {
+          const config = serviceDropdownItems[service.slug];
+          const Icon = config.icon;
+
+          return (
+            <Link
+              key={service.slug}
+              href={service.href}
+              className="group grid grid-cols-[2.45rem_2.2rem_minmax(0,1fr)] items-center gap-3 border-b border-line/80 py-3.5 transition-colors duration-200 last:border-b-0 hover:bg-forest-soft/25"
+              style={{
+                paddingLeft: servicesDropdownLayout.padding,
+                paddingRight: servicesDropdownLayout.padding,
+              }}
+            >
+              <span
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-sand font-source-serif-display text-[0.95rem] font-semibold tabular-nums leading-none tracking-tight text-forest shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]"
+                style={{ fontVariationSettings: '"opsz" 14' }}
+              >
+                {config.number}
+              </span>
+              <Icon
+                className="h-5 w-5 text-forest transition-transform duration-200 group-hover:-translate-y-0.5"
+                strokeLinecap={config.blockyIcon ? "square" : "round"}
+                strokeLinejoin={config.blockyIcon ? "miter" : "round"}
+                strokeWidth={config.blockyIcon ? 1.7 : 1.45}
+              />
+              <span className="min-w-0">
+                <span className="block font-serif text-lg font-medium leading-tight text-ink">
+                  {service.title}
+                </span>
+                <span className="mt-0.5 block text-xs leading-5 text-muted">
+                  {config.description}
+                </span>
+              </span>
+            </Link>
+          );
+        })}
+      </div>
+    </motion.div>
   );
 }
