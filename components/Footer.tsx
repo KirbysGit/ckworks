@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
@@ -10,135 +11,167 @@ import { trackEvent } from "@/lib/analytics";
 import { contactEmail, contactLinkedInUrl } from "@/lib/data";
 import { footerGroups } from "@/lib/navigation";
 
+const footerLabelOverrides = new Map([
+  ["/services/web-design-development", "Web Design"],
+  ["/services/search-ai-visibility", "Search & AI"],
+  ["/services/analytics-lead-tracking", "Analytics & Leads"],
+  ["/services/digital-systems-integrations", "Systems & Integrations"],
+  ["/services/ongoing-support", "Ongoing Support"],
+  ["/privacy-policy", "Privacy"],
+]);
+
+const displayFooterGroups = footerGroups.map((group) => ({
+  ...group,
+  links: group.links.map((link) => ({
+    ...link,
+    label: footerLabelOverrides.get(link.href) ?? link.label,
+  })),
+}));
+
 export default function Footer() {
   return (
-    <footer className="border-t border-line bg-[#E8EFE3]">
-      <div className="container-ck flex flex-col items-center py-6 text-center md:hidden">
-        <Logo size="md" />
-        <p className="mt-4 max-w-[18rem] text-sm leading-6 text-ink/70">
-          Clean websites and practical systems, built with care.
-        </p>
-        <div className="mt-4 flex flex-col items-center gap-3">
-          <a
-            href={`mailto:${contactEmail}`}
-            onClick={() =>
-              trackEvent("email_clicked", {
-                location: "mobile_footer",
-              })
-            }
-            className="text-sm font-medium text-forest hover:text-ink"
-          >
-            {contactEmail}
-          </a>
-          <div className="flex items-center gap-2">
-            <SocialLink
-              href={contactLinkedInUrl}
-              label="LinkedIn"
-              location="mobile_footer"
-              compact
-            />
-            <WhatsAppContactLink
-              location="mobile_footer"
-              className="inline-flex items-center gap-1.5 rounded-full bg-ivory/60 px-3 py-1.5 text-xs font-semibold text-forest shadow-[0_1px_0_rgba(47,91,63,0.12)] transition-colors hover:text-ink"
-              iconClassName="h-3.5 w-3.5"
-            >
-              WhatsApp
-            </WhatsAppContactLink>
-          </div>
-        </div>
-        <Image
-          src="/images/brand/svg/signature-full.svg"
-          alt=""
-          width={1805}
-          height={1397}
-          className="mt-4 h-12 w-auto opacity-90"
-        />
-        <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-forest/75">
-          CK Works
-        </p>
-      </div>
-
-      <div className="container-ck hidden gap-10 py-14 md:grid md:grid-cols-[minmax(14rem,0.75fr)_minmax(0,1.25fr)] lg:grid-cols-[minmax(14rem,0.85fr)_minmax(28rem,1.3fr)_minmax(18rem,0.9fr)] lg:py-16">
-        <div className="max-w-sm">
-          <Logo />
-          <p className="mt-7 max-w-xs text-base leading-8 text-muted">
-            Clean websites and practical systems for growing businesses.
+    <footer className="border-t border-line/70 bg-[#E8EFE3] text-ink [color-scheme:only_light]">
+      <div className="container-ck py-6 md:py-8 lg:py-10">
+        <div className="flex flex-col items-center text-center md:hidden">
+          <Logo size="md" />
+          <p className="mt-4 max-w-[18rem] text-sm leading-6 text-ink/70">
+            Clean websites and practical systems, built with care.
           </p>
-        </div>
-
-        <nav className="grid grid-cols-3 gap-8" aria-label="Footer">
-          {footerGroups.map((group) => (
-            <div key={group.title}>
-              <h2 className="text-xs font-semibold uppercase tracking-[0.22em] text-forest">
-                {group.title}
-              </h2>
-              <ul className="mt-4 space-y-2.5">
-                {group.links.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm leading-6 text-ink/75 transition-colors hover:text-forest"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </nav>
-
-        <div className="md:col-span-2 md:justify-self-start lg:col-span-1 lg:justify-self-end">
-          <div className="w-full min-w-[20rem] max-w-[24rem]">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-forest">
-              Connect
-            </p>
+          <div className="mt-4 flex flex-col items-center gap-3">
             <a
               href={`mailto:${contactEmail}`}
               onClick={() =>
                 trackEvent("email_clicked", {
-                  location: "desktop_footer",
+                  location: "mobile_footer",
                 })
               }
-              className="mt-4 block text-base font-semibold text-forest transition-colors hover:text-ink"
+              className="text-sm font-semibold text-forest transition-colors hover:text-ink"
             >
               {contactEmail}
             </a>
-            <div className="mt-8 flex items-center gap-5 text-base font-semibold text-forest">
+            <div className="flex items-center gap-2">
               <SocialLink
                 href={contactLinkedInUrl}
                 label="LinkedIn"
-                location="desktop_footer"
+                location="mobile_footer"
+                compact
               />
-              <span className="h-6 w-px bg-forest/20" aria-hidden />
               <WhatsAppContactLink
-                location="desktop_footer"
-                className="inline-flex items-center gap-2 transition-colors hover:text-ink"
-                iconClassName="h-5 w-5"
+                location="mobile_footer"
+                className="inline-flex items-center gap-1.5 rounded-full bg-ivory/60 px-3 py-1.5 text-xs font-semibold text-forest shadow-[0_1px_0_rgba(47,91,63,0.12)] transition-colors hover:text-ink"
+                iconClassName="h-3.5 w-3.5"
               >
-                <span>WhatsApp</span>
-                <ArrowUpRight className="h-4 w-4" />
+                WhatsApp
               </WhatsAppContactLink>
             </div>
-            <div className="mt-5 border-t border-forest/20 pt-4">
-              <Image
-                src="/images/brand/svg/signature-initials.svg"
-                alt=""
-                width={1805}
-                height={1397}
-                className="mx-auto h-12 w-auto"
-              />
+          </div>
+          <Image
+            src="/images/brand/svg/signature-full.svg"
+            alt=""
+            width={1805}
+            height={1397}
+            className="mt-4 h-10 w-auto opacity-90"
+          />
+        </div>
+
+        <div className="hidden md:block">
+          <div className="grid items-start gap-x-8 gap-y-8 lg:grid-cols-[minmax(17rem,1.15fr)_minmax(12rem,0.95fr)_minmax(8rem,0.62fr)_minmax(6rem,0.5fr)_minmax(19rem,1.1fr)] xl:gap-x-12">
+            <div className="max-w-sm">
+              <Logo size="md" />
+              <p className="mt-5 max-w-xs text-base leading-7 text-ink/78">
+                Clean websites and practical systems for growing businesses.
+              </p>
             </div>
+
+            <nav
+              className="grid gap-x-8 gap-y-8 sm:grid-cols-3 lg:contents"
+              aria-label="Footer"
+            >
+              {displayFooterGroups.map((group) => (
+                <FooterColumn key={group.title} title={group.title}>
+                  {group.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="whitespace-nowrap text-[15px] leading-7 text-ink/80 transition-colors hover:text-forest"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </FooterColumn>
+              ))}
+            </nav>
+
+            <FooterColumn title="Connect" className="sm:col-span-3 lg:col-auto">
+              <li>
+                <a
+                  href={`mailto:${contactEmail}`}
+                  onClick={() =>
+                    trackEvent("email_clicked", {
+                      location: "desktop_footer",
+                    })
+                  }
+                  className="whitespace-nowrap text-base font-bold text-forest transition-colors hover:text-ink"
+                >
+                  {contactEmail}
+                </a>
+              </li>
+              <li className="pt-4">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-base font-semibold text-forest">
+                  <SocialLink
+                    href={contactLinkedInUrl}
+                    label="LinkedIn"
+                    location="desktop_footer"
+                  />
+                  <span className="h-7 w-px bg-forest/20" aria-hidden />
+                  <WhatsAppContactLink
+                    location="desktop_footer"
+                    className="inline-flex items-center gap-2 transition-colors hover:text-ink"
+                    iconClassName="h-5 w-5"
+                  >
+                    <span>WhatsApp</span>
+                    <ArrowUpRight className="h-4 w-4" />
+                  </WhatsAppContactLink>
+                </div>
+              </li>
+            </FooterColumn>
+          </div>
+
+          <div className="mt-8 flex items-center justify-between border-t border-forest/20 pt-5">
+            <p className="text-sm text-ink/75">
+              &copy; {new Date().getFullYear()} CK Works. All rights reserved.
+            </p>
+            <Image
+              src="/images/brand/svg/signature-initials.svg"
+              alt=""
+              width={1805}
+              height={1397}
+              className="h-10 w-auto opacity-95"
+            />
           </div>
         </div>
       </div>
-
-      <div className="border-t border-line/70">
-        <div className="container-ck py-5 text-center text-xs text-muted md:py-6">
-          <p>© {new Date().getFullYear()} CK Works. All rights reserved.</p>
-        </div>
-      </div>
     </footer>
+  );
+}
+
+function FooterColumn({
+  title,
+  className = "",
+  children,
+}: {
+  title: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className={className}>
+      <h2 className="text-xs font-bold uppercase tracking-[0.28em] text-forest">
+        {title}
+      </h2>
+      <ul className="mt-4 space-y-2.5">{children}</ul>
+    </div>
   );
 }
 
@@ -167,7 +200,7 @@ function SocialLink({
       className={
         compact
           ? "inline-flex items-center gap-1.5 rounded-full bg-ivory/60 px-3 py-1.5 text-xs font-semibold text-forest shadow-[0_1px_0_rgba(47,91,63,0.12)] transition-colors hover:text-ink"
-          : "inline-flex items-center gap-2 transition-colors hover:text-ink"
+          : "inline-flex items-center gap-2 whitespace-nowrap transition-colors hover:text-ink"
       }
     >
       <FaLinkedin className={compact ? "h-3.5 w-3.5" : "h-5 w-5"} />

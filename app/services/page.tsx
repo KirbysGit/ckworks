@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  CheckCircle2,
+  Check,
   ChevronDown,
   CircleHelp,
   ClipboardCheck,
@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   Sparkle,
   UserRound,
+  Waypoints,
 } from "lucide-react";
 import SiteLayout from "@/components/SiteLayout";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
@@ -204,20 +205,53 @@ function ServiceOverviewCard({
   card: ServiceCardConfig;
   service: ServiceArea;
 }) {
+  const isSupport = card.visual === "support";
+
+  if (isSupport) {
+    return (
+      <article
+        className={`group grid min-h-[18rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(18rem,0.86fr)_minmax(0,2.44fr)] ${
+          card.className ?? ""
+        }`}
+      >
+        <div className="flex min-w-0 flex-col border-b border-line px-6 py-7 sm:px-8 sm:py-8 md:border-b-0 md:border-r">
+          <span className="font-serif text-2xl font-medium leading-none tracking-[-0.02em] text-[#A8713B]">
+            {card.number}
+          </span>
+          <h2 className="mt-6 max-w-[21rem] font-serif text-[2.25rem] font-medium leading-[1.02] tracking-[-0.02em] text-ink sm:text-[2.55rem]">
+            {service.title}
+          </h2>
+          <p className="mt-6 max-w-[26rem] text-base leading-8 text-ink/78 md:text-[0.95rem] md:leading-7">
+            {card.description}
+          </p>
+          <Link
+            href={service.href}
+            className="group/link mt-9 inline-flex w-fit items-center gap-2 border-b border-[#A8713B] pb-0.5 text-base font-semibold text-forest transition-colors hover:text-ink md:mt-auto"
+          >
+            View service
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
+          </Link>
+        </div>
+
+        <SupportVisual />
+      </article>
+    );
+  }
+
   return (
     <article
-      className={`group grid min-h-[19.25rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(11.5rem,0.48fr)_minmax(0,1.12fr)] xl:grid-cols-[minmax(12rem,0.45fr)_minmax(0,1.2fr)] ${
+      className={`group grid min-h-[19.25rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(13.25rem,0.58fr)_minmax(0,0.98fr)] xl:grid-cols-[minmax(14.25rem,0.56fr)_minmax(0,1.05fr)] ${
         card.className ?? ""
       }`}
     >
       <div className="flex min-w-0 flex-col px-5 py-5 sm:p-6 md:pr-3">
-        <span className="font-serif text-2xl font-medium leading-none text-[#A8713B]">
+        <span className="font-serif text-2xl font-medium leading-none tracking-[-0.02em] text-[#A8713B]">
           {card.number}
         </span>
-        <h2 className="mt-3 max-w-[15rem] font-serif text-[1.75rem] font-medium leading-[1.05] text-ink sm:text-[1.95rem]">
+        <h2 className="mt-3 max-w-[17rem] font-serif text-[1.75rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-[1.95rem]">
           {service.title}
         </h2>
-        <p className="mt-3 max-w-[14rem] text-sm leading-7 text-ink/78">
+        <p className="mt-3 max-w-[16rem] text-sm leading-7 text-ink/78">
           {card.description}
         </p>
         <Link
@@ -229,8 +263,12 @@ function ServiceOverviewCard({
         </Link>
       </div>
 
-      <div className="flex min-h-[16rem] min-w-0 items-center justify-center px-5 pb-5 pt-1 sm:px-6 sm:pb-6 md:px-4 md:py-5 lg:px-5">
-        <ServiceVisual kind={card.visual} />
+      <div
+        className="flex min-h-[16rem] min-w-0 items-center justify-center px-5 pb-5 pt-1 sm:px-6 sm:pb-6 md:px-4 md:py-5 lg:px-5"
+      >
+        <div className="flex w-full max-w-[96%] origin-center scale-[0.925] items-center justify-center transform-gpu">
+          <ServiceVisual kind={card.visual} />
+        </div>
       </div>
     </article>
   );
@@ -351,10 +389,10 @@ function SearchVisual() {
             <p className="whitespace-nowrap font-sans text-[0.92rem] font-bold leading-tight text-ink">
               Riverstone Builders
             </p>
-            <p className="mt-1.5 whitespace-nowrap font-sans text-[0.66rem] font-semibold leading-tight text-forest">
+            <p className="mt-1.5 whitespace-nowrap font-sans text-[0.6rem] font-semibold leading-tight text-forest">
               Custom Home Builder in Orlando
             </p>
-            <p className="mt-2.5 font-sans text-[0.68rem] leading-[1.55] text-ink/85">
+            <p className="mt-1.5 font-sans text-[0.68rem] leading-[1.55] text-ink/85">
               Custom homes and renovations with a clear portfolio, services, and
               consultation path.
             </p>
@@ -404,32 +442,26 @@ function AnalyticsVisual() {
     { label: "Conversion Rate", value: "1.07%", lift: "11%" },
   ] as const;
 
-  // Denser point set so the leads curve reads more active / detailed.
+  // ~3/4 of the denser set so the curve stays active without overcrowding.
   const points = [
     [36, 82],
     [50, 70],
     [64, 58],
-    [78, 64],
     [92, 78],
     [106, 90],
     [120, 84],
-    [134, 62],
     [148, 48],
     [162, 56],
     [176, 68],
-    [190, 74],
     [204, 66],
     [218, 80],
     [232, 92],
-    [246, 86],
     [260, 70],
     [274, 54],
     [288, 60],
-    [302, 72],
     [316, 78],
     [330, 64],
     [344, 52],
-    [358, 44],
     [372, 38],
   ] as const;
   const polyline = points.map(([x, y]) => `${x},${y}`).join(" ");
@@ -478,7 +510,7 @@ function AnalyticsVisual() {
         </p>
         <svg
           viewBox="0 0 400 132"
-          className="mt-1.5 aspect-[400/132] w-full"
+          className="mt-[-1rem] aspect-[400/132] w-full"
           aria-hidden
         >
           {yLabels.map(({ label, y }) => (
@@ -509,7 +541,7 @@ function AnalyticsVisual() {
             stroke="#3B82C4"
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="2.5"
+            strokeWidth="2"
           />
           {points.map(([x, y]) => (
             <circle
@@ -518,8 +550,6 @@ function AnalyticsVisual() {
               cy={y}
               r="2.4"
               fill="#3B82C4"
-              stroke="#FFFDF8"
-              strokeWidth="1.25"
             />
           ))}
 
@@ -541,84 +571,124 @@ function AnalyticsVisual() {
   );
 }
 
-function SystemsVisual() {
-  const topNodes = [
-    ["Website Form", FileText],
-    ["CRM", UserRound],
-    ["Email Automation", Mail],
-  ] as const;
-  const bottomNodes = [
-    ["Payment Processor", CreditCard],
-    ["Internal Workflow", CheckCircle2],
-  ] as const;
+/**
+ * Systems flow graphic tuning knobs.
+ * Story: Form -> CRM -> Email; CRM forks down to Payments + Workflow.
+ */
+const systemsFlowLayout = {
+  stroke: "#2F5B3F",
+  /** Top row solid arrows */
+  topArrow: {
+    shaftWidth: "0.95rem",
+    headSize: 7,
+    nudgeY: "0rem",
+  },
+  /** Tree fork under CRM */
+  fan: {
+    /** Distance from each side to the vertical drops (aim at bottom-card centers) */
+    branchInset: "25%",
+    /** Stem height before the junction dot */
+    stemHeight: "1.05rem",
+    /** Drop from junction to bottom cards */
+    dropHeight: "1.05rem",
+    lineWidth: "1.5px",
+    junctionSize: "0.4rem",
+  },
+  /** Bottom pair sits under CRM; widen/narrow this to balance the tree */
+  bottomRowWidth: "72%",
+} as const;
+
+function SystemsTopArrow() {
+  const { stroke, topArrow } = systemsFlowLayout;
 
   return (
-    <div className="relative w-full py-1">
-      <svg
-        viewBox="0 0 520 248"
-        className="pointer-events-none absolute inset-0 h-full w-full"
+    <div
+      className="flex items-center justify-center self-center"
+      style={{ transform: `translateY(${topArrow.nudgeY})` }}
+      aria-hidden
+    >
+      <span
+        className="block h-[1.5px] rounded-full"
+        style={{ width: topArrow.shaftWidth, backgroundColor: stroke }}
+      />
+      <span
+        className="block"
+        style={{
+          width: 0,
+          height: 0,
+          marginLeft: -1,
+          borderTop: `${topArrow.headSize * 0.42}px solid transparent`,
+          borderBottom: `${topArrow.headSize * 0.42}px solid transparent`,
+          borderLeft: `${topArrow.headSize}px solid ${stroke}`,
+        }}
+      />
+    </div>
+  );
+}
+
+function SystemsVisual() {
+  const { stroke, fan, bottomRowWidth } = systemsFlowLayout;
+
+  return (
+    <div className="w-full rounded-xl bg-[#F7F3EA] px-3 py-4 sm:px-4 sm:py-5">
+      {/* Form -> CRM -> Email */}
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1.08fr)_auto_minmax(0,1fr)] items-center gap-x-1.5 sm:gap-x-2">
+        <FlowNode label="Form" Icon={FileText} />
+        <SystemsTopArrow />
+        <FlowNode label="CRM" Icon={UserRound} featured />
+        <SystemsTopArrow />
+        <FlowNode label="Email" Icon={Mail} />
+      </div>
+
+      {/* Solid tree fork from CRM into Payments / Workflow */}
+      <div
+        className="relative mx-auto"
+        style={{ width: bottomRowWidth }}
         aria-hidden
       >
-        {/* Solid top-row arrows: Form -> CRM -> Email */}
-        <g
-          fill="none"
-          stroke="#5F665F"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <div
+          className="relative mx-auto"
+          style={{ height: `calc(${fan.stemHeight} + ${fan.dropHeight})` }}
         >
-          <path d="M158 54 H188" />
-          <path d="M182 49 L190 54 L182 59" />
-          <path d="M330 54 H360" />
-          <path d="M354 49 L362 54 L354 59" />
-        </g>
+          {/* Stem */}
+          <span
+            className="absolute left-1/2 top-0 -translate-x-1/2 bg-forest"
+            style={{
+              width: fan.lineWidth,
+              height: fan.stemHeight,
+              backgroundColor: stroke,
+            }}
+          />
+          {/* Junction dot */}
+          <span
+            className="absolute left-1/2 -translate-x-1/2 rounded-full"
+            style={{
+              top: `calc(${fan.stemHeight} - ${fan.junctionSize} / 2)`,
+              width: fan.junctionSize,
+              height: fan.junctionSize,
+              backgroundColor: stroke,
+            }}
+          />
+          {/* Horizontal branch + rounded drops */}
+          <span
+            className="absolute left-1/2 -translate-x-1/2"
+            style={{
+              top: fan.stemHeight,
+              width: `calc(100% - 2 * ${fan.branchInset})`,
+              height: fan.dropHeight,
+              borderLeft: `${fan.lineWidth} solid ${stroke}`,
+              borderRight: `${fan.lineWidth} solid ${stroke}`,
+              borderTop: `${fan.lineWidth} solid ${stroke}`,
+              borderTopLeftRadius: "10px",
+              borderTopRightRadius: "10px",
+            }}
+          />
+        </div>
 
-        {/* Dashed bus: top nodes down into shared rail, then into bottom systems */}
-        <g
-          fill="none"
-          stroke="#8A918A"
-          strokeWidth="1.45"
-          strokeDasharray="3.5 3.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M86 108 V148" />
-          <path d="M260 108 V148" />
-          <path d="M434 108 V148" />
-          <path d="M86 148 H434" />
-
-          {/* Brace-style junctions into each bottom node */}
-          <path d="M140 148 C152 148 156 156 156 168" />
-          <path d="M172 148 C160 148 156 156 156 168" />
-          <path d="M156 168 V196" />
-
-          <path d="M348 148 C360 148 364 156 364 168" />
-          <path d="M380 148 C368 148 364 156 364 168" />
-          <path d="M364 168 V196" />
-        </g>
-
-        {/* Solid arrowheads into bottom nodes */}
-        <g
-          fill="none"
-          stroke="#5F665F"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M151 190 L156 198 L161 190" />
-          <path d="M359 190 L364 198 L369 190" />
-        </g>
-      </svg>
-
-      <div className="relative z-10 grid grid-cols-3 gap-5">
-        {topNodes.map(([label, Icon]) => (
-          <FlowNode key={label} label={label} Icon={Icon} />
-        ))}
-      </div>
-      <div className="relative z-10 mt-14 grid grid-cols-2 gap-12 px-[12%]">
-        {bottomNodes.map(([label, Icon]) => (
-          <FlowNode key={label} label={label} Icon={Icon} />
-        ))}
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <FlowNode label="Payments" Icon={CreditCard} />
+          <FlowNode label="Workflow" Icon={Waypoints} />
+        </div>
       </div>
     </div>
   );
@@ -627,80 +697,214 @@ function SystemsVisual() {
 function FlowNode({
   label,
   Icon,
+  featured = false,
 }: {
   label: string;
   Icon: typeof FileText;
+  featured?: boolean;
 }) {
   return (
-    <div className="flex min-h-[6.75rem] flex-col items-center justify-center rounded-lg border border-line bg-card px-3 py-4 text-center shadow-soft">
-      <Icon className="h-7 w-7 text-ink/80" strokeWidth={1.55} />
-      <span className="mt-2 text-xs font-semibold leading-4 text-ink">
+    <div
+      className={`relative flex min-h-[5.6rem] flex-col items-center justify-center rounded-xl border bg-card px-2 py-3.5 text-center sm:min-h-[5.9rem] sm:px-3 ${
+        featured
+          ? "border-forest shadow-[0_10px_28px_-16px_rgba(47,91,63,0.55)]"
+          : "border-line shadow-soft"
+      }`}
+    >
+      <span
+        className={`relative flex items-center justify-center ${
+          featured ? "h-10 w-10" : "h-7 w-7"
+        }`}
+      >
+        {featured && (
+          <>
+            <span
+              className="absolute inset-0 rounded-full bg-forest-soft"
+              aria-hidden
+            />
+            <span
+              className="absolute inset-[3px] rounded-full border border-forest/35"
+              aria-hidden
+            />
+          </>
+        )}
+        <Icon
+          className={`relative z-10 text-forest ${
+            featured ? "h-5 w-5" : "h-6 w-6"
+          }`}
+          strokeWidth={1.6}
+        />
+      </span>
+      <span className="mt-2 text-center text-[0.72rem] font-semibold leading-none text-forest sm:text-xs">
         {label}
       </span>
     </div>
   );
 }
 
-function SupportVisual() {
+function SupportStatusCheck({ className = "h-5 w-5" }: { className?: string }) {
   return (
-    <div className="grid w-full gap-0 overflow-hidden rounded-lg border border-line bg-ivory/75 shadow-[0_18px_35px_-26px_rgba(31,36,32,0.55)] md:grid-cols-[1fr_0.75fr_1.4fr]">
-      <div className="border-b border-line p-4 md:border-b-0 md:border-r">
-        <p className="text-xs font-semibold text-ink">Site Health</p>
-        <p className="mt-4 flex items-center gap-2 text-sm text-ink">
-          <CheckCircle2 className="h-5 w-5 text-forest" />
+    <span
+      className={`inline-flex shrink-0 items-center justify-center rounded-full bg-[#5F9C69] text-white ${className}`}
+    >
+      <Check className="h-[55%] w-[55%]" strokeWidth={3.2} />
+    </span>
+  );
+}
+
+function SupportVisual() {
+  const backupDetails = [
+    ["Last backup", "Today, 2:13 AM"],
+    ["Next backup", "6:00 AM"],
+    ["Retention", "30 days"],
+  ] as const;
+
+  const activity = [
+    ["Plugin updates completed", "May 20, 9:12 AM"],
+    ["Theme updated to v2.4.1", "May 19, 4:38 PM"],
+    ["Uptime check passed", "May 19, 9:01 AM"],
+  ] as const;
+
+  const chartLine =
+    "12,68 28,55 44,60 60,43 76,49 92,32 108,41 124,38 140,25 156,35 172,36 188,26 204,22 222,10";
+  const chartArea =
+    "M12,80 L12,68 L28,55 L44,60 L60,43 L76,49 L92,32 L108,41 L124,38 L140,25 L156,35 L172,36 L188,26 L204,22 L222,10 L222,80 Z";
+
+  return (
+    <div className="grid h-full w-full md:grid-cols-[minmax(0,1.04fr)_minmax(0,1fr)_minmax(0,1.35fr)]">
+      {/* Site Health */}
+      <div className="relative flex min-h-[15.75rem] flex-col px-6 py-6 sm:px-8 md:min-h-0 md:border-r md:border-line md:px-7 md:py-6">
+        <p className="font-sans text-[1rem] font-semibold text-ink">
+          Site Health
+        </p>
+        <p className="mt-5 flex items-center gap-3 font-sans text-[0.95rem] font-medium text-ink/82">
+          <SupportStatusCheck className="h-7 w-7" />
           All Systems Operational
         </p>
-        <div className="mt-5 border-t border-line pt-4">
-          <p className="text-[10px] text-muted">Uptime (30 days)</p>
-          <div className="mt-2 flex items-end justify-between gap-4">
-            <p className="font-serif text-3xl text-ink">99.9%</p>
-            <svg viewBox="0 0 120 42" className="h-10 flex-1">
-              <polyline
-                points="0,32 12,22 24,26 36,20 48,24 60,12 72,28 84,14 96,20 108,8 120,15"
-                fill="none"
-                stroke="#5F9C69"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="3"
-              />
-            </svg>
-          </div>
+        <div className="mt-5 h-px w-full bg-line" />
+        <div className="mt-5">
+          <p className="font-sans text-[2.65rem] font-semibold leading-none tracking-[-0.04em] text-[#4B7451]">
+            99.9%
+          </p>
+          <p className="mt-2 font-sans text-sm leading-none text-muted">
+            Uptime (30 days)
+          </p>
         </div>
+        <svg
+          viewBox="0 0 236 96"
+          className="mt-auto h-[5.65rem] w-full"
+          aria-hidden
+        >
+          <defs>
+            <linearGradient
+              id="support-uptime-fill"
+              x1="0"
+              x2="0"
+              y1="0"
+              y2="1"
+            >
+              <stop offset="0%" stopColor="#5F9C69" stopOpacity="0.32" />
+              <stop offset="100%" stopColor="#5F9C69" stopOpacity="0.02" />
+            </linearGradient>
+          </defs>
+          <line
+            x1="36"
+            x2="222"
+            y1="18"
+            y2="18"
+            stroke="#D8D0C2"
+            strokeDasharray="3 3"
+            strokeWidth="1.2"
+          />
+          <line
+            x1="36"
+            x2="222"
+            y1="80"
+            y2="80"
+            stroke="#D8D0C2"
+            strokeDasharray="3 3"
+            strokeWidth="1.2"
+          />
+          <text
+            x="4"
+            y="22"
+            className="fill-muted"
+            style={{ fontSize: 10, fontFamily: "system-ui, sans-serif" }}
+          >
+            100%
+          </text>
+          <text
+            x="8"
+            y="84"
+            className="fill-muted"
+            style={{ fontSize: 10, fontFamily: "system-ui, sans-serif" }}
+          >
+            95%
+          </text>
+          <path d={chartArea} fill="url(#support-uptime-fill)" />
+          <polyline
+            points={chartLine}
+            fill="none"
+            stroke="#4B7451"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2.8"
+          />
+          <circle cx="222" cy="10" r="3.2" fill="#4B7451" />
+        </svg>
       </div>
-      <div className="border-b border-line p-4 md:border-b-0 md:border-r">
-        <p className="text-xs font-semibold text-ink">Backups</p>
-        <p className="mt-5 flex items-start gap-2 text-xs leading-5 text-ink/85">
-          <CheckCircle2 className="mt-0.5 h-4 w-4 text-forest" />
-          Last backup
-          <br />
-          Today, 2:13 AM
-        </p>
-        <span className="mt-5 inline-flex rounded-md border border-line bg-card px-4 py-2 text-xs font-semibold text-ink">
+
+      {/* Backups */}
+      <div className="relative flex min-h-[15.75rem] flex-col border-t border-line px-6 py-6 sm:px-8 md:min-h-0 md:border-r md:border-t-0 md:px-7 md:py-6">
+        <p className="font-sans text-[1rem] font-semibold text-ink">Backups</p>
+        <div className="mt-6 divide-y divide-line">
+          {backupDetails.map(([label, value]) => (
+            <div
+              key={label}
+              className="flex items-center justify-between gap-5 py-3.5 first:pt-0"
+            >
+              <span className="font-sans text-[0.92rem] text-ink/78">
+                {label}
+              </span>
+              <span className="shrink-0 text-right font-sans text-[0.92rem] font-semibold text-ink/85">
+                {value}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-5 h-2 overflow-hidden rounded-full bg-line/80">
+          <span className="block h-full w-[76%] rounded-full bg-[#4B7451]" />
+        </div>
+        <span className="mt-auto inline-flex w-fit items-center gap-2 border-b border-[#A8713B] pb-0.5 pt-6 font-sans text-[0.95rem] font-semibold text-forest">
           View backups
+          <ArrowRight className="h-4 w-4" />
         </span>
       </div>
-      <div className="p-4">
-        <p className="text-xs font-semibold text-ink">Recent Activity</p>
-        <div className="mt-4 space-y-3">
-          {[
-            ["Plugin updates completed", "May 20, 9:12 AM"],
-            ["Theme updated to v2.4.1", "May 19, 4:38 PM"],
-            ["Uptime check passed", "May 19, 9:01 AM"],
-          ].map(([item, time]) => (
-            <div key={item} className="flex items-center justify-between gap-4">
-              <p className="flex items-center gap-2 text-xs text-ink/85">
-                <span className="h-2 w-2 rounded-full bg-[#69A96F]" />
-                {item}
+
+      {/* Recent Activity */}
+      <div className="flex min-h-[15.75rem] flex-col border-t border-line px-6 py-6 sm:px-8 md:min-h-0 md:border-t-0 md:px-7 md:py-6">
+        <p className="font-sans text-[1rem] font-semibold text-ink">
+          Recent Activity
+        </p>
+        <div className="mt-6 divide-y divide-line">
+          {activity.map(([item, time]) => (
+            <div
+              key={item}
+              className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-5 py-3.5 first:pt-0"
+            >
+              <p className="flex min-w-0 items-center gap-4 font-sans text-[0.9rem] leading-snug text-ink/82">
+                <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#4B7451]" />
+                <span className="block truncate">{item}</span>
               </p>
-              <span className="hidden text-[10px] text-muted sm:inline">
+              <span className="shrink-0 font-sans text-[0.82rem] text-muted">
                 {time}
               </span>
             </div>
           ))}
         </div>
-        <span className="mt-5 inline-flex items-center gap-2 border-b border-[#A8713B] pb-1 text-xs font-semibold text-ink">
+        <span className="mt-auto inline-flex w-fit items-center gap-2 border-b border-[#A8713B] pb-0.5 pt-6 font-sans text-[0.95rem] font-semibold text-forest">
           View all activity
-          <ArrowRight className="h-3.5 w-3.5" />
+          <ArrowRight className="h-4 w-4" />
         </span>
       </div>
     </div>
