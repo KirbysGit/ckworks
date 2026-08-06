@@ -1,29 +1,84 @@
 import type { Metadata } from "next";
+import type { LucideIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowRight,
+  BriefcaseBusiness,
+  ExternalLink,
+  Layers3,
+  MonitorSmartphone,
+  Palette,
+  ShieldCheck,
+  TrendingUp,
+  Workflow,
+} from "lucide-react";
 import SiteLayout from "@/components/SiteLayout";
-import ProjectCard from "@/components/ProjectCard";
-import PageHero from "@/components/page/PageHero";
-import ContentSection from "@/components/page/ContentSection";
 import ContactCTA from "@/components/page/ContactCTA";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
-import { caseStudies } from "@/lib/projects";
-
-const filters = [
-  "All",
-  "Client Work",
-  "Websites",
-  "Products",
-  "Business Systems",
-  "Data and AI",
-  "Brand Identity",
-];
+import {
+  caseStudies,
+  featuredCaseStudies,
+  secondaryCaseStudies,
+  type CaseStudy,
+} from "@/lib/projects";
+import { serviceAreas, type ServiceSlug } from "@/lib/services";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Selected Work",
   description:
-    "A central portfolio hub for CK Works projects across websites, products, business systems, data, AI, and prototypes.",
+    "A clean portfolio of CK Works websites, products, systems, integrations, and prototypes built around clearer business goals.",
   path: "/work",
 });
+
+const workPageContainer =
+  "mx-auto w-full max-w-[1500px] px-4 sm:px-6 lg:px-7 2xl:px-8";
+
+const workThemes = [
+  {
+    title: "Clearer websites",
+    description:
+      "Projects that organize the story, pages, and calls to action so visitors understand what to do next.",
+  },
+  {
+    title: "Useful systems",
+    description:
+      "Products and dashboards shaped around real workflows, structured data, and practical daily use.",
+  },
+  {
+    title: "Thoughtful builds",
+    description:
+      "Design and development decisions kept close together so the finished work feels intentional.",
+  },
+] as const;
+
+const workServiceLinks: ServiceSlug[] = [
+  "web-design-development",
+  "search-ai-visibility",
+  "analytics-lead-tracking",
+  "digital-systems-integrations",
+  "ongoing-support",
+];
+
+const groupLabels: Record<CaseStudy["group"], string> = {
+  client: "Client Work",
+  product: "Product / System",
+  prototype: "Prototype",
+};
+
+const groupIcons: Record<CaseStudy["group"], LucideIcon> = {
+  client: BriefcaseBusiness,
+  product: Layers3,
+  prototype: MonitorSmartphone,
+};
+
+const secondaryIcons: Record<string, LucideIcon> = {
+  "ck-dev": Palette,
+  "sentiment-trader": TrendingUp,
+  "internal-automation-tool": Workflow,
+  securescape: ShieldCheck,
+};
 
 export default function WorkPage() {
   return (
@@ -34,44 +89,312 @@ export default function WorkPage() {
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: "CK Works Selected Work",
+          description:
+            "Selected websites, products, systems, and prototypes by CK Works.",
           url: absoluteUrl("/work"),
-          hasPart: caseStudies.map((study) => ({
-            "@type": "CreativeWork",
-            name: study.name,
-            url: absoluteUrl(`/${study.slug}`),
-            description: study.oneLiner,
-          })),
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: caseStudies.map((study, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              item: {
+                "@type": "CreativeWork",
+                name: study.name,
+                url: absoluteUrl(`/${study.slug}`),
+                description: study.oneLiner,
+              },
+            })),
+          },
         }}
       />
-      <PageHero
-        label="Selected Work"
-        title="Projects, prototypes, and systems brought into shape."
-        description="This hub gives the portfolio a crawlable home while keeping the existing project URLs exactly where they are."
-      />
 
-      <ContentSection
-        label="Filter Ready"
-        title="Current projects"
-        description="The filters are structural for now. They give us the surface to add client-side filtering once the project taxonomy is finalized."
+      <WorkHero />
+      <FeaturedWorkSection />
+      <WorkServicesSection />
+      <MoreWorkSection />
+      <ContactCTA
+        title="Have something that needs to work better?"
+        description="Send a note with the site, system, or idea you are working through, and I will help you shape the next step."
+      />
+    </SiteLayout>
+  );
+}
+
+function WorkHero() {
+  return (
+    <section className="border-b border-line/70 bg-ivory py-12 sm:py-14 lg:py-16">
+      <div className={workPageContainer}>
+        <div className="grid items-end gap-9 lg:grid-cols-[minmax(0,1.08fr)_minmax(20rem,0.52fr)]">
+          <div className="max-w-5xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+              Selected Work
+            </p>
+            <h1 className="mt-5 max-w-5xl font-serif text-[2.5rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[4.45rem]">
+              A few things I&apos;ve built, designed, or helped bring into
+              shape.
+            </h1>
+            <p className="mt-6 max-w-3xl text-base leading-7 text-ink/76 sm:text-lg">
+              A focused look at CK Works projects across websites, product
+              ideas, dashboards, integrations, and practical business systems.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-line bg-card p-5 shadow-soft sm:p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
+              What this shows
+            </p>
+            <div className="mt-5 space-y-4">
+              {workThemes.map((theme) => (
+                <div key={theme.title} className="border-t border-line pt-4">
+                  <h2 className="text-sm font-semibold text-ink">
+                    {theme.title}
+                  </h2>
+                  <p className="mt-1.5 text-sm leading-6 text-muted">
+                    {theme.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FeaturedWorkSection() {
+  return (
+    <section className="bg-ivory py-10 sm:py-12 lg:py-14">
+      <div className={workPageContainer}>
+        <SectionIntro
+          label="Featured Projects"
+          title="Client sites, product ideas, and systems with a little more story."
+          description="Each case study keeps the visible summary short, then gives more detail when someone wants the full context."
+        />
+
+        <div className="mt-8 grid gap-5 lg:grid-cols-2">
+          {featuredCaseStudies.map((study) => (
+            <FeaturedWorkCard key={study.slug} study={study} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WorkServicesSection() {
+  const services = workServiceLinks
+    .map((slug) => serviceAreas.find((service) => service.slug === slug))
+    .filter(Boolean);
+
+  return (
+    <section className="border-t border-line/70 bg-ivory py-10 sm:py-12 lg:py-14">
+      <div className={workPageContainer}>
+        <div className="grid gap-8 lg:grid-cols-[minmax(16rem,0.42fr)_minmax(0,1fr)]">
+          <SectionIntro
+            label="How The Work Connects"
+            title="The projects point back to practical services."
+            description="This keeps the page useful for visitors and search without turning it into a long sales page."
+          />
+
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+            {services.map((service) => {
+              if (!service) return null;
+              const Icon = service.icon;
+
+              return (
+                <Link
+                  key={service.slug}
+                  href={service.href}
+                  className="group rounded-xl border border-line bg-card p-4 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-forest-soft text-forest">
+                    <Icon className="h-5 w-5" strokeWidth={1.7} />
+                  </span>
+                  <h3 className="mt-4 text-sm font-semibold leading-snug text-ink">
+                    {service.shortTitle}
+                  </h3>
+                  <p className="mt-2 line-clamp-3 text-xs leading-5 text-muted">
+                    {service.description}
+                  </p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-forest">
+                    View service
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" />
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MoreWorkSection() {
+  return (
+    <section className="border-t border-line/70 bg-ivory py-10 sm:py-12 lg:py-14">
+      <div className={workPageContainer}>
+        <SectionIntro
+          label="More Builds"
+          title="Smaller experiments and technical work."
+          description="A few additional projects that round out the range without needing the same visual weight as the featured work."
+        />
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {secondaryCaseStudies.map((study) => (
+            <SmallWorkCard key={study.slug} study={study} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SectionIntro({
+  label,
+  title,
+  description,
+}: {
+  label: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="max-w-4xl">
+      <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
+        {label}
+      </p>
+      <h2 className="mt-4 font-serif text-[2rem] font-medium leading-[1.12] tracking-[-0.015em] text-ink sm:text-4xl lg:text-[2.75rem]">
+        {title}
+      </h2>
+      <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
+        {description}
+      </p>
+    </div>
+  );
+}
+
+function FeaturedWorkCard({ study }: { study: CaseStudy }) {
+  const GroupIcon = groupIcons[study.group];
+
+  return (
+    <article className="group grid min-h-[24rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
+      <Link
+        href={`/${study.slug}`}
+        className={`relative min-h-[17rem] overflow-hidden bg-gradient-to-br ${study.accent}`}
       >
-        <div className="mb-8 flex flex-wrap gap-2">
-          {filters.map((filter) => (
+        {study.coverImage ? (
+          <Image
+            src={study.coverImage.src}
+            alt={study.coverImage.alt}
+            fill
+            sizes="(min-width: 1280px) 32vw, (min-width: 768px) 46vw, 100vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            style={{ objectPosition: study.coverImage.position ?? "center" }}
+          />
+        ) : (
+          <div className="grid-texture absolute inset-0 opacity-25" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/20 via-transparent to-transparent" />
+        {study.liveUrl && (
+          <span className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/92 text-forest shadow-soft">
+            <ExternalLink className="h-4 w-4" />
+          </span>
+        )}
+      </Link>
+
+      <div className="flex min-w-0 flex-col p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="inline-flex items-center gap-1.5 rounded-full bg-forest-soft px-2.5 py-1 text-[11px] font-medium text-forest">
+              <GroupIcon className="h-3 w-3" />
+              {groupLabels[study.group]}
+            </p>
+            <h3 className="mt-4 font-serif text-3xl font-medium leading-tight tracking-[-0.02em] text-ink">
+              {study.name}
+            </h3>
+          </div>
+        </div>
+
+        <p className="mt-2 text-sm font-semibold leading-6 text-forest">
+          {cleanText(study.category)}
+        </p>
+        <p className="mt-4 line-clamp-4 text-sm leading-7 text-muted">
+          {study.teaser}
+        </p>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          {study.workedOn.slice(0, 4).map((item) => (
             <span
-              key={filter}
-              className="rounded-full border border-line bg-card px-3 py-1.5 text-xs font-medium text-forest"
+              key={item}
+              className="rounded-full border border-line bg-ivory px-2.5 py-1 text-[11px] font-medium text-ink/76"
             >
-              {filter}
+              {item}
             </span>
           ))}
         </div>
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {caseStudies.map((study) => (
-            <ProjectCard key={study.slug} study={study} />
-          ))}
-        </div>
-      </ContentSection>
 
-      <ContactCTA />
-    </SiteLayout>
+        <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row">
+          <Link
+            href={`/${study.slug}`}
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-forest px-4 py-3 text-sm font-semibold text-ivory transition-colors duration-200 hover:bg-ink"
+          >
+            View project
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          {study.liveUrl && (
+            <a
+              href={study.liveUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-forest/45 px-4 py-3 text-sm font-semibold text-forest transition-colors duration-200 hover:bg-forest-soft/45"
+            >
+              Live site
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          )}
+        </div>
+      </div>
+    </article>
   );
+}
+
+function SmallWorkCard({ study }: { study: CaseStudy }) {
+  const Icon = secondaryIcons[study.slug] ?? groupIcons[study.group];
+
+  return (
+    <Link
+      href={`/${study.slug}`}
+      className="group flex min-h-64 flex-col rounded-xl border border-line bg-card p-5 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift"
+    >
+      <div className="flex items-start justify-between gap-4">
+        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-forest-soft text-forest">
+          <Icon className="h-5 w-5" strokeWidth={1.7} />
+        </span>
+        <span className="rounded-full bg-sand px-2.5 py-1 text-[10px] font-medium text-forest">
+          {study.badge}
+        </span>
+      </div>
+
+      <h3 className="mt-5 font-serif text-2xl font-medium leading-tight text-ink">
+        {study.name}
+      </h3>
+      <p className="mt-2 text-xs font-semibold leading-5 text-forest">
+        {cleanText(study.category)}
+      </p>
+      <p className="mt-3 line-clamp-4 text-sm leading-6 text-muted">
+        {study.teaser}
+      </p>
+
+      <span className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-forest">
+        View project
+        <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+      </span>
+    </Link>
+  );
+}
+
+function cleanText(value: string) {
+  return value.replaceAll("Â·", "·").replaceAll("â€”", "—");
 }

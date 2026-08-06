@@ -6,7 +6,6 @@ import {
   ArrowRight,
   Check,
   ChevronDown,
-  CircleHelp,
   ClipboardCheck,
   CreditCard,
   FileText,
@@ -146,49 +145,34 @@ export default function ServicesPage() {
             ))}
           </div>
 
-          <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_auto]">
-            <div className="flex items-center gap-4 rounded-xl border border-line bg-card px-5 py-5 shadow-soft sm:px-7">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-line bg-sand text-forest">
-                <CircleHelp className="h-6 w-6" strokeWidth={1.7} />
-              </span>
-              <div>
-                <h2 className="font-serif text-2xl font-medium text-ink">
-                  Not sure where to start?
-                </h2>
-                <p className="mt-1 text-sm leading-6 text-muted">
-                  Tell me a bit about your goals and I&apos;ll help you figure
-                  out the right service.
-                </p>
-              </div>
+          <div className="mt-5 flex flex-col gap-6 rounded-xl border border-line bg-card px-6 py-7 shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+            <div className="max-w-xl">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
+                Not sure which service fits?
+              </p>
+              <h2 className="mt-3 font-serif text-[1.85rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.15rem]">
+                Tell me what you&apos;re working on.
+              </h2>
+              <p className="mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
+                Share a little about your business, what you&apos;re working
+                with now, and what you&apos;d like to improve.
+              </p>
             </div>
-            <Link
-              href="/contact"
-              className="inline-flex min-h-16 items-center justify-center gap-3 rounded-xl bg-ink px-8 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest hover:shadow-lift"
-            >
-              Help me decide
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
 
-          <div className="mt-5 rounded-xl bg-panel p-6 text-ivory shadow-float sm:p-8">
-            <div className="grid items-center gap-6 lg:grid-cols-[auto_minmax(0,1fr)_auto]">
-              <span className="flex h-16 w-16 items-center justify-center rounded-full border border-[#9A7A3D]/65 text-[#C7A35C]">
-                <ShieldCheck className="h-7 w-7" strokeWidth={1.5} />
-              </span>
-              <div>
-                <h2 className="font-serif text-3xl font-medium leading-tight sm:text-4xl">
-                  Let&apos;s build something clear and effective.
-                </h2>
-                <p className="mt-2 text-sm leading-6 text-ivory/72 sm:text-base">
-                  Book a quick call and let&apos;s talk about your goals.
-                </p>
-              </div>
+            <div className="flex w-fit shrink-0 flex-col items-stretch gap-4">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-3 rounded-lg bg-ivory px-7 py-4 text-sm font-semibold text-ink shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-card"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-forest px-6 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"
               >
-                Book a discovery call
+                Start a project
                 <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/process"
+                className="group inline-flex items-center justify-center gap-1.5 border-b border-forest pb-1.5 text-sm font-semibold text-forest transition-colors hover:text-ink"
+              >
+                See how the process works
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
             </div>
           </div>
@@ -214,7 +198,11 @@ function ServiceOverviewCard({
           card.className ?? ""
         }`}
       >
-        <div className="flex min-w-0 flex-col border-b border-line px-6 py-7 sm:px-8 sm:py-8 md:border-b-0 md:border-r">
+        <div className="relative flex min-w-0 flex-col border-b border-line px-6 py-7 sm:px-8 sm:py-8 md:border-b-0">
+          <span
+            className="pointer-events-none absolute inset-y-8 right-0 hidden w-px bg-line md:block"
+            aria-hidden
+          />
           <span className="font-serif text-2xl font-medium leading-none tracking-[-0.02em] text-[#A8713B]">
             {card.number}
           </span>
@@ -771,18 +759,22 @@ function SupportVisual() {
     "M12,80 L12,68 L28,55 L44,60 L60,43 L76,49 L92,32 L108,41 L124,38 L140,25 L156,35 L172,36 L188,26 L204,22 L222,10 L222,80 Z";
 
   return (
-    <div className="grid h-full w-full md:grid-cols-[minmax(0,1.04fr)_minmax(0,1fr)_minmax(0,1.35fr)]">
+    <div className="grid h-full w-full md:grid-cols-[minmax(0,1.04fr)_minmax(0,1fr)_minmax(0,1.35fr)] md:items-center">
       {/* Site Health */}
-      <div className="relative flex min-h-[15.75rem] flex-col px-6 py-6 sm:px-8 md:min-h-0 md:border-r md:border-line md:px-7 md:py-6">
+      <div className="relative flex min-h-[15.75rem] flex-col px-6 py-6 sm:px-8 md:min-h-[14.5rem] md:px-7 md:py-5">
+        <span
+          className="pointer-events-none absolute inset-y-3 right-0 hidden w-px bg-line md:block"
+          aria-hidden
+        />
         <p className="font-sans text-[1rem] font-semibold text-ink">
           Site Health
         </p>
-        <p className="mt-5 flex items-center gap-3 font-sans text-[0.95rem] font-medium text-ink/82">
+        <p className="mt-4 flex items-center gap-3 font-sans text-[0.95rem] font-medium text-ink/82">
           <SupportStatusCheck className="h-7 w-7" />
           All Systems Operational
         </p>
-        <div className="mt-5 h-px w-full bg-line" />
-        <div className="mt-5">
+        <div className="mt-4 h-px w-full bg-line" />
+        <div className="mt-4">
           <p className="font-sans text-[2.65rem] font-semibold leading-none tracking-[-0.04em] text-[#4B7451]">
             99.9%
           </p>
@@ -792,7 +784,7 @@ function SupportVisual() {
         </div>
         <svg
           viewBox="0 0 236 96"
-          className="mt-auto h-[5.65rem] w-full"
+          className="mt-auto h-[5.35rem] w-full"
           aria-hidden
         >
           <defs>
@@ -855,13 +847,17 @@ function SupportVisual() {
       </div>
 
       {/* Backups */}
-      <div className="relative flex min-h-[15.75rem] flex-col border-t border-line px-6 py-6 sm:px-8 md:min-h-0 md:border-r md:border-t-0 md:px-7 md:py-6">
+      <div className="relative flex min-h-[15.75rem] flex-col border-t border-line px-6 py-6 sm:px-8 md:min-h-[14.5rem] md:border-t-0 md:px-7 md:py-5">
+        <span
+          className="pointer-events-none absolute inset-y-3 right-0 hidden w-px bg-line md:block"
+          aria-hidden
+        />
         <p className="font-sans text-[1rem] font-semibold text-ink">Backups</p>
-        <div className="mt-6 divide-y divide-line">
+        <div className="mt-5 divide-y divide-line">
           {backupDetails.map(([label, value]) => (
             <div
               key={label}
-              className="flex items-center justify-between gap-5 py-3.5 first:pt-0"
+              className="flex items-center justify-between gap-5 py-3 first:pt-0"
             >
               <span className="font-sans text-[0.92rem] text-ink/78">
                 {label}
@@ -872,25 +868,25 @@ function SupportVisual() {
             </div>
           ))}
         </div>
-        <div className="mt-5 h-2 overflow-hidden rounded-full bg-line/80">
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-line/80">
           <span className="block h-full w-[76%] rounded-full bg-[#4B7451]" />
         </div>
-        <span className="mt-auto inline-flex w-fit items-center gap-2 border-b border-[#A8713B] pb-0.5 pt-6 font-sans text-[0.95rem] font-semibold text-forest">
+        <span className="mt-auto inline-flex w-fit items-center gap-2 border-b border-[#A8713B] pb-0.5 pt-5 font-sans text-[0.95rem] font-semibold text-forest">
           View backups
           <ArrowRight className="h-4 w-4" />
         </span>
       </div>
 
       {/* Recent Activity */}
-      <div className="flex min-h-[15.75rem] flex-col border-t border-line px-6 py-6 sm:px-8 md:min-h-0 md:border-t-0 md:px-7 md:py-6">
+      <div className="flex min-h-[15.75rem] flex-col border-t border-line px-6 py-6 sm:px-8 md:min-h-[14.5rem] md:border-t-0 md:px-7 md:py-5">
         <p className="font-sans text-[1rem] font-semibold text-ink">
           Recent Activity
         </p>
-        <div className="mt-6 divide-y divide-line">
+        <div className="mt-5 divide-y divide-line">
           {activity.map(([item, time]) => (
             <div
               key={item}
-              className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-5 py-3.5 first:pt-0"
+              className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-5 py-3 first:pt-0"
             >
               <p className="flex min-w-0 items-center gap-4 font-sans text-[0.9rem] leading-snug text-ink/82">
                 <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#4B7451]" />
@@ -902,7 +898,7 @@ function SupportVisual() {
             </div>
           ))}
         </div>
-        <span className="mt-auto inline-flex w-fit items-center gap-2 border-b border-[#A8713B] pb-0.5 pt-6 font-sans text-[0.95rem] font-semibold text-forest">
+        <span className="mt-auto inline-flex w-fit items-center gap-2 border-b border-[#A8713B] pb-0.5 pt-5 font-sans text-[0.95rem] font-semibold text-forest">
           View all activity
           <ArrowRight className="h-4 w-4" />
         </span>

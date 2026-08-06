@@ -68,14 +68,29 @@ export const serviceAreas: ServiceArea[] = [
     ],
     faqs: [
       {
-        question: "Can this be a small site?",
+        question: "How much does a business website cost?",
         answer:
-          "Yes. A focused one-page or small multi-page site can be the right move when the offer is clear.",
+          "It depends on scope: pages, content, design depth, and any integrations. After a short discovery call, I can give you a clear range based on what the site actually needs to do.",
       },
       {
-        question: "Do you help with copy?",
+        question: "How long does a website project usually take?",
         answer:
-          "Yes. I help shape page structure, messaging hierarchy, and calls to action.",
+          "A focused small-business site often lands in a few weeks. Redesigns, richer content, or custom features take longer. Timeline depends on feedback speed and how ready the content is.",
+      },
+      {
+        question: "Can CK Works redesign my existing website?",
+        answer:
+          "Yes. We can keep what still works, clean up the structure and messaging, and rebuild the experience so it looks sharper and converts more clearly.",
+      },
+      {
+        question: "What will you need from me during the project?",
+        answer:
+          "Typically: goals, who you serve, brand assets if you have them, examples you like, and content inputs or access to what already exists. I guide the process so you always know what is needed next.",
+      },
+      {
+        question: "Will I be able to update the website after launch?",
+        answer:
+          "Yes. We can set it up so you can handle common updates yourself, or keep CK Works involved for ongoing changes, depending on how hands-on you want to be.",
       },
     ],
     relatedServiceSlugs: [

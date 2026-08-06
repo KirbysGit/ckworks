@@ -26,7 +26,7 @@ export default function PageHero({
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
             {label}
           </p>
-          <h1 className="mt-5 font-serif text-5xl font-medium leading-[1.04] text-ink sm:text-6xl lg:text-7xl">
+          <h1 className="mt-5 font-serif text-[3rem] font-semibold leading-[1.03] tracking-[-0.025em] text-ink sm:text-[3.35rem] lg:text-[4.35rem]">
             {title}
           </h1>
           {description && (
