@@ -52,24 +52,20 @@ export default function FAQSection({
             <div
               key={faq.question}
               className={`border-b border-line transition-colors duration-200 ${
-                isOpen
-                  ? "bg-[linear-gradient(90deg,rgba(239,243,233,0.38),rgba(255,252,245,0.75))]"
-                  : "bg-transparent"
+                isOpen ? "bg-forest-soft/55" : "bg-transparent"
               }`}
             >
               <button
                 type="button"
                 aria-expanded={isOpen}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className={`flex w-full items-center justify-between gap-6 px-4 text-left transition-colors sm:px-6 ${
-                  isOpen ? "pb-4 pt-6 sm:pb-4 sm:pt-7" : "py-6 sm:py-7"
-                }`}
+                className="flex w-full items-center justify-between gap-5 px-3 py-4 text-left sm:gap-6 sm:px-5 sm:py-5"
               >
                 <span className="pr-2 font-sans text-[1rem] font-semibold leading-snug text-ink sm:text-[1.12rem]">
                   {faq.question}
                 </span>
                 <span
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-200 ${
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors duration-200 ${
                     isOpen
                       ? "border-forest bg-forest text-ivory"
                       : "border-line bg-ivory/45 text-forest hover:border-forest/50"
@@ -90,12 +86,25 @@ export default function FAQSection({
                   <motion.div
                     key="answer"
                     initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                    animate={{
+                      height: "auto",
+                      opacity: 1,
+                      transition: {
+                        height: { duration: 0.32, ease: [0.32, 0.72, 0, 1] },
+                        opacity: { duration: 0.22, ease: "easeOut" },
+                      },
+                    }}
+                    exit={{
+                      height: 0,
+                      opacity: 0,
+                      transition: {
+                        height: { duration: 0.28, ease: [0.4, 0, 0.2, 1] },
+                        opacity: { duration: 0.14, ease: "easeIn" },
+                      },
+                    }}
                     className="overflow-hidden"
                   >
-                    <p className="max-w-5xl px-4 pb-6 text-sm leading-7 text-ink/76 sm:px-6 sm:pb-7 sm:text-[0.95rem]">
+                    <p className="max-w-5xl px-3 pb-4 text-sm leading-7 text-ink/76 sm:px-5 sm:pb-5 sm:text-[0.95rem]">
                       {faq.answer}
                     </p>
                   </motion.div>

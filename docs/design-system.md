@@ -1,0 +1,178 @@
+# Design System
+
+## Design Intent
+
+CK Works should feel like a capable independent studio: calm, clear, personal,
+and technically grounded. The design favors editorial hierarchy, tactile
+details, quiet depth, and simple paths to action.
+
+It should not feel like a generic SaaS dashboard, an oversized agency landing
+page, or a template crowded with decorative cards.
+
+## Core Tokens
+
+Use the named Tailwind tokens from `tailwind.config.ts`.
+
+| Token | Value | Role |
+| --- | --- | --- |
+| `ivory` | `#FAF7F0` | Primary page background |
+| `sand` | `#F7F3EA` | Soft alternate surfaces |
+| `card` | `#FFFDF8` | Framed cards and papers |
+| `ink` | `#1F2420` | Primary text |
+| `muted` | `#5F665F` | Supporting text |
+| `forest` | `#2F5B3F` | Actions, accents, indicators |
+| `forest-soft` | `#DDE8D8` | Low-emphasis green surface |
+| `line` | `#DDD6C8` | Borders and dividers |
+
+The site is intentionally light-only. Do not add `dark:` variants or a dark
+theme to a component unless that becomes an explicit product decision.
+
+## Typography
+
+- `font-serif` is Cormorant Garamond. Use it for page headings, section
+  headings, thoughtful pull quotes, and a limited number of card titles.
+- `font-sans` is Inter. Use it for body copy, labels, navigation, buttons,
+  metadata, forms, and interface text.
+- `font-display` and `font-source-serif-display` are special-use fonts for
+  chapter numerals or intentional editorial details. Use sparingly.
+- Headings establish hierarchy through size, line height, and whitespace, not
+  excessive font weight.
+- Body copy should stay direct and easy to scan. Prefer a short paragraph to a
+  stacked wall of marketing language.
+
+## Layout
+
+- Use `.container-ck` for the normal full-page content boundary. It has a
+  `1360px` maximum width with responsive side padding.
+- Favor a clear left-to-right reading order.
+- Common desktop content splits use a calm `0.9fr / 1.35fr` relationship when
+  the left side introduces and the right side demonstrates.
+- A page band is normally separated by a simple `border-line` rule and
+  intentional vertical padding, not a floating outer card.
+- Use a constrained measure for paragraph copy even when the visual extends
+  wider.
+
+## Components And Surfaces
+
+- Use `Button` for primary actions and the established outlined action pattern
+  for secondary actions.
+- Use `SectionLabel` and `SectionHeader` for standard section introductions.
+- Use `FAQSection` for public FAQs rather than building another accordion.
+- Use `ContactCTA` for standard bottom-of-page calls to action. Project-specific
+  CTAs may have their own layout when the page needs a stronger visual finish.
+- Cards should have a purpose: repeated work, a framed tool, a paper note, a
+  modal, or a discrete demo. Avoid card-inside-card compositions.
+- Keep borders subtle. Shadows should create a small amount of depth, not a
+  floating-dashboard effect.
+
+## Visual Assets And Mockups
+
+- Use `next/image` for raster images and give it accurate `sizes` values.
+- Keep production assets in `public/images/<feature>/<type>/`.
+- Use actual product, project, or client-relevant visuals instead of generic
+  stock imagery when an image represents real work.
+- Reuse established mockups before creating a near-duplicate. The homepage phone
+  frame is the visual reference for phones elsewhere on the site.
+- Browser frames, phones, and laptops need physical logic: sensible aspect
+  ratios, clear edge layering, restrained highlights, and no clipped status UI.
+- Demo content should be visibly illustrative when it is not a client project.
+
+## Responsive Behavior
+
+- Desktop and mobile are related designs, not the same layout at different
+  widths.
+- Preserve rich desktop split layouts through medium screens when space allows.
+  Recompose at phone widths rather than shrinking everything into a narrow row.
+- Mobile prioritizes a readable hierarchy, one clear visual at a time, generous
+  touch targets, and intentional center or left alignment based on the section.
+- Prevent title fragments such as "show up" from breaking across lines when the
+  phrase needs to read together.
+- Check 390px mobile and a normal desktop viewport for every meaningful public
+  layout change.
+
+## Motion
+
+- Motion should clarify sequence, state, or cause and effect.
+- Keep most transitions within roughly 200-600ms and use calm easing.
+- Animate `transform` and `opacity`. Avoid animating layout properties such as
+  height, width, top, or margin for entrances; they cost layout work and cause
+  cumulative layout shift.
+- Honor `prefers-reduced-motion` for every new animation.
+- For complex visual demos, place tuning constants next to the component so an
+  agent can adjust position, scale, timing, and overlap without hunting through
+  JSX.
+
+### The Rendering Rule
+
+This is a correctness constraint, not a style preference.
+
+**Above the fold, use CSS animation.** CSS animations run at first paint, so
+content is never waiting on hydration. A visitor on a slow device sees the
+page immediately.
+
+**Below the fold, use `Reveal`.** `components/ui/Reveal.tsx` renders children
+with no hiding class, then after mount hides only elements still off-screen and
+restores them through an IntersectionObserver. It stays visible when reduced
+motion is set, when IntersectionObserver is unavailable, and when the element
+was already on screen or scrolled past at mount.
+
+**Never gate content on hydration.** Do not use the Framer Motion
+`initial={{ opacity: 0 }}` plus `whileInView` pattern for meaningful page
+content. Server-rendered HTML must be readable with JavaScript disabled — for
+slow devices, failed script loads, and crawlers alike. Verify by confirming
+`ck-reveal` does not appear in the server HTML response.
+
+Framer Motion remains appropriate for orchestrated, interaction-driven, or
+decorative sequences that enhance already-visible content.
+
+### Entrance Primitives
+
+Defined in `app/globals.css`. All are disabled under `prefers-reduced-motion`.
+
+| Class | Motion | Typical use |
+| --- | --- | --- |
+| `ck-rise` | Fade up 16px, 500ms | Headings, copy, stacked text |
+| `ck-fade` | Opacity only, 420ms | Secondary chrome and labels |
+| `ck-lift` | Fade up 22px, 620ms | Device frames and larger cards |
+| `ck-wipe` | `clip-path` left to right, 550ms | Revealing a screen or image |
+| `ck-pop` | Scale 0.86 to 1, 460ms | Buttons and small badges |
+| `ck-loadbar` | Sweep left to right, then fade, 720ms | Browser progress bar |
+
+Sequence with `animationDelay` from a named timing constant near the component
+(for example `webDesignHeroTiming`) rather than scattering literal delays.
+
+`ck-loadbar` starts at `opacity: 0` so it stays hidden if the animation never
+runs. Keep that pattern for any primitive whose resting state should be
+invisible.
+
+An element carrying `ck-wipe` or a long delay may be the LCP element. Keep its
+reveal early and mark the underlying image `priority`.
+
+## Accessibility
+
+- Start with semantic HTML and native controls before creating custom behavior.
+- Keep heading levels meaningful and labels visible where a visitor needs them.
+- Interactive elements need keyboard support, a visible focus state, and an
+  accessible name that explains the action.
+- Modal dialogs need sensible initial focus, focus containment, Escape support,
+  and a clear close control.
+- Maintain readable contrast for body text, borders, form states, and disabled
+  states. Do not rely on color alone to communicate success, error, or status.
+- Treat `prefers-reduced-motion` as a required state, not an afterthought.
+
+## Performance Guardrails
+
+- Avoid large source images when the rendered visual is small. Resize and use
+  WebP or AVIF for photographic assets when practical.
+- Use `next/image` and accurate `sizes` to avoid unnecessary image work.
+- Keep global CSS global. Feature styling stays with its component so unrelated
+  pages do not inherit a growing collection of one-off rules.
+- Defer interaction-heavy client code, such as a modal or complex carousel,
+  only when it is not needed for the first meaningful view.
+
+## Reference Images
+
+Use a reference image to understand its hierarchy, density, rhythm, and object
+relationships. Do not copy literal content or import a competing visual system.
+When a reference and the existing CK Works language disagree, preserve the
+existing system and borrow the useful structural idea.

@@ -66,6 +66,81 @@
   }
 }
 
+/* ── Motion system ──────────────────────────────────────────────────────
+ * Above-the-fold entrances use these CSS animations: they run on first
+ * paint, so content never waits on hydration. Below-the-fold sections use
+ * the <Reveal> component, which only hides an element after JS confirms it
+ * is off-screen (so the server HTML always renders visible).
+ * Everything animates transform/opacity only, and all of it is disabled
+ * under prefers-reduced-motion.
+ */
+@keyframes ck-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ck-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ck-lift {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ck-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes ck-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Browser progress bar: sweeps left→right, then fades out. */
+@keyframes ck-loadbar {
+  0% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  72% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
 @layer components {
   .container-ck {
     @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
@@ -77,5 +152,65 @@
       linear-gradient(to right, rgba(31, 36, 32, 0.05) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(31, 36, 32, 0.05) 1px, transparent 1px);
     background-size: 32px 32px;
+  }
+
+  .ck-rise {
+    animation: ck-rise 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .ck-fade {
+    animation: ck-fade 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .ck-lift {
+    animation: ck-lift 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .ck-wipe {
+    animation: ck-wipe 550ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .ck-pop {
+    animation: ck-pop 460ms cubic-bezier(0.34, 1.36, 0.64, 1) both;
+  }
+
+  /* Starts invisible so it stays hidden if the animation never runs. */
+  .ck-loadbar {
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: ck-loadbar 720ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  /* Applied by <Reveal> only after JS confirms the element is off-screen. */
+  .ck-reveal {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .ck-reveal.is-in {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 520ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ck-rise,
+  .ck-fade,
+  .ck-lift,
+  .ck-wipe,
+  .ck-pop,
+  .ck-loadbar {
+    animation: none !important;
+  }
+
+  .ck-reveal,
+  .ck-reveal.is-in {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }

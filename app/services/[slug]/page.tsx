@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -8,13 +8,16 @@ import {
   ArrowRight,
   ArrowUp,
   BarChart3,
-  Blocks,
-  Boxes,
+  Bell,
+  Box,
+  Calendar,
   Check,
   ChevronDown,
+  ChevronRight,
   CircleCheck,
-  ClipboardList,
+  Clock,
   Database,
+  Eye,
   FileCode2,
   FileText,
   Flag,
@@ -22,12 +25,12 @@ import {
   Globe,
   Headphones,
   Home,
-  Image as ImageIcon,
   LayoutDashboard,
   LayoutTemplate,
   LineChart,
   Mail,
   MapPin,
+  Megaphone,
   MessageSquareText,
   MonitorSmartphone,
   Navigation,
@@ -39,19 +42,22 @@ import {
   Rocket,
   Search,
   Settings2,
-  Share2,
   ShieldCheck,
   Smartphone,
   Sparkle,
-  Sprout,
-  Table2,
+  Store,
   Tag,
   TrendingUp,
   UserRound,
-  Workflow,
   Wrench,
-  Zap,
 } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
+import {
+  SiAirtable,
+  SiGooglecalendar,
+  SiGooglesheets,
+  SiStripe,
+} from "react-icons/si";
 import SiteLayout from "@/components/SiteLayout";
 import PageHero from "@/components/page/PageHero";
 import ContentSection from "@/components/page/ContentSection";
@@ -60,6 +66,7 @@ import FAQSection from "@/components/page/FAQSection";
 import RelatedProjects from "@/components/page/RelatedProjects";
 import RelatedServices from "@/components/page/RelatedServices";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
+import Reveal from "@/components/ui/Reveal";
 import ServiceViewed from "@/components/ServiceViewed";
 import ProjectInquiryTrigger from "@/components/ProjectInquiryTrigger";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
@@ -316,6 +323,11 @@ const visibilitySignals = [
     icon: MapPin,
   },
   {
+    title: "Clear from the first glance",
+    body: "The subtitle shows what they stand for.",
+    icon: Eye,
+  },
+  {
     title: "Project examples",
     body: "Real proof builds trust and context.",
     icon: LayoutTemplate,
@@ -377,7 +389,7 @@ function SearchVisibilityServicePage({ service }: { service: ServiceArea }) {
 
 function SearchVisibilityHero() {
   return (
-    <section className="grid items-center gap-10 border-b border-line pb-11 lg:grid-cols-[minmax(0,0.74fr)_minmax(0,1.26fr)] lg:gap-14 lg:pb-14">
+    <section className="grid items-start gap-10 border-b border-line pb-10 lg:grid-cols-[minmax(0,0.74fr)_minmax(0,1.26fr)] lg:gap-14">
       <div className="max-w-xl">
         <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
           Visibility
@@ -727,6 +739,12 @@ const signalConnector = {
       offsetY: "-2rem",
     },
     {
+      // Clear from the first glance → hero subtitle
+      length: "5.5rem",
+      offsetX: "0.25rem",
+      offsetY: "0rem",
+    },
+    {
       length: "5rem",
       offsetX: "0.25rem",
       offsetY: "6.5rem",
@@ -928,7 +946,10 @@ function SearchReadySitePreview() {
           <h3 className="mt-2.5 font-serif text-[1.55rem] leading-[1.02] tracking-[-0.025em]">
             Custom Homes &amp; Renovations in Orlando, Florida
           </h3>
-          <p className="mt-2.5 text-[0.66rem] leading-5 text-ivory/88">
+          <p
+            id="search-ready-subtitle"
+            className="mt-2.5 text-[0.66rem] leading-5 text-ivory/88"
+          >
             Thoughtful design, quality craftsmanship, and clear next steps for
             how you live.
           </p>
@@ -1150,6 +1171,31 @@ const webDesignContainer =
 const webDesignDemoImage = "/images/services/png/01-hearth-home-demo.png";
 const webDesignLogo = "/images/services/svg/01-hearth-logo-demo.svg";
 
+/**
+ * Hero entrance choreography (ms). The demo site "loads" in the laptop:
+ * frame lifts in → progress bar sweeps the chrome → screen wipes open →
+ * the demo site's own copy types in line by line → phone follows.
+ *
+ * These are CSS animation delays, so the sequence runs on first paint and
+ * never waits on hydration. Bump `screen` with care — the laptop photo is
+ * the likely LCP element, so a late reveal delays that metric.
+ */
+const webDesignHeroTiming = {
+  eyebrow: 0,
+  title: 80,
+  leadCopy: 170,
+  supportCopy: 230,
+  actions: 310,
+  laptop: 260,
+  loadbar: 480,
+  screen: 640,
+  chromeNav: 700,
+  demoHeadline: 920,
+  demoBody: 1000,
+  demoCta: 1080,
+  phone: 1180,
+} as const;
+
 const webDesignIncludes = [
   {
     title: "Custom design",
@@ -1217,12 +1263,12 @@ const webDesignProcess = [
     icon: Search,
   },
   {
-    title: "Design and build",
+    title: "Design & Build",
     body: "We shape the structure, design, and development into a clear, modern site.",
     icon: LayoutTemplate,
   },
   {
-    title: "Launch and improve",
+    title: "Launch & Improve",
     body: "We launch carefully, then keep refining based on how the site is used.",
     icon: Rocket,
   },
@@ -1284,23 +1330,38 @@ function WebDesignServicePage({ service }: { service: ServiceArea }) {
 
 function WebDesignHero() {
   return (
-    <div className="grid items-center gap-10 border-b border-line pb-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
+    <div className="grid items-start gap-10 border-b border-line pb-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
       <div className="max-w-xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
+        <p
+          className="ck-rise text-xs font-semibold uppercase tracking-[0.26em] text-forest"
+          style={{ animationDelay: `${webDesignHeroTiming.eyebrow}ms` }}
+        >
           Design
         </p>
-        <h1 className={serviceHeroTitleClassName}>
+        <h1
+          className={`ck-rise ${serviceHeroTitleClassName}`}
+          style={{ animationDelay: `${webDesignHeroTiming.title}ms` }}
+        >
           Web Design & Development
         </h1>
-        <p className="mt-6 max-w-md text-base leading-7 text-ink/78">
+        <p
+          className="ck-rise mt-6 max-w-md text-base leading-7 text-ink/78"
+          style={{ animationDelay: `${webDesignHeroTiming.leadCopy}ms` }}
+        >
           Websites built around what your business needs people to understand
           and do.
         </p>
-        <p className="mt-5 max-w-lg text-base leading-7 text-ink/78">
+        <p
+          className="ck-rise mt-5 max-w-lg text-base leading-7 text-ink/78"
+          style={{ animationDelay: `${webDesignHeroTiming.supportCopy}ms` }}
+        >
           We plan, design, and build modern websites that look great, work
           everywhere, and make it easy for your customers to take action.
         </p>
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+        <div
+          className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row"
+          style={{ animationDelay: `${webDesignHeroTiming.actions}ms` }}
+        >
           <ProjectInquiryTrigger
             source="web_design_service_hero"
             className="rounded-md px-5"
@@ -1331,7 +1392,10 @@ function WebDesignDevicePreview() {
         aria-hidden
       />
 
-      <div className="absolute left-0 top-3 w-[79%] sm:w-[80%]">
+      <div
+        className="ck-lift absolute left-0 top-3 w-[79%] sm:w-[80%]"
+        style={{ animationDelay: `${webDesignHeroTiming.laptop}ms` }}
+      >
         <div className="relative">
           <div className="relative aspect-[16/10] rounded-t-[1.55rem] rounded-b-none bg-[linear-gradient(145deg,#050605_0%,#111511_43%,#252B26_52%,#121712_66%,#080A08_100%)] p-[7px] shadow-[0_28px_58px_-28px_rgba(17,23,20,0.82),0_8px_18px_-10px_rgba(17,23,20,0.5)]">
             <span
@@ -1385,7 +1449,10 @@ function WebDesignDevicePreview() {
         </div>
       </div>
 
-      <div className="absolute right-0 top-[5.65rem] z-20 w-[29%] min-w-[8.4rem] max-w-[10.5rem]">
+      <div
+        className="ck-lift absolute right-0 top-[5.65rem] z-20 w-[29%] min-w-[8.4rem] max-w-[10.5rem]"
+        style={{ animationDelay: `${webDesignHeroTiming.phone}ms` }}
+      >
         <div className="relative rounded-[2.3rem] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] p-[2px] shadow-[0_18px_38px_-18px_rgba(17,23,20,0.7),0_6px_14px_-8px_rgba(17,23,20,0.58)]">
           <span
             className="pointer-events-none absolute inset-[1px] rounded-[2.2rem] bg-[radial-gradient(circle_at_30%_7%,rgba(255,255,255,0.38),transparent_24%),linear-gradient(160deg,rgba(255,255,255,0.16),transparent_35%,rgba(0,0,0,0.42)_74%)] opacity-70"
@@ -1463,7 +1530,13 @@ function WebDesignDevicePreview() {
 function LaptopBrowserContent() {
   return (
     <div className="flex h-full flex-col">
-      <div className="flex h-9 items-center justify-between border-b border-line bg-card px-4">
+      <div className="relative flex h-9 items-center justify-between border-b border-line bg-card px-4">
+        {/* Page-load progress bar sweeping the bottom of the chrome. */}
+        <span
+          className="ck-loadbar absolute inset-x-0 bottom-0 h-[2px] bg-forest"
+          style={{ animationDelay: `${webDesignHeroTiming.loadbar}ms` }}
+          aria-hidden
+        />
         <span className="flex items-center gap-1.5">
           <Image
             src={webDesignLogo}
@@ -1476,34 +1549,55 @@ function LaptopBrowserContent() {
             Hearth & Home
           </span>
         </span>
-        <div className="hidden gap-5 text-[7px] font-semibold text-ink/70 sm:flex">
+        <div
+          className="ck-fade hidden gap-5 text-[7px] font-semibold text-ink/70 sm:flex"
+          style={{ animationDelay: `${webDesignHeroTiming.chromeNav}ms` }}
+        >
           <span>Our Services</span>
           <span>Projects</span>
           <span>About</span>
           <span>Contact</span>
         </div>
-        <span className="rounded bg-[#174A31] px-2.5 py-1.5 text-[7px] font-semibold text-ivory shadow-[0_6px_16px_-12px_rgba(23,74,49,0.92)]">
+        <span
+          className="ck-fade rounded bg-[#174A31] px-2.5 py-1.5 text-[7px] font-semibold text-ivory shadow-[0_6px_16px_-12px_rgba(23,74,49,0.92)]"
+          style={{ animationDelay: `${webDesignHeroTiming.chromeNav}ms` }}
+        >
           Book a Consultation
         </span>
       </div>
       <div className="relative min-h-0 flex-1 bg-ink">
-        <Image
-          src={webDesignDemoImage}
-          alt="Interior design website preview"
-          fill
-          sizes="(min-width: 1024px) 45vw, 90vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/72 via-ink/18 to-transparent" />
+        <div
+          className="ck-wipe absolute inset-0"
+          style={{ animationDelay: `${webDesignHeroTiming.screen}ms` }}
+        >
+          <Image
+            src={webDesignDemoImage}
+            alt="Interior design website preview"
+            fill
+            priority
+            sizes="(min-width: 1024px) 45vw, 90vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-ink/72 via-ink/18 to-transparent" />
+        </div>
         <div className="absolute left-7 top-[20%] max-w-[15rem] text-ivory">
-          <p className="font-serif text-[2rem] leading-[1.02] tracking-[-0.02em]">
+          <p
+            className="ck-rise font-serif text-[2rem] leading-[1.02] tracking-[-0.02em]"
+            style={{ animationDelay: `${webDesignHeroTiming.demoHeadline}ms` }}
+          >
             Thoughtful spaces, built around you.
           </p>
-          <p className="mt-4 max-w-[12rem] text-[10px] leading-5 text-ivory/84">
+          <p
+            className="ck-rise mt-4 max-w-[12rem] text-[10px] leading-5 text-ivory/84"
+            style={{ animationDelay: `${webDesignHeroTiming.demoBody}ms` }}
+          >
             Interior design for homes that feel calm, comfortable, and
             considered.
           </p>
-          <span className="mt-5 inline-flex rounded bg-ivory px-3 py-2 text-[8px] font-semibold text-ink shadow-[0_10px_18px_-14px_rgba(0,0,0,0.7)]">
+          <span
+            className="ck-pop mt-5 inline-flex rounded bg-ivory px-3 py-2 text-[8px] font-semibold text-ink shadow-[0_10px_18px_-14px_rgba(0,0,0,0.7)]"
+            style={{ animationDelay: `${webDesignHeroTiming.demoCta}ms` }}
+          >
             View our projects
           </span>
         </div>
@@ -1582,7 +1676,7 @@ function WebDesignPhoneStatusBar() {
 function WebDesignIncludes() {
   return (
     <section className="grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)] lg:gap-16 lg:py-16">
-      <div className="max-w-md">
+      <Reveal className="max-w-md">
         <p className={serviceSectionLabelClassName}>
           What this service covers
         </p>
@@ -1600,11 +1694,16 @@ function WebDesignIncludes() {
           See all services
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
-      </div>
+      </Reveal>
 
       <div className="grid gap-x-8 gap-y-8 sm:grid-cols-2">
-        {webDesignIncludes.map(({ title, body, icon: Icon }) => (
-          <article key={title} className="flex gap-4">
+        {webDesignIncludes.map(({ title, body, icon: Icon }, index) => (
+          <Reveal
+            as="article"
+            key={title}
+            delay={index * 70}
+            className="flex gap-4"
+          >
             <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center text-ink">
               <Icon className="h-6 w-6" strokeWidth={1.4} />
             </span>
@@ -1612,7 +1711,7 @@ function WebDesignIncludes() {
               <h3 className="text-[0.95rem] font-semibold text-ink">{title}</h3>
               <p className="mt-1.5 text-sm leading-6 text-muted">{body}</p>
             </div>
-          </article>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -1622,33 +1721,38 @@ function WebDesignIncludes() {
 function WebDesignTransformation() {
   return (
     <section className="border-b border-line py-14 lg:py-20">
-      <div className="mx-auto max-w-5xl text-center">
+      <Reveal className="mx-auto max-w-5xl text-center">
         <p className={serviceCenterLabelClassName}>
           From outdated to built for today
         </p>
         <h2 className={serviceCenterTitleClassName}>
           A better website makes a real difference.
         </h2>
-      </div>
+      </Reveal>
 
       {/* Mobile / tablet: stacked steps */}
       <div className="mt-8 grid gap-8 md:grid-cols-2 xl:hidden">
-        {webDesignTransformation.map((step) => (
-          <TransformationStep key={step.title} step={step} />
+        {webDesignTransformation.map((step, index) => (
+          <Reveal key={step.title} delay={index * 120}>
+            <TransformationStep step={step} />
+          </Reveal>
         ))}
       </div>
 
       {/* Desktop: equal-width cards. Perspective is per-card (not shared),
-          otherwise one camera makes left gaps look huge and right cards stack. */}
+          otherwise one camera makes left gaps look huge and right cards stack.
+          Stages reveal left→right so the sequence reads as progression. */}
       <div className="mt-12 hidden xl:block">
         <div
           className="grid gap-6"
           style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}
         >
-          {webDesignTransformation.map((step) => (
-            <TransformationCardTilt key={step.title}>
-              <WebsiteStagePreview step={step} />
-            </TransformationCardTilt>
+          {webDesignTransformation.map((step, index) => (
+            <Reveal key={step.title} delay={index * 180} className="min-w-0">
+              <TransformationCardTilt>
+                <WebsiteStagePreview step={step} />
+              </TransformationCardTilt>
+            </Reveal>
           ))}
         </div>
         <div
@@ -1656,8 +1760,9 @@ function WebDesignTransformation() {
           style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}
         >
           {webDesignTransformation.map((step, index) => (
-            <div
+            <Reveal
               key={step.title}
+              delay={index * 180 + 120}
               className={`relative min-h-[9.5rem] min-w-0 px-7 first:pl-0 last:pr-0 ${
                 index > 0 ? "border-l border-line" : ""
               }`}
@@ -1687,7 +1792,7 @@ function WebDesignTransformation() {
               <p className="mt-5 max-w-[15rem] text-sm leading-7 text-muted">
                 {step.body}
               </p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -2013,10 +2118,67 @@ function LaunchedSitePreview() {
   );
 }
 
+/**
+ * Process sticky knobs (How we work).
+ *   size      — post-it width in px
+ *   x / y     — offset from its natural spot (px; +x right, +y down)
+ *   rotate    — degrees; negative tilts left
+ *   textScale — SVG text scale (1 = default, 1.45 = larger)
+ *   textPad   — inset around the SVG as % of the note
+ */
+const processStickyLayout = {
+  size: 175,
+  x: 100,
+  y: -5,
+  rotate: -6,
+  textScale: 1.35,
+  textPad: 6,
+} as const;
+
+function ProcessStickyNote() {
+  const { size, x, y, rotate, textScale, textPad } = processStickyLayout;
+
+  return (
+    <div
+      className="relative mt-10 aspect-square rounded-[3px] bg-[#efe6d3] shadow-[0_2px_4px_rgba(31,36,32,0.07),0_14px_18px_-17px_rgba(31,36,32,0.62)] sm:mt-12"
+      style={{
+        width: size,
+        transform: `translate(${x}px, ${y}px) rotate(${rotate}deg)`,
+      }}
+      aria-hidden
+    >
+      <span className="pointer-events-none absolute inset-0 rounded-[3px] bg-[linear-gradient(140deg,rgba(255,255,255,0.22),transparent_38%,rgba(31,36,32,0.055)_100%)]" />
+      <span className="pointer-events-none absolute inset-x-0 top-0 h-3 rounded-t-[3px] bg-[linear-gradient(180deg,rgba(31,36,32,0.055),transparent)]" />
+      <span className="pointer-events-none absolute bottom-[-0.32rem] left-[14%] right-[14%] h-3 rounded-[50%] bg-ink/15 blur-md" />
+      <span className="pointer-events-none absolute bottom-[-1px] left-[10%] right-[20%] h-4 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(31,36,32,0.1),transparent_68%)] blur-sm" />
+      <span className="absolute bottom-0 right-0 h-5 w-5 rounded-tl-sm bg-[linear-gradient(135deg,rgba(31,36,32,0.14),rgba(255,255,255,0.36)_48%,rgba(255,255,255,0.02)_50%)]" />
+      <span
+        className="pointer-events-none absolute z-10"
+        style={{
+          left: `${textPad}%`,
+          top: `${textPad}%`,
+          right: `${textPad}%`,
+          bottom: `${textPad}%`,
+          transform: `scale(${textScale})`,
+          transformOrigin: "center center",
+        }}
+      >
+        <Image
+          src="/images/services/svg/01-post-it-text.svg"
+          alt=""
+          fill
+          sizes={`${size}px`}
+          className="object-contain"
+        />
+      </span>
+    </div>
+  );
+}
+
 function WebDesignProcess() {
   return (
     <section className="grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)] lg:gap-16 lg:py-16">
-      <div className="max-w-md">
+      <Reveal className="max-w-md">
         <p className={serviceSectionLabelClassName}>How we work</p>
         <h2 className={serviceSectionTitleClassName}>
           A clear path from start to launch.
@@ -2031,12 +2193,16 @@ function WebDesignProcess() {
           View the full process
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
-      </div>
+
+        <ProcessStickyNote />
+      </Reveal>
 
       <div>
         {webDesignProcess.map((step, index) => (
-          <article
+          <Reveal
+            as="article"
             key={step.title}
+            delay={index * 110}
             className={`grid min-h-[8.75rem] grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-4 py-6 sm:py-7 ${
               index > 0 ? "border-t border-line" : ""
             }`}
@@ -2055,7 +2221,7 @@ function WebDesignProcess() {
                 {step.body}
               </p>
             </div>
-          </article>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -2098,27 +2264,27 @@ function WebDesignWork({ projects }: { projects: CaseStudy[] }) {
 
   return (
     <section className="border-b border-line py-14 lg:py-20">
-      <div className="mx-auto max-w-5xl text-center">
+      <Reveal className="mx-auto max-w-5xl text-center">
         <p className={serviceCenterLabelClassName}>Selected work</p>
         <h2 className={serviceCenterTitleClassName}>
           Recent projects, real results.
         </h2>
-      </div>
+      </Reveal>
 
       <div className="mt-12 grid gap-4 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-4">
-        <FeaturedWorkCard
-          project={featured}
-          content={webDesignWorkContent.featured}
-        />
+        <Reveal>
+          <FeaturedWorkCard
+            project={featured}
+            content={webDesignWorkContent.featured}
+          />
+        </Reveal>
         <div className="grid gap-4">
-          {webDesignWorkContent.secondary.map((item) => {
+          {webDesignWorkContent.secondary.map((item, index) => {
             const project = bySlug.get(item.slug);
             return project ? (
-              <SecondaryWorkCard
-                key={item.slug}
-                project={project}
-                content={item}
-              />
+              <Reveal key={item.slug} delay={120 + index * 110}>
+                <SecondaryWorkCard project={project} content={item} />
+              </Reveal>
             ) : null;
           })}
         </div>
@@ -2236,17 +2402,19 @@ function SecondaryWorkCard({
 function WebDesignFaq() {
   return (
     <section className="border-t border-line py-12 pb-8 lg:py-14 lg:pb-8">
-      <FAQSection
-        faqs={[...webDesignFaqs]}
-        description="Common questions about planning, building, and maintaining a CK Works website."
-      />
+      <Reveal>
+        <FAQSection
+          faqs={[...webDesignFaqs]}
+          description="Common questions about planning, building, and maintaining a CK Works website."
+        />
+      </Reveal>
     </section>
   );
 }
 
 function WebDesignBottomCta() {
   return (
-    <div className="mt-0 flex flex-col gap-6 rounded-xl border border-line bg-card px-6 py-7 shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+    <Reveal className="mt-0 flex flex-col gap-6 rounded-xl border border-line bg-card px-6 py-7 shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
       <div className="max-w-xl">
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
           Web Design &amp; Development
@@ -2275,7 +2443,7 @@ function WebDesignBottomCta() {
           <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
       </div>
-    </div>
+    </Reveal>
   );
 }
 
@@ -2451,7 +2619,7 @@ function AnalyticsServicePage({ service }: { service: ServiceArea }) {
 
 function AnalyticsHero() {
   return (
-    <div className="grid items-center gap-10 border-b border-line pb-11 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-14 lg:pb-14">
+    <div className="grid items-start gap-10 border-b border-line pb-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-14">
       <div className="max-w-xl">
         <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
           Measurement
@@ -2620,7 +2788,7 @@ function SourceMixDonut() {
 
 function AnalyticsWhyMeasurement() {
   return (
-    <section className="grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-16 lg:py-16">
+    <section className="grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-8 lg:py-16">
       <div className="max-w-md">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
           Why measurement matters
@@ -2639,12 +2807,12 @@ function AnalyticsWhyMeasurement() {
         {analyticsWhyRows.map(({ icon: Icon, title, body }) => (
           <article
             key={title}
-            className="grid gap-x-6 gap-y-2 py-5 first:pt-0 last:pb-0 sm:grid-cols-[auto_minmax(0,11rem)_minmax(0,1fr)] sm:items-center"
+            className="grid gap-x-5 gap-y-2 py-5 first:pt-0 last:pb-0 sm:grid-cols-[auto_minmax(0,15rem)_minmax(0,1fr)] sm:items-center"
           >
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-soft/60 text-forest">
               <Icon className="h-5 w-5" strokeWidth={1.6} />
             </span>
-            <h3 className="font-serif text-xl font-medium leading-snug text-ink">
+            <h3 className="font-serif text-[1.3rem] font-semibold leading-[1.12] tracking-[-0.02em] text-ink sm:text-[1.5rem]">
               {title}
             </h3>
             <p className="text-sm leading-6 text-muted">{body}</p>
@@ -2683,10 +2851,12 @@ function AnalyticsReportingSection() {
           aria-hidden
         />
 
-        {/* Perspective wrapper — the card leans back like a product shot and
-            gently settles flatter on hover. */}
-        <div className="relative mx-auto max-w-5xl [perspective:1800px]">
-          <div className="rounded-2xl border border-line bg-card p-4 shadow-[0_48px_90px_-42px_rgba(31,36,32,0.5)] transition-transform duration-500 [transform-origin:50%_0%] [transform:rotateX(7deg)] hover:[transform:rotateX(2.5deg)] sm:p-5">
+        {/* Perspective wrapper — static corner tilt: rotateX pushes the top
+            edge back / brings the bottom forward, rotateY(-) pushes the left
+            edge back / brings the right forward. Net: bottom-right corner
+            pulls toward the viewer, top-left recedes. */}
+        <div className="relative mx-auto max-w-5xl [perspective:1400px]">
+          <div className="rounded-2xl border border-line bg-card p-4 shadow-[0_48px_90px_-42px_rgba(31,36,32,0.5)] [transform-origin:50%_0%] [transform:rotateX(6deg)_rotateY(-8deg)] sm:p-5">
         <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
           {analyticsReportStats.map((stat) => (
             <div
@@ -2967,7 +3137,7 @@ const analyticsWorkContent = [
       { icon: LayoutDashboard, label: "Dashboards" },
       { icon: LineChart, label: "Reporting" },
     ],
-    tile: "wordmark",
+    tile: "cover",
   },
   {
     slug: "internal-automation-tool",
@@ -3018,11 +3188,15 @@ function AnalyticsProjectCard({
       href={`/${project.slug}`}
       className="group grid grid-cols-[7rem_minmax(0,1fr)] gap-5 rounded-2xl border border-line bg-card p-4 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/30 hover:shadow-lift sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:p-5"
     >
-      {content.tile === "wordmark" ? (
-        <span className="flex min-h-[7rem] items-center justify-center rounded-xl bg-[#16281d]">
-          <span className="font-serif text-[1.7rem] font-semibold lowercase tracking-tight text-ivory">
-            {project.name.toLowerCase()}
-          </span>
+      {content.tile === "cover" && project.coverImage ? (
+        <span className="relative min-h-[7rem] overflow-hidden rounded-xl bg-sand">
+          <Image
+            src={project.coverImage.src}
+            alt={project.coverImage.alt}
+            fill
+            sizes="140px"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          />
         </span>
       ) : (
         <span className="flex min-h-[7rem] items-center justify-center rounded-xl border border-line bg-sand text-forest">
@@ -3121,35 +3295,18 @@ function AnalyticsTableMock() {
 
 function AnalyticsFaq() {
   return (
-    <section className="py-12 lg:py-14">
-      <h2 className="font-serif text-[2rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.3rem]">
-        A few useful questions.
-      </h2>
-      <div className="mt-6 border-t border-line">
-        {analyticsFaqs.map((faq) => (
-          <details key={faq.question} className="group border-b border-line">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left marker:content-none [&::-webkit-details-marker]:hidden">
-              <span className="pr-2 text-[0.95rem] font-medium leading-snug text-ink">
-                {faq.question}
-              </span>
-              <Plus
-                className="h-5 w-5 shrink-0 text-ink/55 transition-transform duration-200 group-open:rotate-45"
-                strokeWidth={1.7}
-              />
-            </summary>
-            <p className="max-w-3xl pb-5 pr-8 text-sm leading-7 text-muted">
-              {faq.answer}
-            </p>
-          </details>
-        ))}
-      </div>
+    <section className="border-b border-line py-12 lg:py-14">
+      <FAQSection
+        faqs={[...analyticsFaqs]}
+        description="Common questions about analytics setup, reporting, and what the work helps you see."
+      />
     </section>
   );
 }
 
 function AnalyticsBottomCta() {
   return (
-    <div className="rounded-2xl border border-line bg-sand px-6 py-8 shadow-soft sm:px-8 sm:py-9 lg:px-10">
+    <div className="mt-10 rounded-2xl border border-line bg-sand px-6 py-8 shadow-soft sm:px-8 sm:py-9 lg:px-10">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
         <div className="max-w-2xl">
           <h2 className="font-serif text-[1.85rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2.15rem]">
@@ -3174,66 +3331,130 @@ function AnalyticsBottomCta() {
 
 // ── Digital Systems & Integrations (bespoke page) ─────────────────────────
 
-const systemsWhoFor = [
-  {
-    icon: Table2,
-    title: "Businesses outgrowing spreadsheets and manual updates",
-    body: "When tracking things by hand starts causing errors, delays, or double work.",
-  },
-  {
-    icon: Workflow,
-    title: "Teams with tools that don't talk to each other",
-    body: "Forms, data, notifications, and accounts that should be working together.",
-  },
-  {
-    icon: Boxes,
-    title: "Owners who want practical systems, not complexity",
-    body: "The smallest setup that actually removes the busywork — nothing more.",
-  },
+const systemsInquirySteps = [
+  { label: "Form received", time: "Just now" },
+  { label: "Contact validated", time: "1 min ago" },
+  { label: "Lead added", time: "2 min ago" },
+  { label: "Team notified", time: "2 min ago" },
 ] as const;
 
-const systemsIncludes = [
-  {
-    icon: LayoutDashboard,
-    title: "Internal dashboards & admin tools",
-    body: "Simple views for tracking the records, numbers, and status a business actually uses.",
-  },
-  {
-    icon: Database,
-    title: "Forms & databases",
-    body: "Capture information cleanly and route it to the right place automatically.",
-  },
-  {
-    icon: Share2,
-    title: "APIs & integrations",
-    body: "Connect tools, accounts, payments, booking, or notifications so data flows between them.",
-  },
-  {
-    icon: Zap,
-    title: "Workflow automation",
-    body: "Replace repetitive manual steps with reliable, hands-off processes.",
-  },
+const systemsWorkflowRail = [
+  { icon: FileText, label: "Website form" },
+  { icon: Database, label: "Client records" },
+  { icon: Bell, label: "Team notification" },
 ] as const;
 
-const systemsProcess = [
-  {
-    icon: ClipboardList,
-    step: "01",
-    title: "Map the workflow",
-    body: "We trace how information moves today and find where it gets stuck or repeated.",
-  },
-  {
-    icon: Blocks,
-    step: "02",
-    title: "Build & connect",
-    body: "We build the dashboard, forms, or integrations and wire your existing tools together.",
-  },
+const systemsWhyItMatters = [
   {
     icon: RefreshCw,
-    step: "03",
-    title: "Automate & maintain",
-    body: "Repetitive steps run on their own, with monitoring so the system stays reliable.",
+    title: "Less repeated work",
+    body: "Information is entered once instead of copied between tools.",
   },
+  {
+    icon: Bell,
+    title: "Fewer missed steps",
+    body: "Notifications and follow-ups happen when they should.",
+  },
+  {
+    icon: Eye,
+    title: "A clearer view",
+    body: "Important records and statuses stay visible in one place.",
+  },
+] as const;
+
+/**
+ * Tool cards for the integration diagram. Gmail/Slack use full-color SVGs
+ * from public/images/services/svg; the rest use brand-tinted react-icons.
+ * Drop an official SVG into that folder and switch an entry to upgrade it.
+ */
+const systemsTools: { name: string; use: string; logo: ReactNode }[] = [
+  {
+    name: "Gmail",
+    use: "Lead notifications",
+    logo: (
+      <Image
+        src="/images/services/svg/gmail-logo.svg"
+        alt=""
+        width={28}
+        height={28}
+        className="h-7 w-7 object-contain"
+      />
+    ),
+  },
+  {
+    name: "Google Sheets",
+    use: "Records and tracking",
+    logo: <SiGooglesheets className="h-7 w-7" color="#34A853" />,
+  },
+  {
+    name: "Slack",
+    use: "Team updates",
+    logo: (
+      <Image
+        src="/images/services/svg/slack-logo.svg"
+        alt=""
+        width={28}
+        height={28}
+        className="h-7 w-7 object-contain"
+      />
+    ),
+  },
+  {
+    name: "Stripe",
+    use: "Payment sync",
+    logo: <SiStripe className="h-7 w-7" color="#635BFF" />,
+  },
+  {
+    name: "Airtable",
+    use: "Project management",
+    logo: <SiAirtable className="h-7 w-7" color="#18BFFF" />,
+  },
+  {
+    name: "LinkedIn",
+    use: "Lead capture",
+    logo: <FaLinkedin className="h-7 w-7" color="#0A66C2" />,
+  },
+  {
+    name: "Website Forms",
+    use: "Client intake",
+    logo: <FileText className="h-7 w-7 text-ink/80" strokeWidth={1.4} />,
+  },
+  {
+    name: "Google Calendar",
+    use: "Scheduling",
+    logo: <SiGooglecalendar className="h-7 w-7" color="#4285F4" />,
+  },
+];
+
+const systemsHowSteps = [
+  {
+    step: "01",
+    title: "Understand",
+    body: "Map the current workflow and find repeated or delayed steps.",
+  },
+  {
+    step: "02",
+    title: "Build and connect",
+    body: "Create the dashboard, form, database, or integration.",
+  },
+  {
+    step: "03",
+    title: "Test and improve",
+    body: "Check the system with real use and refine it.",
+  },
+] as const;
+
+const systemsOpsStats = [
+  { label: "New inquiries", value: "18", delta: "+12%" },
+  { label: "Ready for review", value: "7", delta: "+8%" },
+  { label: "Follow-up due", value: "5", delta: "+20%" },
+] as const;
+
+const systemsOpsActivity = [
+  { label: "Sarah Mitchell – Kitchen remodeling", time: "Just now" },
+  { label: "Daniel Ortiz – Bathroom remodel", time: "10 min ago" },
+  { label: "New website inquiry", time: "1 hr ago" },
+  { label: "Invoice collected – Staysure remodel", time: "2 hrs ago" },
 ] as const;
 
 const systemsFaqs = [
@@ -3257,36 +3478,14 @@ const systemsFaqs = [
     answer:
       "In most cases, yes. Systems and integrations can sit alongside your current site or connect directly to it. We review how it is built and what access is available before recommending an approach.",
   },
+  {
+    question: "Who maintains the system after launch?",
+    answer:
+      "Whatever fits how you work. Many businesses pair systems work with Ongoing Support so updates and small improvements are handled for them; others take a documented handoff and run it themselves. Either way, nothing is locked in.",
+  },
 ] as const;
 
 const systemsProjectSlugs = ["internal-automation-tool", "centi"] as const;
-
-const systemsNav = [
-  { label: "Dashboard", icon: LayoutDashboard, active: true },
-  { label: "Records", icon: Database, active: false },
-  { label: "Automations", icon: Zap, active: false },
-  { label: "Settings", icon: Settings2, active: false },
-] as const;
-
-const systemsMetrics = [
-  { label: "Records", value: "1,248" },
-  { label: "Synced", value: "98%" },
-  { label: "Uptime", value: "99.9%" },
-] as const;
-
-const systemsRecords = [
-  { name: "New inquiry", source: "Website form", tone: "active" },
-  { name: "Invoice #1042", source: "Stripe", tone: "synced" },
-  { name: "Client onboarding", source: "Airtable", tone: "pending" },
-  { name: "Support ticket", source: "Email", tone: "active" },
-] as const;
-
-const systemsRunSteps = [
-  { label: "Form submitted", done: true },
-  { label: "Data validated", done: true },
-  { label: "Team notified", done: true },
-  { label: "Synced to CRM", done: false },
-] as const;
 
 function SystemsServicePage({ service }: { service: ServiceArea }) {
   const projects = systemsProjectSlugs
@@ -3300,10 +3499,9 @@ function SystemsServicePage({ service }: { service: ServiceArea }) {
       <section className="bg-ivory py-10 sm:py-12 lg:py-16">
         <div className={webDesignContainer}>
           <SystemsHero />
-          <SystemsWhoFor />
-          <SystemsIncludes />
-          <SystemsProcess />
-          <SystemsPrinciple />
+          <SystemsWhyItMatters />
+          <SystemsToolGrid />
+          <SystemsHowItWorks />
           <SystemsWork projects={projects} />
           <SystemsFaq />
           <SystemsBottomCta />
@@ -3318,17 +3516,18 @@ function SystemsHero() {
     <div className="grid items-center gap-10 border-b border-line pb-11 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-14 lg:pb-14">
       <div className="max-w-xl">
         <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
-          Systems
+          Digital Systems &amp; Integrations
         </p>
         <h1 className={serviceHeroTitleClassName}>
-          Digital Systems
-          <br />
-          &amp; Integrations
+          Custom systems that keep the work moving.
         </h1>
         <p className="mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]">
-          Digital systems and integrations connect the forms, data, tools, and
-          notifications your business already uses — so information moves
-          automatically instead of by hand.
+          We build internal dashboards, connected forms, workflow automations,
+          and integrations that bring your tools and information together.
+        </p>
+        <p className="mt-4 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]">
+          The goal is simple: less copying, fewer missed steps, and a clearer
+          view of what&apos;s happening.
         </p>
         <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
           <ProjectInquiryTrigger
@@ -3339,198 +3538,145 @@ function SystemsHero() {
             <ArrowRight className="h-4 w-4" />
           </ProjectInquiryTrigger>
           <a
-            href="#example-system"
-            className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-3 text-sm font-semibold text-forest underline decoration-forest/35 underline-offset-4 transition-colors hover:decoration-forest"
+            href="#how-it-works"
+            className="group inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-card px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-forest/40 hover:text-forest"
           >
-            See an example system
+            See how it works
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </a>
         </div>
       </div>
 
-      <SystemsConsole />
+      <SystemsInquiryDemo />
     </div>
   );
 }
 
-/** Dark "internal system" mockup — the hero centerpiece. */
-function SystemsConsole() {
+/** Hero visual: inquiry card → dotted connector → connected-workflow rail. */
+function SystemsInquiryDemo() {
   return (
-    <div
-      id="example-system"
-      className="scroll-mt-28 overflow-hidden rounded-2xl border border-white/10 bg-[#141a16] shadow-[0_34px_66px_-30px_rgba(6,10,7,0.9)]"
-    >
-      <div className="flex items-center gap-2 border-b border-white/8 px-4 py-2.5">
-        <span className="flex items-center gap-1.5" aria-hidden>
-          <span className="h-2 w-2 rounded-full bg-white/20" />
-          <span className="h-2 w-2 rounded-full bg-white/20" />
-          <span className="h-2 w-2 rounded-full bg-white/20" />
-        </span>
-        <span className="mx-auto font-sans text-[0.66rem] font-medium text-ivory/45">
-          operations.ckworks
-        </span>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-forest/40 bg-forest/15 px-2 py-0.5 text-[0.58rem] font-semibold text-[#9BD3AC]">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#7FBE90]" />
-          Live
-        </span>
-      </div>
-
-      <div className="grid grid-cols-[6.5rem_minmax(0,1fr)] sm:grid-cols-[8rem_minmax(0,1fr)]">
-        <aside className="border-r border-white/8 p-3">
-          <div className="flex items-center gap-1.5 px-1.5 pb-3">
-            <Workflow className="h-4 w-4 text-[#9BD3AC]" strokeWidth={1.8} />
-            <span className="font-serif text-[0.82rem] font-medium text-ivory">
-              CK Ops
-            </span>
+    <div>
+      <div className="grid items-center gap-4 lg:grid-cols-[minmax(0,1.22fr)_2rem_minmax(0,0.88fr)] lg:gap-0">
+        <div className="rounded-2xl border border-line bg-card shadow-[0_26px_54px_-34px_rgba(31,36,32,0.5)]">
+          <div
+            className="flex items-center gap-1.5 border-b border-line px-4 py-2.5"
+            aria-hidden
+          >
+            <span className="h-2 w-2 rounded-full bg-[#C87264]" />
+            <span className="h-2 w-2 rounded-full bg-[#D8A847]" />
+            <span className="h-2 w-2 rounded-full bg-[#5F9C69]" />
           </div>
-          <nav className="space-y-0.5">
-            {systemsNav.map(({ label, icon: Icon, active }) => (
-              <span
-                key={label}
-                className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-[0.66rem] font-medium ${
-                  active
-                    ? "bg-forest/25 text-ivory"
-                    : "text-ivory/55"
-                }`}
-              >
-                <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.7} />
-                <span className="truncate">{label}</span>
+          <div className="p-5">
+            <p className="font-sans text-[0.95rem] font-semibold text-ink">
+              New website inquiry
+            </p>
+            <div className="mt-3.5 flex items-center gap-3 rounded-xl border border-line bg-ivory/60 p-3.5">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-forest text-[0.72rem] font-semibold text-ivory">
+                SM
               </span>
-            ))}
-          </nav>
-        </aside>
-
-        <div className="min-w-0 p-4">
-          <div className="flex items-center justify-between gap-3">
-            <p className="font-sans text-[0.82rem] font-semibold text-ivory">
-              Operations
-            </p>
-            <span className="inline-flex items-center gap-1 rounded-md bg-white/8 px-2 py-1 text-[0.6rem] font-semibold text-ivory/70">
-              <Plus className="h-3 w-3" strokeWidth={2.2} />
-              New
-            </span>
-          </div>
-
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {systemsMetrics.map((metric) => (
-              <div
-                key={metric.label}
-                className="rounded-lg border border-white/8 bg-white/[0.03] px-2.5 py-2"
-              >
-                <p className="text-[0.55rem] font-medium uppercase tracking-[0.08em] text-ivory/40">
-                  {metric.label}
-                </p>
-                <p className="mt-1 font-sans text-[0.92rem] font-semibold leading-none text-ivory">
-                  {metric.value}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-3 overflow-hidden rounded-lg border border-white/8">
-            <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_auto] gap-2 border-b border-white/8 bg-white/[0.03] px-3 py-1.5 text-[0.55rem] font-semibold uppercase tracking-[0.08em] text-ivory/40">
-              <span>Record</span>
-              <span>Source</span>
-              <span className="text-right">Status</span>
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-semibold text-ink">
+                  Sarah Mitchell
+                </span>
+                <span className="block truncate text-xs text-muted">
+                  Kitchen remodeling
+                </span>
+                <span className="block truncate text-xs text-muted">
+                  Orlando, FL
+                </span>
+              </span>
             </div>
-            {systemsRecords.map((record) => (
-              <div
-                key={record.name}
-                className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_auto] items-center gap-2 border-b border-white/5 px-3 py-2 last:border-b-0"
-              >
-                <span className="truncate text-[0.68rem] font-medium text-ivory/90">
-                  {record.name}
-                </span>
-                <span className="truncate text-[0.62rem] text-ivory/50">
-                  {record.source}
-                </span>
-                <SystemsStatusPill tone={record.tone} />
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-3 rounded-lg border border-white/8 bg-white/[0.02] px-3 py-2.5">
-            <p className="text-[0.55rem] font-semibold uppercase tracking-[0.08em] text-ivory/40">
-              Automation run
-            </p>
-            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1.5">
-              {systemsRunSteps.map((runStep, index) => (
-                <span key={runStep.label} className="flex items-center gap-2">
-                  <span className="flex items-center gap-1">
-                    {runStep.done ? (
-                      <CircleCheck
-                        className="h-3.5 w-3.5 fill-[#2F5B3F] text-ivory"
-                        strokeWidth={2.2}
-                      />
-                    ) : (
-                      <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-dashed border-ivory/40">
-                        <span className="h-1 w-1 rounded-full bg-ivory/40" />
-                      </span>
-                    )}
-                    <span
-                      className={`text-[0.6rem] font-medium ${
-                        runStep.done ? "text-ivory/80" : "text-ivory/45"
-                      }`}
-                    >
-                      {runStep.label}
-                    </span>
+            <ul className="mt-2 divide-y divide-line/70">
+              {systemsInquirySteps.map((step) => (
+                <li key={step.label} className="flex items-center gap-2.5 py-2.5">
+                  <CircleCheck
+                    className="h-4 w-4 shrink-0 fill-forest text-ivory"
+                    strokeWidth={2.4}
+                  />
+                  <span className="min-w-0 flex-1 truncate text-[0.8rem] font-medium text-ink">
+                    {step.label}
                   </span>
-                  {index < systemsRunSteps.length - 1 && (
-                    <ArrowRight
-                      className="h-3 w-3 text-ivory/25"
-                      strokeWidth={2}
-                      aria-hidden
-                    />
-                  )}
-                </span>
+                  <span className="shrink-0 text-[0.66rem] text-muted">
+                    {step.time}
+                  </span>
+                </li>
               ))}
-            </div>
+            </ul>
+          </div>
+        </div>
+
+        <span
+          className="hidden self-center border-t border-dashed border-line lg:block"
+          aria-hidden
+        />
+
+        <div className="rounded-2xl border border-line bg-card p-5 shadow-soft">
+          <p className="text-center text-[0.82rem] font-semibold text-ink">
+            Connected workflow
+          </p>
+          <div className="mt-4 flex flex-col items-center">
+            {systemsWorkflowRail.map(({ icon: Icon, label }, index) => (
+              <Fragment key={label}>
+                {index > 0 && (
+                  <ArrowDown
+                    className="my-2 h-4 w-4 text-muted/60"
+                    strokeWidth={1.8}
+                    aria-hidden
+                  />
+                )}
+                <span className="flex flex-col items-center gap-2">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-forest-soft/70 text-forest">
+                    <Icon className="h-5 w-5" strokeWidth={1.6} />
+                  </span>
+                  <span className="text-xs font-medium text-ink/80">
+                    {label}
+                  </span>
+                </span>
+              </Fragment>
+            ))}
           </div>
         </div>
       </div>
+      <p className="mt-3 text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted">
+        Illustrative example
+      </p>
     </div>
   );
 }
 
-function SystemsStatusPill({ tone }: { tone: "active" | "synced" | "pending" }) {
-  const styles = {
-    active: "bg-[#2F5B3F]/30 text-[#9BD3AC]",
-    synced: "bg-[#2F5B3F]/30 text-[#9BD3AC]",
-    pending: "bg-[#8a6d1f]/25 text-[#E4C56A]",
-  } as const;
-  const label = tone === "pending" ? "Pending" : tone === "synced" ? "Synced" : "Active";
-
+function SystemsWhyItMatters() {
   return (
-    <span
-      className={`justify-self-end rounded-full px-2 py-0.5 text-[0.55rem] font-semibold ${styles[tone]}`}
-    >
-      {label}
-    </span>
-  );
-}
-
-function SystemsWhoFor() {
-  return (
-    <section className="border-b border-line py-12 lg:py-14">
-      <div className="max-w-xl">
-        <p className={serviceSectionLabelClassName}>Who it is for</p>
+    <section className="grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.9fr)_1px_minmax(0,1.1fr)] lg:gap-12 lg:py-16">
+      <div className="max-w-md">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
+          Why it matters
+        </p>
         <h2 className={serviceSectionTitleClassName}>
-          When the moving parts stop keeping up.
+          Keep information moving without the manual handoffs.
         </h2>
+        <p className={serviceSectionBodyClassName}>
+          As businesses grow, information spreads across forms, spreadsheets,
+          inboxes, and disconnected tools.
+        </p>
+        <p className="mt-3 text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
+          We connect the pieces so your team can move faster with confidence.
+        </p>
       </div>
 
-      <div className="mt-9 grid gap-6 lg:grid-cols-3 lg:gap-5">
-        {systemsWhoFor.map(({ icon: Icon, title, body }) => (
-          <article
-            key={title}
-            className="rounded-2xl border border-line bg-card p-6 shadow-soft"
-          >
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-forest-soft text-forest">
+      <span className="hidden w-px bg-line lg:block" aria-hidden />
+
+      <div className="divide-y divide-line lg:self-center">
+        {systemsWhyItMatters.map(({ icon: Icon, title, body }) => (
+          <article key={title} className="flex gap-5 py-5 first:pt-0 last:pb-0">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-soft/60 text-forest">
               <Icon className="h-5 w-5" strokeWidth={1.6} />
             </span>
-            <h3 className="mt-4 font-serif text-lg font-medium leading-snug text-ink">
-              {title}
-            </h3>
-            <p className="mt-2 text-sm leading-6 text-muted">{body}</p>
+            <div>
+              <h3 className="font-serif text-xl font-medium leading-snug text-ink">
+                {title}
+              </h3>
+              <p className="mt-1 text-sm leading-6 text-muted">{body}</p>
+            </div>
           </article>
         ))}
       </div>
@@ -3538,103 +3684,193 @@ function SystemsWhoFor() {
   );
 }
 
-function SystemsIncludes() {
-  return (
-    <section className="border-b border-line py-12 lg:py-14">
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
-        <div className="max-w-sm">
-          <p className={serviceSectionLabelClassName}>
-            What this service covers
-          </p>
-          <h2 className={serviceSectionTitleClassName}>
-            Built around how you actually work.
-          </h2>
-          <p className={serviceSectionBodyClassName}>
-            From a single admin view to fully connected tools, each piece is
-            built only where it removes real work.
-          </p>
-        </div>
+function SystemsToolGrid() {
+  const topRow = systemsTools.slice(0, 4);
+  const bottomRow = systemsTools.slice(4);
 
-        <div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
-          {systemsIncludes.map(({ icon: Icon, title, body }) => (
-            <article key={title} className="flex gap-4">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-sand text-forest">
-                <Icon className="h-5 w-5" strokeWidth={1.55} />
+  return (
+    <section className="border-b border-line py-14 lg:py-16">
+      <div className="mx-auto max-w-3xl text-center">
+        <p className={serviceCenterLabelClassName}>
+          What this service can include
+        </p>
+        <h2 className="mt-4 font-serif text-[2rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.45rem]">
+          Connect the tools your business already uses.
+        </h2>
+      </div>
+
+      <div className="mx-auto mt-10 max-w-4xl">
+        <SystemsToolRow tools={topRow} />
+        <div className="my-3 flex flex-col items-center lg:my-0">
+          <span
+            className="hidden h-4 border-l border-dashed border-line lg:block"
+            aria-hidden
+          />
+          <div className="flex items-center gap-3 rounded-xl bg-forest px-6 py-4 shadow-[0_18px_38px_-18px_rgba(47,91,63,0.6)]">
+            <Store className="h-6 w-6 shrink-0 text-ivory" strokeWidth={1.6} />
+            <span className="font-serif text-lg font-semibold leading-none text-ivory">
+              Your business
+            </span>
+          </div>
+          <span
+            className="hidden h-4 border-l border-dashed border-line lg:block"
+            aria-hidden
+          />
+        </div>
+        <SystemsToolRow tools={bottomRow} />
+      </div>
+    </section>
+  );
+}
+
+function SystemsToolRow({ tools }: { tools: typeof systemsTools }) {
+  return (
+    <div className="grid grid-cols-2 gap-3 lg:flex lg:items-stretch lg:gap-0">
+      {tools.map((tool, index) => (
+        <Fragment key={tool.name}>
+          {index > 0 && (
+            <span
+              className="hidden self-center border-t border-dashed border-line lg:block lg:flex-1"
+              aria-hidden
+            />
+          )}
+          <article className="flex flex-col items-center gap-1.5 rounded-xl border border-line bg-card px-3 py-5 text-center shadow-soft lg:w-44 lg:shrink-0">
+            <span className="flex h-9 items-center justify-center">
+              {tool.logo}
+            </span>
+            <h3 className="text-sm font-semibold text-ink">{tool.name}</h3>
+            <p className="text-xs leading-4 text-muted">{tool.use}</p>
+          </article>
+        </Fragment>
+      ))}
+    </div>
+  );
+}
+
+function SystemsHowItWorks() {
+  return (
+    <section
+      id="how-it-works"
+      className="grid scroll-mt-24 gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center lg:gap-14 lg:py-16"
+    >
+      <div className="max-w-md">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
+          How it works
+        </p>
+        <h2 className={serviceSectionTitleClassName}>
+          Start with the workflow, not the software.
+        </h2>
+        <div className="mt-7 divide-y divide-line">
+          {systemsHowSteps.map((step) => (
+            <article
+              key={step.title}
+              className="flex gap-4 py-4 first:pt-0 last:pb-0"
+            >
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest-soft/70 font-source-serif-display text-[0.82rem] font-semibold tabular-nums text-forest"
+                style={{ fontVariationSettings: '"opsz" 16' }}
+              >
+                {step.step}
               </span>
               <div>
                 <h3 className="text-[0.95rem] font-semibold text-ink">
-                  {title}
+                  {step.title}
                 </h3>
-                <p className="mt-1.5 text-sm leading-6 text-muted">{body}</p>
+                <p className="mt-1 text-sm leading-6 text-muted">{step.body}</p>
               </div>
             </article>
           ))}
         </div>
       </div>
+
+      <SystemsOperationsCard />
     </section>
   );
 }
 
-function SystemsProcess() {
+/** Light "Operations" dashboard — how-it-works visual. */
+function SystemsOperationsCard() {
   return (
-    <section className="py-12 lg:py-14">
-      <div className="rounded-[1.5rem] border border-line bg-[linear-gradient(140deg,rgba(221,232,216,0.5),rgba(255,253,248,0.92)_48%,rgba(221,232,216,0.32))] px-5 py-9 shadow-[0_18px_40px_-32px_rgba(31,36,32,0.4)] sm:px-9 sm:py-11 lg:px-12">
-        <div className="mx-auto max-w-5xl text-center">
-          <p className={serviceCenterLabelClassName}>
-            How a system comes together
-          </p>
-          <h2 className={serviceCenterTitleClassName}>
-            From tangled steps to something that runs itself.
-          </h2>
+    <div className="rounded-2xl border border-line bg-card shadow-[0_26px_54px_-34px_rgba(31,36,32,0.5)]">
+      <div
+        className="flex items-center gap-1.5 border-b border-line px-4 py-2.5"
+        aria-hidden
+      >
+        <span className="h-2 w-2 rounded-full bg-[#C87264]" />
+        <span className="h-2 w-2 rounded-full bg-[#D8A847]" />
+        <span className="h-2 w-2 rounded-full bg-[#5F9C69]" />
+      </div>
+      <div className="p-4 sm:p-5">
+        <div className="flex items-center justify-between gap-3">
+          <p className="font-sans text-sm font-semibold text-ink">Operations</p>
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-ivory px-2.5 py-1.5 text-[0.68rem] font-medium text-muted">
+            This week
+            <ChevronDown className="h-3 w-3" strokeWidth={2} />
+          </span>
         </div>
 
-        <div className="mt-10 grid gap-8 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] md:items-start md:gap-4">
-          {systemsProcess.map(({ icon: Icon, step, title, body }, index) => (
-            <div key={title} className="contents">
-              <article className="mx-auto max-w-xs text-center">
-                <span className="relative mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-line bg-card text-forest shadow-soft">
-                  <Icon className="h-7 w-7" strokeWidth={1.35} />
-                  <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-forest text-[0.62rem] font-semibold text-ivory shadow-soft">
-                    {step}
-                  </span>
-                </span>
-                <h3 className="mt-5 text-[1.05rem] font-semibold text-ink">
-                  {title}
-                </h3>
-                <p className="mt-2.5 text-sm leading-6 text-muted">{body}</p>
-              </article>
-              {index < systemsProcess.length - 1 && (
-                <div className="hidden items-center justify-center pt-6 text-forest/45 md:flex">
-                  <ArrowRight className="h-5 w-5" strokeWidth={1.6} />
-                </div>
-              )}
+        <div className="mt-3.5 grid grid-cols-3 gap-2.5">
+          {systemsOpsStats.map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-xl border border-line p-3"
+            >
+              <p className="text-[0.62rem] font-medium text-muted">
+                {stat.label}
+              </p>
+              <div className="mt-1.5 flex items-baseline justify-between gap-2">
+                <p className="font-sans text-[1.15rem] font-semibold leading-none tracking-[-0.01em] text-ink">
+                  {stat.value}
+                </p>
+                <p className="text-[0.62rem] font-semibold text-forest">
+                  {stat.delta}
+                </p>
+              </div>
             </div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
 
-function SystemsPrinciple() {
-  return (
-    <section className="pb-12 lg:pb-14">
-      <div className="flex flex-col gap-5 rounded-2xl border border-line bg-sand px-6 py-7 sm:flex-row sm:items-center sm:gap-7 sm:px-8 lg:px-10">
-        <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-line bg-card text-forest shadow-soft">
-          <Sprout className="h-7 w-7" strokeWidth={1.4} />
-        </span>
-        <div>
-          <h2 className="font-serif text-[1.7rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2rem]">
-            Systems should remove work, not add it.
-          </h2>
-          <p className="mt-2.5 max-w-2xl text-sm leading-7 text-muted sm:text-[0.95rem]">
-            The best system is often the smallest one — a single clean
-            dashboard, one reliable integration, or one workflow that quietly
-            runs itself. We build only what earns its place.
-          </p>
+        <p className="mt-4 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-muted">
+          Recent activity
+        </p>
+        <ul className="mt-1 divide-y divide-line/70">
+          {systemsOpsActivity.map((item) => (
+            <li key={item.label} className="flex items-center gap-2.5 py-2">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-forest-soft/50 text-forest">
+                <FileText className="h-3.5 w-3.5" strokeWidth={1.7} />
+              </span>
+              <span className="min-w-0 flex-1 truncate text-[0.72rem] font-medium text-ink">
+                {item.label}
+              </span>
+              <span className="shrink-0 text-[0.62rem] text-muted">
+                {item.time}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-xl border border-line bg-sand/60 px-4 py-3">
+          {systemsWorkflowRail.map(({ icon: Icon }, index) => {
+            const labels = ["Form submitted", "Record created", "Team notified"];
+            return (
+              <Fragment key={labels[index]}>
+                {index > 0 && (
+                  <ArrowRight
+                    className="h-3.5 w-3.5 text-muted/60"
+                    strokeWidth={1.8}
+                    aria-hidden
+                  />
+                )}
+                <span className="flex items-center gap-1.5 text-[0.68rem] font-medium text-ink/80">
+                  <Icon className="h-3.5 w-3.5 text-forest" strokeWidth={1.7} />
+                  {labels[index]}
+                </span>
+              </Fragment>
+            );
+          })}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -3642,7 +3878,7 @@ function SystemsWork({ projects }: { projects: CaseStudy[] }) {
   if (projects.length === 0) return null;
 
   return (
-    <section className="border-t border-line py-12 lg:py-14">
+    <section className="border-b border-line py-12 lg:py-14">
       <h2 className="font-serif text-[2rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.3rem]">
         Relevant work
       </h2>
@@ -3657,38 +3893,18 @@ function SystemsWork({ projects }: { projects: CaseStudy[] }) {
 
 function SystemsFaq() {
   return (
-    <section className="border-t border-line py-12 lg:py-14">
-      <h2 className="font-serif text-[2rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.3rem]">
-        Common questions
-      </h2>
-      <div className="mt-6 space-y-3">
-        {systemsFaqs.map((faq) => (
-          <details
-            key={faq.question}
-            className="group rounded-xl border border-line bg-card px-5 shadow-soft"
-          >
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left marker:content-none [&::-webkit-details-marker]:hidden">
-              <span className="pr-2 text-[0.95rem] font-medium leading-snug text-ink">
-                {faq.question}
-              </span>
-              <ChevronDown
-                className="h-5 w-5 shrink-0 text-ink/60 transition-transform duration-200 group-open:rotate-180"
-                strokeWidth={1.8}
-              />
-            </summary>
-            <p className="max-w-3xl pb-5 pr-8 text-sm leading-7 text-muted">
-              {faq.answer}
-            </p>
-          </details>
-        ))}
-      </div>
+    <section className="border-b border-line py-12 lg:py-14">
+      <FAQSection
+        faqs={[...systemsFaqs]}
+        description="Common questions about connecting tools, automating steps, and keeping systems running."
+      />
     </section>
   );
 }
 
 function SystemsBottomCta() {
   return (
-    <div className="rounded-2xl border border-line bg-sand px-6 py-8 shadow-soft sm:px-8 sm:py-9 lg:px-10">
+    <div className="mt-10 rounded-2xl border border-line bg-sand px-6 py-8 shadow-soft sm:px-8 sm:py-9 lg:px-10">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
         <div className="max-w-2xl">
           <h2 className="font-serif text-[1.85rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2.15rem]">
@@ -3713,44 +3929,70 @@ function SystemsBottomCta() {
 
 // ── Ongoing Support (bespoke page) ────────────────────────────────────────
 
-const supportUpdates = [
-  { label: "Updated team page content", date: "May 3" },
-  { label: "Fixed mobile spacing issue", date: "May 2" },
-  { label: "Improved Core Web Vitals", date: "Apr 30" },
+const supportStats = [
+  { icon: ShieldCheck, label: "Site health", value: "Healthy", accent: true },
+  { icon: Calendar, label: "Last check", value: "May 3, 2025", accent: false },
+  { icon: Box, label: "Uptime", value: "99.9%", accent: false },
+  { icon: Clock, label: "Response time", value: "< 2h", accent: false },
 ] as const;
 
-const supportKeepWorking = [
-  { icon: CircleCheck, title: "Stay current" },
-  { icon: Wrench, title: "Fix problems early" },
-  { icon: LineChart, title: "Improve when it matters" },
+const supportUpdates = [
+  "Updated team page content",
+  "Fixed mobile spacing issue",
+  "Improved Core Web Vitals",
+] as const;
+
+const supportWhyItMatters = [
+  {
+    icon: RefreshCw,
+    title: "Stay current",
+    body: "Content, tools, and integrations stay up to date.",
+  },
+  {
+    icon: Wrench,
+    title: "Fix problems early",
+    body: "Small issues are addressed before they become bigger.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Improve when it matters",
+    body: "Changes are prioritized based on impact and timing.",
+  },
 ] as const;
 
 const supportIncludes = [
   {
     title: "Website care",
-    body: "Routine updates, technical checks, dependency maintenance, and general cleanup.",
+    body: "Keep your site updated, secure, and working as it should.",
   },
   {
     title: "Fixes and troubleshooting",
-    body: "Broken layouts, mobile issues, forms, errors, and unexpected behavior.",
+    body: "Investigate issues and make clarifications to get things back on track.",
   },
   {
     title: "Content and small improvements",
-    body: "New pages, updated information, project additions, and practical interface changes.",
+    body: "Update content and make useful changes to keep things clear and effective.",
   },
   {
     title: "Performance and measurement checks",
-    body: "Occasional reviews of speed, analytics, search visibility, and important customer paths.",
+    body: "Check speed, tracking, and metrics to ensure things are performing well.",
   },
 ] as const;
 
 const supportRequests = [
   { icon: Pencil, label: "Update a service or team page" },
   { icon: Smartphone, label: "Fix a mobile layout issue" },
-  { icon: ClipboardList, label: "Add a new form field or notification" },
-  { icon: ImageIcon, label: "Publish a project or announcement" },
-  { icon: LineChart, label: "Investigate a tracking problem" },
+  { icon: Mail, label: "Add a new form field or notification" },
+  { icon: Megaphone, label: "Publish a project or announcement" },
+  { icon: BarChart3, label: "Investigate a tracking problem" },
   { icon: Gauge, label: "Improve a slow or confusing section" },
+] as const;
+
+const supportTrackerSteps = [
+  { label: "Received", date: "May 3" },
+  { label: "In review", date: "May 3" },
+  { label: "In progress", date: "May 4" },
+  { label: "Completed", date: "May 4" },
 ] as const;
 
 const supportProcess = [
@@ -3807,7 +4049,7 @@ function OngoingSupportServicePage({ service }: { service: ServiceArea }) {
       <section className="bg-ivory py-10 sm:py-12 lg:py-16">
         <div className={webDesignContainer}>
           <SupportHero />
-          <SupportKeepWorking />
+          <SupportWhyItMatters />
           <SupportIncludes />
           <SupportRequests />
           <SupportPrinciple />
@@ -3865,7 +4107,7 @@ function SupportHero() {
             </ProjectInquiryTrigger>
             <a
               href="#support-includes"
-              className="group inline-flex items-center justify-center gap-2 rounded-md px-3 py-3 text-sm font-semibold text-forest transition-colors hover:text-ink"
+              className="group inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-card px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-forest/40 hover:text-forest"
             >
               See what support can include
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -3884,127 +4126,107 @@ function SupportConsole() {
   return (
     <div
       id="example-support"
-      className="scroll-mt-28 overflow-hidden rounded-2xl border border-line bg-card shadow-[0_26px_54px_-34px_rgba(31,36,32,0.5)]"
+      className="scroll-mt-28 rounded-2xl border border-line bg-card shadow-[0_26px_54px_-34px_rgba(31,36,32,0.5)]"
     >
-      <div className="border-b border-line px-5 py-3.5">
-        <p className="font-sans text-sm font-semibold text-ink">
+      <div className="relative flex items-center border-b border-line px-4 py-2.5">
+        <span className="flex items-center gap-1.5" aria-hidden>
+          <span className="h-2 w-2 rounded-full bg-[#C87264]" />
+          <span className="h-2 w-2 rounded-full bg-[#D8A847]" />
+          <span className="h-2 w-2 rounded-full bg-[#5F9C69]" />
+        </span>
+        <p className="absolute left-1/2 -translate-x-1/2 font-sans text-[0.78rem] font-semibold text-ink">
           Example support view
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
-        <div className="divide-y divide-line border-b border-line sm:border-b-0 sm:border-r">
-          <div className="px-5 py-4">
-            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-muted">
-              Site health
-            </p>
-            <div className="mt-2.5 flex items-center gap-3">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest text-ivory">
-                <Check className="h-4 w-4" strokeWidth={2.6} />
-              </span>
-              <div>
-                <p className="text-[0.95rem] font-semibold text-ink">Healthy</p>
-                <p className="text-[0.68rem] text-muted">
-                  All systems running normally.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="px-5 py-4">
-            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-muted">
-              Recent updates
-            </p>
-            <ul className="mt-2.5 space-y-2.5">
-              {supportUpdates.map((update) => (
-                <li key={update.label} className="flex items-center gap-2.5">
-                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-forest-soft text-forest">
-                    <Check className="h-3 w-3" strokeWidth={2.8} />
-                  </span>
-                  <span className="min-w-0 flex-1 truncate text-[0.72rem] font-medium text-ink/85">
-                    {update.label}
-                  </span>
-                  <span className="shrink-0 text-[0.64rem] text-muted">
-                    {update.date}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <a
-              href="#support-process"
-              className="mt-3.5 inline-flex items-center gap-1.5 text-[0.7rem] font-semibold text-forest"
+      <div className="p-4 sm:p-5">
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+          {supportStats.map(({ icon: Icon, label, value, accent }) => (
+            <div
+              key={label}
+              className="rounded-xl border border-line p-3.5 text-center"
             >
-              View all activity
-              <ArrowRight className="h-3 w-3" strokeWidth={2} />
-            </a>
-          </div>
+              <span
+                className={`mx-auto flex h-10 w-10 items-center justify-center rounded-full ${
+                  accent
+                    ? "bg-forest text-ivory"
+                    : "bg-forest-soft/60 text-forest"
+                }`}
+              >
+                <Icon className="h-4.5 w-4.5" strokeWidth={1.7} />
+              </span>
+              <p className="mt-2.5 text-[0.62rem] font-medium text-muted">
+                {label}
+              </p>
+              <p
+                className={`mt-0.5 text-[0.82rem] font-semibold ${
+                  accent ? "text-forest" : "text-ink"
+                }`}
+              >
+                {value}
+              </p>
+            </div>
+          ))}
         </div>
 
-        <div className="divide-y divide-line">
-          <div className="px-5 py-4">
-            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-muted">
-              Last check
-            </p>
-            <p className="mt-2 text-[0.95rem] font-semibold text-ink">
-              May 3, 2025
-            </p>
-            <p className="text-[0.68rem] text-muted">10:24 AM</p>
-          </div>
-          <div className="px-5 py-4">
-            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-muted">
-              Uptime
-            </p>
-            <p className="mt-2 font-sans text-[1.5rem] font-semibold leading-none text-forest">
-              99.9%
-            </p>
-            <p className="mt-1 text-[0.68rem] text-muted">Last 30 days</p>
-          </div>
-          <div className="px-5 py-4">
-            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-muted">
-              Response time
-            </p>
-            <p className="mt-2 font-sans text-[1.5rem] font-semibold leading-none text-forest">
-              &lt; 2h
-            </p>
-            <p className="mt-1 text-[0.68rem] text-muted">Typical</p>
-          </div>
+        <div className="mt-3 rounded-xl border border-line px-4 py-3.5">
+          <p className="text-[0.7rem] font-semibold text-ink">Recent updates</p>
+          <ul className="mt-1 divide-y divide-line/70">
+            {supportUpdates.map((update) => (
+              <li key={update} className="flex items-center gap-3 py-2.5">
+                <span
+                  className="h-2.5 w-2.5 shrink-0 rounded-full border border-line bg-sand"
+                  aria-hidden
+                />
+                <span className="min-w-0 flex-1 truncate text-[0.74rem] font-medium text-ink/85">
+                  {update}
+                </span>
+                <ChevronRight
+                  className="h-3.5 w-3.5 shrink-0 text-muted/70"
+                  strokeWidth={2}
+                />
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
   );
 }
 
-function SupportKeepWorking() {
+function SupportWhyItMatters() {
   return (
-    <section className="py-12 lg:py-14">
-      <div className="grid gap-8 rounded-2xl border border-line bg-sand px-6 py-9 sm:px-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center lg:gap-12 lg:px-10">
-        <div className="max-w-md">
-          <h2 className="font-serif text-[1.9rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.3rem]">
-            Keep what you built working well.
-          </h2>
-          <p className="mt-3 text-sm leading-6 text-muted sm:text-[0.95rem]">
-            Support is useful when the site needs to stay current, small issues
-            need attention, or improvements make more sense over time than
-            through another full rebuild.
-          </p>
-        </div>
-        <div className="grid grid-cols-3">
-          {supportKeepWorking.map(({ icon: Icon, title }, index) => (
-            <article
-              key={title}
-              className={`px-2 text-center sm:px-4 ${
-                index > 0 ? "border-l border-line/80" : ""
-              }`}
-            >
-              <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-line bg-card text-forest">
-                <Icon className="h-5 w-5" strokeWidth={1.6} />
-              </span>
-              <p className="mt-3 text-sm font-semibold leading-snug text-ink">
+    <section className="grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.9fr)_1px_minmax(0,1.1fr)] lg:gap-12 lg:py-16">
+      <div className="max-w-md">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
+          Why it matters
+        </p>
+        <h2 className={serviceSectionTitleClassName}>
+          Keep what you built working well.
+        </h2>
+        <p className={serviceSectionBodyClassName}>
+          Support is useful when the site needs to stay current, small issues
+          need attention, or improvements make more sense over time than
+          through another full rebuild.
+        </p>
+      </div>
+
+      <span className="hidden w-px bg-line lg:block" aria-hidden />
+
+      <div className="divide-y divide-line lg:self-center">
+        {supportWhyItMatters.map(({ icon: Icon, title, body }) => (
+          <article key={title} className="flex gap-5 py-5 first:pt-0 last:pb-0">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-soft/60 text-forest">
+              <Icon className="h-5 w-5" strokeWidth={1.6} />
+            </span>
+            <div>
+              <h3 className="font-serif text-xl font-medium leading-snug text-ink">
                 {title}
-              </p>
-            </article>
-          ))}
-        </div>
+              </h3>
+              <p className="mt-1 text-sm leading-6 text-muted">{body}</p>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );
@@ -4014,39 +4236,36 @@ function SupportIncludes() {
   return (
     <section
       id="support-includes"
-      className="scroll-mt-24 border-b border-line py-12 lg:py-14"
+      className="scroll-mt-24 border-b border-line py-14 lg:py-16"
     >
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-12">
-        <div className="max-w-sm">
-          <p className={serviceSectionLabelClassName}>
-            What support can include
-          </p>
-          <h2 className={serviceSectionTitleClassName}>
-            Practical support for the things that keep your site or system
-            running smoothly.
-          </h2>
-        </div>
-        <div className="border-t border-line">
-          {supportIncludes.map(({ title, body }, index) => (
-            <article
-              key={title}
-              className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-5 gap-y-1.5 border-b border-line py-5 sm:grid-cols-[auto_minmax(0,13rem)_minmax(0,1fr)] sm:gap-x-8"
-            >
+      <div className="mx-auto max-w-3xl text-center">
+        <p className={serviceCenterLabelClassName}>What support can include</p>
+        <h2 className="mt-4 font-serif text-[2rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.45rem]">
+          Practical support for the things that keep your site or system
+          running smoothly.
+        </h2>
+      </div>
+
+      <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        {supportIncludes.map(({ title, body }, index) => (
+          <article
+            key={title}
+            className="rounded-2xl border border-line bg-card p-5 shadow-soft"
+          >
+            <div className="flex items-center gap-3">
               <span
-                className="font-source-serif-display text-[1.35rem] font-semibold leading-none tabular-nums text-forest/70"
-                style={{ fontVariationSettings: '"opsz" 20' }}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest-soft/60 font-source-serif-display text-[0.82rem] font-semibold tabular-nums text-forest"
+                style={{ fontVariationSettings: '"opsz" 16' }}
               >
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <h3 className="text-[1.02rem] font-semibold leading-snug text-ink">
+              <h3 className="text-[0.95rem] font-semibold leading-snug text-ink">
                 {title}
               </h3>
-              <p className="col-start-2 text-sm leading-6 text-muted sm:col-start-3 sm:pt-0.5">
-                {body}
-              </p>
-            </article>
-          ))}
-        </div>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-muted">{body}</p>
+          </article>
+        ))}
       </div>
     </section>
   );
@@ -4054,24 +4273,23 @@ function SupportIncludes() {
 
 function SupportRequests() {
   return (
-    <section className="border-b border-line py-12 lg:py-14">
-      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
-        Examples of common requests
-      </p>
-      <div className="mt-8 grid grid-cols-2 gap-y-8 sm:grid-cols-3 lg:grid-cols-6 lg:gap-y-0">
-        {supportRequests.map(({ icon: Icon, label }, index) => (
+    <section className="py-12 lg:py-14">
+      <div className="flex items-center gap-5">
+        <p className="shrink-0 text-xs font-semibold uppercase tracking-[0.24em] text-muted">
+          Examples of common requests
+        </p>
+        <span className="h-px flex-1 bg-line" aria-hidden />
+      </div>
+      <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
+        {supportRequests.map(({ icon: Icon, label }) => (
           <article
             key={label}
-            className={`px-4 text-center lg:px-5 ${
-              index > 0 ? "lg:border-l lg:border-line" : ""
-            }`}
+            className="flex items-center gap-3.5 rounded-xl border border-line bg-card px-4 py-3.5 shadow-soft"
           >
-            <span className="mx-auto flex h-8 items-center justify-center text-forest">
-              <Icon className="h-6 w-6" strokeWidth={1.5} />
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center text-forest">
+              <Icon className="h-5 w-5" strokeWidth={1.5} />
             </span>
-            <p className="mx-auto mt-3 max-w-[9rem] text-xs font-medium leading-5 text-ink/80">
-              {label}
-            </p>
+            <p className="text-sm font-medium text-ink/85">{label}</p>
           </article>
         ))}
       </div>
@@ -4081,118 +4299,38 @@ function SupportRequests() {
 
 function SupportPrinciple() {
   return (
-    <section className="py-12 lg:py-14">
-      <div className="grid items-center gap-8 overflow-hidden rounded-2xl border border-line bg-sand px-6 py-8 sm:px-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10 lg:px-10">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
-          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-line bg-card text-forest shadow-soft">
-            <ShieldCheck className="h-6 w-6" strokeWidth={1.5} />
-          </span>
-          <div>
-            <h2 className="font-serif text-[1.7rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2rem]">
-              Support should remove uncertainty.
-            </h2>
-            <p className="mt-2.5 max-w-xl text-sm leading-7 text-muted sm:text-[0.95rem]">
-              The goal is not to create unnecessary monthly work. Support can be
-              scoped around a specific need or organized into ongoing care when
-              regular attention would genuinely help.
-            </p>
-          </div>
+    <section className="pb-12 lg:pb-14">
+      <div className="grid items-center gap-8 rounded-2xl border border-line bg-sand px-6 py-8 sm:px-8 lg:grid-cols-[minmax(0,1.3fr)_1px_minmax(0,0.7fr)] lg:gap-10 lg:px-10 lg:py-9">
+        <div>
+          <h2 className="font-serif text-[1.7rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2rem]">
+            Support should remove uncertainty.
+          </h2>
+          <p className="mt-2.5 max-w-xl text-sm leading-7 text-muted sm:text-[0.95rem]">
+            The goal is not to create unnecessary monthly work. Support can be
+            scoped around a specific need or organized into ongoing care when
+            regular attention would genuinely help.
+          </p>
         </div>
-        <SupportPrincipleArt className="hidden justify-self-end lg:block" />
+
+        <span className="hidden self-stretch bg-line/80 lg:block" aria-hidden />
+
+        <div className="hidden -rotate-2 lg:block">
+          <p className="font-serif text-[1.55rem] italic leading-snug text-forest">
+            Right amount of support
+            <br />
+            at the right time.
+          </p>
+          <Image
+            src="/images/hero/svg/underline.svg"
+            alt=""
+            width={3785}
+            height={429}
+            className="mt-1.5 h-auto w-40"
+            aria-hidden
+          />
+        </div>
       </div>
     </section>
-  );
-}
-
-function SupportPrincipleArt({ className = "" }: { className?: string }) {
-  const stroke = "#2F5B3F";
-  return (
-    <svg
-      viewBox="0 0 300 170"
-      className={`h-auto w-full max-w-[21rem] ${className}`}
-      fill="none"
-      aria-hidden
-    >
-      {/* browser window */}
-      <rect
-        x="20"
-        y="28"
-        width="184"
-        height="116"
-        rx="12"
-        stroke={stroke}
-        strokeOpacity="0.28"
-        strokeWidth="2"
-      />
-      <line
-        x1="20"
-        y1="52"
-        x2="204"
-        y2="52"
-        stroke={stroke}
-        strokeOpacity="0.2"
-        strokeWidth="1.5"
-      />
-      {[34, 43, 52].map((cx) => (
-        <circle key={cx} cx={cx} cy="40" r="2.4" fill={stroke} fillOpacity="0.28" />
-      ))}
-      {[
-        { y: 72, x2: 118, o: 0.22 },
-        { y: 88, x2: 168, o: 0.14 },
-        { y: 104, x2: 150, o: 0.14 },
-        { y: 120, x2: 104, o: 0.14 },
-      ].map((bar) => (
-        <line
-          key={bar.y}
-          x1="38"
-          y1={bar.y}
-          x2={bar.x2}
-          y2={bar.y}
-          stroke={stroke}
-          strokeOpacity={bar.o}
-          strokeWidth="4"
-          strokeLinecap="round"
-        />
-      ))}
-      {/* check badge */}
-      <circle cx="196" cy="122" r="16" fill={stroke} />
-      <path
-        d="M188 122 l6 6 l10 -11"
-        stroke="#FAF7F0"
-        strokeWidth="2.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      {/* plant */}
-      <path
-        d="M256 144 v-26"
-        stroke={stroke}
-        strokeOpacity="0.3"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M256 122 c-12 -1 -19 -10 -18 -22 c12 -1 20 9 18 22 Z"
-        stroke={stroke}
-        strokeOpacity="0.3"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M256 126 c12 -1 19 -10 18 -22 c-12 -1 -20 9 -18 22 Z"
-        stroke={stroke}
-        strokeOpacity="0.3"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M244 144 h24 l-3 16 h-18 Z"
-        stroke={stroke}
-        strokeOpacity="0.3"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }
 
@@ -4200,73 +4338,117 @@ function SupportProcess() {
   return (
     <section
       id="support-process"
-      className="scroll-mt-24 border-b border-line py-12 lg:py-14"
+      className="grid scroll-mt-24 gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-14 lg:py-16"
     >
-      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
-        How requests are handled
-      </p>
-      <div className="mt-9 grid gap-8 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] md:items-start md:gap-5">
-        {supportProcess.map(({ step, title, body }, index) => (
-          <div key={title} className="contents">
-            <article className="flex gap-4">
+      <div className="max-w-md">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
+          How requests are handled
+        </p>
+        <h2 className={serviceSectionTitleClassName}>
+          A simple path from request to resolution.
+        </h2>
+        <div className="mt-7 divide-y divide-line">
+          {supportProcess.map(({ step, title, body }) => (
+            <article key={title} className="flex gap-4 py-4 first:pt-0 last:pb-0">
               <span
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-card font-source-serif-display text-[0.95rem] font-semibold tabular-nums text-forest shadow-soft"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest-soft/70 font-source-serif-display text-[0.85rem] font-semibold tabular-nums text-forest"
                 style={{ fontVariationSettings: '"opsz" 16' }}
               >
                 {step}
               </span>
               <div>
-                <h3 className="text-[1rem] font-semibold text-ink">{title}</h3>
-                <p className="mt-1.5 text-sm leading-6 text-muted">{body}</p>
+                <h3 className="text-[0.95rem] font-semibold text-ink">
+                  {title}
+                </h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{body}</p>
               </div>
             </article>
-            {index < supportProcess.length - 1 && (
-              <div className="hidden items-center justify-center pt-3 text-muted/55 md:flex">
-                <ArrowRight className="h-5 w-5" strokeWidth={1.6} />
-              </div>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
+        <p className="mt-6 text-sm leading-6 text-muted">
+          You receive a clear understanding of what is being changed, what it
+          will require, and what happens next.
+        </p>
       </div>
-      <p className="mx-auto mt-9 max-w-2xl text-center text-sm leading-6 text-muted">
-        You receive a clear understanding of what is being changed, what it will
-        require, and what happens next.
-      </p>
+
+      <SupportRequestTracker />
     </section>
+  );
+}
+
+/** "Support request" tracker — how-requests-are-handled visual. */
+function SupportRequestTracker() {
+  return (
+    <div className="rounded-2xl border border-line bg-card p-4 shadow-[0_26px_54px_-34px_rgba(31,36,32,0.5)] sm:p-5">
+      <p className="font-sans text-sm font-semibold text-ink">
+        Support request
+      </p>
+
+      <div className="mt-3 flex items-center gap-3 rounded-xl border border-line bg-ivory/60 p-3.5">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line bg-card text-forest">
+          <FileText className="h-4 w-4" strokeWidth={1.7} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-[0.8rem] font-semibold text-ink">
+            Update contact form confirmation message
+          </span>
+          <span className="block text-[0.66rem] text-muted">
+            Submitted May 3, 2025 · via email
+          </span>
+        </span>
+        <span className="shrink-0 rounded-full bg-forest-soft px-2.5 py-1 text-[0.62rem] font-semibold text-forest">
+          Completed
+        </span>
+      </div>
+
+      <div className="relative mt-6 px-1">
+        <span
+          className="absolute left-[12.5%] right-[12.5%] top-3 h-px bg-forest/40"
+          aria-hidden
+        />
+        <div className="relative grid grid-cols-4">
+          {supportTrackerSteps.map((step) => (
+            <div key={step.label} className="flex flex-col items-center gap-1.5">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-forest text-ivory ring-4 ring-card">
+                <Check className="h-3 w-3" strokeWidth={2.8} />
+              </span>
+              <span className="text-center text-[0.66rem] font-semibold leading-tight text-ink">
+                {step.label}
+              </span>
+              <span className="-mt-1 text-[0.6rem] text-muted">
+                {step.date}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-5 flex items-start gap-3 rounded-xl bg-forest-soft/50 p-4">
+        <CircleCheck
+          className="mt-0.5 h-5 w-5 shrink-0 fill-forest text-ivory"
+          strokeWidth={2.2}
+        />
+        <div>
+          <p className="text-[0.78rem] font-semibold text-ink">
+            Completed May 4, 2025
+          </p>
+          <p className="mt-1 text-[0.72rem] leading-5 text-muted">
+            Confirmation message updated and tested on desktop and mobile. You
+            can view the change on your site.
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
 
 function SupportFaq() {
   return (
     <section className="border-b border-line py-12 lg:py-14">
-      <div className="grid gap-7 lg:grid-cols-[minmax(12rem,0.4fr)_minmax(0,1fr)] lg:gap-12">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
-            Common questions
-          </p>
-          <h2 className="mt-4 font-serif text-[2rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.3rem]">
-            A few useful questions.
-          </h2>
-        </div>
-        <div className="border-t border-line">
-          {supportFaqs.map((faq) => (
-            <details key={faq.question} className="group border-b border-line">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left marker:content-none [&::-webkit-details-marker]:hidden">
-                <span className="pr-2 text-[0.95rem] font-medium leading-snug text-ink">
-                  {faq.question}
-                </span>
-                <Plus
-                  className="h-5 w-5 shrink-0 text-ink/55 transition-transform duration-200 group-open:rotate-45"
-                  strokeWidth={1.7}
-                />
-              </summary>
-              <p className="max-w-2xl pb-5 pr-8 text-sm leading-7 text-muted">
-                {faq.answer}
-              </p>
-            </details>
-          ))}
-        </div>
-      </div>
+      <FAQSection
+        faqs={[...supportFaqs]}
+        description="Common questions about ongoing support, how requests work, and what to expect."
+      />
     </section>
   );
 }
