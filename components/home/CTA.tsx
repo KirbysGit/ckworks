@@ -3,8 +3,8 @@
 import { type CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import Button from "./ui/Button";
-import WhatsAppContactLink from "./WhatsAppContactLink";
+import Button from "../ui/Button";
+import WhatsAppContactLink from "../contact/WhatsAppContactLink";
 import { fadeUp, inView } from "@/lib/motion";
 
 /**

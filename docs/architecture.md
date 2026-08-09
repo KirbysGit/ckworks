@@ -14,22 +14,42 @@
 
 ```text
 app/                    Route entry points, metadata, API routes, global CSS
-components/ui/          Small reusable visual primitives
+components/home/        Homepage-only sections and mockups
+components/layout/      Header, footer, and shared route shell
+components/inquiry/     Project inquiry modal, provider, and triggers
+components/contact/     Contact form and contact-channel helpers
+components/projects/    Project cards and case-study page instrumentation
+components/analytics/   Small client-side analytics view events
 components/page/        Reusable public-page sections and SEO-adjacent pieces
-components/             Homepage and cross-feature compositions
+components/ui/          Small reusable visual primitives
 lib/                    Content data, SEO helpers, navigation, motion, analytics
 public/images/          Versioned production assets organized by feature
 docs/                   Durable decisions and agent guidance
 .agents/                Reusable task briefs for agent handoffs
 
-components/services/    TARGET, does not exist yet. See "Service Page
-                        Modularization Plan" below.
+components/services/    Bespoke service experiences plus small shared service pieces
 ```
 
-`components/services/` is the intended destination for service-specific page
-experiences. As of 2026-08-07 it has not been created: every custom service
-page still lives in `app/services/[slug]/page.tsx`. Create the folder as part
-of a deliberate extraction, not as a side effect of an unrelated task.
+The `components/` root is deliberately empty. A component belongs in the
+smallest folder that accurately describes its owner. Do not reintroduce root
+files just to avoid deciding where a component belongs.
+
+`components/services/` owns bespoke service experiences. As of 2026-08-07,
+the five top-level page experiences live there and
+`app/services/[slug]/page.tsx` only owns route resolution and metadata.
+
+## Current Feature Ownership
+
+| Folder | Owns | Does not own |
+| --- | --- | --- |
+| `components/home/` | Landing-page bands and homepage-specific mockups | Reusable page patterns or other route content |
+| `components/layout/` | Site navigation, footer, and the standard route shell | Page sections and page data |
+| `components/inquiry/` | Inquiry state, modal presentation, and open triggers | General contact-page fields |
+| `components/contact/` | Contact form and reusable communication links | Inquiry modal state |
+| `components/projects/` | Portfolio cards and project-view instrumentation | Project facts, which stay in `lib/projects.ts` |
+| `components/analytics/` | Small client event emitters | GTM configuration or analytics event names, which stay in `lib/analytics.ts` |
+| `components/page/` | Repeatable public-page sections | Feature-specific visual systems |
+| `components/ui/` | Compact visual primitives with broad reuse | Feature-specific copy, layout, or data |
 
 ## Route Responsibilities
 
@@ -96,39 +116,38 @@ or several unique sections. Keep the folder name short and direct.
 components/services/
   web-design/
     Page.tsx
-    Hero.tsx
-    Includes.tsx
-    Transformation.tsx
-    Process.tsx
-    Work.tsx
-    data.ts
-    visuals/
-      Laptop.tsx
-      Phone.tsx
-      Browser.tsx
   search-visibility/
     Page.tsx
-    Hero.tsx
-    Benefits.tsx
-    Scope.tsx
-    Signals.tsx
-    visuals/
-      SearchResult.tsx
-      AiOverview.tsx
+  analytics/
+    Page.tsx
+  systems/
+    Page.tsx
+  support/
+    Page.tsx
+  shared/
+    ServiceFrame.tsx
+    GenericServicePage.tsx
+    ProjectWorkCard.tsx
+    styles.ts
 ```
 
 Use a subfolder only when it gives the filename context. Inside
 `web-design/`, `Hero.tsx` is clearer than `WebDesignServiceHero.tsx`.
 
+The `Page.tsx` files are the first extraction boundary, not the final desired
+size. Split a local page by its visible bands and visual systems when working
+in that service: `Hero.tsx`, `Transformation.tsx`, `Faq.tsx`, or
+`visuals/DevicePreview.tsx` are good next moves. Do not extract a file merely
+to satisfy a directory diagram.
+
 ## Service Page Modularization Plan
 
-`app/services/[slug]/page.tsx` currently contains several custom service
-experiences and is too large to be an easy editing surface. Extract it in
-small, non-breaking steps.
+`app/services/[slug]/page.tsx` is now a route shell. The five bespoke pages
+were extracted in a behavior-preserving pass, so the next work happens inside
+the relevant service folder.
 
-1. Keep route lookup, metadata, `ServiceViewed`, and service selection in the
-   route file.
-2. Move each top-level service page into `components/services/<slug>/Page.tsx`.
+1. Keep route lookup, metadata, and service selection in the route file.
+2. Keep layout, service-view tracking, and schema in `shared/ServiceFrame.tsx`.
 3. Move each visible band into a direct child component only when it has its
    own layout, visual, or meaningful amount of copy.
 4. Move visual mockups into `visuals/` when they are reused by that service or
@@ -138,13 +157,15 @@ small, non-breaking steps.
 6. After each service extraction, type-check and compare the desktop and mobile
    page before moving the next service.
 
-Suggested extraction order:
+Suggested second-pass extraction order, largest module first (line counts as
+of 2026-08-08):
 
-1. `web-design-development` because it has the most visual code.
-2. `search-ai-visibility` because it establishes the newer modular pattern.
-3. `analytics-lead-tracking`.
-4. `digital-systems-integrations`.
-5. `ongoing-support`.
+1. `search-ai-visibility` (~1,600 lines) — now the largest, and it carries the
+   most self-contained visual demos to lift out.
+2. `web-design-development` (~1,390 lines).
+3. `analytics-lead-tracking` (~910 lines).
+4. `digital-systems-integrations` (~670 lines).
+5. `ongoing-support` (~640 lines).
 
 ## Data Boundaries
 

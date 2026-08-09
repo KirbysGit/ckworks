@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import SiteLayout from "@/components/SiteLayout";
+import SiteLayout from "@/components/layout/SiteLayout";
 import Button from "@/components/ui/Button";
 
 export default function NotFound() {

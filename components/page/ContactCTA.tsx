@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import Button from "@/components/ui/Button";
-import WhatsAppContactLink from "@/components/WhatsAppContactLink";
+import WhatsAppContactLink from "@/components/contact/WhatsAppContactLink";
 
 export default function ContactCTA({
   title = "Ready to talk through the next step?",

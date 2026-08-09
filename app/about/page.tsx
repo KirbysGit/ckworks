@@ -15,7 +15,7 @@ import {
   UserRound,
   UsersRound,
 } from "lucide-react";
-import SiteLayout from "@/components/SiteLayout";
+import SiteLayout from "@/components/layout/SiteLayout";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";

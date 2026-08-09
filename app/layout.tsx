@@ -13,7 +13,7 @@ import {
   siteTagline,
   siteUrl,
 } from "@/lib/site";
-import { ProjectInquiryProvider } from "@/components/ProjectInquiryProvider";
+import { ProjectInquiryProvider } from "@/components/inquiry/ProjectInquiryProvider";
 import { gtmId } from "@/lib/analytics";
 import {
   contactEmail,

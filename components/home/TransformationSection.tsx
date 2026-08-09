@@ -12,7 +12,7 @@ import {
   Plus,
   UserRound,
 } from "lucide-react";
-import SectionHeader from "./ui/SectionHeader";
+import SectionHeader from "../ui/SectionHeader";
 import { fadeUp, stagger, inView } from "@/lib/motion";
 
 type Note = {

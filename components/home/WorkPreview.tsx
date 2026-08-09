@@ -13,7 +13,7 @@ import {
   Workflow,
   type LucideIcon,
 } from "lucide-react";
-import ProjectCard from "./ProjectCard";
+import ProjectCard from "../projects/ProjectCard";
 import {
   featuredCaseStudies,
   secondaryCaseStudies,

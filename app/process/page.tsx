@@ -17,7 +17,7 @@ import {
   Rocket,
   Sparkles,
 } from "lucide-react";
-import SiteLayout from "@/components/SiteLayout";
+import SiteLayout from "@/components/layout/SiteLayout";
 import ContactCTA from "@/components/page/ContactCTA";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import { getCaseStudy } from "@/lib/projects";

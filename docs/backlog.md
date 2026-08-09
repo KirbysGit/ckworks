@@ -77,9 +77,9 @@ rename. Do not rename either as a side effect of unrelated work.
 
 ### Duplicate mobile and desktop DOM
 
-**Verified.** `components/Hero.tsx` renders the H1 text twice — once in a
+**Verified.** `components/home/Hero.tsx` renders the H1 text twice — once in a
 `block md:hidden` span and once in a `hidden md:inline` span.
-`components/TransformationSection.tsx` ships a mobile swipe carousel and a
+`components/home/TransformationSection.tsx` ships a mobile swipe carousel and a
 separate desktop board with overlapping content.
 
 Costs: duplicated text for crawlers, larger DOM, and extra hydration work on
@@ -156,6 +156,7 @@ deliberate mailbox choice. Confirm with Colin before changing anything.
 
 - **2026-08-07** — `excel-logo.svg` reduced from roughly 349KB to 6.4KB. All
   SVGs under `public/images/services/svg/` are now 21KB or smaller. The asset is
-  used by `components/Services.tsx` on the homepage, so the reduction mattered.
+  used by `components/home/Services.tsx` on the homepage, so the reduction
+  mattered.
 - **2026-08-07** — Reverted the `.check-anim/types/**/*.ts` entry that a
   production build added to `tsconfig.json`; the file now matches `HEAD`.

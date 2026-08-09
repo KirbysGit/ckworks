@@ -19,7 +19,7 @@ import {
   UserRound,
   Waypoints,
 } from "lucide-react";
-import SiteLayout from "@/components/SiteLayout";
+import SiteLayout from "@/components/layout/SiteLayout";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import { createPageMetadata, absoluteUrl } from "@/lib/seo";
 import { serviceAreas, type ServiceArea, type ServiceSlug } from "@/lib/services";

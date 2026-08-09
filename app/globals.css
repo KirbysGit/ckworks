@@ -105,12 +105,17 @@
   }
 }
 
-@keyframes ck-wipe {
+/* Page content resolves from soft blur into focus (replaces wipe). */
+@keyframes ck-resolve {
   from {
-    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    filter: blur(7px);
+    transform: scale(1.025);
   }
   to {
-    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
   }
 }
 
@@ -125,19 +130,93 @@
   }
 }
 
-/* Browser progress bar: sweeps left→right, then fades out. */
+/*
+ * Browser progress bar: ease in, hesitate mid-way, finish, then fade —
+ * closer to Chrome/Safari than a linear sweep.
+ */
 @keyframes ck-loadbar {
   0% {
     opacity: 1;
-    transform: scaleX(0);
+    transform: scaleX(0.02);
   }
-  72% {
+  18% {
+    opacity: 1;
+    transform: scaleX(0.22);
+  }
+  42% {
+    opacity: 1;
+    transform: scaleX(0.48);
+  }
+  58% {
+    opacity: 1;
+    transform: scaleX(0.62);
+  }
+  82% {
     opacity: 1;
     transform: scaleX(1);
   }
   100% {
     opacity: 0;
     transform: scaleX(1);
+  }
+}
+
+/* Leading highlight that rides the load bar. */
+@keyframes ck-loadbar-shine {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  20%,
+  75% {
+    opacity: 1;
+  }
+}
+
+/* Skeleton screen: fade in while loading, out as real content arrives. */
+@keyframes ck-skeleton {
+  0% {
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  68% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes ck-skeleton-shimmer {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+/* Draws a horizontal rule or connector from its left edge. Transform only. */
+@keyframes ck-draw-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/*
+ * Sweeps an SVG arc on. Deliberately has no `to` keyframe: the implied end is
+ * the element's own `stroke-dasharray`, so each donut segment animates to its
+ * real share without needing a per-segment keyframe. Pair with a circle whose
+ * circumference is 100 (r = 15.9155) so shares map 1:1.
+ */
+@keyframes ck-draw-arc {
+  from {
+    stroke-dasharray: 0 100;
   }
 }
 
@@ -166,8 +245,11 @@
     animation: ck-lift 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .ck-wipe {
-    animation: ck-wipe 550ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  .ck-resolve {
+    --ck-anim-delay: 0ms;
+    opacity: 0;
+    animation: ck-resolve 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--ck-anim-delay);
   }
 
   .ck-pop {
@@ -176,10 +258,89 @@
 
   /* Starts invisible so it stays hidden if the animation never runs. */
   .ck-loadbar {
+    --ck-anim-delay: 0ms;
+    position: relative;
+    overflow: hidden;
     opacity: 0;
-    transform: scaleX(0);
+    transform: scaleX(0.02);
     transform-origin: left center;
-    animation: ck-loadbar 720ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation: ck-loadbar 920ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation-delay: var(--ck-anim-delay);
+  }
+
+  .ck-loadbar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 28%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.55),
+      transparent
+    );
+    animation: ck-loadbar-shine 920ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation-delay: var(--ck-anim-delay);
+  }
+
+  .ck-skeleton {
+    --ck-anim-delay: 0ms;
+    opacity: 0;
+    pointer-events: none;
+    animation: ck-skeleton 900ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation-delay: var(--ck-anim-delay);
+  }
+
+  .ck-skeleton-block {
+    background: linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0.07) 20%,
+      rgba(255, 255, 255, 0.18) 40%,
+      rgba(255, 255, 255, 0.07) 60%
+    );
+    background-size: 220% 100%;
+    animation: ck-skeleton-shimmer 1.15s linear infinite;
+  }
+
+  /*
+   * Draws a connector or rule from its left edge.
+   *
+   * Above the fold it runs on load like the other primitives. Inside a
+   * <Reveal> it is held at zero and waits for `.is-in`, so the draw happens
+   * when the section scrolls into view rather than finishing unseen. With JS
+   * off, <Reveal> never applies `.ck-reveal`, so the base rule runs and the
+   * connector still ends up drawn.
+   */
+  .ck-draw-x {
+    --ck-anim-delay: 0ms;
+    transform-origin: left center;
+    animation: ck-draw-x 550ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--ck-anim-delay);
+  }
+
+  .ck-reveal .ck-draw-x {
+    animation: none;
+    transform: scaleX(0);
+  }
+
+  .ck-reveal.is-in .ck-draw-x {
+    animation: ck-draw-x 550ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--ck-anim-delay);
+  }
+
+  /*
+   * Above-the-fold only. Unlike ck-draw-x this has no reveal-held variant:
+   * holding it would mean setting `stroke-dasharray` in CSS, which outranks the
+   * element's own presentation attribute and would strand the arc undrawn under
+   * reduced motion. If a donut ever needs to draw on scroll, set the resting
+   * dasharray via inline style first so the cascade still resolves correctly.
+   */
+  .ck-draw-arc {
+    --ck-anim-delay: 0ms;
+    animation: ck-draw-arc 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--ck-anim-delay);
   }
 
   /* Applied by <Reveal> only after JS confirms the element is off-screen. */
@@ -201,10 +362,23 @@
   .ck-rise,
   .ck-fade,
   .ck-lift,
-  .ck-wipe,
+  .ck-resolve,
   .ck-pop,
-  .ck-loadbar {
+  .ck-loadbar,
+  .ck-loadbar::after,
+  .ck-skeleton,
+  .ck-skeleton-block {
     animation: none !important;
+  }
+
+  .ck-resolve {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  .ck-skeleton {
+    display: none !important;
   }
 
   .ck-reveal,
@@ -212,5 +386,17 @@
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+
+  .ck-draw-x,
+  .ck-reveal .ck-draw-x,
+  .ck-reveal.is-in .ck-draw-x {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  /* Cancelling the animation is enough — the element's own dasharray is drawn. */
+  .ck-draw-arc {
+    animation: none !important;
   }
 }

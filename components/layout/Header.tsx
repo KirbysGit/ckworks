@@ -16,8 +16,8 @@ import {
   Headphones,
   type LucideIcon,
 } from "lucide-react";
-import Logo from "./ui/Logo";
-import DrawUnderline from "./ui/DrawUnderline";
+import Logo from "../ui/Logo";
+import DrawUnderline from "../ui/DrawUnderline";
 import { primaryNav } from "@/lib/navigation";
 import type { ServiceArea, ServiceSlug } from "@/lib/services";
 

@@ -74,12 +74,15 @@ Status strings come from `lib/projects.ts` and carry real meaning:
 ### Taylor.io (`taylor`)
 
 - **Status**: Personal Product / Early Release — live at `trytaylor.io`
-- **Supports**: Digital Systems & Integrations, Web Design & Development
-- **Demonstrates**: product strategy, full-stack architecture, AI workflow
-  design, structured-data modeling, guided multi-step flows, document export
+- **Supports**: AI/LLM Pipeline Design, Web Design & Development
+- **Tech stack**: FastAPI · React · PostgreSQL · Railway · Vercel
+- **Demonstrates**: product strategy, full-stack architecture, LLM workflow
+  design with multi-pass generation and structured prompts, resume parsing,
+  guided multi-step flows, document generation, and PDF export
 - **Allowed claims**: Colin designed and built it end to end; it grew out of a
   resume-tailoring workflow he repeated more than 150 times during his own job
-  search; it is an early release with known rough edges
+  search; it is an early release with known rough edges; real LLM pipeline with
+  resume parsing and document export capabilities
 - **Limitations**: personal product, early stage, no commercial traction data
 - **Never imply**: job-placement outcomes, interview or hiring-rate
   improvements, user counts, revenue, or that it is a mature commercial
@@ -88,29 +91,39 @@ Status strings come from `lib/projects.ts` and carry real meaning:
 
 ### Centi (`centi`)
 
-- **Status**: Personal Product / Working Build — live at `centi.dev`
-- **Supports**: Analytics & Lead Tracking, Digital Systems & Integrations
-- **Demonstrates**: full-stack development, dashboard UX, Plaid integration,
-  data modeling, authentication — organizing connected accounts and uploaded
-  transactions into a readable view
+- **Status**: Personal Product / Active Development — live at `finance-organizer-wine.vercel.app`
+- **Supports**: Web Design & Development, Digital Systems & Integrations
+- **Demonstrates**: full-stack fintech architecture (React + FastAPI +
+  SQLAlchemy + Plaid API), production auth & security, complex third-party bank
+  integration (public token exchange, live account sync, transaction fetch),
+  custom scoring engine with scheduled background jobs, data modeling & analysis,
+  intentional UX for financial literacy
 - **Allowed claims**: Colin's first full-stack application outside school; built
-  after Mint shut down to get clearer insight into his own spending; real
-  third-party financial API integration
-- **Limitations**: personal-use build, not a commercial finance product
-- **Never imply**: real users, handling of other people's financial data,
-  regulatory compliance, or security certification
+  after Mint shut down to get clearer insight into personal spending; real Plaid
+  integration with live sync; production deployment with thoughtful security
+  posture; active development toward a real product with plans for educational
+  features and affiliate recommendations
+- **Limitations**: personal-use build at the origin, not a commercial finance
+  product with external users or regulatory compliance
+- **Never imply**: regulatory compliance, security certification, or handling of
+  third-party financial data at scale
 - **Source**: `lib/projects.ts`, `projects.md`
 
 ### SETLST (`setlst`)
 
 - **Status**: Collaborative Product Concept / In Progress
-- **Supports**: product and mobile design range
-- **Demonstrates**: product design, brand direction, and frontend prototyping
-  for a music-driven gym companion built with a friend
-- **Allowed claims**: an in-progress collaborative concept; explores live music
-  activity, workout consistency, and social features
-- **Limitations**: concept stage, not shipped
-- **Never imply**: an available app, a release date, downloads, or users
+- **Supports**: Web Design & Development, Digital Systems & Integrations
+- **Demonstrates**: full-stack product thinking, brand direction, and collaborative
+  shipping; implemented gym presence feeds with Spotify real-time sync,
+  RLS-enforced messaging, and friend graphs; thoughtful product architecture for
+  music-driven social fitness
+- **Allowed claims**: a functional prototype built with a friend; explores live
+  music activity, workout consistency, and social features; demonstrates working
+  systems for real product problems (API sync, access control, social graphs)
+- **Limitations**: functional prototype, not a commercial launch; V1 deliberately
+  avoids live location tracking as a scope decision
+- **Never imply**: an available app, a release date, downloads, or real-world
+  users
 - **Source**: `lib/projects.ts`, `projects.md`
 
 ## Professional And Research Work
@@ -180,10 +193,11 @@ actually demonstrate.
 
 | Service | Lead proof | Supporting |
 | --- | --- | --- |
-| Web Design & Development | Tizirsso Racing | Taylor.io, Centi |
+| Web Design & Development | Tizirsso Racing | Centi, SETLST |
 | Search & AI Visibility | Tizirsso Racing | CK Dev |
+| AI/LLM Pipeline Design | Taylor.io | — |
 | Analytics & Lead Tracking | Centi | Internal Automation Tool, SentimentTrader |
-| Digital Systems & Integrations | Internal Automation Tool | Centi, Taylor.io |
+| Digital Systems & Integrations | Internal Automation Tool | Centi, SETLST |
 | Ongoing Support | Tizirsso Racing | Centi, Taylor.io |
 
 The honest gap: only Tizirsso Racing is a shipped client website. The other

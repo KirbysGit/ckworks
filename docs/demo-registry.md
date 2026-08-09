@@ -30,8 +30,8 @@ Verified against the repository on 2026-08-07.
 ### Windermere Wellness
 
 - **Represents**: a wellness and therapy practice
-- **Used in**: `components/Hero.tsx`, `components/HeroMockup.tsx`,
-  `components/TransformationSection.tsx` (homepage)
+- **Used in**: `components/home/Hero.tsx`, `components/home/HeroMockup.tsx`,
+  `components/home/TransformationSection.tsx` (homepage)
 - **Purpose**: the homepage hero mockup and the before/after transformation
   story
 - **Assets**: `public/images/hero/`, `public/images/transformation/`
@@ -44,10 +44,11 @@ Verified against the repository on 2026-08-07.
 ### Riverstone Builders
 
 - **Represents**: a local residential home builder in Orlando
-- **Used in**: `app/services/[slug]/page.tsx` (Search & AI Visibility),
+- **Used in**: `components/services/search-visibility/Page.tsx`,
   `app/services/page.tsx`
-- **Purpose**: demonstrating a search result, an AI Overview, and a
-  search-ready site so visitors can see what visibility work changes
+- **Purpose**: demonstrating a search-ready site, local business profile,
+  search result, AI Overview, and site-context signals so visitors can see
+  what visibility work changes
 - **Assets**: `public/images/services/png/02-riverstone-demo.png`,
   `02-riverstone-demo-2.png`
 - **Labeling**: "Illustrative search example", "Illustrative Riverstone

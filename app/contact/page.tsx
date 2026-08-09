@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Mail } from "lucide-react";
-import SiteLayout from "@/components/SiteLayout";
-import ContactForm from "@/components/ContactForm";
-import WhatsAppContactLink from "@/components/WhatsAppContactLink";
+import SiteLayout from "@/components/layout/SiteLayout";
+import ContactForm from "@/components/contact/ContactForm";
+import WhatsAppContactLink from "@/components/contact/WhatsAppContactLink";
 import PageHero from "@/components/page/PageHero";
 import ContentSection from "@/components/page/ContentSection";
 import SchemaMarkup from "@/components/page/SchemaMarkup";

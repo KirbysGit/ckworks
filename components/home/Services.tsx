@@ -7,7 +7,7 @@ import {
   useInView as useMotionInView,
 } from "framer-motion";
 import { ArrowRight, CheckCircle2, Minus, Plus, Sparkle } from "lucide-react";
-import SectionHeader from "./ui/SectionHeader";
+import SectionHeader from "../ui/SectionHeader";
 import { trackEvent } from "@/lib/analytics";
 import { services } from "@/lib/data";
 import { fadeUp, stagger, inView } from "@/lib/motion";

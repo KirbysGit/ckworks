@@ -1,4 +1,4 @@
-import ProjectCard from "@/components/ProjectCard";
+import ProjectCard from "@/components/projects/ProjectCard";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 
 export default function RelatedProjects({ slugs }: { slugs: string[] }) {

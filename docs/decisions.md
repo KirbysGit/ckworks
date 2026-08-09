@@ -34,10 +34,15 @@ work.
 ## 2026-08-07: Motion Rendering Rule
 
 - Above-the-fold entrances use the CSS primitives in `app/globals.css`
-  (`ck-rise`, `ck-fade`, `ck-lift`, `ck-wipe`, `ck-pop`, `ck-loadbar`) because
-  CSS animation runs at first paint.
+  (`ck-rise`, `ck-fade`, `ck-lift`, `ck-resolve`, `ck-pop`, `ck-draw-x`,
+  `ck-loadbar`, `ck-skeleton`) because CSS animation runs at first paint.
+  `design-system.md` holds the current table; check there before using one.
 - Below-the-fold entrances use `components/ui/Reveal.tsx`, which keeps content
   visible until JavaScript confirms the element is off-screen.
+- `Reveal` is a single-step CSS *transition*, so it cannot drive multi-step
+  motion, and a `ck-*` animation placed inside one runs at first paint and
+  finishes off-screen. `ck-draw-x` is the one reveal-aware primitive; follow
+  its pattern if another needs to wait for scroll.
 - Meaningful server-rendered content is never gated on hydration. The Framer
   Motion `initial` plus `whileInView` pattern is not used for page content.
 - Framer Motion remains appropriate for orchestrated or interaction-driven
@@ -50,8 +55,10 @@ work.
 - New service work belongs under `components/services/<service>/`.
 - Shared public-page patterns remain in `components/page/`; compact reusable UI
   remains in `components/ui/`.
-- The existing large `app/services/[slug]/page.tsx` should be extracted in
-  stages, starting with Web Design and Search & AI Visibility.
+- The route extraction is complete: `app/services/[slug]/page.tsx` is now a
+  thin selection and metadata layer, and all five bespoke pages live in their
+  own feature folders. Remaining work is splitting each `Page.tsx` by visible
+  band, which happens inside that service folder.
 
 ## 2026-08-07: Visual Language
 

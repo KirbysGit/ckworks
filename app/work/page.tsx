@@ -13,7 +13,7 @@ import {
   TrendingUp,
   Workflow,
 } from "lucide-react";
-import SiteLayout from "@/components/SiteLayout";
+import SiteLayout from "@/components/layout/SiteLayout";
 import ContactCTA from "@/components/page/ContactCTA";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";

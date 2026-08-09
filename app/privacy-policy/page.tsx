@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import SiteLayout from "@/components/SiteLayout";
+import SiteLayout from "@/components/layout/SiteLayout";
 import PageHero from "@/components/page/PageHero";
 import ContentSection from "@/components/page/ContentSection";
 import { createPageMetadata } from "@/lib/seo";

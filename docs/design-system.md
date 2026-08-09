@@ -23,9 +23,15 @@ Use the named Tailwind tokens from `tailwind.config.ts`.
 | `forest` | `#2F5B3F` | Actions, accents, indicators |
 | `forest-soft` | `#DDE8D8` | Low-emphasis green surface |
 | `line` | `#DDD6C8` | Borders and dividers |
+| `panel` | `#111714` | Rare near-black surface; one use site-wide |
 
 The site is intentionally light-only. Do not add `dark:` variants or a dark
 theme to a component unless that becomes an explicit product decision.
+
+One exception exists today: `components/ui/Logo.tsx` uses `dark:hidden` and
+`dark:block` to swap between the ink and ivory wordmarks. It predates this rule
+and is scoped to the logo asset. Do not treat it as precedent for theming other
+components, and do not "fix" it as a side effect of unrelated work.
 
 ## Typography
 
@@ -134,19 +140,45 @@ Defined in `app/globals.css`. All are disabled under `prefers-reduced-motion`.
 | `ck-rise` | Fade up 16px, 500ms | Headings, copy, stacked text |
 | `ck-fade` | Opacity only, 420ms | Secondary chrome and labels |
 | `ck-lift` | Fade up 22px, 620ms | Device frames and larger cards |
-| `ck-wipe` | `clip-path` left to right, 550ms | Revealing a screen or image |
+| `ck-resolve` | Blur 7px into focus, 680ms | A screen or result settling into view |
 | `ck-pop` | Scale 0.86 to 1, 460ms | Buttons and small badges |
-| `ck-loadbar` | Sweep left to right, then fade, 720ms | Browser progress bar |
+| `ck-draw-x` | `scaleX` 0 to 1 from the left, 550ms | Rules, connectors, flow lines |
+| `ck-loadbar` | Sweep left to right, then fade, 920ms | Browser progress bar |
+| `ck-skeleton` | Fade in, hold, fade out, 900ms | Placeholder shown while "loading" |
+| `ck-skeleton-block` | Looping shimmer sweep | Individual skeleton bars |
 
-Sequence with `animationDelay` from a named timing constant near the component
-(for example `webDesignHeroTiming`) rather than scattering literal delays.
+`ck-resolve`, `ck-loadbar`, `ck-skeleton`, and `ck-draw-x` take their delay from a
+`--ck-anim-delay` custom property rather than `animationDelay`, because they set
+`animation-delay` themselves. The others take a plain `animationDelay`.
+
+Sequence with a named timing constant near the component (for example
+`webDesignHeroTiming` or `searchVisibilityHeroTiming`) rather than scattering
+literal delays.
 
 `ck-loadbar` starts at `opacity: 0` so it stays hidden if the animation never
 runs. Keep that pattern for any primitive whose resting state should be
 invisible.
 
-An element carrying `ck-wipe` or a long delay may be the LCP element. Keep its
-reveal early and mark the underlying image `priority`.
+An element carrying `ck-resolve` or a long delay may be the LCP element. Keep
+its reveal early and mark the underlying image `priority`.
+
+### Combining Primitives With `Reveal`
+
+These two systems do not compose the way you might expect. `Reveal` is a CSS
+**transition** on a wrapper — a single fade plus a 16px translate — so it can
+stagger siblings but cannot drive multi-step motion. The `ck-*` primitives are
+CSS **animations** that start at first paint, so one placed inside a `Reveal`
+runs and finishes while the section is still off-screen.
+
+Two rules follow:
+
+- Inside a `Reveal`, use `Reveal` itself for entrances. The only primitive that
+  is reveal-aware is `ck-draw-x`, which is held at `scaleX(0)` under
+  `.ck-reveal` and animates when `.is-in` lands. Follow that pattern if another
+  primitive needs to wait for scroll.
+- Never put a transform-animating primitive on an element that already carries
+  its own `transform` for layout. The animation ends at `transform: none` and
+  silently discards the offset. Put the entrance on a wrapper instead.
 
 ## Accessibility
 

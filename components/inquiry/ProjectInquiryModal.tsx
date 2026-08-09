@@ -3,8 +3,8 @@
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronDown, Loader2, X } from "lucide-react";
-import Logo from "./ui/Logo";
-import WhatsAppContactLink from "./WhatsAppContactLink";
+import Logo from "../ui/Logo";
+import WhatsAppContactLink from "../contact/WhatsAppContactLink";
 import { trackEvent } from "@/lib/analytics";
 import { contactEmail } from "@/lib/data";
 
