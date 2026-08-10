@@ -3,60 +3,23 @@ import { Fragment, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowDown,
   ArrowRight,
-  ArrowUp,
-  BarChart3,
   Bell,
-  Box,
-  Calendar,
-  Check,
-  ChevronDown,
-  ChevronRight,
+  CalendarDays,
   CircleCheck,
-  Clock,
-  Database,
+  CreditCard,
   Eye,
-  FileCode2,
   FileText,
-  Flag,
-  Gauge,
-  Globe,
-  Headphones,
-  Home,
-  LayoutDashboard,
+  Folder,
+  IdCard,
   LayoutTemplate,
-  LineChart,
-  Mail,
-  MapPin,
-  Megaphone,
   MessageSquareText,
-  MonitorSmartphone,
-  Navigation,
-  Paintbrush,
-  Pencil,
-  PhoneCall,
-  Plus,
+  Package,
   RefreshCw,
-  Rocket,
-  Search,
-  Settings2,
-  ShieldCheck,
-  Smartphone,
-  Sparkle,
   Store,
-  Tag,
-  TrendingUp,
-  UserRound,
-  Wrench,
+  UserRoundCheck,
 } from "lucide-react";
-import { FaLinkedin } from "react-icons/fa";
-import {
-  SiAirtable,
-  SiGooglecalendar,
-  SiGooglesheets,
-  SiStripe,
-} from "react-icons/si";
+import { SiAirtable, SiGooglecalendar, SiStripe } from "react-icons/si";
 import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
@@ -64,6 +27,7 @@ import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import type { ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
 import ProjectWorkCard from "../shared/ProjectWorkCard";
+import OperationsHub from "./OperationsHub";
 import {
   serviceCenterLabelClassName,
   serviceCenterTitleClassName,
@@ -73,19 +37,6 @@ import {
   serviceSectionLabelClassName,
   serviceSectionTitleClassName,
 } from "../shared/styles";
-const systemsInquirySteps = [
-  { label: "Form received", time: "Just now" },
-  { label: "Contact validated", time: "1 min ago" },
-  { label: "Lead added", time: "2 min ago" },
-  { label: "Team notified", time: "2 min ago" },
-] as const;
-
-const systemsWorkflowRail = [
-  { icon: FileText, label: "Website form" },
-  { icon: Database, label: "Client records" },
-  { icon: Bell, label: "Team notification" },
-] as const;
-
 const systemsWhyItMatters = [
   {
     icon: RefreshCw,
@@ -109,7 +60,14 @@ const systemsWhyItMatters = [
  * from public/images/services/svg; the rest use brand-tinted react-icons.
  * Drop an official SVG into that folder and switch an entry to upgrade it.
  */
-const systemsTools: { name: string; use: string; logo: ReactNode }[] = [
+type SystemsTool = { name: string; use: string; logo: ReactNode };
+
+/**
+ * The grid reads as a direction, not a logo wall: information arrives from the
+ * tools above, lands in one place, and is pushed back out to the tools below.
+ * Keep each row at three so the connectors stay legible.
+ */
+const systemsInputs: SystemsTool[] = [
   {
     name: "Gmail",
     use: "Lead notifications",
@@ -124,9 +82,22 @@ const systemsTools: { name: string; use: string; logo: ReactNode }[] = [
     ),
   },
   {
-    name: "Google Sheets",
-    use: "Records and tracking",
-    logo: <SiGooglesheets className="h-7 w-7" color="#34A853" />,
+    name: "Website Forms",
+    use: "Client intake",
+    logo: <FileText className="h-7 w-7 text-ink/80" strokeWidth={1.4} />,
+  },
+  {
+    name: "Stripe",
+    use: "Payment sync",
+    logo: <SiStripe className="h-7 w-7" color="#635BFF" />,
+  },
+];
+
+const systemsConnected: SystemsTool[] = [
+  {
+    name: "Airtable",
+    use: "Project management",
+    logo: <SiAirtable className="h-7 w-7" color="#18BFFF" />,
   },
   {
     name: "Slack",
@@ -142,61 +113,114 @@ const systemsTools: { name: string; use: string; logo: ReactNode }[] = [
     ),
   },
   {
-    name: "Stripe",
-    use: "Payment sync",
-    logo: <SiStripe className="h-7 w-7" color="#635BFF" />,
-  },
-  {
-    name: "Airtable",
-    use: "Project management",
-    logo: <SiAirtable className="h-7 w-7" color="#18BFFF" />,
-  },
-  {
-    name: "LinkedIn",
-    use: "Lead capture",
-    logo: <FaLinkedin className="h-7 w-7" color="#0A66C2" />,
-  },
-  {
-    name: "Website Forms",
-    use: "Client intake",
-    logo: <FileText className="h-7 w-7 text-ink/80" strokeWidth={1.4} />,
-  },
-  {
     name: "Google Calendar",
     use: "Scheduling",
     logo: <SiGooglecalendar className="h-7 w-7" color="#4285F4" />,
   },
 ];
 
-const systemsHowSteps = [
+/**
+ * Flow-diagram tuning. Percentages are of the diagram's width, so the
+ * connectors stay attached to their columns at any container size.
+ *   columnCenters — horizontal centre of each card column
+ *   hubAnchors    — where each connector meets the hub
+ *   bandIn / bandOut — visible gap between card row and hub
+ *   hubNudgeY        — shift "Your business" up (−) or down (+)
+ *   cardDip          — how far lines tuck under the cards (top + bottom)
+ *   snakeFromCard*   — % of (dip + band) before the first bend, from the card
+ *   note*            — handwritten aside placement (desktop only)
+ */
+const systemsFlowLayout = {
+  /**
+   * Outer starts sit on the inner half of each outer card (not the card
+   * centre) so the horizontal snake run stays short. Centre stays at 50%.
+   * Keep the `2rem` in sync with the row's `sm:gap-4`.
+   */
+  columnCenters: [
+    "calc((100%) / 3 * 0.48)",
+    "50%",
+    "calc(100% - (100%) / 3 * 0.5)",
+  ],
+  /** Meet the hub near its outer edges — shortens the inward jog. */
+  hubAnchors: ["38%", "50%", "62%"],
+  /** Top connectors (inputs → hub). */
+  bandIn: "h-20",
+  /** Bottom connectors (hub → tools). Match the top’s visible rhythm. */
+  bandOut: "h-20",
+  /**
+   * Vertical nudge for the hub pill. Negative = up, positive = down.
+   * e.g. "-0.5rem" / "0.75rem" / "0rem"
+   */
+  hubNudgeY: "0.25rem",
+  /**
+   * How far outer/center lines tuck under the tool cards. Cards must sit
+   * above the connector band (z-index) for the dip to read.
+   */
+  cardDip: "0.85rem",
+  /**
+   * % of the full connector box (dip + band) from the card to the bend.
+   * Keep these similar so top/bottom stubs match.
+   */
+  snakeFromCardIn: 28,
+  snakeFromCardOut: 80,
+  /** Corner radius for outer snake bends (viewBox 0–100 units). */
+  snakeCorner: 8,
+  /**
+   * Small node dots at the card edge. Half sits under the card so they read
+   * as connection points the lines plug into.
+   */
+  cardNode: "0.7rem",
+  noteWidth: "w-[10.5rem] xl:w-[12.5rem]",
+  noteLeft: "-left-4 xl:-left-10",
+  noteRight: "-right-4 xl:-right-10",
+  noteTop: "top-1/2 -translate-y-1/2",
+} as const;
+
+/**
+ * Three everyday workflows, each shown as the chain of steps a system takes
+ * over. `removes` is the point of the row — it names the manual work that
+ * stops happening, rather than describing the software.
+ *
+ * These are illustrative examples, not delivered client work; the section
+ * labels them as such.
+ */
+const systemsWorkflows = [
   {
     step: "01",
-    title: "Understand",
-    body: "Map the current workflow and find repeated or delayed steps.",
+    title: "New inquiries",
+    audience: "Service business",
+    steps: [
+      { icon: LayoutTemplate, label: "Website form" },
+      { icon: IdCard, label: "Client record" },
+      { icon: Bell, label: "Team notification", alert: true },
+      { icon: CircleCheck, label: "Follow-up" },
+    ],
+    removes: "manual lead entry and forgotten follow-ups.",
   },
   {
     step: "02",
-    title: "Build and connect",
-    body: "Create the dashboard, form, database, or integration.",
+    title: "Orders & updates",
+    audience: "Retail / product business",
+    steps: [
+      { icon: CreditCard, label: "Payment received" },
+      { icon: Package, label: "Order updated" },
+      { icon: Bell, label: "Team notified", alert: true },
+      { icon: MessageSquareText, label: "Customer update" },
+    ],
+    removes: "checking multiple tools and manual status updates.",
   },
   {
     step: "03",
-    title: "Test and improve",
-    body: "Check the system with real use and refine it.",
+    title: "Client onboarding",
+    audience: "Professional services",
+    steps: [
+      { icon: UserRoundCheck, label: "Client confirmed" },
+      { icon: Folder, label: "Record created" },
+      { icon: FileText, label: "Documents organized" },
+      { icon: CalendarDays, label: "Kickoff scheduled" },
+    ],
+    removes: "repetitive setup every time a new client starts.",
   },
-] as const;
-
-const systemsOpsStats = [
-  { label: "New inquiries", value: "18", delta: "+12%" },
-  { label: "Ready for review", value: "7", delta: "+8%" },
-  { label: "Follow-up due", value: "5", delta: "+20%" },
-] as const;
-
-const systemsOpsActivity = [
-  { label: "Sarah Mitchell – Kitchen remodeling", time: "Just now" },
-  { label: "Daniel Ortiz – Bathroom remodel", time: "10 min ago" },
-  { label: "New website inquiry", time: "1 hr ago" },
-  { label: "Invoice collected – Staysure remodel", time: "2 hrs ago" },
 ] as const;
 
 const systemsFaqs = [
@@ -252,7 +276,7 @@ export default function Page({ service }: { service: ServiceArea }) {
 
 function SystemsHero() {
   return (
-    <div className="grid items-center gap-10 border-b border-line pb-11 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-14 lg:pb-14">
+    <div className="grid items-center gap-10 border-b border-line pb-11 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-14 lg:pb-14">
       <div className="max-w-xl">
         <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
           Digital Systems &amp; Integrations
@@ -286,99 +310,7 @@ function SystemsHero() {
         </div>
       </div>
 
-      <SystemsInquiryDemo />
-    </div>
-  );
-}
-
-/** Hero visual: inquiry card → dotted connector → connected-workflow rail. */
-function SystemsInquiryDemo() {
-  return (
-    <div>
-      <div className="grid items-center gap-4 lg:grid-cols-[minmax(0,1.22fr)_2rem_minmax(0,0.88fr)] lg:gap-0">
-        <div className="rounded-2xl border border-line bg-card shadow-[0_26px_54px_-34px_rgba(31,36,32,0.5)]">
-          <div
-            className="flex items-center gap-1.5 border-b border-line px-4 py-2.5"
-            aria-hidden
-          >
-            <span className="h-2 w-2 rounded-full bg-[#C87264]" />
-            <span className="h-2 w-2 rounded-full bg-[#D8A847]" />
-            <span className="h-2 w-2 rounded-full bg-[#5F9C69]" />
-          </div>
-          <div className="p-5">
-            <p className="font-sans text-[0.95rem] font-semibold text-ink">
-              New website inquiry
-            </p>
-            <div className="mt-3.5 flex items-center gap-3 rounded-xl border border-line bg-ivory/60 p-3.5">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-forest text-[0.72rem] font-semibold text-ivory">
-                SM
-              </span>
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-semibold text-ink">
-                  Sarah Mitchell
-                </span>
-                <span className="block truncate text-xs text-muted">
-                  Kitchen remodeling
-                </span>
-                <span className="block truncate text-xs text-muted">
-                  Orlando, FL
-                </span>
-              </span>
-            </div>
-            <ul className="mt-2 divide-y divide-line/70">
-              {systemsInquirySteps.map((step) => (
-                <li key={step.label} className="flex items-center gap-2.5 py-2.5">
-                  <CircleCheck
-                    className="h-4 w-4 shrink-0 fill-forest text-ivory"
-                    strokeWidth={2.4}
-                  />
-                  <span className="min-w-0 flex-1 truncate text-[0.8rem] font-medium text-ink">
-                    {step.label}
-                  </span>
-                  <span className="shrink-0 text-[0.66rem] text-muted">
-                    {step.time}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <span
-          className="hidden self-center border-t border-dashed border-line lg:block"
-          aria-hidden
-        />
-
-        <div className="rounded-2xl border border-line bg-card p-5 shadow-soft">
-          <p className="text-center text-[0.82rem] font-semibold text-ink">
-            Connected workflow
-          </p>
-          <div className="mt-4 flex flex-col items-center">
-            {systemsWorkflowRail.map(({ icon: Icon, label }, index) => (
-              <Fragment key={label}>
-                {index > 0 && (
-                  <ArrowDown
-                    className="my-2 h-4 w-4 text-muted/60"
-                    strokeWidth={1.8}
-                    aria-hidden
-                  />
-                )}
-                <span className="flex flex-col items-center gap-2">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-forest-soft/70 text-forest">
-                    <Icon className="h-5 w-5" strokeWidth={1.6} />
-                  </span>
-                  <span className="text-xs font-medium text-ink/80">
-                    {label}
-                  </span>
-                </span>
-              </Fragment>
-            ))}
-          </div>
-        </div>
-      </div>
-      <p className="mt-3 text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted">
-        Illustrative example
-      </p>
+      <OperationsHub />
     </div>
   );
 }
@@ -424,9 +356,6 @@ function SystemsWhyItMatters() {
 }
 
 function SystemsToolGrid() {
-  const topRow = systemsTools.slice(0, 4);
-  const bottomRow = systemsTools.slice(4);
-
   return (
     <section className="border-b border-line py-14 lg:py-16">
       <div className="mx-auto max-w-3xl text-center">
@@ -438,49 +367,228 @@ function SystemsToolGrid() {
         </h2>
       </div>
 
-      <div className="mx-auto mt-10 max-w-4xl">
-        <SystemsToolRow tools={topRow} />
-        <div className="my-3 flex flex-col items-center lg:my-0">
-          <span
-            className="hidden h-4 border-l border-dashed border-line lg:block"
-            aria-hidden
-          />
-          <div className="flex items-center gap-3 rounded-xl bg-forest px-6 py-4 shadow-[0_18px_38px_-18px_rgba(47,91,63,0.6)]">
-            <Store className="h-6 w-6 shrink-0 text-ivory" strokeWidth={1.6} />
-            <span className="font-sans text-lg font-semibold leading-none text-ivory">
-              Your business
-            </span>
+      <div className="relative mx-auto mt-10 max-w-4xl">
+        {/* Handwritten asides flank the hub; they need room, so desktop only. */}
+        <Image
+          src="/images/services/svg/04-demo-text-01.svg"
+          alt=""
+          width={835}
+          height={349}
+          aria-hidden
+          className={`pointer-events-none absolute z-0 hidden h-auto lg:block ${systemsFlowLayout.noteWidth} ${systemsFlowLayout.noteLeft} ${systemsFlowLayout.noteTop}`}
+        />
+        <Image
+          src="/images/services/svg/04-demo-text-02.svg"
+          alt=""
+          width={1046}
+          height={436}
+          aria-hidden
+          className={`pointer-events-none absolute z-0 hidden h-auto lg:block ${systemsFlowLayout.noteWidth} ${systemsFlowLayout.noteRight} ${systemsFlowLayout.noteTop}`}
+        />
+
+        <div className="relative z-10">
+          <SystemsFlowLabel>Inputs</SystemsFlowLabel>
+          <SystemsToolRow tools={systemsInputs} />
+
+          <SystemsFlowConnectors direction="in" />
+
+          {/* The connector bands supply this spacing at lg; mobile needs its own. */}
+          <div
+            className="relative z-30 my-6 flex justify-center lg:my-0"
+            style={{ transform: `translateY(${systemsFlowLayout.hubNudgeY})` }}
+          >
+            <div className="relative z-30 flex items-center gap-3.5 rounded-xl bg-forest px-6 py-4 shadow-[0_18px_38px_-18px_rgba(47,91,63,0.6)]">
+              <Store
+                className="h-7 w-7 shrink-0 text-ivory"
+                strokeWidth={1.5}
+              />
+              <span className="min-w-0">
+                <span className="block font-sans text-lg font-semibold leading-tight text-ivory">
+                  Your business
+                </span>
+                <span className="mt-0.5 block text-[0.78rem] leading-tight text-ivory/80">
+                  records &middot; notifications &middot; follow-up
+                </span>
+              </span>
+            </div>
           </div>
-          <span
-            className="hidden h-4 border-l border-dashed border-line lg:block"
-            aria-hidden
-          />
+
+          <SystemsFlowConnectors direction="out" />
+
+          <SystemsToolRow tools={systemsConnected} />
+          {/* Label sits outside the row (below) so the hub has matching gaps above/below. */}
+          <SystemsFlowLabel className="mb-0 mt-4">Connected tools</SystemsFlowLabel>
         </div>
-        <SystemsToolRow tools={bottomRow} />
       </div>
     </section>
   );
 }
 
-function SystemsToolRow({ tools }: { tools: typeof systemsTools }) {
+function SystemsFlowLabel({
+  children,
+  className = "mb-4",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="grid grid-cols-2 gap-3 lg:flex lg:items-stretch lg:gap-0">
-      {tools.map((tool, index) => (
-        <Fragment key={tool.name}>
-          {index > 0 && (
-            <span
-              className="hidden self-center border-t border-dashed border-line lg:block lg:flex-1"
-              aria-hidden
-            />
-          )}
-          <article className="flex flex-col items-center gap-1.5 rounded-xl border border-line bg-card px-3 py-5 text-center shadow-soft lg:w-44 lg:shrink-0">
-            <span className="flex h-9 items-center justify-center">
-              {tool.logo}
-            </span>
-            <h3 className="text-sm font-semibold text-ink">{tool.name}</h3>
-            <p className="text-xs leading-4 text-muted">{tool.use}</p>
-          </article>
-        </Fragment>
+    <div className={`flex items-center gap-4 ${className}`}>
+      <span className="h-px flex-1 bg-line" aria-hidden />
+      <span className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-forest">
+        {children}
+      </span>
+      <span className="h-px flex-1 bg-line" aria-hidden />
+    </div>
+  );
+}
+
+/**
+ * Connectors between a card row and the hub.
+ * Outer columns use a two-bend snake (down → inward → down);
+ * the centre column stays a straight drop.
+ * Bands tuck under the cards via `cardDip` so lines plug into both rows.
+ */
+function SystemsFlowConnectors({ direction }: { direction: "in" | "out" }) {
+  const {
+    columnCenters,
+    hubAnchors,
+    bandIn,
+    bandOut,
+    cardDip,
+    snakeFromCardIn,
+    snakeFromCardOut,
+    snakeCorner,
+    cardNode,
+  } = systemsFlowLayout;
+  const toHub = direction === "in";
+  const band = toHub ? bandIn : bandOut;
+  /**
+   * Bend position from the top of the connector box. Top: short stub from
+   * the card, then across, then down. Bottom: mirror so the card stub matches.
+   */
+  const bendAt = toHub ? snakeFromCardIn : 100 - snakeFromCardOut;
+  const corner = Math.min(
+    snakeCorner,
+    Math.max(2, bendAt - 2),
+    Math.max(2, 100 - bendAt - 2),
+  );
+
+  return (
+    <div
+      className={`relative isolate hidden lg:block ${band}`}
+      style={
+        toHub
+          ? { marginTop: `-${cardDip}`, paddingTop: cardDip }
+          : { marginBottom: `-${cardDip}`, paddingBottom: cardDip }
+      }
+      aria-hidden
+    >
+      {/* Lines underneath (z-0). */}
+      <div className="absolute inset-0 z-0">
+        {columnCenters.map((center, index) => {
+          const anchor = hubAnchors[index];
+          const isCenter = index === 1;
+          const isLeft = index === 0;
+          const boxLeft = isCenter ? center : isLeft ? center : anchor;
+          const boxRight = isCenter ? center : isLeft ? anchor : center;
+
+          const snakePath = (() => {
+            if (isCenter) {
+              return "M 0 0 L 0 100";
+            }
+
+            const downRight = `M 0 0 L 0 ${bendAt - corner} Q 0 ${bendAt} ${corner} ${bendAt} L ${100 - corner} ${bendAt} Q 100 ${bendAt} 100 ${bendAt + corner} L 100 100`;
+            const downLeft = `M 100 0 L 100 ${bendAt - corner} Q 100 ${bendAt} ${100 - corner} ${bendAt} L ${corner} ${bendAt} Q 0 ${bendAt} 0 ${bendAt + corner} L 0 100`;
+
+            if (toHub) {
+              return isLeft ? downRight : downLeft;
+            }
+            return isLeft ? downLeft : downRight;
+          })();
+
+          if (isCenter) {
+            return (
+              <svg
+                key={`${direction}-line-${center}`}
+                className="pointer-events-none absolute inset-y-0 w-3 -translate-x-1/2 overflow-visible text-ink/45"
+                style={{ left: center }}
+                viewBox="0 0 12 100"
+                preserveAspectRatio="none"
+                fill="none"
+              >
+                <path
+                  d="M 6 0 L 6 100"
+                  stroke="currentColor"
+                  strokeWidth={2.25}
+                  strokeDasharray="1.75 5.5"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+            );
+          }
+
+          return (
+            <svg
+              key={`${direction}-line-${center}`}
+              className="pointer-events-none absolute inset-y-0 overflow-visible text-ink/45"
+              style={{
+                left: boxLeft,
+                right: `calc(100% - (${boxRight}))`,
+              }}
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              fill="none"
+            >
+              <path
+                d={snakePath}
+                stroke="currentColor"
+                strokeWidth={2.25}
+                strokeDasharray="1.75 5.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+          );
+        })}
+      </div>
+
+      {/* Nodes above lines (z-10), still under tool cards (z-20). */}
+      <div className="absolute inset-0 z-10">
+        {columnCenters.map((center) => (
+          <span
+            key={`${direction}-node-${center}`}
+            className="absolute rounded-full bg-ink/40"
+            style={{
+              left: `calc(${center} - ${cardNode} / 2)`,
+              width: cardNode,
+              height: cardNode,
+              ...(toHub
+                ? { top: `calc(${cardDip} - ${cardNode} / 2)` }
+                : { bottom: `calc(${cardDip} - ${cardNode} / 2)` }),
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SystemsToolRow({ tools }: { tools: SystemsTool[] }) {
+  return (
+    <div className="relative z-20 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+      {tools.map((tool) => (
+        <article
+          key={tool.name}
+          className="flex flex-col items-center gap-1.5 rounded-xl border border-line bg-card px-3 py-5 text-center shadow-soft"
+        >
+          <span className="flex h-9 items-center justify-center">
+            {tool.logo}
+          </span>
+          <h3 className="text-sm font-semibold text-ink">{tool.name}</h3>
+          <p className="text-xs leading-4 text-muted">{tool.use}</p>
+        </article>
       ))}
     </div>
   );
@@ -490,125 +598,113 @@ function SystemsHowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="grid scroll-mt-24 gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center lg:gap-14 lg:py-16"
+      className="scroll-mt-24 border-b border-line py-14 lg:py-16"
     >
-      <div className="max-w-md">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
-          How it works
-        </p>
-        <h2 className={serviceSectionTitleClassName}>
-          Start with the workflow, not the software.
-        </h2>
-        <div className="mt-7 divide-y divide-line">
-          {systemsHowSteps.map((step) => (
-            <article
-              key={step.title}
-              className="flex gap-4 py-4 first:pt-0 last:pb-0"
-            >
-              <span
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest-soft/70 font-source-serif-display text-[0.82rem] font-semibold tabular-nums text-forest"
-                style={{ fontVariationSettings: '"opsz" 16' }}
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-0">
+        <Reveal className="max-w-md lg:pr-14">
+          <p className={serviceSectionLabelClassName}>
+            Where a system earns its place
+          </p>
+          <h2 className={serviceSectionTitleClassName}>
+            Small systems for the work that keeps repeating.
+          </h2>
+          <span className="mt-7 block h-px w-10 bg-forest" aria-hidden />
+          <p className={`${serviceSectionBodyClassName} max-w-sm`}>
+            The best opportunities are usually the repeated handoffs, updates,
+            and follow-ups that happen every day. A useful system connects the
+            work already happening and removes the steps your team keeps doing
+            by hand.
+          </p>
+        </Reveal>
+
+        {/* Divider belongs to the right column so it spans the full stack. */}
+        <div className="min-w-0 lg:border-l lg:border-line lg:pl-12">
+          <Reveal className="mb-6 block text-right">
+            <span className="text-[0.72rem] font-medium text-forest">
+              Illustrative workflows
+            </span>
+          </Reveal>
+
+          <div className="divide-y divide-line">
+            {systemsWorkflows.map((workflow, index) => (
+              <Reveal
+                as="article"
+                key={workflow.step}
+                delay={index * 110}
+                className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-4 py-7 first:pt-0 last:pb-0 sm:gap-x-5"
               >
-                {step.step}
-              </span>
-              <div>
-                <h3 className="text-[0.95rem] font-semibold text-ink">
-                  {step.title}
-                </h3>
-                <p className="mt-1 text-sm leading-6 text-muted">{step.body}</p>
-              </div>
-            </article>
-          ))}
+                {/* The number is its own column, so the title, chain, and
+                    "Removes" line all share one left edge automatically. */}
+                <span
+                  className="font-source-serif-display text-[1.35rem] font-semibold leading-none tabular-nums text-forest/60"
+                  style={{ fontVariationSettings: '"opsz" 20' }}
+                >
+                  {workflow.step}
+                </span>
+                <div className="min-w-0">
+                  <h3 className="font-serif text-[1.6rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[1.85rem]">
+                    {workflow.title}
+                  </h3>
+                  <p className="mt-1 text-[0.85rem] font-medium text-forest">
+                    {workflow.audience}
+                  </p>
+
+                  <SystemsWorkflowChain steps={workflow.steps} />
+
+                  <p className="mt-4 text-[0.88rem] leading-6 text-ink/80">
+                    <span className="font-semibold text-ink">Removes:</span>{" "}
+                    {workflow.removes}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
-
-      <SystemsOperationsCard />
     </section>
   );
 }
 
-/** Light "Operations" dashboard — how-it-works visual. */
-function SystemsOperationsCard() {
+/**
+ * Icon chain for one workflow. Arrows live in their own auto-width columns so
+ * the four steps stay evenly spaced, and they drop out below `sm` where the
+ * chain reflows to a two-column grid.
+ */
+function SystemsWorkflowChain({
+  steps,
+}: {
+  steps: (typeof systemsWorkflows)[number]["steps"];
+}) {
   return (
-    <div className="rounded-2xl border border-line bg-card shadow-[0_26px_54px_-34px_rgba(31,36,32,0.5)]">
-      <div
-        className="flex items-center gap-1.5 border-b border-line px-4 py-2.5"
-        aria-hidden
-      >
-        <span className="h-2 w-2 rounded-full bg-[#C87264]" />
-        <span className="h-2 w-2 rounded-full bg-[#D8A847]" />
-        <span className="h-2 w-2 rounded-full bg-[#5F9C69]" />
-      </div>
-      <div className="p-4 sm:p-5">
-        <div className="flex items-center justify-between gap-3">
-          <p className="font-sans text-sm font-semibold text-ink">Operations</p>
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-ivory px-2.5 py-1.5 text-[0.68rem] font-medium text-muted">
-            This week
-            <ChevronDown className="h-3 w-3" strokeWidth={2} />
-          </span>
-        </div>
-
-        <div className="mt-3.5 grid grid-cols-3 gap-2.5">
-          {systemsOpsStats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-xl border border-line p-3"
+    <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-[repeat(4,minmax(0,1fr))] sm:gap-x-0 lg:grid-cols-[repeat(3,minmax(0,1fr)_auto)_minmax(0,1fr)]">
+      {steps.map(({ icon: Icon, ...rest }, index) => (
+        <Fragment key={rest.label}>
+          {index > 0 && (
+            <span
+              className="hidden items-center px-3 lg:flex xl:px-4"
+              aria-hidden
             >
-              <p className="text-[0.62rem] font-medium text-muted">
-                {stat.label}
-              </p>
-              <div className="mt-1.5 flex items-baseline justify-between gap-2">
-                <p className="font-sans text-[1.15rem] font-semibold leading-none tracking-[-0.01em] text-ink">
-                  {stat.value}
-                </p>
-                <p className="text-[0.62rem] font-semibold text-forest">
-                  {stat.delta}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <p className="mt-4 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-muted">
-          Recent activity
-        </p>
-        <ul className="mt-1 divide-y divide-line/70">
-          {systemsOpsActivity.map((item) => (
-            <li key={item.label} className="flex items-center gap-2.5 py-2">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-forest-soft/50 text-forest">
-                <FileText className="h-3.5 w-3.5" strokeWidth={1.7} />
+              <span className="relative block h-px w-full min-w-[1.5rem] bg-ink/35">
+                <span className="absolute -right-px -top-[3px] block h-[7px] w-[7px] rotate-45 border-r border-t border-ink/35" />
               </span>
-              <span className="min-w-0 flex-1 truncate text-[0.72rem] font-medium text-ink">
-                {item.label}
-              </span>
-              <span className="shrink-0 text-[0.62rem] text-muted">
-                {item.time}
-              </span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-xl border border-line bg-sand/60 px-4 py-3">
-          {systemsWorkflowRail.map(({ icon: Icon }, index) => {
-            const labels = ["Form submitted", "Record created", "Team notified"];
-            return (
-              <Fragment key={labels[index]}>
-                {index > 0 && (
-                  <ArrowRight
-                    className="h-3.5 w-3.5 text-muted/60"
-                    strokeWidth={1.8}
-                    aria-hidden
-                  />
-                )}
-                <span className="flex items-center gap-1.5 text-[0.68rem] font-medium text-ink/80">
-                  <Icon className="h-3.5 w-3.5 text-forest" strokeWidth={1.7} />
-                  {labels[index]}
-                </span>
-              </Fragment>
-            );
-          })}
-        </div>
-      </div>
+            </span>
+          )}
+          <div className="flex min-w-0 flex-col items-center gap-2.5 text-center">
+            <span className="relative flex h-11 w-11 items-center justify-center">
+              <Icon className="h-8 w-8 text-ink/75" strokeWidth={1.15} />
+              {"alert" in rest && rest.alert ? (
+                <span
+                  className="absolute right-1 top-0.5 h-2 w-2 rounded-full bg-forest ring-2 ring-ivory"
+                  aria-hidden
+                />
+              ) : null}
+            </span>
+            <span className="text-[0.8rem] leading-4 text-ink/80">
+              {rest.label}
+            </span>
+          </div>
+        </Fragment>
+      ))}
     </div>
   );
 }
