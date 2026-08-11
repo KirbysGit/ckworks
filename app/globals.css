@@ -220,6 +220,18 @@
   }
 }
 
+/* One item arriving as part of a sequence. Shorter throw than ck-rise. */
+@keyframes ck-step {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @layer components {
   .container-ck {
     @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
@@ -304,14 +316,18 @@
     animation: ck-skeleton-shimmer 1.15s linear infinite;
   }
 
-  /*
-   * Draws a connector or rule from its left edge.
+  /* ── Reveal-aware primitives ──────────────────────────────────────────
+   * These follow a shared three-rule contract, so a sequence can be built
+   * below the fold without nesting a <Reveal> around every moving part:
    *
-   * Above the fold it runs on load like the other primitives. Inside a
-   * <Reveal> it is held at zero and waits for `.is-in`, so the draw happens
-   * when the section scrolls into view rather than finishing unseen. With JS
-   * off, <Reveal> never applies `.ck-reveal`, so the base rule runs and the
-   * connector still ends up drawn.
+   *   .ck-x                  runs on load  (above the fold)
+   *   .ck-reveal .ck-x       held at start (off-screen, waiting)
+   *   .ck-reveal.is-in .ck-x runs now      (scrolled into view)
+   *
+   * Every held state needs a matching reduced-motion reset at the bottom of
+   * this file, or the element stays stuck in its "before" state.
+   *
+   * Draws a connector or rule from its left edge.
    */
   .ck-draw-x {
     --ck-anim-delay: 0ms;
@@ -327,6 +343,23 @@
 
   .ck-reveal.is-in .ck-draw-x {
     animation: ck-draw-x 550ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--ck-anim-delay);
+  }
+
+  /* One item in a sequence — icons and labels along a flow. */
+  .ck-step {
+    --ck-anim-delay: 0ms;
+    animation: ck-step 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--ck-anim-delay);
+  }
+
+  .ck-reveal .ck-step {
+    animation: none;
+    opacity: 0;
+  }
+
+  .ck-reveal.is-in .ck-step {
+    animation: ck-step 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
     animation-delay: var(--ck-anim-delay);
   }
 
@@ -392,6 +425,14 @@
   .ck-reveal .ck-draw-x,
   .ck-reveal.is-in .ck-draw-x {
     animation: none !important;
+    transform: none !important;
+  }
+
+  .ck-step,
+  .ck-reveal .ck-step,
+  .ck-reveal.is-in .ck-step {
+    animation: none !important;
+    opacity: 1 !important;
     transform: none !important;
   }
 

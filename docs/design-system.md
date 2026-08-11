@@ -142,14 +142,17 @@ Defined in `app/globals.css`. All are disabled under `prefers-reduced-motion`.
 | `ck-lift` | Fade up 22px, 620ms | Device frames and larger cards |
 | `ck-resolve` | Blur 7px into focus, 680ms | A screen or result settling into view |
 | `ck-pop` | Scale 0.86 to 1, 460ms | Buttons and small badges |
+| `ck-step` | Fade up 6px, 420ms | One item in a sequence — a chain of icons |
 | `ck-draw-x` | `scaleX` 0 to 1 from the left, 550ms | Rules, connectors, flow lines |
+| `ck-draw-arc` | `stroke-dasharray` 0 to its own value, 700ms | SVG donut segments |
 | `ck-loadbar` | Sweep left to right, then fade, 920ms | Browser progress bar |
 | `ck-skeleton` | Fade in, hold, fade out, 900ms | Placeholder shown while "loading" |
 | `ck-skeleton-block` | Looping shimmer sweep | Individual skeleton bars |
 
-`ck-resolve`, `ck-loadbar`, `ck-skeleton`, and `ck-draw-x` take their delay from a
-`--ck-anim-delay` custom property rather than `animationDelay`, because they set
-`animation-delay` themselves. The others take a plain `animationDelay`.
+`ck-resolve`, `ck-loadbar`, `ck-skeleton`, `ck-step`, `ck-draw-x`, and
+`ck-draw-arc` take their delay from a `--ck-anim-delay` custom property rather
+than `animationDelay`, because they set `animation-delay` themselves. The
+others take a plain `animationDelay`.
 
 Sequence with a named timing constant near the component (for example
 `webDesignHeroTiming` or `searchVisibilityHeroTiming`) rather than scattering
@@ -172,13 +175,55 @@ runs and finishes while the section is still off-screen.
 
 Two rules follow:
 
-- Inside a `Reveal`, use `Reveal` itself for entrances. The only primitive that
-  is reveal-aware is `ck-draw-x`, which is held at `scaleX(0)` under
-  `.ck-reveal` and animates when `.is-in` lands. Follow that pattern if another
-  primitive needs to wait for scroll.
+- Inside a `Reveal`, use a **reveal-aware primitive** (below) or `Reveal`
+  itself. A plain primitive nested in a `Reveal` will have finished before the
+  reader ever sees it.
 - Never put a transform-animating primitive on an element that already carries
   its own `transform` for layout. The animation ends at `transform: none` and
-  silently discards the offset. Put the entrance on a wrapper instead.
+  silently discards the offset. Put the entrance on a wrapper, or move the
+  layout transform to an inner element.
+
+### Reveal-Aware Primitives
+
+`ck-step` and `ck-draw-x` are reveal-aware. Each is defined three times:
+
+```css
+.ck-step                    /* runs on load  — above the fold        */
+.ck-reveal .ck-step         /* held at start — off-screen, waiting   */
+.ck-reveal.is-in .ck-step   /* runs now      — scrolled into view    */
+```
+
+This is what makes a below-the-fold sequence practical: wrap the whole diagram
+in **one** `Reveal`, then give each moving part its own `--ck-anim-delay`. The
+observer fires once and every delay is measured from that moment, instead of
+nesting a `Reveal` around every icon and line.
+
+Two constraints when adding another one:
+
+- **Every held state needs a matching `prefers-reduced-motion` reset.** The
+  held rule is what the element falls back to when the animation is cancelled,
+  so without a reset it stays stuck in its "before" state — invisible, or
+  undrawn.
+- **Do not hold a property the element also sets as an SVG presentation
+  attribute.** CSS wins over presentation attributes, so the held value cannot
+  be cleared by turning the animation off. `ck-draw-arc` is deliberately *not*
+  reveal-aware for this reason: holding it needs `stroke-dasharray` in CSS,
+  which would strand the arc undrawn under reduced motion.
+
+### Sequencing A Flow
+
+When a visual is a flow — a chain of steps, a diagram with connectors — animate
+it in the order the work happens rather than all at once. Two are in use:
+
+- `SystemsWorkflowChain` traces each row icon → arrow → icon → arrow, so the
+  chain draws itself left to right.
+- `SystemsToolGrid` runs top to bottom: input cards, lines into the hub, the
+  hub, lines back out, output cards.
+
+Keep the delays in a named timing constant beside the component
+(`systemsWorkflowTiming`, `systemsFlowTiming`) so the rhythm is tunable in one
+place. Restraint matters more than coverage: one sequenced diagram per screenful
+reads as intent, several at once reads as noise.
 
 ## Accessibility
 

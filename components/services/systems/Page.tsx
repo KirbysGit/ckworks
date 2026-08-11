@@ -1,5 +1,5 @@
 /** Renders the bespoke Digital Systems and Integrations service experience. */
-import { Fragment, type ReactNode } from "react";
+import { Fragment, type CSSProperties, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -27,7 +27,7 @@ import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import type { ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
 import ProjectWorkCard from "../shared/ProjectWorkCard";
-import OperationsHub from "./OperationsHub";
+import OperationsHub, { systemsHeroTiming } from "./OperationsHub";
 import {
   serviceCenterLabelClassName,
   serviceCenterTitleClassName,
@@ -170,10 +170,44 @@ const systemsFlowLayout = {
    * as connection points the lines plug into.
    */
   cardNode: "0.7rem",
-  noteWidth: "w-[10.5rem] xl:w-[12.5rem]",
+  noteWidth: "w-[9rem] xl:w-[11rem]",
   noteLeft: "-left-4 xl:-left-10",
   noteRight: "-right-4 xl:-right-10",
   noteTop: "top-1/2 -translate-y-1/2",
+} as const;
+
+/**
+ * Tool-diagram sequence (ms), measured from when the section scrolls in.
+ * It reads top to bottom, the same direction as the diagram: the inputs
+ * arrive, the lines reach the hub, the hub lands, then the work flows back
+ * out to the connected tools.
+ *
+ * These drive `ck-step`, which is held until `<Reveal>` adds `.is-in` — so a
+ * single wrapper sequences the whole diagram without one observer per part.
+ */
+const systemsFlowTiming = {
+  inputCards: 0,
+  /** Added per card in a row. */
+  cardStep: 80,
+  linesIn: 300,
+  hub: 430,
+  linesOut: 560,
+  outputCards: 690,
+} as const;
+
+/**
+ * Per-row workflow sequence (ms). Icon, arrow, icon, arrow — so the chain
+ * traces itself in the order the work actually happens.
+ */
+const systemsWorkflowTiming = {
+  /** Added per step index (icon 0, 1, 2, 3). */
+  iconStep: 200,
+  /** Arrow lands between the icons it joins. */
+  arrowOffset: 90,
+  /** Arrowhead follows its line. */
+  headOffset: 200,
+  /** Added per workflow row. */
+  rowStep: 110,
 } as const;
 
 /**
@@ -259,7 +293,7 @@ export default function Page({ service }: { service: ServiceArea }) {
     .filter((project): project is CaseStudy => Boolean(project));
 
   return (
-    <ServiceFrame service={service}><section className="bg-ivory py-10 sm:py-12 lg:py-16">
+    <ServiceFrame service={service}><section className="bg-ivory pb-10 pt-5 sm:pb-12 sm:pt-6 lg:pb-16 lg:pt-6">
         <div className={serviceContainer}>
           <SystemsHero />
           <SystemsWhyItMatters />
@@ -278,21 +312,36 @@ function SystemsHero() {
   return (
     <div className="grid items-center gap-10 border-b border-line pb-11 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-14 lg:pb-14">
       <div className="max-w-xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
-          Digital Systems &amp; Integrations
+        <p
+          className="ck-rise text-xs font-semibold uppercase tracking-[0.26em] text-forest"
+          style={{ animationDelay: `${systemsHeroTiming.eyebrow}ms` }}
+        >
+          Flow
         </p>
-        <h1 className={serviceHeroTitleClassName}>
+        <h1
+          className={`ck-rise ${serviceHeroTitleClassName}`}
+          style={{ animationDelay: `${systemsHeroTiming.title}ms` }}
+        >
           Custom systems that keep the work moving.
         </h1>
-        <p className="mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]">
+        <p
+          className="ck-rise mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]"
+          style={{ animationDelay: `${systemsHeroTiming.leadCopy}ms` }}
+        >
           We build internal dashboards, connected forms, workflow automations,
           and integrations that bring your tools and information together.
         </p>
-        <p className="mt-4 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]">
+        <p
+          className="ck-rise mt-4 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]"
+          style={{ animationDelay: `${systemsHeroTiming.supportCopy}ms` }}
+        >
           The goal is simple: less copying, fewer missed steps, and a clearer
           view of what&apos;s happening.
         </p>
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div
+          className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
+          style={{ animationDelay: `${systemsHeroTiming.actions}ms` }}
+        >
           <ProjectInquiryTrigger
             source="systems_service_hero"
             className="rounded-md px-5"
@@ -318,7 +367,7 @@ function SystemsHero() {
 function SystemsWhyItMatters() {
   return (
     <section className="grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.9fr)_1px_minmax(0,1.1fr)] lg:gap-12 lg:py-16">
-      <div className="max-w-md">
+      <Reveal className="max-w-md">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
           Why it matters
         </p>
@@ -332,23 +381,30 @@ function SystemsWhyItMatters() {
         <p className="mt-3 text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
           We connect the pieces so your team can move faster with confidence.
         </p>
-      </div>
+      </Reveal>
 
       <span className="hidden w-px bg-line lg:block" aria-hidden />
 
       <div className="divide-y divide-line lg:self-center">
-        {systemsWhyItMatters.map(({ icon: Icon, title, body }) => (
-          <article key={title} className="flex gap-5 py-5 first:pt-0 last:pb-0">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-soft/60 text-forest">
-              <Icon className="h-5 w-5" strokeWidth={1.6} />
+        {systemsWhyItMatters.map(({ icon: Icon, title, body }, index) => (
+          <Reveal
+            as="article"
+            key={title}
+            delay={index * 110}
+            className="grid min-h-[8.75rem] grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-4 py-6 first:pt-0 last:pb-0 sm:py-7"
+          >
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-forest-soft/60 text-forest sm:h-11 sm:w-11">
+              <Icon className="h-5 w-5" strokeWidth={1.5} />
             </span>
             <div>
-              <h3 className="font-serif text-xl font-medium leading-snug text-ink">
+              <h3 className="font-serif text-[1.55rem] font-semibold leading-[1.12] tracking-[-0.02em] text-ink sm:text-[1.85rem]">
                 {title}
               </h3>
-              <p className="mt-1 text-sm leading-6 text-muted">{body}</p>
+              <p className="mt-3 text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
+                {body}
+              </p>
             </div>
-          </article>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -358,14 +414,14 @@ function SystemsWhyItMatters() {
 function SystemsToolGrid() {
   return (
     <section className="border-b border-line py-14 lg:py-16">
-      <div className="mx-auto max-w-3xl text-center">
+      <Reveal className="mx-auto max-w-3xl text-center">
         <p className={serviceCenterLabelClassName}>
           What this service can include
         </p>
         <h2 className={serviceCenterTitleClassName}>
           Connect the tools you already use.
         </h2>
-      </div>
+      </Reveal>
 
       <div className="relative mx-auto mt-10 max-w-4xl">
         {/* Handwritten asides flank the hub; they need room, so desktop only. */}
@@ -386,9 +442,12 @@ function SystemsToolGrid() {
           className={`pointer-events-none absolute z-0 hidden h-auto lg:block ${systemsFlowLayout.noteWidth} ${systemsFlowLayout.noteRight} ${systemsFlowLayout.noteTop}`}
         />
 
-        <div className="relative z-10">
+        <Reveal className="relative z-10 block">
           <SystemsFlowLabel>Inputs</SystemsFlowLabel>
-          <SystemsToolRow tools={systemsInputs} />
+          <SystemsToolRow
+            tools={systemsInputs}
+            baseDelay={systemsFlowTiming.inputCards}
+          />
 
           <SystemsFlowConnectors direction="in" />
 
@@ -397,7 +456,14 @@ function SystemsToolGrid() {
             className="relative z-30 my-6 flex justify-center lg:my-0"
             style={{ transform: `translateY(${systemsFlowLayout.hubNudgeY})` }}
           >
-            <div className="relative z-30 flex items-center gap-3.5 rounded-xl bg-forest px-6 py-4 shadow-[0_18px_38px_-18px_rgba(47,91,63,0.6)]">
+            {/* ck-step goes on the pill, not the parent — the parent carries
+                the hubNudgeY transform this animation would overwrite. */}
+            <div
+              className="ck-step relative z-30 flex items-center gap-3.5 rounded-xl bg-forest px-6 py-4 shadow-[0_18px_38px_-18px_rgba(47,91,63,0.6)]"
+              style={
+                { "--ck-anim-delay": `${systemsFlowTiming.hub}ms` } as CSSProperties
+              }
+            >
               <Store
                 className="h-7 w-7 shrink-0 text-ivory"
                 strokeWidth={1.5}
@@ -415,10 +481,13 @@ function SystemsToolGrid() {
 
           <SystemsFlowConnectors direction="out" />
 
-          <SystemsToolRow tools={systemsConnected} />
+          <SystemsToolRow
+            tools={systemsConnected}
+            baseDelay={systemsFlowTiming.outputCards}
+          />
           {/* Label sits outside the row (below) so the hub has matching gaps above/below. */}
           <SystemsFlowLabel className="mb-0 mt-4">Connected tools</SystemsFlowLabel>
-        </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -449,6 +518,10 @@ function SystemsFlowLabel({
  * Bands tuck under the cards via `cardDip` so lines plug into both rows.
  */
 function SystemsFlowConnectors({ direction }: { direction: "in" | "out" }) {
+  const lineDelay =
+    direction === "in"
+      ? systemsFlowTiming.linesIn
+      : systemsFlowTiming.linesOut;
   const {
     columnCenters,
     hubAnchors,
@@ -510,8 +583,15 @@ function SystemsFlowConnectors({ direction }: { direction: "in" | "out" }) {
             return (
               <svg
                 key={`${direction}-line-${center}`}
-                className="pointer-events-none absolute inset-y-0 w-3 -translate-x-1/2 overflow-visible text-ink/45"
-                style={{ left: center }}
+                /* Centred via calc, not -translate-x-1/2: ck-step animates
+                   transform and would settle at `none`, losing the offset. */
+                className="ck-step pointer-events-none absolute inset-y-0 w-3 overflow-visible text-ink/45"
+                style={
+                  {
+                    left: `calc(${center} - 0.375rem)`,
+                    "--ck-anim-delay": `${lineDelay}ms`,
+                  } as CSSProperties
+                }
                 viewBox="0 0 12 100"
                 preserveAspectRatio="none"
                 fill="none"
@@ -531,11 +611,14 @@ function SystemsFlowConnectors({ direction }: { direction: "in" | "out" }) {
           return (
             <svg
               key={`${direction}-line-${center}`}
-              className="pointer-events-none absolute inset-y-0 overflow-visible text-ink/45"
-              style={{
-                left: boxLeft,
-                right: `calc(100% - (${boxRight}))`,
-              }}
+              className="ck-step pointer-events-none absolute inset-y-0 overflow-visible text-ink/45"
+              style={
+                {
+                  left: boxLeft,
+                  right: `calc(100% - (${boxRight}))`,
+                  "--ck-anim-delay": `${lineDelay}ms`,
+                } as CSSProperties
+              }
               viewBox="0 0 100 100"
               preserveAspectRatio="none"
               fill="none"
@@ -575,13 +658,26 @@ function SystemsFlowConnectors({ direction }: { direction: "in" | "out" }) {
   );
 }
 
-function SystemsToolRow({ tools }: { tools: SystemsTool[] }) {
+function SystemsToolRow({
+  tools,
+  baseDelay,
+}: {
+  tools: SystemsTool[];
+  baseDelay: number;
+}) {
   return (
     <div className="relative z-20 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-      {tools.map((tool) => (
+      {tools.map((tool, index) => (
         <article
           key={tool.name}
-          className="flex flex-col items-center gap-1.5 rounded-xl border border-line bg-card px-3 py-5 text-center shadow-soft"
+          className="ck-step flex flex-col items-center gap-1.5 rounded-xl border border-line bg-card px-3 py-5 text-center shadow-soft"
+          style={
+            {
+              "--ck-anim-delay": `${
+                baseDelay + index * systemsFlowTiming.cardStep
+              }ms`,
+            } as CSSProperties
+          }
         >
           <span className="flex h-9 items-center justify-center">
             {tool.logo}
@@ -619,11 +715,6 @@ function SystemsHowItWorks() {
 
         {/* Divider belongs to the right column so it spans the full stack. */}
         <div className="min-w-0 lg:border-l lg:border-line lg:pl-12">
-          <Reveal className="mb-6 block text-right">
-            <span className="text-[0.72rem] font-medium text-forest">
-              Illustrative workflows
-            </span>
-          </Reveal>
 
           <div className="divide-y divide-line">
             {systemsWorkflows.map((workflow, index) => (
@@ -631,7 +722,7 @@ function SystemsHowItWorks() {
                 as="article"
                 key={workflow.step}
                 delay={index * 110}
-                className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-4 py-7 first:pt-0 last:pb-0 sm:gap-x-5"
+                className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-4 py-6 first:pt-0 last:pb-0 sm:gap-x-5"
               >
                 {/* The number is its own column, so the title, chain, and
                     "Removes" line all share one left edge automatically. */}
@@ -643,18 +734,23 @@ function SystemsHowItWorks() {
                 </span>
                 <div className="min-w-0">
                   <h3 className="font-serif text-[1.6rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[1.85rem]">
-                    {workflow.title}
+                    {workflow.title}{" "}
+                    <span className="font-sans text-[0.85rem] font-medium tracking-normal text-ink/55 sm:text-[0.9rem]">
+                      for a
+                    </span>{" "}
+                    <span className="font-sans text-[0.9rem] font-semibold tracking-normal text-forest sm:text-[0.95rem]">
+                      {workflow.audience}
+                    </span>
                   </h3>
-                  <p className="mt-1 text-[0.85rem] font-medium text-forest">
-                    {workflow.audience}
-                  </p>
-
-                  <SystemsWorkflowChain steps={workflow.steps} />
-
-                  <p className="mt-4 text-[0.88rem] leading-6 text-ink/80">
+                  <p className="mt-1 text-[0.85rem] leading-6 text-ink/80">
                     <span className="font-semibold text-ink">Removes:</span>{" "}
                     {workflow.removes}
                   </p>
+
+                  <SystemsWorkflowChain
+                    steps={workflow.steps}
+                    rowDelay={index * systemsWorkflowTiming.rowStep}
+                  />
                 </div>
               </Reveal>
             ))}
@@ -672,39 +768,72 @@ function SystemsHowItWorks() {
  */
 function SystemsWorkflowChain({
   steps,
+  rowDelay,
 }: {
   steps: (typeof systemsWorkflows)[number]["steps"];
+  rowDelay: number;
 }) {
   return (
-    <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-[repeat(4,minmax(0,1fr))] sm:gap-x-0 lg:grid-cols-[repeat(3,minmax(0,1fr)_auto)_minmax(0,1fr)]">
-      {steps.map(({ icon: Icon, ...rest }, index) => (
-        <Fragment key={rest.label}>
-          {index > 0 && (
-            <span
-              className="hidden items-center px-3 lg:flex xl:px-4"
-              aria-hidden
-            >
-              <span className="relative block h-px w-full min-w-[1.5rem] bg-ink/35">
-                <span className="absolute -right-px -top-[3px] block h-[7px] w-[7px] rotate-45 border-r border-t border-ink/35" />
-              </span>
-            </span>
-          )}
-          <div className="flex min-w-0 flex-col items-center gap-2.5 text-center">
-            <span className="relative flex h-11 w-11 items-center justify-center">
-              <Icon className="h-8 w-8 text-ink/75" strokeWidth={1.15} />
-              {"alert" in rest && rest.alert ? (
+    <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-[repeat(4,minmax(0,1fr))] sm:gap-x-0 lg:grid-cols-[repeat(3,minmax(0,1fr)_auto)_minmax(0,1fr)]">
+      {steps.map(({ icon: Icon, ...rest }, index) => {
+        const iconAt = rowDelay + index * systemsWorkflowTiming.iconStep;
+        // The arrow into this step leaves just after the previous icon lands.
+        const arrowAt =
+          iconAt -
+          systemsWorkflowTiming.iconStep +
+          systemsWorkflowTiming.arrowOffset;
+
+        return (
+          <Fragment key={rest.label}>
+            {index > 0 && (
+              <span
+                className="hidden items-center px-3 lg:flex xl:px-4"
+                aria-hidden
+              >
                 <span
-                  className="absolute right-1 top-0.5 h-2 w-2 rounded-full bg-forest ring-2 ring-ivory"
-                  aria-hidden
-                />
-              ) : null}
-            </span>
-            <span className="text-[0.8rem] leading-4 text-ink/80">
-              {rest.label}
-            </span>
-          </div>
-        </Fragment>
-      ))}
+                  className="ck-draw-x relative block h-px w-full min-w-[1.5rem] bg-ink/35"
+                  style={
+                    { "--ck-anim-delay": `${arrowAt}ms` } as CSSProperties
+                  }
+                >
+                  {/* Head follows the line it caps rather than scaling with
+                      it. The rotation lives on an inner span because ck-step
+                      animates transform and would settle at `none`. */}
+                  <span
+                    className="ck-step absolute -right-px -top-[3px] block h-[7px] w-[7px]"
+                    style={
+                      {
+                        "--ck-anim-delay": `${
+                          arrowAt + systemsWorkflowTiming.headOffset
+                        }ms`,
+                      } as CSSProperties
+                    }
+                  >
+                    <span className="block h-full w-full rotate-45 border-r border-t border-ink/35" />
+                  </span>
+                </span>
+              </span>
+            )}
+            <div
+              className="ck-step flex min-w-0 flex-col items-center gap-2.5 text-center"
+              style={{ "--ck-anim-delay": `${iconAt}ms` } as CSSProperties}
+            >
+              <span className="relative flex h-11 w-11 items-center justify-center">
+                <Icon className="h-8 w-8 text-ink/75" strokeWidth={1.15} />
+                {"alert" in rest && rest.alert ? (
+                  <span
+                    className="absolute right-1 top-0.5 h-2 w-2 rounded-full bg-forest ring-2 ring-ivory"
+                    aria-hidden
+                  />
+                ) : null}
+              </span>
+              <span className="text-[0.8rem] leading-4 text-ink/80">
+                {rest.label}
+              </span>
+            </div>
+          </Fragment>
+        );
+      })}
     </div>
   );
 }
@@ -714,12 +843,20 @@ function SystemsWork({ projects }: { projects: CaseStudy[] }) {
 
   return (
     <section className="border-b border-line py-12 lg:py-14">
-      <h2 className="font-serif text-[2rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.3rem]">
-        Relevant work
-      </h2>
+      <Reveal>
+        <h2 className="font-serif text-[2rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.3rem]">
+          Relevant work
+        </h2>
+      </Reveal>
       <div className="mt-7 grid gap-5 sm:grid-cols-2 sm:gap-6">
-        {projects.map((project) => (
-          <ProjectWorkCard key={project.slug} project={project} />
+        {projects.map((project, index) => (
+          <Reveal
+            key={project.slug}
+            delay={index * 120}
+            className="h-full min-h-0"
+          >
+            <ProjectWorkCard project={project} />
+          </Reveal>
         ))}
       </div>
     </section>
@@ -729,17 +866,19 @@ function SystemsWork({ projects }: { projects: CaseStudy[] }) {
 function SystemsFaq() {
   return (
     <section className="border-b border-line py-12 lg:py-14">
-      <FAQSection
-        faqs={[...systemsFaqs]}
-        description="Common questions about connecting tools, automating steps, and keeping systems running."
-      />
+      <Reveal>
+        <FAQSection
+          faqs={[...systemsFaqs]}
+          description="Common questions about connecting tools, automating steps, and keeping systems running."
+        />
+      </Reveal>
     </section>
   );
 }
 
 function SystemsBottomCta() {
   return (
-    <div className="mt-10 rounded-2xl border border-line bg-sand px-6 py-8 shadow-soft sm:px-8 sm:py-9 lg:px-10">
+    <Reveal className="mt-10 block rounded-2xl border border-line bg-sand px-6 py-8 shadow-soft sm:px-8 sm:py-9 lg:px-10">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
         <div className="max-w-2xl">
           <h2 className="font-serif text-[1.85rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2.15rem]">
@@ -758,7 +897,7 @@ function SystemsBottomCta() {
           <ArrowRight className="h-4 w-4" />
         </ProjectInquiryTrigger>
       </div>
-    </div>
+    </Reveal>
   );
 }
 

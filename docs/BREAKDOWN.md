@@ -93,9 +93,11 @@ closing CTA.
 
 - Bespoke designs for all five service pages
 - Motion system: CSS entrance primitives in `app/globals.css` plus
-  `components/ui/Reveal.tsx`. Applied in full to Web Design and, on
-  2026-08-08, Search & AI Visibility (which also added `ck-draw-x`, the first
-  reveal-aware primitive). Analytics, Systems, and Support still have none.
+  `components/ui/Reveal.tsx`. Applied in full to Web Design, Search & AI
+  Visibility (`ck-draw-x`, the first reveal-aware primitive), Analytics
+  (`ck-draw-arc`, plus a skeleton-to-figures load in the hero), and Digital
+  Systems (`ck-step`, and the first sequenced flow diagrams). Ongoing Support
+  is the only service page with no motion.
 - Agent documentation set: `AGENTS.md`, `CLAUDE.md`, and `docs/`
 - First component ownership migration: homepage, layout, inquiry, contact,
   projects, and analytics moved out of the `components/` root

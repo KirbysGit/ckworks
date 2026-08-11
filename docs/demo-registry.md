@@ -60,14 +60,17 @@ Verified against the repository on 2026-08-07.
 ### Hearth & Home
 
 - **Represents**: an interior design studio
-- **Used in**: `app/services/[slug]/page.tsx` (Web Design & Development)
-- **Purpose**: the hero device mockups and the four-stage transformation
-  showing an outdated site becoming a launched one
+- **Used in**: `components/services/web-design/Page.tsx`,
+  `components/services/support/Page.tsx`
+- **Purpose**: on Web Design, the hero device mockups and the four-stage
+  transformation showing an outdated site becoming a launched one. On Ongoing
+  Support, the browser preview of a site being actively looked after.
 - **Assets**: `public/images/services/png/01-hearth-home-demo.png`,
   `public/images/services/svg/01-hearth-logo-demo.svg`
-- **Labeling**: framed inside device mockups as a design demonstration.
-- **Never imply**: a real interior-design client or a measured redesign
-  outcome.
+- **Labeling**: framed inside a device or browser mockup as a demonstration;
+  the Support preview is captioned "CK Works client site".
+- **Never imply**: a real interior-design client, an actual support retainer,
+  or a measured redesign outcome.
 
 ## People And Companies In Demo Data
 
