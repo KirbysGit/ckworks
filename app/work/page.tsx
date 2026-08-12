@@ -137,8 +137,9 @@ const workHeroLogoCards = [
     alt: "Tizirsso Racing",
     meta: ["Client Work", "Live"],
     className:
-      "left-[11%] top-[2%] z-20 w-[60%] rotate-[-2.6deg] sm:w-[56%]",
-    logoClassName: "p-12 sm:p-14",
+      "left-[13%] top-[3%] z-20 w-[50%] rotate-[-2.2deg] sm:w-[47%]",
+    logoClassName: "p-5 sm:p-6",
+    background: "linear-gradient(140deg, #E10600 0%, #7d0400 55%, #160404 100%)",
   },
   {
     slug: "taylor",
@@ -148,9 +149,10 @@ const workHeroLogoCards = [
     alt: "Taylor.io",
     meta: ["Personal Project", "Early Build"],
     className:
-      "right-[2%] top-[25%] z-30 w-[43%] rotate-[4deg] sm:w-[40%]",
+      "right-[7%] top-[28%] z-30 w-[37%] rotate-[3.5deg] sm:w-[34%]",
     logoClassName: "p-9 sm:p-10",
-    glow: "radial-gradient(ellipse 72% 68% at 50% 50%, #C23B57 0%, #E5766D 42%, transparent 75%)",
+    background:
+      "radial-gradient(55% 48% at 22% 20%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%), radial-gradient(42% 38% at 82% 78%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 55%), linear-gradient(155deg, #D65656 0%, #AF3E48 55%, #7f2c37 100%)",
   },
   {
     slug: "setlst",
@@ -160,9 +162,9 @@ const workHeroLogoCards = [
     alt: "SETLST",
     meta: ["Product Concept", "In Progress"],
     className:
-      "bottom-[6%] left-[2%] z-10 w-[51%] rotate-[2.8deg] sm:w-[48%]",
+      "bottom-[8%] left-[6%] z-10 w-[43%] rotate-[2.4deg] sm:w-[40%]",
     logoClassName: "p-10 sm:p-12",
-    glow: "radial-gradient(ellipse 72% 68% at 50% 50%, #4C3B9C 0%, #3D6FBF 45%, transparent 75%)",
+    background: "linear-gradient(135deg, #2EF2C3 0%, #8B5CF6 100%)",
   },
   {
     slug: "centi",
@@ -172,8 +174,9 @@ const workHeroLogoCards = [
     alt: "Centi",
     meta: ["Personal Project", "Working Build"],
     className:
-      "bottom-[2%] right-[8%] z-20 w-[47%] rotate-[-1.4deg] sm:w-[44%]",
+      "bottom-[4%] right-[19%] z-20 w-[39%] rotate-[-1.2deg] sm:w-[37%]",
     logoClassName: "p-9 sm:p-11",
+    background: "linear-gradient(135deg, #0d6efd 0%, #198754 100%)",
   },
 ] as const;
 
@@ -193,30 +196,26 @@ function WorkLogoStack() {
           href={`/${card.slug}`}
           className={`group absolute block transition-transform duration-300 hover:-translate-y-1 ${card.className}`}
         >
-          <article className="relative aspect-[1.28/1] overflow-hidden rounded-[0.35rem] border border-line bg-card shadow-[0_2px_5px_rgba(31,36,32,0.07),0_24px_42px_-32px_rgba(31,36,32,0.48)] transition-shadow duration-300 group-hover:shadow-[0_4px_10px_rgba(31,36,32,0.08),0_30px_46px_-30px_rgba(31,36,32,0.62)]">
+          <article
+            className="relative aspect-[1.28/1] overflow-hidden rounded-[0.35rem] shadow-[0_2px_5px_rgba(31,36,32,0.07),0_24px_42px_-32px_rgba(31,36,32,0.48)] transition-shadow duration-300 group-hover:shadow-[0_4px_10px_rgba(31,36,32,0.08),0_30px_46px_-30px_rgba(31,36,32,0.62)]"
+            style={{ background: card.background }}
+          >
             <span
-              className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.65),transparent_42%,rgba(31,36,32,0.035))]"
+              className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.16),transparent_42%,rgba(0,0,0,0.14))]"
               aria-hidden
             />
             <span
-              className="pointer-events-none absolute inset-3 rounded-[0.2rem] border border-line/65"
+              className="pointer-events-none absolute inset-3 rounded-[0.2rem] border border-white/20"
               aria-hidden
             />
 
             <div className="relative z-10 flex h-full flex-col px-5 py-4 sm:px-6 sm:py-5">
-              <div className="flex items-center justify-between gap-3 text-[0.55rem] font-semibold uppercase tracking-[0.12em] text-ink/72 sm:text-[0.62rem]">
+              <div className="flex items-center justify-between gap-3 text-[0.55rem] font-semibold uppercase tracking-[0.12em] text-ivory/85 sm:text-[0.62rem]">
                 <span>{card.number}</span>
                 <span>{card.type}</span>
               </div>
 
               <div className="relative min-h-0 flex-1">
-                {"glow" in card && card.glow && (
-                  <span
-                    className="pointer-events-none absolute inset-0 opacity-80 blur-xl transition-opacity duration-300 group-hover:opacity-100"
-                    style={{ background: card.glow }}
-                    aria-hidden
-                  />
-                )}
                 <Image
                   src={card.src}
                   alt={card.alt}
@@ -226,12 +225,12 @@ function WorkLogoStack() {
                 />
               </div>
 
-              <div className="flex items-center gap-2 border-t border-line/70 pt-2.5 text-[0.55rem] font-medium text-ink/70 sm:text-[0.62rem]">
+              <div className="flex items-center gap-2 border-t border-white/25 pt-2.5 text-[0.55rem] font-medium text-ivory/85 sm:text-[0.62rem]">
                 {card.meta.map((item, index) => (
                   <span key={item} className="inline-flex items-center gap-2">
                     {index > 0 && (
                       <span
-                        className="h-1 w-1 rounded-full bg-forest"
+                        className="h-1 w-1 rounded-full bg-ivory/85"
                         aria-hidden
                       />
                     )}
@@ -275,12 +274,12 @@ function MoreWorkSection() {
   return (
     <section className="border-t border-line/70 bg-ivory py-10 sm:py-12 lg:py-14">
       <div className={workPageContainer}>
-        <div className="grid gap-8 lg:grid-cols-[minmax(18rem,0.33fr)_minmax(0,1fr)] lg:items-start lg:gap-10">
-          <div className="max-w-md">
+        <div className="grid gap-8 lg:grid-cols-[minmax(22rem,0.4fr)_minmax(0,1fr)] lg:items-start lg:gap-10">
+          <div className="max-w-lg">
             <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
               More Technical Work
             </p>
-            <h2 className="mt-5 font-serif text-[2.35rem] font-medium leading-[1.08] tracking-[-0.015em] text-ink sm:text-[3rem] lg:text-[3.35rem]">
+            <h2 className="mt-5 font-serif text-[2.35rem] font-medium leading-[1.08] tracking-[-0.015em] text-ink sm:text-[3rem] lg:text-[3.15rem]">
               Smaller builds with useful technical range.
             </h2>
             <p className="mt-6 max-w-sm text-base leading-8 text-muted sm:text-lg">
@@ -492,14 +491,14 @@ function TechnicalWorkRow({
 
       <div className="min-w-0">
         <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <h3 className="font-serif text-[1.65rem] font-medium leading-tight text-ink sm:text-[1.9rem]">
+          <h3 className="font-serif text-[1.4rem] font-medium leading-tight text-ink sm:text-[1.6rem]">
             {study.name}
           </h3>
-          <p className="text-[0.8rem] font-semibold leading-5 text-forest sm:text-[0.86rem]">
+          <p className="text-[0.72rem] font-semibold leading-5 text-forest sm:text-[0.78rem]">
             {summary?.summary ?? cleanText(study.category)}
           </p>
         </div>
-        <p className="mt-1 text-base leading-6 text-muted sm:text-[1.05rem]">
+        <p className="mt-1 text-sm leading-6 text-muted sm:text-[0.92rem]">
           {summary?.stack ?? cleanText(study.category)}
         </p>
       </div>
