@@ -201,6 +201,10 @@ function WorkLogoStack() {
               className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.65),transparent_42%,rgba(31,36,32,0.035))]"
               aria-hidden
             />
+            <span
+              className="pointer-events-none absolute inset-3 rounded-[0.2rem] border border-line/65"
+              aria-hidden
+            />
 
             <div className="relative z-10 flex h-full flex-col px-5 py-4 sm:px-6 sm:py-5">
               <div className="flex items-center justify-between gap-3 text-[0.55rem] font-semibold uppercase tracking-[0.12em] text-ink/72 sm:text-[0.62rem]">
