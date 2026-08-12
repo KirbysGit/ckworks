@@ -122,11 +122,67 @@ function WorkHero() {
             </p>
           </div>
 
-          {/* Logo gallery — add project logos here with overlapping layout */}
-          <div className="relative h-24 hidden lg:block" />
+          <LogoCluster />
         </div>
       </div>
     </section>
+  );
+}
+
+function LogoCluster() {
+  const logos = [
+    {
+      slug: "tizirsso",
+      src: "/images/projects/png/tizi-logo.png",
+      alt: "Tizirsso Racing",
+      position: { top: "0px", left: "0px", zIndex: 20, rotate: -6 },
+    },
+    {
+      slug: "taylor",
+      src: "/images/projects/png/taylor-logo.png",
+      alt: "Taylor.io",
+      position: { top: "24px", left: "36px", zIndex: 30, rotate: 4 },
+    },
+    {
+      slug: "setlst",
+      src: "/images/projects/png/setlst-logo.png",
+      alt: "SETLST",
+      position: { top: "48px", left: "12px", zIndex: 40, rotate: -3 },
+    },
+    {
+      slug: "centi",
+      src: "/images/projects/png/centi-logo.png",
+      alt: "Centi",
+      position: { top: "36px", left: "54px", zIndex: 50, rotate: 5 },
+    },
+  ];
+
+  return (
+    <div className="relative hidden lg:block h-40 w-full">
+      {logos.map((logo) => (
+        <Link
+          key={logo.slug}
+          href={`/${logo.slug}`}
+          className="group absolute transition-all duration-300 hover:z-50 hover:scale-105"
+          style={{
+            top: logo.position.top,
+            left: logo.position.left,
+            zIndex: logo.position.zIndex,
+            transform: `rotate(${logo.position.rotate}deg)`,
+          }}
+        >
+          <div className="relative w-20 h-20 bg-card rounded-lg border border-line shadow-soft transition-all duration-300 group-hover:shadow-lift group-hover:-translate-y-1 overflow-hidden">
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              fill
+              sizes="80px"
+              className="object-contain p-2"
+            />
+          </div>
+        </Link>
+      ))}
+    </div>
   );
 }
 
