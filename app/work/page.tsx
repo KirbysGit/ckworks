@@ -150,6 +150,7 @@ const workHeroLogoCards = [
     className:
       "right-[2%] top-[25%] z-30 w-[43%] rotate-[4deg] sm:w-[40%]",
     logoClassName: "p-9 sm:p-10",
+    glow: "radial-gradient(ellipse 72% 68% at 50% 50%, #C23B57 0%, #E5766D 42%, transparent 75%)",
   },
   {
     slug: "setlst",
@@ -161,6 +162,7 @@ const workHeroLogoCards = [
     className:
       "bottom-[6%] left-[2%] z-10 w-[51%] rotate-[2.8deg] sm:w-[48%]",
     logoClassName: "p-10 sm:p-12",
+    glow: "radial-gradient(ellipse 72% 68% at 50% 50%, #4C3B9C 0%, #3D6FBF 45%, transparent 75%)",
   },
   {
     slug: "centi",
@@ -208,13 +210,20 @@ function WorkLogoStack() {
               </div>
 
               <div className="relative min-h-0 flex-1">
-              <Image
+                {"glow" in card && card.glow && (
+                  <span
+                    className="pointer-events-none absolute inset-0 opacity-80 blur-xl transition-opacity duration-300 group-hover:opacity-100"
+                    style={{ background: card.glow }}
+                    aria-hidden
+                  />
+                )}
+                <Image
                   src={card.src}
                   alt={card.alt}
-                fill
+                  fill
                   sizes="(min-width: 1024px) 340px, 50vw"
-                  className={`object-contain transition-transform duration-300 group-hover:scale-[1.035] ${card.logoClassName}`}
-              />
+                  className={`relative object-contain transition-transform duration-300 group-hover:scale-[1.035] ${card.logoClassName}`}
+                />
               </div>
 
               <div className="flex items-center gap-2 border-t border-line/70 pt-2.5 text-[0.55rem] font-medium text-ink/70 sm:text-[0.62rem]">
@@ -266,12 +275,19 @@ function MoreWorkSection() {
   return (
     <section className="border-t border-line/70 bg-ivory py-10 sm:py-12 lg:py-14">
       <div className={workPageContainer}>
-        <div className="grid gap-8 lg:grid-cols-[minmax(18rem,0.36fr)_minmax(0,1fr)] lg:items-start">
-          <SectionIntro
-            label="More Technical Work"
-            title="Smaller builds with useful technical range."
-            description="A compact look at earlier experiments, prototypes, and systems that show how I think through product and engineering problems."
-          />
+        <div className="grid gap-8 lg:grid-cols-[minmax(18rem,0.33fr)_minmax(0,1fr)] lg:items-start lg:gap-10">
+          <div className="max-w-md">
+            <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
+              More Technical Work
+            </p>
+            <h2 className="mt-5 font-serif text-[2.35rem] font-medium leading-[1.08] tracking-[-0.015em] text-ink sm:text-[3rem] lg:text-[3.35rem]">
+              Smaller builds with useful technical range.
+            </h2>
+            <p className="mt-6 max-w-sm text-base leading-8 text-muted sm:text-lg">
+              A selection of experiments, prototypes, and systems that reflect
+              how I approach product and engineering problems.
+            </p>
+          </div>
 
           <div className="rounded-xl border border-line/70 bg-card/70">
             {secondaryCaseStudies.map((study, index) => (
@@ -448,49 +464,44 @@ function TechnicalWorkRow({
   return (
     <Link
       href={`/${study.slug}`}
-      className="group grid gap-4 border-b border-line px-4 py-4 transition-colors duration-200 last:border-b-0 hover:bg-forest-soft/20 sm:grid-cols-[4rem_minmax(0,1fr)_auto] sm:items-center sm:px-5"
+      className="group grid gap-4 border-b border-line px-4 py-4 transition-colors duration-200 last:border-b-0 hover:bg-forest-soft/18 sm:grid-cols-[3.25rem_10.5rem_minmax(0,1fr)_2rem] sm:items-center sm:px-6"
     >
-      <div className="flex items-center gap-3 sm:gap-0">
-        <span className="font-source-serif-display text-lg font-medium tabular-nums text-forest sm:w-10">
+      <div className="flex items-center gap-3">
+        <span className="font-source-serif-display text-lg font-medium tabular-nums text-forest">
           {String(index).padStart(2, "0")}
-        </span>
-        <span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-line bg-forest-soft text-forest sm:hidden">
-          <Icon className="h-5 w-5" strokeWidth={1.7} />
         </span>
       </div>
 
-      <div className="grid min-w-0 gap-4 sm:grid-cols-[6.75rem_minmax(0,1fr)] sm:items-center">
-        <div className="relative hidden aspect-[1.65/1] overflow-hidden rounded-lg border border-line bg-forest-soft sm:block">
-          {summary?.image ? (
-            <Image
-              src={summary.image}
-              alt=""
-              fill
-              sizes="90px"
-              className="object-cover"
-            />
-          ) : study.slug === "internal-automation-tool" ? (
-            <InternalAutomationThumb />
-          ) : (
-            <span className="flex h-full w-full items-center justify-center text-forest">
-              <Icon className="h-6 w-6" strokeWidth={1.55} />
-            </span>
-          )}
-        </div>
+      <div className="relative aspect-[1.9/1] overflow-hidden rounded-lg border border-line bg-forest-soft shadow-[0_10px_24px_-20px_rgba(31,36,32,0.6)]">
+        {summary?.image ? (
+          <Image
+            src={summary.image}
+            alt=""
+            fill
+            sizes="170px"
+            className="object-cover"
+          />
+        ) : study.slug === "internal-automation-tool" ? (
+          <InternalAutomationThumb />
+        ) : (
+          <span className="flex h-full w-full items-center justify-center text-forest">
+            <Icon className="h-6 w-6" strokeWidth={1.55} />
+          </span>
+        )}
+      </div>
 
-        <div className="min-w-0">
-          <div>
-            <h3 className="font-serif text-[1.35rem] font-medium leading-tight text-ink">
-              {study.name}
-            </h3>
-            <p className="mt-1 text-[0.78rem] font-semibold leading-5 text-forest">
-              {summary?.summary ?? cleanText(study.category)}
-            </p>
-          </div>
-          <p className="mt-1 text-sm leading-6 text-muted">
-            {summary?.stack ?? cleanText(study.category)}
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <h3 className="font-serif text-[1.65rem] font-medium leading-tight text-ink sm:text-[1.9rem]">
+            {study.name}
+          </h3>
+          <p className="text-[0.8rem] font-semibold leading-5 text-forest sm:text-[0.86rem]">
+            {summary?.summary ?? cleanText(study.category)}
           </p>
         </div>
+        <p className="mt-1 text-base leading-6 text-muted sm:text-[1.05rem]">
+          {summary?.stack ?? cleanText(study.category)}
+        </p>
       </div>
 
       <span className="inline-flex items-center gap-2 text-sm font-semibold text-forest sm:justify-self-end">
