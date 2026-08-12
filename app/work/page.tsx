@@ -106,7 +106,7 @@ function WorkHero() {
   return (
     <section className="border-b border-line/70 bg-ivory py-12 sm:py-14 lg:py-16">
       <div className={workPageContainer}>
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,1fr)] items-end">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.95fr)] lg:items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
               Selected Work
@@ -129,55 +129,74 @@ function WorkHero() {
   );
 }
 
-function LogoCluster() {
-  const logos = [
-    {
-      slug: "tizirsso",
-      src: "/images/projects/png/tizi-logo.png",
-      alt: "Tizirsso Racing",
-      position: { top: "0px", left: "0px", zIndex: 20, rotate: -6 },
-    },
-    {
-      slug: "taylor",
-      src: "/images/projects/png/taylor-logo.png",
-      alt: "Taylor.io",
-      position: { top: "24px", left: "36px", zIndex: 30, rotate: 4 },
-    },
-    {
-      slug: "setlst",
-      src: "/images/projects/png/setlst-logo.png",
-      alt: "SETLST",
-      position: { top: "48px", left: "12px", zIndex: 40, rotate: -3 },
-    },
-    {
-      slug: "centi",
-      src: "/images/projects/png/centi-logo.png",
-      alt: "Centi",
-      position: { top: "36px", left: "54px", zIndex: 50, rotate: 5 },
-    },
-  ];
+const logoNotes = [
+  {
+    slug: "tizirsso",
+    src: "/images/projects/png/tizi-logo.png",
+    alt: "Tizirsso Racing",
+    accent: "#C9C9C9",
+    rotate: -4,
+    offsetY: 0.5,
+  },
+  {
+    slug: "taylor",
+    src: "/images/projects/png/taylor-logo.png",
+    alt: "Taylor.io",
+    accent: "#E5766D",
+    rotate: 3,
+    offsetY: -0.75,
+  },
+  {
+    slug: "setlst",
+    src: "/images/projects/png/setlst-logo.png",
+    alt: "SETLST",
+    accent: "#22D3EE",
+    rotate: -3,
+    offsetY: -0.25,
+  },
+  {
+    slug: "centi",
+    src: "/images/projects/png/centi-logo.png",
+    alt: "Centi",
+    accent: "#00AB8C",
+    rotate: 4,
+    offsetY: 0.75,
+  },
+] as const;
 
+function LogoCluster() {
   return (
-    <div className="relative hidden lg:block h-40 w-full">
-      {logos.map((logo) => (
+    <div className="mx-auto grid w-full max-w-[22rem] grid-cols-2 gap-5 sm:gap-6 lg:mx-0 lg:ml-auto">
+      {logoNotes.map((logo) => (
         <Link
           key={logo.slug}
           href={`/${logo.slug}`}
-          className="group absolute transition-all duration-300 hover:z-50 hover:scale-105"
-          style={{
-            top: logo.position.top,
-            left: logo.position.left,
-            zIndex: logo.position.zIndex,
-            transform: `rotate(${logo.position.rotate}deg)`,
-          }}
+          className="group block transition-transform duration-300 hover:-translate-y-1.5"
+          style={{ marginTop: `${logo.offsetY}rem` }}
         >
-          <div className="relative w-20 h-20 bg-card rounded-lg border border-line shadow-soft transition-all duration-300 group-hover:shadow-lift group-hover:-translate-y-1 overflow-hidden">
+          <div
+            className="relative aspect-square overflow-hidden rounded-xl bg-ink shadow-[0_2px_4px_rgba(15,18,16,0.3),0_18px_26px_-18px_rgba(15,18,16,0.7)] transition-shadow duration-300 group-hover:shadow-[0_4px_10px_rgba(15,18,16,0.35),0_24px_34px_-16px_rgba(15,18,16,0.8)]"
+            style={{ transform: `rotate(${logo.rotate}deg)` }}
+          >
+            {/* brand glow */}
+            <span
+              className="pointer-events-none absolute inset-0 opacity-80 transition-opacity duration-300 group-hover:opacity-100"
+              style={{
+                background: `radial-gradient(circle at 50% 42%, ${logo.accent}3d, transparent 68%)`,
+              }}
+              aria-hidden
+            />
+            {/* paper sheen */}
+            <span
+              className="pointer-events-none absolute inset-0 bg-[linear-gradient(140deg,rgba(255,255,255,0.10),transparent_40%,rgba(0,0,0,0.3)_100%)]"
+              aria-hidden
+            />
             <Image
               src={logo.src}
               alt={logo.alt}
               fill
-              sizes="80px"
-              className="object-contain p-2"
+              sizes="(min-width: 1024px) 160px, 40vw"
+              className="object-contain p-6 transition-transform duration-300 group-hover:scale-[1.05]"
             />
           </div>
         </Link>
