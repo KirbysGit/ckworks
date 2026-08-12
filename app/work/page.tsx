@@ -213,7 +213,7 @@ function WorkLogoStack() {
               </div>
 
               <div
-                className="relative mt-2.5 min-h-0 flex-1 overflow-hidden rounded-[0.3rem]"
+                className="relative mt-2.5 min-h-0 flex-1 overflow-hidden"
                 style={{ background: card.background }}
               >
                 <Image
@@ -225,7 +225,9 @@ function WorkLogoStack() {
                 />
               </div>
 
-              <div className="flex items-center gap-2 border-t border-line/70 pt-2.5 text-[0.55rem] font-medium text-ink/70 sm:text-[0.62rem]">
+              <div className="border-t border-line/70" aria-hidden />
+
+              <div className="flex items-center gap-2 pt-2.5 text-[0.55rem] font-medium text-ink/70 sm:text-[0.62rem]">
                 {card.meta.map((item, index) => (
                   <span key={item} className="inline-flex items-center gap-2">
                     {index > 0 && (
