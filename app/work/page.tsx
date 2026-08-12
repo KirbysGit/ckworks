@@ -129,75 +129,106 @@ function WorkHero() {
   );
 }
 
+const paperTones: Record<string, string> = {
+  sage: "bg-[#d8d8bd]",
+  cream: "bg-[#efe6d3]",
+  yellow: "bg-[#ead77e]",
+  sky: "bg-[#cfe3e1]",
+};
+
 const logoNotes = [
   {
     slug: "tizirsso",
     src: "/images/projects/png/tizi-logo.png",
     alt: "Tizirsso Racing",
-    accent: "#C9C9C9",
-    rotate: -4,
-    offsetY: 0.5,
+    tone: "sage",
+    accent: "#6b6b66",
+    rotate: -3,
+    offsetY: 0.3,
+    peel: true,
   },
   {
     slug: "taylor",
     src: "/images/projects/png/taylor-logo.png",
     alt: "Taylor.io",
+    tone: "cream",
     accent: "#E5766D",
-    rotate: 3,
-    offsetY: -0.75,
+    rotate: 2,
+    offsetY: -0.4,
   },
   {
     slug: "setlst",
     src: "/images/projects/png/setlst-logo.png",
     alt: "SETLST",
+    tone: "sky",
     accent: "#22D3EE",
-    rotate: -3,
-    offsetY: -0.25,
+    rotate: -2,
+    offsetY: 0.2,
+    peel: true,
   },
   {
     slug: "centi",
     src: "/images/projects/png/centi-logo.png",
     alt: "Centi",
+    tone: "yellow",
     accent: "#00AB8C",
-    rotate: 4,
-    offsetY: 0.75,
+    rotate: 3,
+    offsetY: -0.3,
   },
 ] as const;
 
 function LogoCluster() {
   return (
-    <div className="mx-auto grid w-full max-w-[22rem] grid-cols-2 gap-5 sm:gap-6 lg:mx-0 lg:ml-auto">
+    <div className="mx-auto grid w-full max-w-[22rem] grid-cols-2 gap-6 sm:gap-7 lg:mx-0 lg:ml-auto">
       {logoNotes.map((logo) => (
         <Link
           key={logo.slug}
           href={`/${logo.slug}`}
-          className="group block transition-transform duration-300 hover:-translate-y-1.5"
+          className="group block transition-transform duration-300 hover:-translate-y-1"
           style={{ marginTop: `${logo.offsetY}rem` }}
         >
           <div
-            className="relative aspect-square overflow-hidden rounded-xl bg-ink shadow-[0_2px_4px_rgba(15,18,16,0.3),0_18px_26px_-18px_rgba(15,18,16,0.7)] transition-shadow duration-300 group-hover:shadow-[0_4px_10px_rgba(15,18,16,0.35),0_24px_34px_-16px_rgba(15,18,16,0.8)]"
+            className={`relative aspect-square rounded-[3px] ${paperTones[logo.tone]} p-3 shadow-[0_2px_4px_rgba(31,36,32,0.08),0_16px_20px_-18px_rgba(31,36,32,0.6)] transition-shadow duration-300 group-hover:shadow-[0_4px_8px_rgba(31,36,32,0.1),0_22px_28px_-18px_rgba(31,36,32,0.72)]`}
             style={{ transform: `rotate(${logo.rotate}deg)` }}
           >
-            {/* brand glow */}
-            <span
-              className="pointer-events-none absolute inset-0 opacity-80 transition-opacity duration-300 group-hover:opacity-100"
-              style={{
-                background: `radial-gradient(circle at 50% 42%, ${logo.accent}3d, transparent 68%)`,
-              }}
-              aria-hidden
-            />
             {/* paper sheen */}
             <span
-              className="pointer-events-none absolute inset-0 bg-[linear-gradient(140deg,rgba(255,255,255,0.10),transparent_40%,rgba(0,0,0,0.3)_100%)]"
+              className="pointer-events-none absolute inset-0 rounded-[3px] bg-[linear-gradient(140deg,rgba(255,255,255,0.24),transparent_38%,rgba(31,36,32,0.06)_100%)]"
               aria-hidden
             />
-            <Image
-              src={logo.src}
-              alt={logo.alt}
-              fill
-              sizes="(min-width: 1024px) 160px, 40vw"
-              className="object-contain p-6 transition-transform duration-300 group-hover:scale-[1.05]"
+            <span
+              className="pointer-events-none absolute inset-x-0 top-0 h-4 rounded-t-[3px] bg-[linear-gradient(180deg,rgba(31,36,32,0.06),transparent)]"
+              aria-hidden
             />
+            {/* contact shadow beneath the paper */}
+            <span
+              className="pointer-events-none absolute -bottom-1.5 left-[10%] right-[10%] h-4 rounded-[50%] bg-ink/15 blur-md"
+              aria-hidden
+            />
+            {logo.peel && (
+              <span
+                className="pointer-events-none absolute bottom-0 right-0 h-5 w-5 rounded-tl-sm bg-[linear-gradient(135deg,rgba(31,36,32,0.16),rgba(255,255,255,0.4)_48%,rgba(255,255,255,0.02)_50%)]"
+                aria-hidden
+              />
+            )}
+
+            {/* logo mounted on the note, like a pinned photo */}
+            <div className="relative h-full w-full overflow-hidden rounded-md bg-ink">
+              <span
+                className="pointer-events-none absolute inset-0 opacity-80"
+                style={{
+                  background: `radial-gradient(circle at 50% 42%, ${logo.accent}40, transparent 70%)`,
+                }}
+                aria-hidden
+              />
+              <Image
+                src={logo.src}
+                alt={logo.alt}
+                fill
+                sizes="(min-width: 1024px) 160px, 40vw"
+                className="object-contain p-5 transition-transform duration-300 group-hover:scale-[1.04]"
+              />
+            </div>
           </div>
         </Link>
       ))}
