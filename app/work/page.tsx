@@ -227,9 +227,9 @@ function WorkLogoStack() {
 
               <div className="border-t border-line/70" aria-hidden />
 
-              <div className="flex justify-center items-center gap-2 pt-2.5 text-[0.55rem] font-medium uppercase tracking-[0.12em] text-ink/70 sm:text-[0.62rem]">
+              <div className="flex justify-center items-center gap-1.5 pt-2.5 text-[0.55rem] font-medium uppercase tracking-[0.08em] text-ink/70 sm:text-[0.62rem] whitespace-nowrap">
                 {card.meta.map((item, index) => (
-                  <span key={item} className="inline-flex items-center gap-2">
+                  <span key={item} className="inline-flex items-center gap-1.5">
                     {index > 0 && (
                       <span
                         className="h-1 w-1 rounded-full bg-forest"
