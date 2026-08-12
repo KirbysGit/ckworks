@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
+import Reveal from "@/components/ui/Reveal";
 import { createPageMetadata, absoluteUrl } from "@/lib/seo";
 import { serviceAreas, type ServiceArea, type ServiceSlug } from "@/lib/services";
 
@@ -110,7 +111,7 @@ export default function ServicesPage() {
 
       <section className="bg-ivory py-10 sm:py-12 lg:py-16">
         <div className={servicesPageContainer}>
-          <div className="max-w-5xl">
+          <Reveal className="max-w-5xl">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest/85">
               Services
             </p>
@@ -130,22 +131,27 @@ export default function ServicesPage() {
               How we can help
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </a>
-          </div>
+          </Reveal>
 
           <div
             id="services-list"
             className="mt-8 grid scroll-mt-28 gap-4 lg:grid-cols-2 lg:gap-5 xl:gap-6"
           >
-            {serviceCards.map((card) => (
-              <ServiceOverviewCard
+            {serviceCards.map((card, index) => (
+              <Reveal
                 key={card.slug}
-                card={card}
-                service={getService(card.slug)}
-              />
+                delay={index * 90}
+                className={`min-w-0 ${card.className ?? ""}`}
+              >
+                <ServiceOverviewCard
+                  card={card}
+                  service={getService(card.slug)}
+                />
+              </Reveal>
             ))}
           </div>
 
-          <div className="mt-5 flex flex-col gap-6 rounded-xl border border-line bg-card px-6 py-7 shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+          <Reveal className="mt-5 flex flex-col gap-6 rounded-xl border border-line bg-card px-6 py-7 shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
             <div className="max-w-xl">
               <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
                 Not sure which service fits?
@@ -175,7 +181,7 @@ export default function ServicesPage() {
                 <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
     </SiteLayout>
@@ -193,11 +199,7 @@ function ServiceOverviewCard({
 
   if (isSupport) {
     return (
-      <article
-        className={`group grid min-h-[18rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(18rem,0.86fr)_minmax(0,2.44fr)] ${
-          card.className ?? ""
-        }`}
-      >
+      <article className="group/card grid h-full min-h-[18rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(18rem,0.86fr)_minmax(0,2.44fr)]">
         <div className="relative flex min-w-0 flex-col border-b border-line px-6 py-7 sm:px-8 sm:py-8 md:border-b-0">
           <span
             className="pointer-events-none absolute inset-y-8 right-0 hidden w-px bg-line md:block"
@@ -227,11 +229,7 @@ function ServiceOverviewCard({
   }
 
   return (
-    <article
-      className={`group grid min-h-[19.25rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(13.25rem,0.58fr)_minmax(0,0.98fr)] xl:grid-cols-[minmax(14.25rem,0.56fr)_minmax(0,1.05fr)] ${
-        card.className ?? ""
-      }`}
-    >
+    <article className="group/card grid h-full min-h-[19.25rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(13.25rem,0.58fr)_minmax(0,0.98fr)] xl:grid-cols-[minmax(14.25rem,0.56fr)_minmax(0,1.05fr)]">
       <div className="flex min-w-0 flex-col px-5 py-5 sm:p-6 md:pr-3">
         <span className="font-serif text-2xl font-medium leading-none tracking-[-0.02em] text-[#A8713B]">
           {card.number}
@@ -254,7 +252,7 @@ function ServiceOverviewCard({
       <div
         className="flex min-h-[16rem] min-w-0 items-center justify-center px-5 pb-5 pt-1 sm:px-6 sm:pb-6 md:px-4 md:py-5 lg:px-5"
       >
-        <div className="flex w-full max-w-[96%] origin-center scale-[0.925] items-center justify-center transform-gpu">
+        <div className="flex w-full max-w-[96%] origin-center scale-[0.925] items-center justify-center transform-gpu transition-transform duration-300 ease-out group-hover/card:scale-[0.95]">
           <ServiceVisual kind={card.visual} />
         </div>
       </div>
@@ -530,6 +528,8 @@ function AnalyticsVisual() {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
+            pathLength={1}
+            className="[stroke-dasharray:1] [stroke-dashoffset:0] group-hover/card:animate-[spark-draw_1.1s_ease-out_both] motion-reduce:animate-none"
           />
           {points.map(([x, y]) => (
             <circle
@@ -841,6 +841,8 @@ function SupportVisual() {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2.8"
+            pathLength={1}
+            className="[stroke-dasharray:1] [stroke-dashoffset:0] group-hover/card:animate-[spark-draw_0.9s_ease-out_both] motion-reduce:animate-none"
           />
           <circle cx="222" cy="10" r="3.2" fill="#4B7451" />
         </svg>

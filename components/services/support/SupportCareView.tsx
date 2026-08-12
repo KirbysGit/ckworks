@@ -1,6 +1,34 @@
 /** Renders the illustrative live-site care workspace in the Support hero. */
+import { type CSSProperties } from "react";
 import Image from "next/image";
 import { CalendarDays, Check, CheckCircle2, Clock3 } from "lucide-react";
+
+/**
+ * Hero entrance choreography (ms), shared with the copy column in `Page.tsx`.
+ * The site arrives first and the evidence of care accumulates around it —
+ * it is live, then the recent updates tick in, then the context checks. That
+ * order is the pitch: the work continues after launch.
+ *
+ * CSS animation delays only (runs on first paint, no hydration wait). The
+ * envelope matches the other service heroes so the pages stay siblings.
+ */
+export const supportHeroTiming = {
+  eyebrow: 0,
+  title: 80,
+  leadCopy: 170,
+  actions: 310,
+  careCard: 260,
+  header: 420,
+  preview: 560,
+  detailRow: 760,
+  nextUp: 880,
+  updatesCard: 960,
+  updates: 1080,
+  /** Added per recent-update row. */
+  updateStep: 85,
+  contextCard: 1340,
+  caption: 1460,
+} as const;
 
 const supportCareLayout = {
   /** Desktop keeps the live preview dominant while the care rail saves height. */
@@ -24,7 +52,8 @@ export default function SupportCareView() {
     <figure id="example-support" className="scroll-mt-28">
       <div className={`grid gap-3 ${supportCareLayout.workspaceGrid}`}>
         <div
-          className={`${supportCareLayout.outerRadius} border border-line bg-card p-3 shadow-[0_26px_54px_-34px_rgba(31,36,32,0.5)] sm:p-4`}
+          className={`ck-lift ${supportCareLayout.outerRadius} border border-line bg-card p-3 shadow-[0_26px_54px_-34px_rgba(31,36,32,0.5)] sm:p-4`}
+          style={{ animationDelay: `${supportHeroTiming.careCard}ms` }}
         >
           <SupportCareHeader />
           <SitePreview />
@@ -34,7 +63,10 @@ export default function SupportCareView() {
         <CareStatusRail />
       </div>
 
-      <figcaption className="mt-3 text-center text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted">
+      <figcaption
+        className="ck-fade mt-3 text-center text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted"
+        style={{ animationDelay: `${supportHeroTiming.caption}ms` }}
+      >
         Illustrative client care example
       </figcaption>
     </figure>
@@ -43,7 +75,10 @@ export default function SupportCareView() {
 
 function SupportCareHeader() {
   return (
-    <header className="flex items-center justify-between gap-4 px-2 pb-3 text-sm sm:px-3 sm:text-base">
+    <header
+      className="ck-fade flex items-center justify-between gap-4 px-2 pb-3 text-sm sm:px-3 sm:text-base"
+      style={{ animationDelay: `${supportHeroTiming.header}ms` }}
+    >
       <p className="font-semibold tracking-[-0.01em] text-ink">
         riverstonebuilders.com
       </p>
@@ -67,7 +102,12 @@ function SitePreview() {
 function HeroPreview() {
   return (
     <section
-      className={`relative overflow-hidden ${supportCareLayout.preview}`}
+      className={`ck-resolve relative overflow-hidden ${supportCareLayout.preview}`}
+      style={
+        {
+          "--ck-anim-delay": `${supportHeroTiming.preview}ms`,
+        } as CSSProperties
+      }
     >
       <Image
         src="/images/services/png/05-hero-demo-01.png"
@@ -101,7 +141,14 @@ function HeroPreview() {
 
 function SiteDetailRow() {
   return (
-    <section className="grid gap-4 px-5 py-4 sm:grid-cols-[0.82fr_0.96fr_1.05fr] sm:px-7 sm:py-5">
+    <section
+      className="ck-step grid gap-4 px-5 py-4 sm:grid-cols-[0.82fr_0.96fr_1.05fr] sm:px-7 sm:py-5"
+      style={
+        {
+          "--ck-anim-delay": `${supportHeroTiming.detailRow}ms`,
+        } as CSSProperties
+      }
+    >
       <div>
         <p className="text-[0.58rem] font-semibold uppercase tracking-[0.17em] text-ink/80">
           Our approach
@@ -145,14 +192,32 @@ function SiteDetailRow() {
 function CareStatusRail() {
   return (
     <aside className="relative z-10 grid gap-3 lg:-ml-8 lg:w-[13.75rem] lg:self-center">
-      <section className="rounded-xl border border-line bg-card/95 p-4 shadow-[0_18px_42px_-32px_rgba(31,36,32,0.45)] sm:p-5">
+      <section
+        className="ck-step rounded-xl border border-line bg-card/95 p-4 shadow-[0_18px_42px_-32px_rgba(31,36,32,0.45)] sm:p-5"
+        style={
+          {
+            "--ck-anim-delay": `${supportHeroTiming.updatesCard}ms`,
+          } as CSSProperties
+        }
+      >
         <p className="flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-forest">
           <Clock3 className="h-4 w-4" strokeWidth={1.8} aria-hidden />
           Last updated
         </p>
         <ul className="mt-3 space-y-2 text-[0.72rem] text-ink/82 sm:text-[0.78rem]">
-          {updates.map(([label, date]) => (
-            <li key={label} className="flex items-center gap-2.5">
+          {updates.map(([label, date], index) => (
+            <li
+              key={label}
+              className="ck-step flex items-center gap-2.5"
+              style={
+                {
+                  "--ck-anim-delay": `${
+                    supportHeroTiming.updates +
+                    index * supportHeroTiming.updateStep
+                  }ms`,
+                } as CSSProperties
+              }
+            >
               <span
                 className="h-1.5 w-1.5 shrink-0 rounded-full bg-forest"
                 aria-hidden
@@ -164,7 +229,14 @@ function CareStatusRail() {
         </ul>
       </section>
 
-      <section className="rounded-xl border border-line bg-card/95 p-4 shadow-[0_18px_42px_-32px_rgba(31,36,32,0.45)] sm:p-5">
+      <section
+        className="ck-step rounded-xl border border-line bg-card/95 p-4 shadow-[0_18px_42px_-32px_rgba(31,36,32,0.45)] sm:p-5"
+        style={
+          {
+            "--ck-anim-delay": `${supportHeroTiming.contextCard}ms`,
+          } as CSSProperties
+        }
+      >
         <p className="flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-forest">
           <CheckCircle2 className="h-4 w-4" strokeWidth={1.8} aria-hidden />
           Site context
@@ -188,7 +260,12 @@ function CareStatusRail() {
 
 function NextUpBar() {
   return (
-    <section className="mt-3 flex flex-col gap-3 rounded-xl border border-line bg-ivory/35 px-4 py-3.5 sm:flex-row sm:items-center sm:px-4">
+    <section
+      className="ck-step mt-3 flex flex-col gap-3 rounded-xl border border-line bg-ivory/35 px-4 py-3.5 sm:flex-row sm:items-center sm:px-4"
+      style={
+        { "--ck-anim-delay": `${supportHeroTiming.nextUp}ms` } as CSSProperties
+      }
+    >
       <p className="flex shrink-0 items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-ink sm:pr-3">
         <CalendarDays
           className="h-4 w-4 text-forest"

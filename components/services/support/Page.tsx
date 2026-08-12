@@ -35,7 +35,7 @@ import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import type { ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
 import ProjectWorkCard from "../shared/ProjectWorkCard";
-import SupportCareView from "./SupportCareView";
+import SupportCareView, { supportHeroTiming } from "./SupportCareView";
 import {
   serviceCenterLabelClassName,
   serviceCenterTitleClassName,
@@ -227,17 +227,29 @@ function SupportHero() {
     <div className="border-b border-line pb-11 lg:pb-14">
       <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-14">
         <div className="max-w-xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
+          <p
+            className="ck-rise text-xs font-semibold uppercase tracking-[0.26em] text-forest"
+            style={{ animationDelay: `${supportHeroTiming.eyebrow}ms` }}
+          >
             Care
           </p>
-          <h1 className={serviceHeroTitleClassName}>
+          <h1
+            className={`ck-rise ${serviceHeroTitleClassName}`}
+            style={{ animationDelay: `${supportHeroTiming.title}ms` }}
+          >
             Ongoing Support
           </h1>
-          <p className="mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]">
+          <p
+            className="ck-rise mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]"
+            style={{ animationDelay: `${supportHeroTiming.leadCopy}ms` }}
+          >
             Updates, fixes, technical cleanup, and continued improvements that
             keep your website or system useful after launch.
           </p>
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div
+            className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
+            style={{ animationDelay: `${supportHeroTiming.actions}ms` }}
+          >
             <ProjectInquiryTrigger
               source="support_service_hero"
               className="rounded-md px-5"
@@ -264,7 +276,7 @@ function SupportHero() {
 function SupportWhyItMatters() {
   return (
     <section className="grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.9fr)_1px_minmax(0,1.1fr)] lg:gap-12 lg:py-16">
-      <div className="max-w-md">
+      <Reveal className="max-w-md">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
           Why it matters
         </p>
@@ -276,13 +288,18 @@ function SupportWhyItMatters() {
           need attention, or improvements make more sense over time than
           through another full rebuild.
         </p>
-      </div>
+      </Reveal>
 
       <span className="hidden w-px bg-line lg:block" aria-hidden />
 
       <div className="divide-y divide-line lg:self-center">
-        {supportWhyItMatters.map(({ icon: Icon, title, body }) => (
-          <article key={title} className="flex gap-5 py-5 first:pt-0 last:pb-0">
+        {supportWhyItMatters.map(({ icon: Icon, title, body }, index) => (
+          <Reveal
+            as="article"
+            key={title}
+            delay={index * 110}
+            className="flex gap-5 py-5 first:pt-0 last:pb-0"
+          >
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-soft/60 text-forest">
               <Icon className="h-5 w-5" strokeWidth={1.6} />
             </span>
@@ -292,7 +309,7 @@ function SupportWhyItMatters() {
               </h3>
               <p className="mt-1 text-sm leading-6 text-muted">{body}</p>
             </div>
-          </article>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -452,7 +469,7 @@ function SupportIncludeCard({
   const { title, body, icon: Icon, tags } = item;
 
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-line bg-card p-5 shadow-soft">
+    <article className="flex h-full flex-col rounded-2xl border border-line bg-card p-5 pb-0 shadow-soft">
       <div className="flex items-start justify-between gap-3">
         <div className={wide ? "flex min-w-0 items-start gap-3.5" : "min-w-0"}>
           <SupportStepBadge index={index} />
@@ -555,7 +572,7 @@ function SupportTagRow({
     <div
       className={`flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 ${
         showLine
-          ? "-mx-5 mt-auto border-t border-line px-5 pt-2.5"
+          ? "-mx-5 mt-auto border-t border-line px-5 py-3.5"
           : "pt-0"
       } ${className}`}
     >
@@ -617,7 +634,7 @@ function SupportRequests() {
 
 function SupportPrinciple() {
   return (
-    <section className="pb-12 lg:pb-14">
+    <section className="border-b border-line py-14 lg:py-16">
       {/* The three shapes on the right are the point: support is scoped to
           what is needed, not sold as one mandatory retainer. */}
       <Reveal className="grid items-center gap-8 rounded-2xl border border-line bg-card px-6 py-8 shadow-soft sm:px-8 lg:grid-cols-[minmax(0,1.24fr)_1px_minmax(0,0.76fr)] lg:gap-12 lg:px-10 lg:py-10">
@@ -660,7 +677,7 @@ function SupportProcess() {
       id="support-process"
       className="grid scroll-mt-24 gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-14 lg:py-16"
     >
-      <div className="max-w-md">
+      <Reveal className="max-w-md">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
           How requests are handled
         </p>
@@ -668,8 +685,13 @@ function SupportProcess() {
           A simple path from request to resolution.
         </h2>
         <div className="mt-7 divide-y divide-line">
-          {supportProcess.map(({ step, title, body }) => (
-            <article key={title} className="flex gap-4 py-4 first:pt-0 last:pb-0">
+          {supportProcess.map(({ step, title, body }, index) => (
+            <Reveal
+              as="article"
+              key={title}
+              delay={index * 100}
+              className="flex gap-4 py-4 first:pt-0 last:pb-0"
+            >
               <span
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest-soft/70 font-source-serif-display text-[0.85rem] font-semibold tabular-nums text-forest"
                 style={{ fontVariationSettings: '"opsz" 16' }}
@@ -682,16 +704,20 @@ function SupportProcess() {
                 </h3>
                 <p className="mt-1 text-sm leading-6 text-muted">{body}</p>
               </div>
-            </article>
+            </Reveal>
           ))}
         </div>
         <p className="mt-6 text-sm leading-6 text-muted">
           You receive a clear understanding of what is being changed, what it
           will require, and what happens next.
         </p>
-      </div>
+      </Reveal>
 
-      <SupportRequestTracker />
+      {/* min-w-0: a grid item defaults to min-width:auto and will not shrink
+          below its content, which pushed the tracker past the viewport. */}
+      <Reveal delay={120} className="min-w-0">
+        <SupportRequestTracker />
+      </Reveal>
     </section>
   );
 }
@@ -765,10 +791,12 @@ function SupportRequestTracker() {
 function SupportFaq() {
   return (
     <section className="border-b border-line py-12 lg:py-14">
-      <FAQSection
-        faqs={[...supportFaqs]}
-        description="Common questions about ongoing support, how requests work, and what to expect."
-      />
+      <Reveal>
+        <FAQSection
+          faqs={[...supportFaqs]}
+          description="Common questions about ongoing support, how requests work, and what to expect."
+        />
+      </Reveal>
     </section>
   );
 }
@@ -776,7 +804,7 @@ function SupportFaq() {
 function SupportRebuildNote() {
   return (
     <section className="border-b border-line py-8 text-center">
-      <p className="text-sm text-muted">
+      <Reveal as="p" className="text-sm text-muted">
         Planning a larger rebuild instead?{" "}
         <Link
           href="/services/web-design-development"
@@ -785,14 +813,14 @@ function SupportRebuildNote() {
           View Web Design &amp; Development
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
-      </p>
+      </Reveal>
     </section>
   );
 }
 
 function SupportBottomCta() {
   return (
-    <div className="mt-10 flex flex-col gap-6 rounded-2xl border border-line bg-sand px-6 py-7 shadow-soft sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:px-10">
+    <Reveal className="mt-10 flex flex-col gap-6 rounded-2xl border border-line bg-sand px-6 py-7 shadow-soft sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:px-10">
       <div>
         <h2 className="font-serif text-[1.7rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2rem]">
           Need help keeping something current?
@@ -809,6 +837,6 @@ function SupportBottomCta() {
         Request support
         <ArrowRight className="h-4 w-4" />
       </ProjectInquiryTrigger>
-    </div>
+    </Reveal>
   );
 }
