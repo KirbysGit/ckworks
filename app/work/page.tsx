@@ -137,7 +137,7 @@ const workHeroLogoCards = [
     alt: "Tizirsso Racing",
     meta: ["Client Work", "Live"],
     className:
-      "left-[13%] top-[3%] z-20 w-[50%] rotate-[-2.2deg] sm:w-[47%]",
+      "left-[4%] top-[0%] z-20 w-[50%] rotate-[-2.2deg] sm:w-[47%]",
     logoClassName: "p-5 sm:p-6",
     background: "linear-gradient(140deg, #E10600 0%, #7d0400 55%, #160404 100%)",
   },
@@ -149,7 +149,7 @@ const workHeroLogoCards = [
     alt: "Taylor.io",
     meta: ["Personal Project", "Early Build"],
     className:
-      "right-[7%] top-[28%] z-30 w-[37%] rotate-[3.5deg] sm:w-[34%]",
+      "right-[4%] top-[12%] z-30 w-[37%] rotate-[3.5deg] sm:w-[34%]",
     logoClassName: "p-4 sm:p-5",
     background:
       "radial-gradient(55% 48% at 22% 20%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%), radial-gradient(42% 38% at 82% 78%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 55%), linear-gradient(155deg, #D65656 0%, #AF3E48 55%, #7f2c37 100%)",
@@ -162,7 +162,7 @@ const workHeroLogoCards = [
     alt: "SETLST",
     meta: ["Product Concept", "In Progress"],
     className:
-      "bottom-[8%] left-[6%] z-10 w-[43%] rotate-[2.4deg] sm:w-[40%]",
+      "bottom-[2%] left-[5%] z-10 w-[43%] rotate-[2.4deg] sm:w-[40%]",
     logoClassName: "p-5 sm:p-6",
     background: "linear-gradient(135deg, #2EF2C3 0%, #8B5CF6 100%)",
   },
@@ -174,7 +174,7 @@ const workHeroLogoCards = [
     alt: "Centi",
     meta: ["Personal Project", "Working Build"],
     className:
-      "bottom-[4%] right-[19%] z-20 w-[39%] rotate-[-1.2deg] sm:w-[37%]",
+      "bottom-[6%] right-[5%] z-20 w-[39%] rotate-[-1.2deg] sm:w-[37%]",
     logoClassName: "p-4 sm:p-5",
     background: "linear-gradient(135deg, #0d6efd 0%, #198754 100%)",
   },
