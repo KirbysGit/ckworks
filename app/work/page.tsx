@@ -106,17 +106,15 @@ function WorkHero() {
   return (
     <section className="border-b border-line/70 bg-ivory py-12 sm:py-14 lg:py-16">
       <div className={workPageContainer}>
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,1fr)]">
-          <div className="flex flex-col justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-                Selected Work
-              </p>
-              <h1 className="mt-5 max-w-4xl font-serif text-[2.5rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[4rem]">
-                A few things I&apos;ve built, designed, or helped bring into
-                shape.
-              </h1>
-            </div>
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,1fr)] items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+              Selected Work
+            </p>
+            <h1 className="mt-5 max-w-4xl font-serif text-[2.5rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[4rem]">
+              A few things I&apos;ve built, designed, or helped bring into
+              shape.
+            </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-ink/76 sm:text-lg">
               Websites, products, systems, and the experiments in between.
               Here&apos;s a selection of work I&apos;m proud of and the problems
@@ -124,30 +122,8 @@ function WorkHero() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            {featuredCaseStudies.map((study) => (
-              <Link
-                key={study.slug}
-                href={`/${study.slug}`}
-                className="group relative aspect-square overflow-hidden rounded-lg border border-line shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift"
-              >
-                {study.coverImage ? (
-                  <Image
-                    src={study.coverImage.src}
-                    alt={study.coverImage.alt}
-                    fill
-                    sizes="(min-width: 1280px) 20vw, (min-width: 768px) 25vw, 50vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                    style={{
-                      objectPosition: study.coverImage.position ?? "center",
-                    }}
-                  />
-                ) : (
-                  <div className={`grid-texture h-full w-full bg-gradient-to-br ${study.accent}`} />
-                )}
-              </Link>
-            ))}
-          </div>
+          {/* Logo gallery — add project logos here with overlapping layout */}
+          <div className="relative h-24 hidden lg:block" />
         </div>
       </div>
     </section>
