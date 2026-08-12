@@ -35,24 +35,6 @@ export const metadata: Metadata = createPageMetadata({
 const workPageContainer =
   "mx-auto w-full max-w-[1500px] px-4 sm:px-6 lg:px-7 2xl:px-8";
 
-const workThemes = [
-  {
-    title: "Clearer websites",
-    description:
-      "Projects that organize the story, pages, and calls to action so visitors understand what to do next.",
-  },
-  {
-    title: "Useful systems",
-    description:
-      "Products and dashboards shaped around real workflows, structured data, and practical daily use.",
-  },
-  {
-    title: "Thoughtful builds",
-    description:
-      "Design and development decisions kept close together so the finished work feels intentional.",
-  },
-] as const;
-
 const workServiceLinks: ServiceSlug[] = [
   "web-design-development",
   "search-ai-visibility",
@@ -124,37 +106,47 @@ function WorkHero() {
   return (
     <section className="border-b border-line/70 bg-ivory py-12 sm:py-14 lg:py-16">
       <div className={workPageContainer}>
-        <div className="grid items-end gap-9 lg:grid-cols-[minmax(0,1.08fr)_minmax(20rem,0.52fr)]">
-          <div className="max-w-5xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-              Selected Work
-            </p>
-            <h1 className="mt-5 max-w-5xl font-serif text-[2.5rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[4.45rem]">
-              A few things I&apos;ve built, designed, or helped bring into
-              shape.
-            </h1>
-            <p className="mt-6 max-w-3xl text-base leading-7 text-ink/76 sm:text-lg">
-              A focused look at CK Works projects across websites, product
-              ideas, dashboards, integrations, and practical business systems.
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,1fr)]">
+          <div className="flex flex-col justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+                Selected Work
+              </p>
+              <h1 className="mt-5 max-w-4xl font-serif text-[2.5rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[4rem]">
+                A few things I&apos;ve built, designed, or helped bring into
+                shape.
+              </h1>
+            </div>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-ink/76 sm:text-lg">
+              Websites, products, systems, and the experiments in between.
+              Here&apos;s a selection of work I&apos;m proud of and the problems
+              I set out to solve.
             </p>
           </div>
 
-          <div className="rounded-xl border border-line bg-card p-5 shadow-soft sm:p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
-              What this shows
-            </p>
-            <div className="mt-5 space-y-4">
-              {workThemes.map((theme) => (
-                <div key={theme.title} className="border-t border-line pt-4">
-                  <h2 className="text-sm font-semibold text-ink">
-                    {theme.title}
-                  </h2>
-                  <p className="mt-1.5 text-sm leading-6 text-muted">
-                    {theme.description}
-                  </p>
-                </div>
-              ))}
-            </div>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            {featuredCaseStudies.map((study) => (
+              <Link
+                key={study.slug}
+                href={`/${study.slug}`}
+                className="group relative aspect-square overflow-hidden rounded-lg border border-line shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift"
+              >
+                {study.coverImage ? (
+                  <Image
+                    src={study.coverImage.src}
+                    alt={study.coverImage.alt}
+                    fill
+                    sizes="(min-width: 1280px) 20vw, (min-width: 768px) 25vw, 50vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                    style={{
+                      objectPosition: study.coverImage.position ?? "center",
+                    }}
+                  />
+                ) : (
+                  <div className={`grid-texture h-full w-full bg-gradient-to-br ${study.accent}`} />
+                )}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
@@ -164,17 +156,21 @@ function WorkHero() {
 
 function FeaturedWorkSection() {
   return (
-    <section className="bg-ivory py-10 sm:py-12 lg:py-14">
+    <section className="bg-ivory py-12 sm:py-14 lg:py-16">
       <div className={workPageContainer}>
         <SectionIntro
-          label="Featured Projects"
+          label="Featured Work"
           title="Client sites, product ideas, and systems with a little more story."
           description="Each case study keeps the visible summary short, then gives more detail when someone wants the full context."
         />
 
-        <div className="mt-8 grid gap-5 lg:grid-cols-2">
-          {featuredCaseStudies.map((study) => (
-            <FeaturedWorkCard key={study.slug} study={study} />
+        <div className="mt-12 space-y-12 sm:space-y-14 lg:space-y-16">
+          {featuredCaseStudies.map((study, index) => (
+            <EditorialWorkCard
+              key={study.slug}
+              study={study}
+              index={index + 1}
+            />
           ))}
         </div>
       </div>
@@ -275,86 +271,99 @@ function SectionIntro({
   );
 }
 
-function FeaturedWorkCard({ study }: { study: CaseStudy }) {
+function EditorialWorkCard({
+  study,
+  index,
+}: {
+  study: CaseStudy;
+  index: number;
+}) {
   const GroupIcon = groupIcons[study.group];
+  const isEven = index % 2 === 0;
 
   return (
-    <article className="group grid min-h-[24rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
-      <Link
-        href={`/${study.slug}`}
-        className={`relative min-h-[17rem] overflow-hidden bg-gradient-to-br ${study.accent}`}
+    <article className="group">
+      <div
+        className={`grid gap-6 items-start lg:gap-8 lg:grid-cols-2 ${
+          isEven ? "lg:grid-flow-dense" : ""
+        }`}
       >
-        {study.coverImage ? (
-          <Image
-            src={study.coverImage.src}
-            alt={study.coverImage.alt}
-            fill
-            sizes="(min-width: 1280px) 32vw, (min-width: 768px) 46vw, 100vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-            style={{ objectPosition: study.coverImage.position ?? "center" }}
-          />
-        ) : (
-          <div className="grid-texture absolute inset-0 opacity-25" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/20 via-transparent to-transparent" />
-        {study.liveUrl && (
-          <span className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/92 text-forest shadow-soft">
-            <ExternalLink className="h-4 w-4" />
-          </span>
-        )}
-      </Link>
-
-      <div className="flex min-w-0 flex-col p-5 sm:p-6">
-        <div className="flex items-start justify-between gap-4">
+        {/* Text Content */}
+        <div className={isEven ? "lg:col-start-2" : ""}>
           <div>
-            <p className="inline-flex items-center gap-1.5 rounded-full bg-forest-soft px-2.5 py-1 text-[11px] font-medium text-forest">
-              <GroupIcon className="h-3 w-3" />
-              {groupLabels[study.group]}
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
+              {String(index).padStart(2, "0")} {groupLabels[study.group]}
             </p>
-            <h3 className="mt-4 font-serif text-3xl font-medium leading-tight tracking-[-0.02em] text-ink">
+            <h3 className="mt-4 font-serif text-4xl font-medium leading-tight tracking-[-0.02em] text-ink">
               {study.name}
             </h3>
           </div>
+
+          <p className="mt-3 text-sm font-semibold leading-6 text-forest">
+            {cleanText(study.category)}
+          </p>
+          <p className="mt-4 text-base leading-7 text-muted">
+            {study.teaser}
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            {study.workedOn.slice(0, 4).map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-line bg-ivory px-2.5 py-1 text-[11px] font-medium text-ink/76"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href={`/${study.slug}`}
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-forest px-4 py-3 text-sm font-semibold text-ivory transition-colors duration-200 hover:bg-ink"
+            >
+              View project
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            {study.liveUrl && (
+              <a
+                href={study.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-forest/45 px-4 py-3 text-sm font-semibold text-forest transition-colors duration-200 hover:bg-forest-soft/45"
+              >
+                Live site
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            )}
+          </div>
         </div>
 
-        <p className="mt-2 text-sm font-semibold leading-6 text-forest">
-          {cleanText(study.category)}
-        </p>
-        <p className="mt-4 line-clamp-4 text-sm leading-7 text-muted">
-          {study.teaser}
-        </p>
-
-        <div className="mt-5 flex flex-wrap gap-2">
-          {study.workedOn.slice(0, 4).map((item) => (
-            <span
-              key={item}
-              className="rounded-full border border-line bg-ivory px-2.5 py-1 text-[11px] font-medium text-ink/76"
-            >
-              {item}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row">
-          <Link
-            href={`/${study.slug}`}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-forest px-4 py-3 text-sm font-semibold text-ivory transition-colors duration-200 hover:bg-ink"
-          >
-            View project
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-          {study.liveUrl && (
-            <a
-              href={study.liveUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-forest/45 px-4 py-3 text-sm font-semibold text-forest transition-colors duration-200 hover:bg-forest-soft/45"
-            >
-              Live site
-              <ExternalLink className="h-4 w-4" />
-            </a>
+        {/* Image */}
+        <Link
+          href={`/${study.slug}`}
+          className={`group/image relative min-h-80 overflow-hidden rounded-xl border border-line shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift ${
+            isEven ? "lg:col-start-1 lg:row-start-1" : ""
+          }`}
+        >
+          {study.coverImage ? (
+            <Image
+              src={study.coverImage.src}
+              alt={study.coverImage.alt}
+              fill
+              sizes="(min-width: 1280px) 42vw, (min-width: 768px) 48vw, 100vw"
+              className="object-cover transition-transform duration-500 group-hover/image:scale-[1.03]"
+              style={{
+                objectPosition: study.coverImage.position ?? "center",
+              }}
+            />
+          ) : (
+            <div
+              className={`h-full w-full bg-gradient-to-br ${study.accent}`}
+            />
           )}
-        </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/20 via-transparent to-transparent" />
+        </Link>
       </div>
     </article>
   );
