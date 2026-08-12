@@ -92,7 +92,6 @@ export default function WorkPage() {
 
       <WorkHero />
       <FeaturedWorkSection />
-      <WorkServicesSection />
       <MoreWorkSection />
       <ContactCTA
         title="Have something that needs to work better?"
@@ -104,9 +103,9 @@ export default function WorkPage() {
 
 function WorkHero() {
   return (
-    <section className="border-b border-line/70 bg-ivory py-12 sm:py-14 lg:py-16">
+    <section className="overflow-hidden border-b border-line/70 bg-ivory py-12 sm:py-14 lg:py-16">
       <div className={workPageContainer}>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.95fr)] lg:items-center">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.94fr)_minmax(28rem,1.06fr)] lg:items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
               Selected Work
@@ -122,114 +121,117 @@ function WorkHero() {
             </p>
           </div>
 
-          <LogoCluster />
+          <WorkLogoStack />
         </div>
       </div>
     </section>
   );
 }
 
-const paperTones: Record<string, string> = {
-  sage: "bg-[#d8d8bd]",
-  cream: "bg-[#efe6d3]",
-  yellow: "bg-[#ead77e]",
-  sky: "bg-[#cfe3e1]",
-};
-
-const logoNotes = [
+const workHeroLogoCards = [
   {
     slug: "tizirsso",
+    number: "01",
+    type: "Brand Identity",
     src: "/images/projects/png/tizi-logo.png",
     alt: "Tizirsso Racing",
-    tone: "sage",
-    accent: "#6b6b66",
-    rotate: -3,
-    offsetY: 0.3,
-    peel: true,
+    meta: ["Client Work", "Live"],
+    className:
+      "left-[11%] top-[2%] z-20 w-[60%] rotate-[-2.6deg] sm:w-[56%]",
+    logoClassName: "p-12 sm:p-14",
   },
   {
     slug: "taylor",
+    number: "02",
+    type: "Product",
     src: "/images/projects/png/taylor-logo.png",
     alt: "Taylor.io",
-    tone: "cream",
-    accent: "#E5766D",
-    rotate: 2,
-    offsetY: -0.4,
+    meta: ["Personal Project", "Early Build"],
+    className:
+      "right-[2%] top-[25%] z-30 w-[43%] rotate-[4deg] sm:w-[40%]",
+    logoClassName: "p-9 sm:p-10",
   },
   {
     slug: "setlst",
+    number: "03",
+    type: "Platform Concept",
     src: "/images/projects/png/setlst-logo.png",
     alt: "SETLST",
-    tone: "sky",
-    accent: "#22D3EE",
-    rotate: -2,
-    offsetY: 0.2,
-    peel: true,
+    meta: ["Product Concept", "In Progress"],
+    className:
+      "bottom-[6%] left-[2%] z-10 w-[51%] rotate-[2.8deg] sm:w-[48%]",
+    logoClassName: "p-10 sm:p-12",
   },
   {
     slug: "centi",
+    number: "04",
+    type: "Fintech Product",
     src: "/images/projects/png/centi-logo.png",
     alt: "Centi",
-    tone: "yellow",
-    accent: "#00AB8C",
-    rotate: 3,
-    offsetY: -0.3,
+    meta: ["Personal Project", "Working Build"],
+    className:
+      "bottom-[2%] right-[8%] z-20 w-[47%] rotate-[-1.4deg] sm:w-[44%]",
+    logoClassName: "p-9 sm:p-11",
   },
 ] as const;
 
-function LogoCluster() {
+function WorkLogoStack() {
   return (
-    <div className="mx-auto grid w-full max-w-[22rem] grid-cols-2 gap-6 sm:gap-7 lg:mx-0 lg:ml-auto">
-      {logoNotes.map((logo) => (
-        <Link
-          key={logo.slug}
-          href={`/${logo.slug}`}
-          className="group block transition-transform duration-300 hover:-translate-y-1"
-          style={{ marginTop: `${logo.offsetY}rem` }}
-        >
-          <div
-            className={`relative aspect-square rounded-[3px] ${paperTones[logo.tone]} p-3 shadow-[0_2px_4px_rgba(31,36,32,0.08),0_16px_20px_-18px_rgba(31,36,32,0.6)] transition-shadow duration-300 group-hover:shadow-[0_4px_8px_rgba(31,36,32,0.1),0_22px_28px_-18px_rgba(31,36,32,0.72)]`}
-            style={{ transform: `rotate(${logo.rotate}deg)` }}
-          >
-            {/* paper sheen */}
-            <span
-              className="pointer-events-none absolute inset-0 rounded-[3px] bg-[linear-gradient(140deg,rgba(255,255,255,0.24),transparent_38%,rgba(31,36,32,0.06)_100%)]"
-              aria-hidden
-            />
-            <span
-              className="pointer-events-none absolute inset-x-0 top-0 h-4 rounded-t-[3px] bg-[linear-gradient(180deg,rgba(31,36,32,0.06),transparent)]"
-              aria-hidden
-            />
-            {/* contact shadow beneath the paper */}
-            <span
-              className="pointer-events-none absolute -bottom-1.5 left-[10%] right-[10%] h-4 rounded-[50%] bg-ink/15 blur-md"
-              aria-hidden
-            />
-            {logo.peel && (
-              <span
-                className="pointer-events-none absolute bottom-0 right-0 h-5 w-5 rounded-tl-sm bg-[linear-gradient(135deg,rgba(31,36,32,0.16),rgba(255,255,255,0.4)_48%,rgba(255,255,255,0.02)_50%)]"
-                aria-hidden
-              />
-            )}
+    <div className="relative mx-auto h-[26rem] w-full max-w-[46rem] lg:mx-0 lg:ml-auto lg:h-[31rem]">
+      <span
+        className="pointer-events-none absolute bottom-[11%] right-[5%] text-4xl text-muted/35"
+        aria-hidden
+      >
+        *
+      </span>
 
-            {/* logo mounted on the note, like a pinned photo */}
-            <div className="relative h-full w-full overflow-hidden rounded-md bg-ink">
-              <span
-                className="pointer-events-none absolute inset-0 opacity-80"
-                style={{
-                  background: `radial-gradient(circle at 50% 42%, ${logo.accent}40, transparent 70%)`,
-                }}
-                aria-hidden
-              />
+      {workHeroLogoCards.map((card) => (
+        <Link
+          key={card.slug}
+          href={`/${card.slug}`}
+          className={`group absolute block transition-transform duration-300 hover:-translate-y-1 ${card.className}`}
+        >
+          <article className="relative aspect-[1.28/1] overflow-hidden rounded-[0.35rem] border border-line bg-card shadow-[0_2px_5px_rgba(31,36,32,0.07),0_24px_42px_-32px_rgba(31,36,32,0.48)] transition-shadow duration-300 group-hover:shadow-[0_4px_10px_rgba(31,36,32,0.08),0_30px_46px_-30px_rgba(31,36,32,0.62)]">
+            <span
+              className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.65),transparent_42%,rgba(31,36,32,0.035))]"
+              aria-hidden
+            />
+            <span
+              className="pointer-events-none absolute inset-3 rounded-[0.2rem] border border-line/65"
+              aria-hidden
+            />
+
+            <div className="relative z-10 flex h-full flex-col px-5 py-4 sm:px-6 sm:py-5">
+              <div className="flex items-center justify-between gap-3 text-[0.55rem] font-semibold uppercase tracking-[0.12em] text-ink/72 sm:text-[0.62rem]">
+                <span>{card.number}</span>
+                <span>{card.type}</span>
+              </div>
+
+              <div className="relative min-h-0 flex-1">
               <Image
-                src={logo.src}
-                alt={logo.alt}
+                  src={card.src}
+                  alt={card.alt}
                 fill
-                sizes="(min-width: 1024px) 160px, 40vw"
-                className="object-contain p-5 transition-transform duration-300 group-hover:scale-[1.04]"
+                  sizes="(min-width: 1024px) 340px, 50vw"
+                  className={`object-contain transition-transform duration-300 group-hover:scale-[1.035] ${card.logoClassName}`}
               />
+              </div>
+
+              <div className="flex items-center gap-2 border-t border-line/70 pt-2.5 text-[0.55rem] font-medium text-ink/70 sm:text-[0.62rem]">
+                {card.meta.map((item, index) => (
+                  <span key={item} className="inline-flex items-center gap-2">
+                    {index > 0 && (
+                      <span
+                        className="h-1 w-1 rounded-full bg-forest"
+                        aria-hidden
+                      />
+                    )}
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          </article>
         </Link>
       ))}
     </div>
@@ -260,69 +262,26 @@ function FeaturedWorkSection() {
   );
 }
 
-function WorkServicesSection() {
-  const services = workServiceLinks
-    .map((slug) => serviceAreas.find((service) => service.slug === slug))
-    .filter(Boolean);
-
-  return (
-    <section className="border-t border-line/70 bg-ivory py-10 sm:py-12 lg:py-14">
-      <div className={workPageContainer}>
-        <div className="grid gap-8 lg:grid-cols-[minmax(16rem,0.42fr)_minmax(0,1fr)]">
-          <SectionIntro
-            label="How The Work Connects"
-            title="The projects point back to practical services."
-            description="This keeps the page useful for visitors and search without turning it into a long sales page."
-          />
-
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-            {services.map((service) => {
-              if (!service) return null;
-              const Icon = service.icon;
-
-              return (
-                <Link
-                  key={service.slug}
-                  href={service.href}
-                  className="group rounded-xl border border-line bg-card p-4 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift"
-                >
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-forest-soft text-forest">
-                    <Icon className="h-5 w-5" strokeWidth={1.7} />
-                  </span>
-                  <h3 className="mt-4 text-sm font-semibold leading-snug text-ink">
-                    {service.shortTitle}
-                  </h3>
-                  <p className="mt-2 line-clamp-3 text-xs leading-5 text-muted">
-                    {service.description}
-                  </p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-forest">
-                    View service
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" />
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function MoreWorkSection() {
   return (
     <section className="border-t border-line/70 bg-ivory py-10 sm:py-12 lg:py-14">
       <div className={workPageContainer}>
-        <SectionIntro
-          label="More Builds"
-          title="Smaller experiments and technical work."
-          description="A few additional projects that round out the range without needing the same visual weight as the featured work."
-        />
+        <div className="grid gap-8 lg:grid-cols-[minmax(18rem,0.36fr)_minmax(0,1fr)] lg:items-start">
+          <SectionIntro
+            label="More Technical Work"
+            title="Smaller builds with useful technical range."
+            description="A compact look at earlier experiments, prototypes, and systems that show how I think through product and engineering problems."
+          />
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {secondaryCaseStudies.map((study) => (
-            <SmallWorkCard key={study.slug} study={study} />
-          ))}
+          <div className="rounded-xl border border-line/70 bg-card/70">
+            {secondaryCaseStudies.map((study, index) => (
+              <TechnicalWorkRow
+                key={study.slug}
+                study={study}
+                index={index + 1}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -451,38 +410,129 @@ function EditorialWorkCard({
   );
 }
 
-function SmallWorkCard({ study }: { study: CaseStudy }) {
+const technicalWorkSummaries: Record<
+  string,
+  { summary: string; stack: string; image?: string }
+> = {
+  "ck-dev": {
+    summary: "Creative frontend portfolio",
+    stack: "Frontend · UI experiments",
+    image: "/images/projects/png/ck-dev.png",
+  },
+  "sentiment-trader": {
+    summary: "Financial sentiment data pipeline",
+    stack: "Python · NLP · Market data",
+    image: "/images/projects/png/sentiment-trader.png",
+  },
+  "internal-automation-tool": {
+    summary: "Internal operations platform",
+    stack: "Automation · Backend systems",
+  },
+  securescape: {
+    summary: "Hardware/software security prototype",
+    stack: "Embedded systems · Computer vision",
+    image: "/images/projects/png/secure-scape.png",
+  },
+};
+
+function TechnicalWorkRow({
+  study,
+  index,
+}: {
+  study: CaseStudy;
+  index: number;
+}) {
   const Icon = secondaryIcons[study.slug] ?? groupIcons[study.group];
+  const summary = technicalWorkSummaries[study.slug];
 
   return (
     <Link
       href={`/${study.slug}`}
-      className="group flex min-h-64 flex-col rounded-xl border border-line bg-card p-5 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift"
+      className="group grid gap-4 border-b border-line px-4 py-4 transition-colors duration-200 last:border-b-0 hover:bg-forest-soft/20 sm:grid-cols-[4rem_minmax(0,1fr)_auto] sm:items-center sm:px-5"
     >
-      <div className="flex items-start justify-between gap-4">
-        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-forest-soft text-forest">
-          <Icon className="h-5 w-5" strokeWidth={1.7} />
+      <div className="flex items-center gap-3 sm:gap-0">
+        <span className="font-source-serif-display text-lg font-medium tabular-nums text-forest sm:w-10">
+          {String(index).padStart(2, "0")}
         </span>
-        <span className="rounded-full bg-sand px-2.5 py-1 text-[10px] font-medium text-forest">
-          {study.badge}
+        <span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-line bg-forest-soft text-forest sm:hidden">
+          <Icon className="h-5 w-5" strokeWidth={1.7} />
         </span>
       </div>
 
-      <h3 className="mt-5 font-serif text-2xl font-medium leading-tight text-ink">
-        {study.name}
-      </h3>
-      <p className="mt-2 text-xs font-semibold leading-5 text-forest">
-        {cleanText(study.category)}
-      </p>
-      <p className="mt-3 line-clamp-4 text-sm leading-6 text-muted">
-        {study.teaser}
-      </p>
+      <div className="grid min-w-0 gap-4 sm:grid-cols-[6.75rem_minmax(0,1fr)] sm:items-center">
+        <div className="relative hidden aspect-[1.65/1] overflow-hidden rounded-lg border border-line bg-forest-soft sm:block">
+          {summary?.image ? (
+            <Image
+              src={summary.image}
+              alt=""
+              fill
+              sizes="90px"
+              className="object-cover"
+            />
+          ) : study.slug === "internal-automation-tool" ? (
+            <InternalAutomationThumb />
+          ) : (
+            <span className="flex h-full w-full items-center justify-center text-forest">
+              <Icon className="h-6 w-6" strokeWidth={1.55} />
+            </span>
+          )}
+        </div>
 
-      <span className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-forest">
-        View project
-        <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+        <div className="min-w-0">
+          <div>
+            <h3 className="font-serif text-[1.35rem] font-medium leading-tight text-ink">
+              {study.name}
+            </h3>
+            <p className="mt-1 text-[0.78rem] font-semibold leading-5 text-forest">
+              {summary?.summary ?? cleanText(study.category)}
+            </p>
+          </div>
+          <p className="mt-1 text-sm leading-6 text-muted">
+            {summary?.stack ?? cleanText(study.category)}
+          </p>
+        </div>
+      </div>
+
+      <span className="inline-flex items-center gap-2 text-sm font-semibold text-forest sm:justify-self-end">
+        <span className="sr-only">View {study.name}</span>
+        <ArrowRight
+          className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
+          strokeWidth={1.55}
+          aria-hidden
+        />
       </span>
     </Link>
+  );
+}
+
+function InternalAutomationThumb() {
+  return (
+    <div className="flex h-full w-full flex-col justify-between bg-[#111614] p-2.5">
+      <div className="flex items-center justify-between gap-2">
+        <span className="h-1.5 w-8 rounded-full bg-ivory/30" />
+        <span className="h-1.5 w-4 rounded-full bg-[#5F9C69]" />
+      </div>
+      <div className="grid grid-cols-[0.38fr_1fr] gap-2">
+        <div className="space-y-1.5">
+          {[0, 1, 2, 3].map((item) => (
+            <span
+              key={item}
+              className="block h-1.5 rounded-full bg-ivory/20"
+            />
+          ))}
+        </div>
+        <div className="space-y-1.5">
+          <span className="block h-4 rounded bg-ivory/12" />
+          <span className="block h-1.5 w-4/5 rounded-full bg-ivory/25" />
+          <span className="block h-1.5 w-2/3 rounded-full bg-[#5F9C69]/70" />
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-1.5">
+        {[0, 1, 2].map((item) => (
+          <span key={item} className="h-3 rounded bg-ivory/12" />
+        ))}
+      </div>
+    </div>
   );
 }
 
