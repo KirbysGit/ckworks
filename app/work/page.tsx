@@ -6,7 +6,12 @@ import {
   ArrowRight,
   BriefcaseBusiness,
   ExternalLink,
+  Folder,
+  Grid2X2,
   Layers3,
+  Mail,
+  MessageCircle,
+  Monitor,
   MonitorSmartphone,
   Palette,
   ShieldCheck,
@@ -14,7 +19,7 @@ import {
   Workflow,
 } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
-import ContactCTA from "@/components/page/ContactCTA";
+import WhatsAppContactLink from "@/components/contact/WhatsAppContactLink";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
 import {
@@ -93,10 +98,7 @@ export default function WorkPage() {
       <WorkHero />
       <FeaturedWorkSection />
       <MoreWorkSection />
-      <ContactCTA
-        title="Have something that needs to work better?"
-        description="Send a note with the site, system, or idea you are working through, and I will help you shape the next step."
-      />
+      <WorkFooterCta />
     </SiteLayout>
   );
 }
@@ -128,6 +130,22 @@ function WorkHero() {
   );
 }
 
+// Card positioning configuration - easy to adjust
+const cardPositions = {
+  tizirsso: { left: "4%", top: "0%", zIndex: 20, width: "50%", smWidth: "47%", rotation: "-2.2deg" },
+  taylor: { right: "4%", top: "12%", zIndex: 30, width: "37%", smWidth: "34%", rotation: "3.5deg" },
+  setlst: { left: "5%", bottom: "2%", zIndex: 10, width: "43%", smWidth: "40%", rotation: "2.4deg" },
+  centi: { right: "5%", bottom: "6%", zIndex: 20, width: "39%", smWidth: "37%", rotation: "-1.2deg" },
+} as const;
+
+type CardPosition = typeof cardPositions[keyof typeof cardPositions];
+
+const buildCardClassName = (pos: CardPosition): string => {
+  const positionClass = pos.left ? `left-[${pos.left}]` : `right-[${pos.right}]`;
+  const verticalClass = pos.top ? `top-[${pos.top}]` : `bottom-[${pos.bottom}]`;
+  return `${positionClass} ${verticalClass} z-${pos.zIndex} w-[${pos.width}] rotate-[${pos.rotation}] sm:w-[${pos.smWidth}]`;
+};
+
 const workHeroLogoCards = [
   {
     slug: "tizirsso",
@@ -136,8 +154,7 @@ const workHeroLogoCards = [
     src: "/images/projects/png/tizi-logo.png",
     alt: "Tizirsso Racing",
     meta: ["Client Work", "Live"],
-    className:
-      "left-[4%] top-[0%] z-20 w-[50%] rotate-[-2.2deg] sm:w-[47%]",
+    className: buildCardClassName(cardPositions.tizirsso),
     logoClassName: "p-5 sm:p-6",
     background: "linear-gradient(140deg, #E10600 0%, #7d0400 55%, #160404 100%)",
   },
@@ -148,8 +165,7 @@ const workHeroLogoCards = [
     src: "/images/projects/png/taylor-logo.png",
     alt: "Taylor.io",
     meta: ["Personal Project", "Early Build"],
-    className:
-      "right-[4%] top-[12%] z-30 w-[37%] rotate-[3.5deg] sm:w-[34%]",
+    className: buildCardClassName(cardPositions.taylor),
     logoClassName: "p-4 sm:p-5",
     background:
       "radial-gradient(55% 48% at 22% 20%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%), radial-gradient(42% 38% at 82% 78%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 55%), linear-gradient(155deg, #D65656 0%, #AF3E48 55%, #7f2c37 100%)",
@@ -161,8 +177,7 @@ const workHeroLogoCards = [
     src: "/images/projects/png/setlst-logo.png",
     alt: "SETLST",
     meta: ["Product Concept", "In Progress"],
-    className:
-      "bottom-[2%] left-[5%] z-10 w-[43%] rotate-[2.4deg] sm:w-[40%]",
+    className: buildCardClassName(cardPositions.setlst),
     logoClassName: "p-5 sm:p-6",
     background: "linear-gradient(135deg, #2EF2C3 0%, #8B5CF6 100%)",
   },
@@ -173,8 +188,7 @@ const workHeroLogoCards = [
     src: "/images/projects/png/centi-logo.png",
     alt: "Centi",
     meta: ["Personal Project", "Working Build"],
-    className:
-      "bottom-[6%] right-[5%] z-20 w-[39%] rotate-[-1.2deg] sm:w-[37%]",
+    className: buildCardClassName(cardPositions.centi),
     logoClassName: "p-4 sm:p-5",
     background: "linear-gradient(135deg, #0d6efd 0%, #198754 100%)",
   },
@@ -452,6 +466,39 @@ const technicalWorkSummaries: Record<
   },
 };
 
+const workFooterLinks = [
+  {
+    label: "Services",
+    description: "What I help with",
+    href: "/services",
+    icon: Monitor,
+  },
+  {
+    label: "About",
+    description: "Background and focus",
+    href: "/about",
+    icon: Folder,
+  },
+  {
+    label: "Work",
+    description: "More projects",
+    href: "/work",
+    icon: Grid2X2,
+  },
+  {
+    label: "Process",
+    description: "How projects work",
+    href: "/process",
+    icon: MessageCircle,
+  },
+  {
+    label: "Contact",
+    description: "Get in touch",
+    href: "/contact",
+    icon: Mail,
+  },
+] as const;
+
 function TechnicalWorkRow({
   study,
   index,
@@ -545,6 +592,99 @@ function InternalAutomationThumb() {
         ))}
       </div>
     </div>
+  );
+}
+
+function WorkFooterCta() {
+  return (
+    <section className="border-t border-line/70 bg-ivory py-12 sm:py-14 lg:py-16">
+      <div className={workPageContainer}>
+        <div className="relative overflow-hidden rounded-[2rem] border border-line bg-card px-5 py-8 text-center shadow-soft sm:px-8 lg:px-10 lg:py-12">
+          <Image
+            src="/images/projects/svg/work-cta-left.svg"
+            alt=""
+            width={250}
+            height={230}
+            className="pointer-events-none absolute left-8 top-[29%] hidden w-44 opacity-90 lg:block xl:left-12 xl:w-52"
+          />
+          <Image
+            src="/images/projects/svg/work-cta-right.svg"
+            alt=""
+            width={260}
+            height={250}
+            className="pointer-events-none absolute right-8 top-[24%] hidden w-44 opacity-90 lg:block xl:right-12 xl:w-52"
+          />
+
+          <div className="relative z-10 mx-auto max-w-4xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+              Let&apos;s build something
+            </p>
+            <h2 className="mx-auto mt-5 max-w-4xl font-serif text-[2.5rem] font-medium leading-[1.03] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[4rem]">
+              Have a project in mind?
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-muted sm:text-lg">
+              Send a note with the site, system, or idea you&apos;re working
+              through. I&apos;ll help you shape the next step.
+            </p>
+
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-3 rounded-md bg-forest px-7 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift sm:min-w-[13rem]"
+              >
+                Start a project
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <WhatsAppContactLink
+                location="work_footer_cta"
+                className="inline-flex items-center justify-center gap-3 rounded-md border border-forest/60 bg-transparent px-7 py-3.5 text-sm font-semibold text-forest transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest-soft/35 hover:shadow-soft sm:min-w-[12rem]"
+                iconClassName="h-5 w-5"
+              >
+                WhatsApp
+              </WhatsAppContactLink>
+            </div>
+          </div>
+
+          <nav
+            aria-label="Work page related links"
+            className="relative z-10 mt-10 border-t border-line pt-6"
+          >
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:gap-0">
+              {workFooterLinks.map(
+                ({ label, description, href, icon: Icon }, index) => (
+                  <li
+                    key={label}
+                    className={`lg:px-5 ${
+                      index > 0 ? "lg:border-l lg:border-line" : ""
+                    }`}
+                  >
+                    <Link
+                      href={href}
+                      className="group grid grid-cols-[2rem_minmax(0,1fr)_1.5rem] items-center gap-3 text-left transition-colors hover:text-forest lg:grid-cols-[2rem_minmax(0,1fr)]"
+                    >
+                      <Icon
+                        className="h-5 w-5 text-forest"
+                        strokeWidth={1.6}
+                        aria-hidden
+                      />
+                      <span className="min-w-0">
+                        <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-forest">
+                          {label}
+                        </span>
+                        <span className="mt-1 block text-sm leading-5 text-muted">
+                          {description}
+                        </span>
+                      </span>
+                      <ArrowRight className="h-4 w-4 text-forest transition-transform duration-200 group-hover:translate-x-1 lg:col-start-2 lg:justify-self-end" />
+                    </Link>
+                  </li>
+                ),
+              )}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </section>
   );
 }
 
