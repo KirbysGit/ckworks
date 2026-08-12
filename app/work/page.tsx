@@ -150,7 +150,7 @@ const workHeroLogoCards = [
     meta: ["Personal Project", "Early Build"],
     className:
       "right-[7%] top-[28%] z-30 w-[37%] rotate-[3.5deg] sm:w-[34%]",
-    logoClassName: "p-9 sm:p-10",
+    logoClassName: "p-4 sm:p-5",
     background:
       "radial-gradient(55% 48% at 22% 20%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%), radial-gradient(42% 38% at 82% 78%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 55%), linear-gradient(155deg, #D65656 0%, #AF3E48 55%, #7f2c37 100%)",
   },
@@ -163,7 +163,7 @@ const workHeroLogoCards = [
     meta: ["Product Concept", "In Progress"],
     className:
       "bottom-[8%] left-[6%] z-10 w-[43%] rotate-[2.4deg] sm:w-[40%]",
-    logoClassName: "p-10 sm:p-12",
+    logoClassName: "p-5 sm:p-6",
     background: "linear-gradient(135deg, #2EF2C3 0%, #8B5CF6 100%)",
   },
   {
@@ -175,7 +175,7 @@ const workHeroLogoCards = [
     meta: ["Personal Project", "Working Build"],
     className:
       "bottom-[4%] right-[19%] z-20 w-[39%] rotate-[-1.2deg] sm:w-[37%]",
-    logoClassName: "p-9 sm:p-11",
+    logoClassName: "p-4 sm:p-5",
     background: "linear-gradient(135deg, #0d6efd 0%, #198754 100%)",
   },
 ] as const;
@@ -196,26 +196,22 @@ function WorkLogoStack() {
           href={`/${card.slug}`}
           className={`group absolute block transition-transform duration-300 hover:-translate-y-1 ${card.className}`}
         >
-          <article
-            className="relative aspect-[1.28/1] overflow-hidden rounded-[0.35rem] shadow-[0_2px_5px_rgba(31,36,32,0.07),0_24px_42px_-32px_rgba(31,36,32,0.48)] transition-shadow duration-300 group-hover:shadow-[0_4px_10px_rgba(31,36,32,0.08),0_30px_46px_-30px_rgba(31,36,32,0.62)]"
-            style={{ background: card.background }}
-          >
+          <article className="relative aspect-[1.28/1] overflow-hidden rounded-[0.35rem] border border-line bg-card shadow-[0_2px_5px_rgba(31,36,32,0.07),0_24px_42px_-32px_rgba(31,36,32,0.48)] transition-shadow duration-300 group-hover:shadow-[0_4px_10px_rgba(31,36,32,0.08),0_30px_46px_-30px_rgba(31,36,32,0.62)]">
             <span
-              className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.16),transparent_42%,rgba(0,0,0,0.14))]"
-              aria-hidden
-            />
-            <span
-              className="pointer-events-none absolute inset-3 rounded-[0.2rem] border border-white/20"
+              className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.65),transparent_42%,rgba(31,36,32,0.035))]"
               aria-hidden
             />
 
             <div className="relative z-10 flex h-full flex-col px-5 py-4 sm:px-6 sm:py-5">
-              <div className="flex items-center justify-between gap-3 text-[0.55rem] font-semibold uppercase tracking-[0.12em] text-ivory/85 sm:text-[0.62rem]">
+              <div className="flex items-center justify-between gap-3 text-[0.55rem] font-semibold uppercase tracking-[0.12em] text-ink/72 sm:text-[0.62rem]">
                 <span>{card.number}</span>
                 <span>{card.type}</span>
               </div>
 
-              <div className="relative min-h-0 flex-1">
+              <div
+                className="relative mt-2.5 min-h-0 flex-1 overflow-hidden rounded-[0.3rem]"
+                style={{ background: card.background }}
+              >
                 <Image
                   src={card.src}
                   alt={card.alt}
@@ -225,12 +221,12 @@ function WorkLogoStack() {
                 />
               </div>
 
-              <div className="flex items-center gap-2 border-t border-white/25 pt-2.5 text-[0.55rem] font-medium text-ivory/85 sm:text-[0.62rem]">
+              <div className="flex items-center gap-2 border-t border-line/70 pt-2.5 text-[0.55rem] font-medium text-ink/70 sm:text-[0.62rem]">
                 {card.meta.map((item, index) => (
                   <span key={item} className="inline-flex items-center gap-2">
                     {index > 0 && (
                       <span
-                        className="h-1 w-1 rounded-full bg-ivory/85"
+                        className="h-1 w-1 rounded-full bg-forest"
                         aria-hidden
                       />
                     )}
