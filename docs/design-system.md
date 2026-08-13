@@ -182,6 +182,32 @@ Two rules follow:
   its own `transform` for layout. The animation ends at `transform: none` and
   silently discards the offset. Put the entrance on a wrapper, or move the
   layout transform to an inner element.
+- **This applies to hover transforms too, and permanently.** Every primitive
+  runs with `both` fill, so after it finishes the element *keeps*
+  `transform: none` — and an animation's filled value outranks a normal
+  declaration in the cascade. An element carrying an entrance will therefore
+  ignore `hover:-translate-y-*` forever, not just during the animation. When a
+  card needs an entrance, a resting tilt, and a hover lift, that is three
+  transforms and needs two elements: the outer one owns the entrance, the inner
+  one owns tilt plus hover. Tailwind composes tilt and hover safely because they
+  are separate custom properties (`--tw-rotate`, `--tw-translate-y`). The hero
+  folders in `app/work/page.tsx` are the reference implementation.
+
+### Where To Put A `Reveal`
+
+Wrap the **container**, not each item, whenever the children depend on being
+siblings. `Reveal` renders a real wrapper element, so one per item silently
+breaks `first:`, `last:`, `space-y-*`, and any negative-margin overlap — the
+featured stack in `app/work/page.tsx` uses `-mt-5 ... first:mt-0`, and per-card
+wrappers collapse it. Per-item `Reveal` with a `delay` stagger is for
+independent items in a plain grid or list.
+
+`Reveal` also takes no `style` prop; it spends that slot on its own
+`transitionDelay`. An item that needs an inline style must keep it on an inner
+element.
+
+Verify any new entrance work with the check in **The Rendering Rule**: fetch the
+page and confirm `ck-reveal` is absent from the server HTML.
 
 ### Reveal-Aware Primitives
 

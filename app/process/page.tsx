@@ -7,19 +7,15 @@ import {
   BarChart3,
   CheckCircle2,
   CircleDot,
-  Code2,
   FileText,
   Flag,
-  FolderTree,
-  Lightbulb,
   PencilLine,
-  RefreshCw,
-  Rocket,
   Sparkles,
 } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
 import ContactCTA from "@/components/page/ContactCTA";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
+import StageChain from "@/components/process/StageChain";
 import { getCaseStudy } from "@/lib/projects";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
 
@@ -104,6 +100,17 @@ const collaborationRows = [
   ["Feedback and decisions", "Testing and launch"],
 ] as const;
 
+/**
+ * Hero entrance rhythm. Copy rises first; the stage chain picks the sequence up
+ * at 340ms and carries it left to right (see `components/process/StageChain.tsx`).
+ */
+const processHeroTiming = {
+  eyebrow: 0,
+  title: 80,
+  lead: 170,
+  actions: 250,
+} as const;
+
 export default function ProcessPage() {
   const tizirsso = getCaseStudy("tizirsso");
 
@@ -137,27 +144,55 @@ export default function ProcessPage() {
 
       <section className="bg-ivory py-12 sm:py-14 lg:py-20">
         <div className="container-ck">
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(26rem,0.8fr)]">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.5fr)] lg:gap-12">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+              <p
+                className="ck-rise text-xs font-semibold uppercase tracking-[0.28em] text-forest"
+                style={{ animationDelay: `${processHeroTiming.eyebrow}ms` }}
+              >
                 The Approach
               </p>
-              <h1 className="mt-5 max-w-3xl font-serif text-[3rem] font-medium leading-[1.02] text-ink sm:text-6xl lg:text-7xl">
+              <h1
+                className="ck-rise mt-5 max-w-3xl font-serif text-[2.75rem] font-medium leading-[1.03] text-ink sm:text-5xl lg:text-6xl"
+                style={{ animationDelay: `${processHeroTiming.title}ms` }}
+              >
                 A calm way projects take shape.
               </h1>
-              <p className="mt-6 max-w-2xl text-base leading-8 text-muted sm:text-lg">
+              <p
+                className="ck-rise mt-6 max-w-xl text-base leading-8 text-muted sm:text-lg"
+                style={{ animationDelay: `${processHeroTiming.lead}ms` }}
+              >
                 CK Works plans, designs, builds, and improves websites and
                 digital systems through a focused process that keeps decisions
                 clear and the work moving.
               </p>
+              <div
+                className="ck-rise mt-8 flex flex-col gap-3 sm:flex-row"
+                style={{ animationDelay: `${processHeroTiming.actions}ms` }}
+              >
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-3 rounded-md bg-forest px-7 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"
+                >
+                  Start a project
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="#phases"
+                  className="inline-flex items-center justify-center gap-3 rounded-md border border-forest/60 bg-transparent px-7 py-3.5 text-sm font-semibold text-forest transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest-soft/35 hover:shadow-soft"
+                >
+                  See how it works
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
             </div>
 
-            <RoadmapVisual />
+            <StageChain />
           </div>
         </div>
       </section>
 
-      <section className="bg-ivory">
+      <section id="phases" className="scroll-mt-24 bg-ivory">
         <div className="container-ck">
           <div className="space-y-10 border-t border-line/70 py-10 lg:space-y-16 lg:py-16">
             {phases.map((phase, index) => (
@@ -319,39 +354,6 @@ function PhaseSection({ phase, index }: { phase: Phase; index: number }) {
       </div>
       <div className={visualFirst ? "lg:order-1" : ""}>{phase.visual}</div>
     </article>
-  );
-}
-
-function RoadmapVisual() {
-  const steps = [
-    { label: "Clarify", icon: Lightbulb },
-    { label: "Shape", icon: FolderTree },
-    { label: "Build", icon: Code2 },
-    { label: "Launch", icon: Rocket },
-  ];
-
-  return (
-    <div className="rounded-2xl border border-line bg-card p-5 shadow-soft sm:p-6">
-      <div className="grid gap-3">
-        {steps.map(({ label, icon: Icon }, index) => (
-          <div key={label} className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-forest-soft text-forest">
-              <Icon className="h-5 w-5" strokeWidth={1.7} />
-            </span>
-            <span className="font-serif text-2xl font-medium text-ink">
-              {label}
-            </span>
-            {index < steps.length - 1 && (
-              <ArrowRight className="ml-auto h-4 w-4 text-muted" />
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="mt-5 flex items-center gap-3 rounded-xl border border-line bg-ivory/65 px-4 py-3 text-forest">
-        <RefreshCw className="h-4 w-4" />
-        <span className="text-sm font-semibold">Improve after launch</span>
-      </div>
-    </div>
   );
 }
 
