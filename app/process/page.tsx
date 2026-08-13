@@ -7,6 +7,7 @@ import SiteLayout from "@/components/layout/SiteLayout";
 import ContactCTA from "@/components/page/ContactCTA";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import Reveal from "@/components/ui/Reveal";
+import SectionLabel from "@/components/ui/SectionLabel";
 import StageChain from "@/components/process/StageChain";
 import {
   BriefVisual,
@@ -193,12 +194,10 @@ export default function ProcessPage() {
       <section id="phases" className="scroll-mt-24 bg-ivory py-12 lg:py-16">
         <div className="container-ck">
           <Reveal>
-            <p className="w-fit border-b-2 border-forest pb-2 text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-              The Process
-            </p>
+            <SectionLabel>The Process</SectionLabel>
           </Reveal>
 
-          <div className="mt-8 space-y-4 lg:mt-10 lg:space-y-5">
+          <div className="mt-10 lg:mt-12">
             {phases.map((phase, index) => (
               <PhaseSection key={phase.number} phase={phase} index={index} />
             ))}
@@ -338,13 +337,16 @@ export default function ProcessPage() {
 }
 
 /**
- * One phase as a full-width band. Alternating tint and side keeps four similar
- * blocks from reading as one long column; the eyebrow repeats the title in
- * small caps so the number, the name, and the illustration all land together.
+ * One phase as an editorial band.
  *
- * Below the fold, so the band is a `Reveal`. It wraps the whole article rather
- * than the two columns separately — the copy and its illustration should
- * arrive as one thought.
+ * No outer card: `docs/design-system.md` separates page bands with a rule and
+ * vertical padding rather than a floating surface, and wrapping these in one
+ * would nest a card inside the framed visual it already contains. The split is
+ * the house 0.9fr / 1.35fr — left introduces, right demonstrates — and the side
+ * alternates so four similar blocks do not read as one column.
+ *
+ * Below the fold, so the band is a `Reveal` wrapping the whole article: the
+ * copy and its illustration should arrive as one thought.
  */
 function PhaseSection({ phase, index }: { phase: Phase; index: number }) {
   const visualFirst = index % 2 === 1;
@@ -353,25 +355,22 @@ function PhaseSection({ phase, index }: { phase: Phase; index: number }) {
     <Reveal
       as="article"
       delay={index * 60}
-      className={`rounded-2xl border border-line/70 px-5 py-8 sm:px-8 lg:px-12 lg:py-12 ${
-        index % 2 === 0 ? "bg-card" : "bg-sand"
-      }`}
+      className="border-t border-line/70 py-10 first:border-t-0 first:pt-0 lg:py-14 lg:first:pt-0"
     >
-      <div className="grid items-center gap-9 lg:grid-cols-2 lg:gap-14">
+      <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)] lg:gap-16">
         <div className={visualFirst ? "lg:order-2" : ""}>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-forest">
-            {phase.number} {phase.title}
-          </p>
-          <h2 className="mt-3 font-serif text-[2.5rem] font-medium leading-[1.05] text-forest sm:text-5xl">
+          <SectionLabel>{`Phase ${phase.number}`}</SectionLabel>
+          <h2 className="mt-4 font-serif text-[2.35rem] font-medium leading-[1.06] text-ink sm:text-[2.75rem]">
             {phase.title}
           </h2>
-          <span className="mt-5 block h-px w-12 bg-forest/50" aria-hidden />
           <p className="mt-5 max-w-md text-base leading-8 text-muted">
             {phase.body}
           </p>
-          <p className="mt-5 text-sm leading-6 text-forest/85">
-            <span className="font-semibold">Typical outcome:</span>{" "}
-            {phase.outcome}
+          <p className="mt-6 max-w-md border-t border-line pt-4 text-sm leading-6 text-muted">
+            <span className="font-semibold uppercase tracking-[0.14em] text-forest">
+              Outcome
+            </span>
+            <span className="mt-1.5 block">{phase.outcome}</span>
           </p>
         </div>
 
