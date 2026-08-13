@@ -1,15 +1,16 @@
 import type { CSSProperties } from "react";
-import { ArrowRight, Menu } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 
 /**
  * Hero progression for /process: one project moving from a rough sketch to a
  * launched site. The four stages mirror the four phases detailed below the
  * fold, so the chain reads as a preview of the page rather than a second story.
  *
- * Deliberately unbranded. The process page tells a Tizirsso-flavoured story in
- * its phase visuals, and `docs/demo-registry.md` rule 6 keeps one brand per
- * page context — so the launched card earns its "finished" read through colour
- * arriving after three monochrome stages, not through a demo brand or photo.
+ * Stages 01–03 stay unbranded (sketch → wireframe → monochrome design). Stage
+ * 04 resolves into the Hearth & Home demo used on Web Design and Support —
+ * colour + brand arrive together as the "finished" read. See
+ * `docs/demo-registry.md`.
  *
  * Sequenced left to right per the "Sequencing A Flow" section of
  * `docs/design-system.md`: each card lands, then the arrow leading out of it,
@@ -23,6 +24,18 @@ import { ArrowRight, Menu } from "lucide-react";
 const stageTiming = {
   card: [340, 560, 780, 1000],
   arrow: [500, 720, 940],
+} as const;
+
+const stageAssets = {
+  current: "/images/process/svg/process-demo-1.svg",
+  liveImage: "/images/services/png/01-hearth-home-demo.png",
+  liveLogo: "/images/services/svg/01-hearth-logo-demo.svg",
+} as const;
+
+const stageVisuals = {
+  currentInset: "0.68rem",
+  currentColor: "#8B9086",
+  currentOpacity: 0.55,
 } as const;
 
 const delay = (ms: number) => ({ "--ck-anim-delay": `${ms}ms` }) as CSSProperties;
@@ -110,74 +123,66 @@ export default function StageChain() {
 /** 01 — paper, marker, and an image box that is still just a box. */
 function SketchStage() {
   return (
-    <div className="flex h-full flex-col bg-[#F4EFE3] p-3">
-      <p className="rotate-[-1.6deg] font-serif text-[0.9rem] font-medium uppercase tracking-[0.08em] text-ink/70">
-        Home
-      </p>
-
-      <svg
-        viewBox="0 0 100 60"
-        className="mt-2.5 w-full"
-        fill="none"
-        stroke="#55534B"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      >
-        <path d="M2 3 L98 2 L97 58 L3 57 Z" />
-        <path d="M3 3 L97 57 M97 3 L3 57" />
-      </svg>
-
-      <div className="mt-auto space-y-2.5 pt-3">
-        {[0, 1, 2].map((row) => (
-          <div key={row} className="flex items-center gap-2">
-            <span className="h-2 w-2 shrink-0 rounded-full border border-ink/40" />
-            <svg
-              viewBox="0 0 120 6"
-              className="h-1.5 w-full"
-              fill="none"
-              stroke="#55534B"
-              strokeWidth="1.3"
-              strokeLinecap="round"
-              preserveAspectRatio="none"
-            >
-              <path d="M0 3 Q 7.5 0.5, 15 3 T 30 3 T 45 3 T 60 3 T 75 3 T 90 3 T 105 3 T 120 3" />
-            </svg>
-          </div>
-        ))}
-      </div>
+    <div className="relative h-full bg-[#F4EFE3]">
+      <span
+        className="absolute"
+        style={{
+          inset: stageVisuals.currentInset,
+          backgroundColor: stageVisuals.currentColor,
+          opacity: stageVisuals.currentOpacity,
+          WebkitMaskImage: `url(${stageAssets.current})`,
+          maskImage: `url(${stageAssets.current})`,
+          WebkitMaskPosition: "center",
+          maskPosition: "center",
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskSize: "contain",
+          maskSize: "contain",
+        }}
+      />
     </div>
   );
 }
 
-/** 02 — the same content, now with a shape. */
+/** 02 — the same content, now with a shape. Wireframe only: boxes and lines. */
 function StructureStage() {
   return (
-    <div className="flex h-full flex-col items-center bg-card p-3">
-      <span className="rounded border border-line bg-ivory px-2.5 py-1 text-[0.55rem] font-medium text-ink">
-        Home
-      </span>
-      <span className="h-2.5 w-px bg-line" />
-      <span className="h-px w-2/3 bg-line" />
-
-      <div className="grid w-full grid-cols-3 gap-1.5">
-        {["About", "Services", "Contact"].map((page) => (
-          <div key={page} className="flex flex-col items-center">
-            <span className="h-2.5 w-px bg-line" />
-            <span className="w-full truncate rounded border border-line bg-ivory px-1 py-1 text-center text-[0.45rem] text-ink">
-              {page}
-            </span>
-          </div>
-        ))}
+    <div className="flex h-full flex-col gap-2 bg-card p-2.5">
+      {/* Flat chrome — structure, not polish. */}
+      <div className="flex items-center justify-between gap-2">
+        <span className="h-1.5 w-8 rounded-sm bg-line/70" />
+        <div className="flex gap-1">
+          {[0, 1, 2].map((item) => (
+            <span key={item} className="h-1 w-3 rounded-sm bg-line/60" />
+          ))}
+        </div>
       </div>
 
-      <div className="mt-auto w-full space-y-2 pt-3">
-        {[0, 1, 2].map((row) => (
-          <div key={row} className="flex items-center gap-1.5">
-            <span className="h-3 w-2.5 shrink-0 rounded-[1px] border border-line bg-ivory" />
-            <span className="h-1.5 flex-1 rounded-full bg-line/80" />
+      <div className="grid flex-1 grid-rows-[1.1fr_0.9fr] gap-1.5">
+        <div className="grid grid-cols-[1fr_0.85fr] gap-1.5">
+          <div className="flex flex-col justify-center gap-1 rounded-sm border border-dashed border-line/70 bg-ivory/50 px-1.5 py-1.5">
+            <span className="block h-1 w-full rounded-sm bg-line/80" />
+            <span className="block h-1 w-4/5 rounded-sm bg-line/65" />
+            <span className="block h-1 w-3/5 rounded-sm bg-line/55" />
+            <span className="mt-1 block h-2.5 w-8 rounded-sm border border-line/65 bg-transparent" />
           </div>
-        ))}
+          <span className="rounded-sm border border-dashed border-line/70 bg-line/25" />
+        </div>
+
+        <div className="grid grid-cols-3 gap-1">
+          {["A", "B", "C"].map((item) => (
+            <div
+              key={item}
+              className="flex flex-col gap-1 rounded-sm border border-dashed border-line/65 bg-ivory/45 px-1 py-1.5"
+            >
+              <span className="block h-1 w-2/3 rounded-sm bg-line/65" />
+              <span className="block h-1 w-full rounded-sm bg-line/50" />
+            </div>
+          ))}
+        </div>
       </div>
+
+      <span className="block h-1 w-[70%] rounded-sm bg-line/55" />
     </div>
   );
 }
@@ -185,65 +190,100 @@ function StructureStage() {
 /** 03 — hierarchy and spacing resolve, still deliberately colourless. */
 function DesignStage() {
   return (
-    <div className="flex h-full flex-col gap-2 bg-card p-2.5">
-      <div className="flex items-center justify-between">
-        <span className="h-2.5 w-2.5 rounded-full bg-line" />
-        <div className="flex gap-1">
+    <div className="flex h-full flex-col bg-card">
+      <div className="flex h-7 shrink-0 items-center gap-1 border-b border-line/80 px-2">
+        <span className="h-3 w-3 rounded-full bg-line/80" />
+        <span className="h-1.5 w-10 rounded-full bg-line/70" />
+        <span className="ml-auto flex items-center gap-1">
           {[0, 1, 2].map((dash) => (
-            <span key={dash} className="h-1 w-3 rounded-full bg-line" />
+            <span key={dash} className="h-1 w-3 rounded-full bg-line/60" />
+          ))}
+        </span>
+      </div>
+
+      <div className="grid min-h-0 flex-1 grid-rows-[1.15fr_auto]">
+        <div className="grid min-h-0 grid-cols-[0.48fr_0.52fr]">
+          <div className="flex flex-col justify-center gap-1.5 bg-ivory/70 px-2 py-2">
+            <span className="block h-2 w-[90%] rounded-full bg-line" />
+            <span className="block h-2 w-[70%] rounded-full bg-line/80" />
+            <span className="mt-0.5 block h-1 w-[75%] rounded-full bg-line/55" />
+            <span className="mt-1 inline-block h-3 w-10 rounded bg-line/70" />
+          </div>
+          <span className="min-h-0 bg-line/40" />
+        </div>
+
+        <div className="grid shrink-0 grid-cols-3 divide-x divide-line/70 border-t border-line/80 bg-ivory/50">
+          {[0, 1, 2].map((item) => (
+            <span key={item} className="flex flex-col items-center gap-1 px-0.5 py-1.5">
+              <span className="h-2.5 w-2.5 rounded-sm bg-line/55" />
+              <span className="h-1 w-8 rounded-full bg-line/55" />
+            </span>
           ))}
         </div>
-      </div>
-
-      <span className="h-[34%] w-full rounded bg-line/75" />
-
-      <div className="grid grid-cols-3 gap-1.5">
-        {[0, 1, 2].map((tile) => (
-          <span key={tile} className="h-7 rounded bg-line/55" />
-        ))}
-      </div>
-
-      <div className="mt-auto space-y-1.5">
-        <span className="block h-1.5 w-full rounded-full bg-line/70" />
-        <span className="block h-1.5 w-4/5 rounded-full bg-line/70" />
-        <span className="block h-1.5 w-3/5 rounded-full bg-line/70" />
       </div>
     </div>
   );
 }
 
-/** 04 — the payoff. Colour arrives only here, which is what sells "finished". */
+/**
+ * 04 — a real launched site. Hearth & Home (same demo as Web Design / Support)
+ * fills the structure Design only sketched in grayscale.
+ */
 function LiveStage() {
   return (
     <div className="flex h-full flex-col bg-card">
-      <div className="flex items-center gap-1.5 border-b border-line bg-ivory px-2 py-1.5">
-        {["#E06C60", "#E3B341", "#5FA46B"].map((tone) => (
-          <span
-            key={tone}
-            className="h-1.5 w-1.5 rounded-full"
-            style={{ backgroundColor: tone }}
-          />
-        ))}
-        <span className="ml-1 h-1.5 flex-1 rounded-full bg-line/70" />
-        <Menu className="h-2.5 w-2.5 text-muted" />
+      <div className="flex h-7 shrink-0 items-center gap-1 border-b border-line px-2">
+        <Image
+          src={stageAssets.liveLogo}
+          alt=""
+          width={12}
+          height={12}
+          className="h-3 w-3 shrink-0 object-contain"
+        />
+        <span className="truncate font-serif text-[0.55rem] font-semibold tracking-[0.01em] text-ink">
+          Hearth &amp; Home
+        </span>
+        <span className="ml-auto hidden items-center gap-1.5 text-[0.42rem] font-semibold text-ink/55 sm:flex">
+          {["Services", "Projects", "About"].map((item) => (
+            <span key={item}>{item}</span>
+          ))}
+        </span>
       </div>
 
-      <div
-        className="flex flex-1 flex-col justify-end p-2.5"
-        style={{
-          background:
-            "linear-gradient(158deg, #3C6E4E 0%, #2F5B3F 46%, #16301F 100%)",
-        }}
-      >
-        <p className="font-serif text-[0.78rem] font-medium leading-[1.2] text-ivory">
-          Built with purpose.
-          <br />
-          Designed to last.
-        </p>
-        <span className="mt-2 inline-flex w-fit items-center gap-1 rounded bg-ivory px-1.5 py-1 text-[0.45rem] font-semibold text-forest">
-          Get in touch
-          <ArrowRight className="h-2 w-2" />
-        </span>
+      <div className="grid min-h-0 flex-1 grid-rows-[1.15fr_auto]">
+        <div className="grid min-h-0 grid-cols-[0.48fr_0.52fr]">
+          <div className="flex flex-col justify-center bg-[#243028] px-2 py-2 text-ivory">
+            <p className="font-serif text-[0.68rem] font-medium leading-[1.08]">
+              Thoughtful spaces, built around you.
+            </p>
+            <p className="mt-1 text-[0.4rem] leading-[1.35] text-ivory/78">
+              Interior design for calm, considered homes.
+            </p>
+            <span className="mt-1.5 inline-flex w-fit rounded bg-[#174A31] px-1.5 py-0.5 text-[0.38rem] font-semibold text-ivory">
+              View our work
+            </span>
+          </div>
+          <div className="relative min-h-0 overflow-hidden">
+            <Image
+              src={stageAssets.liveImage}
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 120px, 40vw"
+              className="object-cover"
+            />
+          </div>
+        </div>
+
+        <div className="grid shrink-0 grid-cols-3 divide-x divide-line border-t border-line bg-[#faf8f4]">
+          {["Warm spaces", "Refined detail", "Easy inquiry"].map((label) => (
+            <span
+              key={label}
+              className="px-0.5 py-1.5 text-center text-[0.38rem] font-semibold leading-tight text-ink/75"
+            >
+              {label}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );

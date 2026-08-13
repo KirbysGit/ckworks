@@ -2,20 +2,18 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  BarChart3,
-  CheckCircle2,
-  CircleDot,
-  FileText,
-  Flag,
-  PencilLine,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2, CircleDot } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
 import ContactCTA from "@/components/page/ContactCTA";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
+import Reveal from "@/components/ui/Reveal";
 import StageChain from "@/components/process/StageChain";
+import {
+  BriefVisual,
+  BuildVisual,
+  LaunchVisual,
+  SitemapVisual,
+} from "@/components/process/PhaseVisuals";
 import { getCaseStudy } from "@/lib/projects";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
 
@@ -43,7 +41,7 @@ const phases: Phase[] = [
     body:
       "We learn how the business works, what needs to improve, and what the project needs to accomplish. The goal is to turn a loose idea into a clear direction before design or development starts.",
     outcome: "goals, priorities, and project direction",
-    visual: <DiscoveryNotesVisual />,
+    visual: <BriefVisual />,
   },
   {
     number: "02",
@@ -192,9 +190,15 @@ export default function ProcessPage() {
         </div>
       </section>
 
-      <section id="phases" className="scroll-mt-24 bg-ivory">
+      <section id="phases" className="scroll-mt-24 bg-ivory py-12 lg:py-16">
         <div className="container-ck">
-          <div className="space-y-10 border-t border-line/70 py-10 lg:space-y-16 lg:py-16">
+          <Reveal>
+            <p className="w-fit border-b-2 border-forest pb-2 text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+              The Process
+            </p>
+          </Reveal>
+
+          <div className="mt-8 space-y-4 lg:mt-10 lg:space-y-5">
             {phases.map((phase, index) => (
               <PhaseSection key={phase.number} phase={phase} index={index} />
             ))}
@@ -333,221 +337,46 @@ export default function ProcessPage() {
   );
 }
 
+/**
+ * One phase as a full-width band. Alternating tint and side keeps four similar
+ * blocks from reading as one long column; the eyebrow repeats the title in
+ * small caps so the number, the name, and the illustration all land together.
+ *
+ * Below the fold, so the band is a `Reveal`. It wraps the whole article rather
+ * than the two columns separately — the copy and its illustration should
+ * arrive as one thought.
+ */
 function PhaseSection({ phase, index }: { phase: Phase; index: number }) {
   const visualFirst = index % 2 === 1;
 
   return (
-    <article className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(24rem,1fr)] lg:gap-12">
-      <div className={visualFirst ? "lg:order-2" : ""}>
-        <p className="font-serif text-3xl font-medium text-[#A8713B]">
-          {phase.number}
-        </p>
-        <h2 className="mt-3 font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl">
-          {phase.title}
-        </h2>
-        <p className="mt-5 max-w-xl text-base leading-8 text-muted">
-          {phase.body}
-        </p>
-        <p className="mt-5 max-w-xl rounded-full border border-line bg-card px-4 py-2 text-sm font-medium text-forest shadow-[0_8px_22px_-18px_rgba(31,36,32,0.45)]">
-          Typical outcome: {phase.outcome}
-        </p>
-      </div>
-      <div className={visualFirst ? "lg:order-1" : ""}>{phase.visual}</div>
-    </article>
-  );
-}
-
-function VisualFrame({ children }: { children: ReactNode }) {
-  return (
-    <div className="rounded-2xl border border-line bg-card p-4 shadow-soft sm:p-5">
-      <div className="grid-texture relative min-h-[20rem] overflow-hidden rounded-xl border border-line bg-ivory/80">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function DiscoveryNotesVisual() {
-  const notes = [
-    ["Goals", "Clearer story for sponsors"],
-    ["Audience", "Fans, partners, teams"],
-    ["Priority", "Make the next step obvious"],
-  ];
-
-  return (
-    <VisualFrame>
-      <div className="absolute inset-0 p-5">
-        <div className="rounded-xl border border-line bg-card p-5 shadow-soft">
-          <div className="flex items-center justify-between border-b border-line pb-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
-              Discovery Notes
-            </p>
-            <PencilLine className="h-4 w-4 text-forest" />
-          </div>
-          <div className="mt-5 space-y-4">
-            {notes.map(([label, text]) => (
-              <div key={label} className="grid grid-cols-[5rem_1fr] gap-3">
-                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-forest">
-                  {label}
-                </span>
-                <span className="rounded-lg border border-line bg-ivory/70 px-3 py-2 text-sm text-muted">
-                  {text}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="absolute bottom-6 right-7 w-40 rotate-[-4deg] rounded-lg border border-line bg-[#F7F0D8] p-4 shadow-soft">
-          <Sparkles className="h-4 w-4 text-forest" />
-          <p className="mt-3 font-serif text-xl leading-tight text-ink">
-            What should this help people understand?
+    <Reveal
+      as="article"
+      delay={index * 60}
+      className={`rounded-2xl border border-line/70 px-5 py-8 sm:px-8 lg:px-12 lg:py-12 ${
+        index % 2 === 0 ? "bg-card" : "bg-sand"
+      }`}
+    >
+      <div className="grid items-center gap-9 lg:grid-cols-2 lg:gap-14">
+        <div className={visualFirst ? "lg:order-2" : ""}>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-forest">
+            {phase.number} {phase.title}
+          </p>
+          <h2 className="mt-3 font-serif text-[2.5rem] font-medium leading-[1.05] text-forest sm:text-5xl">
+            {phase.title}
+          </h2>
+          <span className="mt-5 block h-px w-12 bg-forest/50" aria-hidden />
+          <p className="mt-5 max-w-md text-base leading-8 text-muted">
+            {phase.body}
+          </p>
+          <p className="mt-5 text-sm leading-6 text-forest/85">
+            <span className="font-semibold">Typical outcome:</span>{" "}
+            {phase.outcome}
           </p>
         </div>
+
+        <div className={visualFirst ? "lg:order-1" : ""}>{phase.visual}</div>
       </div>
-    </VisualFrame>
-  );
-}
-
-function SitemapVisual() {
-  const pages = ["Home", "Services", "Work", "Contact"];
-
-  return (
-    <VisualFrame>
-      <div className="absolute inset-0 flex items-center justify-center p-6">
-        <div className="w-full max-w-md">
-          <div className="mx-auto flex w-32 items-center justify-center rounded-lg border border-forest/35 bg-card px-4 py-3 text-sm font-semibold text-ink shadow-soft">
-            Website
-          </div>
-          <div className="mx-auto h-10 w-px bg-line" />
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {pages.map((page) => (
-              <div key={page} className="relative">
-                <div className="absolute -top-5 left-1/2 h-5 w-px -translate-x-1/2 bg-line" />
-                <div className="rounded-lg border border-line bg-card px-3 py-3 text-center text-sm font-medium text-ink shadow-soft">
-                  {page}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-7 rounded-xl border border-line bg-card p-4 shadow-soft">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
-              Flow Notes
-            </p>
-            <div className="mt-3 space-y-2">
-              <span className="block h-2 w-full rounded-full bg-line" />
-              <span className="block h-2 w-5/6 rounded-full bg-line" />
-              <span className="block h-2 w-2/3 rounded-full bg-line" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </VisualFrame>
-  );
-}
-
-function BuildVisual() {
-  return (
-    <VisualFrame>
-      <div className="absolute inset-0 p-5">
-        <div className="grid h-full gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-line bg-card p-4 shadow-soft">
-            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-forest">
-              <FileText className="h-4 w-4" />
-              Wireframe
-            </p>
-            <div className="mt-5 space-y-3">
-              <span className="block h-5 w-4/5 rounded bg-line/70" />
-              <span className="block h-3 w-full rounded bg-line/70" />
-              <span className="block h-3 w-5/6 rounded bg-line/70" />
-              <div className="grid grid-cols-2 gap-3 pt-3">
-                <span className="h-20 rounded-lg border border-dashed border-muted/35" />
-                <span className="h-20 rounded-lg border border-dashed border-muted/35" />
-              </div>
-            </div>
-          </div>
-          <div className="rounded-xl border border-line bg-card shadow-soft">
-            <div className="flex h-8 items-center gap-1.5 border-b border-line px-4">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#C87264]" />
-              <span className="h-1.5 w-1.5 rounded-full bg-[#D8A847]" />
-              <span className="h-1.5 w-1.5 rounded-full bg-[#5F9C69]" />
-            </div>
-            <div className="p-4">
-              <p className="font-serif text-2xl leading-none text-ink">
-                Clear message.
-                <br />
-                Real action.
-              </p>
-              <p className="mt-3 text-xs leading-5 text-muted">
-                Working interface with responsive structure and clean calls to
-                action.
-              </p>
-              <span className="mt-5 inline-flex rounded-md bg-forest px-4 py-2 text-xs font-semibold text-ivory">
-                Start here
-              </span>
-            </div>
-          </div>
-        </div>
-        <ArrowRight className="absolute left-1/2 top-1/2 hidden h-7 w-7 -translate-x-1/2 -translate-y-1/2 rounded-full bg-card p-1 text-forest shadow-soft sm:block" />
-      </div>
-    </VisualFrame>
-  );
-}
-
-function LaunchVisual() {
-  return (
-    <VisualFrame>
-      <div className="absolute inset-0 p-5">
-        <div className="relative h-full rounded-xl border border-line bg-card shadow-soft">
-          <div className="flex h-8 items-center gap-1.5 border-b border-line px-4">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#C87264]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-[#D8A847]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-[#5F9C69]" />
-            <span className="ml-auto text-[10px] font-medium text-muted">
-              live site
-            </span>
-          </div>
-          <div className="grid h-[calc(100%-2rem)] grid-cols-[1fr_0.9fr] gap-5 p-5">
-            <div>
-              <p className="font-serif text-3xl leading-none text-ink">
-                Launched,
-                <br />
-                checked,
-                <br />
-                improving.
-              </p>
-              <p className="mt-4 text-xs leading-5 text-muted">
-                The important paths are tested and the next improvements are
-                visible.
-              </p>
-              <span className="mt-5 inline-flex items-center gap-2 rounded-md bg-forest px-4 py-2 text-xs font-semibold text-ivory">
-                <Flag className="h-3.5 w-3.5" />
-                Live
-              </span>
-            </div>
-            <div className="rounded-lg bg-[linear-gradient(135deg,#EAE0CE,#B9C8B4)]" />
-          </div>
-          <div className="absolute bottom-6 right-6 w-44 rounded-xl border border-line bg-ivory/95 p-4 shadow-lift">
-            <p className="flex items-center gap-2 text-xs font-semibold text-ink">
-              <BarChart3 className="h-4 w-4 text-forest" />
-              Launch Signals
-            </p>
-            <div className="mt-4 space-y-3">
-              <Metric label="Inquiries" value="+18%" />
-              <Metric label="Key paths checked" value="4/4" />
-              <Metric label="Next fix" value="Queued" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </VisualFrame>
-  );
-}
-
-function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-center justify-between gap-4 text-xs">
-      <span className="text-muted">{label}</span>
-      <span className="font-semibold text-forest">{value}</span>
-    </div>
+    </Reveal>
   );
 }
