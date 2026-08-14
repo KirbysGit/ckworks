@@ -1,0 +1,188 @@
+import type { ReactNode } from "react";
+
+/**
+ * Laptop and phone shells.
+ *
+ * The bezel treatment is lifted from the Web Design hero
+ * (`components/services/web-design/Page.tsx`) so the site keeps one device
+ * language — `docs/design-system.md` asks for established mockups to be reused
+ * rather than near-duplicated. Shell only: pass the screen as children.
+ *
+ * `size` swaps the radii, bezel thickness, and base proportions. "lg" carries
+ * the hero's original values; "sm" is tuned for a device sitting inside a card.
+ * The Web Design hero can adopt these once its entrance choreography is
+ * untangled — its `ck-lift` wrappers already sit outside the frame markup.
+ */
+
+type Size = "sm" | "lg";
+
+const laptopSizing = {
+  sm: {
+    lid: "rounded-t-[1.1rem] p-[5px]",
+    sheen: "inset-[2px] rounded-t-[0.95rem]",
+    screen: "rounded-t-[0.75rem]",
+    divider: "h-[7px]",
+    base: "h-[16px]",
+    baseRadius: "rounded-b-[1rem]",
+    lip: "h-[9px]",
+    notch: "h-[6px] w-[24%] rounded-b-[0.6rem]",
+    foot: "h-[4px] w-7",
+  },
+  lg: {
+    lid: "rounded-t-[1.55rem] p-[7px]",
+    sheen: "inset-[2px] rounded-t-[1.35rem]",
+    screen: "rounded-t-[1.05rem]",
+    divider: "h-[9px]",
+    base: "h-[22px]",
+    baseRadius: "rounded-b-[1.45rem]",
+    lip: "h-[13px]",
+    notch: "h-[9px] w-[27%] rounded-b-[0.85rem]",
+    foot: "h-[5px] w-10",
+  },
+} as const;
+
+export function LaptopFrame({
+  children,
+  size = "sm",
+  className = "",
+}: {
+  children: ReactNode;
+  size?: Size;
+  className?: string;
+}) {
+  const s = laptopSizing[size];
+
+  return (
+    <div className={`relative ${className}`}>
+      <div
+        className={`relative aspect-[16/10] rounded-b-none bg-[linear-gradient(145deg,#050605_0%,#111511_43%,#252B26_52%,#121712_66%,#080A08_100%)] shadow-[0_28px_58px_-28px_rgba(17,23,20,0.82),0_8px_18px_-10px_rgba(17,23,20,0.5)] ${s.lid}`}
+      >
+        <span
+          className={`pointer-events-none absolute rounded-b-none bg-[linear-gradient(165deg,rgba(255,255,255,0.045),transparent_30%,rgba(0,0,0,0.34)_78%)] opacity-45 ${s.sheen}`}
+          aria-hidden
+        />
+        <div
+          className={`relative h-full overflow-hidden rounded-b-none border border-black/25 bg-card shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] ${s.screen}`}
+        >
+          {children}
+        </div>
+      </div>
+
+      {/* Hinge */}
+      <div
+        className={`relative z-10 -mt-px bg-[linear-gradient(180deg,#353C35_0%,#1D241E_42%,#111511_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.11),0_4px_8px_-8px_rgba(0,0,0,0.9)] ${s.divider}`}
+        aria-hidden
+      >
+        <span className="absolute inset-x-[1px] top-px h-px bg-white/10" />
+      </div>
+
+      {/* Base, wider than the lid so the machine sits on a footprint */}
+      <div
+        className={`relative z-20 mx-[-7%] -mt-[3px] shadow-[0_18px_32px_-23px_rgba(17,23,20,0.72)] ${s.base}`}
+        aria-hidden
+      >
+        <span
+          className={`absolute inset-x-0 top-0 h-full bg-[linear-gradient(180deg,#6B766C_0%,#4A554B_46%,#172018_100%)] shadow-[inset_0_2px_3px_rgba(255,255,255,0.08),inset_0_-4px_7px_rgba(0,0,0,0.36)] ${s.baseRadius}`}
+        />
+        <span
+          className={`absolute inset-x-[2.75%] top-0 bg-[linear-gradient(180deg,#A4A99F_0%,#899185_48%,rgba(102,114,104,0)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] [mask-image:linear-gradient(90deg,transparent_0%,black_9%,black_91%,transparent_100%)] ${s.lip}`}
+        />
+        <span className="absolute inset-x-[4%] top-[1px] h-px rounded-full bg-white/28" />
+        <span
+          className={`absolute left-1/2 top-0 -translate-x-1/2 bg-[linear-gradient(180deg,#5B625A_0%,#888A80_56%,#B4B2A8_100%)] shadow-[inset_0_-1px_2px_rgba(255,255,255,0.36),inset_0_2px_3px_rgba(0,0,0,0.22),0_6px_12px_-10px_rgba(0,0,0,0.78)] ${s.notch}`}
+        />
+        <span
+          className={`absolute -bottom-[3px] left-[11%] rounded-b-md bg-[linear-gradient(180deg,#2A2F29,#070807)] shadow-[0_3px_8px_-4px_rgba(0,0,0,0.9)] ${s.foot}`}
+        />
+        <span
+          className={`absolute -bottom-[3px] right-[11%] rounded-b-md bg-[linear-gradient(180deg,#2A2F29,#070807)] shadow-[0_3px_8px_-4px_rgba(0,0,0,0.9)] ${s.foot}`}
+        />
+      </div>
+    </div>
+  );
+}
+
+const phoneSizing = {
+  sm: {
+    outer: "rounded-[1.5rem] p-[1.5px]",
+    sheen: "inset-[1px] rounded-[1.45rem]",
+    button: "top-12 h-7 w-[2px]",
+    inner: "rounded-[1.4rem] p-[3px]",
+    screen: "rounded-[1.15rem]",
+    notch: "h-[12px] w-[38px]",
+    notchRadius: "rounded-b-[5px]",
+    notchCorner: "h-1.5 w-1.5",
+    notchShadowL: "shadow-[6px_0_0_0_#050605] -left-[6px]",
+    notchShadowR: "shadow-[-6px_0_0_0_#050605] -right-[6px]",
+    speaker: "top-[5px] h-[1.5px] w-[14px]",
+  },
+  lg: {
+    outer: "rounded-[2.3rem] p-[2px]",
+    sheen: "inset-[1px] rounded-[2.2rem]",
+    button: "top-24 h-11 w-[3px]",
+    inner: "rounded-[2.15rem] p-[4px]",
+    screen: "rounded-[1.75rem]",
+    notch: "h-[20px] w-[62px]",
+    notchRadius: "rounded-b-[8px]",
+    notchCorner: "h-2 w-2",
+    notchShadowL: "shadow-[8px_0_0_0_#050605] -left-[8px]",
+    notchShadowR: "shadow-[-8px_0_0_0_#050605] -right-[8px]",
+    speaker: "top-[9px] h-[2px] w-[22px]",
+  },
+} as const;
+
+export function PhoneFrame({
+  children,
+  size = "sm",
+  className = "",
+}: {
+  children: ReactNode;
+  size?: Size;
+  className?: string;
+}) {
+  const s = phoneSizing[size];
+
+  return (
+    <div
+      className={`relative bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] shadow-[0_18px_38px_-18px_rgba(17,23,20,0.7),0_6px_14px_-8px_rgba(17,23,20,0.58)] ${s.outer} ${className}`}
+    >
+      <span
+        className={`pointer-events-none absolute bg-[radial-gradient(circle_at_30%_7%,rgba(255,255,255,0.38),transparent_24%),linear-gradient(160deg,rgba(255,255,255,0.16),transparent_35%,rgba(0,0,0,0.42)_74%)] opacity-70 ${s.sheen}`}
+        aria-hidden
+      />
+      <span
+        className={`absolute -right-[2px] rounded-r-full bg-[linear-gradient(180deg,#313630,#090A09)] ${s.button}`}
+        aria-hidden
+      />
+
+      <div
+        className={`relative bg-[linear-gradient(145deg,#030403_0%,#0C0F0C_46%,#252B25_58%,#050605_100%)] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.16),inset_-2px_-2px_4px_rgba(0,0,0,0.82)] ${s.inner}`}
+      >
+        <div
+          className={`relative overflow-hidden bg-card shadow-[inset_0_0_0_1px_rgba(31,36,32,0.05)] ${s.screen}`}
+        >
+          <div
+            className={`pointer-events-none absolute left-1/2 top-[-1px] z-30 -translate-x-1/2 ${s.notch}`}
+            aria-hidden
+          >
+            <div
+              className={`relative h-full w-full bg-[#050605] ${s.notchRadius}`}
+            >
+              <span
+                className={`absolute top-0 rounded-br-lg ${s.notchCorner} ${s.notchShadowL}`}
+              />
+              <span
+                className={`absolute top-0 rounded-bl-lg ${s.notchCorner} ${s.notchShadowR}`}
+              />
+              <span
+                className={`absolute left-1/2 -translate-x-1/2 rounded-full bg-white/16 ${s.speaker}`}
+              />
+            </div>
+          </div>
+
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}

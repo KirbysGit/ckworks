@@ -62,12 +62,16 @@ Verified against the repository on 2026-08-07.
 - **Represents**: an interior design studio
 - **Used in**: `components/services/web-design/Page.tsx`,
   `components/services/support/Page.tsx`, `components/process/StageChain.tsx`,
-  `components/process/PhaseVisuals.tsx`
+  `components/process/BuildPhase.tsx`, `components/process/PhaseVisuals.tsx`
 - **Purpose**: on Web Design, the hero device mockups and the four-stage
   transformation showing an outdated site becoming a launched one. On Ongoing
   Support, the browser preview of a site being actively looked after. On
-  Process, the launched stage of the hero progression and the laptop/phone
-  mockups in the "Design & build" phase.
+  Process, the launched stage of the hero progression and the desktop/mobile
+  mockups in the "Build it out" phase.
+- **Note**: the Process "Build it out" mockup is the artefact a *client* gets,
+  so the screen stays Hearth & Home rather than CK Works — the same asset pair
+  the Web Design hero uses, and it keeps the phase reading as "the site I build
+  for you" instead of "my own site".
 - **Assets**: `public/images/services/png/01-hearth-home-demo.png`,
   `public/images/services/svg/01-hearth-logo-demo.svg`
 - **Labeling**: framed inside a device or browser mockup as a demonstration;
