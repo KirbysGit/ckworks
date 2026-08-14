@@ -61,8 +61,9 @@ export function LaptopFrame({
           className={`pointer-events-none absolute rounded-b-none bg-[linear-gradient(165deg,rgba(255,255,255,0.045),transparent_30%,rgba(0,0,0,0.34)_78%)] opacity-45 ${s.sheen}`}
           aria-hidden
         />
+        {/* Query container so screen content can scale from the lid width. */}
         <div
-          className={`relative h-full overflow-hidden rounded-b-none border border-black/25 bg-card shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] ${s.screen}`}
+          className={`relative h-full overflow-hidden rounded-b-none border border-black/25 bg-card shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] [container-type:inline-size] ${s.screen}`}
         >
           {children}
         </div>
@@ -102,19 +103,23 @@ export function LaptopFrame({
   );
 }
 
+/**
+ * "sm" is sized in container units so a phone dropped into a narrow column
+ * stays a phone — radii, bezel, and notch all track the device width instead
+ * of holding fixed pixels and swamping the screen. "lg" keeps the hero's
+ * original pixel values, where the width is known and generous.
+ */
 const phoneSizing = {
   sm: {
-    outer: "rounded-[1.5rem] p-[1.5px]",
-    sheen: "inset-[1px] rounded-[1.45rem]",
-    button: "top-12 h-7 w-[2px]",
-    inner: "rounded-[1.4rem] p-[3px]",
-    screen: "rounded-[1.15rem]",
-    notch: "h-[12px] w-[38px]",
-    notchRadius: "rounded-b-[5px]",
-    notchCorner: "h-1.5 w-1.5",
-    notchShadowL: "shadow-[6px_0_0_0_#050605] -left-[6px]",
-    notchShadowR: "shadow-[-6px_0_0_0_#050605] -right-[6px]",
-    speaker: "top-[5px] h-[1.5px] w-[14px]",
+    outer: "rounded-[13cqw] p-[1.2cqw]",
+    sheen: "inset-[0.6cqw] rounded-[12.4cqw]",
+    button: "top-[26%] h-[13%] w-[1.6cqw]",
+    inner: "rounded-[12cqw] p-[2.2cqw]",
+    screen: "rounded-[10cqw]",
+    notch: "h-[9cqw] w-[32cqw]",
+    notchRadius: "rounded-b-[3.5cqw]",
+    speaker: "top-[3cqw] h-[1.1cqw] w-[11cqw]",
+    detailedNotch: false,
   },
   lg: {
     outer: "rounded-[2.3rem] p-[2px]",
@@ -124,10 +129,8 @@ const phoneSizing = {
     screen: "rounded-[1.75rem]",
     notch: "h-[20px] w-[62px]",
     notchRadius: "rounded-b-[8px]",
-    notchCorner: "h-2 w-2",
-    notchShadowL: "shadow-[8px_0_0_0_#050605] -left-[8px]",
-    notchShadowR: "shadow-[-8px_0_0_0_#050605] -right-[8px]",
     speaker: "top-[9px] h-[2px] w-[22px]",
+    detailedNotch: true,
   },
 } as const;
 
@@ -143,8 +146,10 @@ export function PhoneFrame({
   const s = phoneSizing[size];
 
   return (
+    // The outer shell is the query container, so every part of the phone —
+    // bezel, radii, notch, and the screen content — scales from one width.
     <div
-      className={`relative bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] shadow-[0_18px_38px_-18px_rgba(17,23,20,0.7),0_6px_14px_-8px_rgba(17,23,20,0.58)] ${s.outer} ${className}`}
+      className={`relative [container-type:inline-size] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] shadow-[0_18px_38px_-18px_rgba(17,23,20,0.7),0_6px_14px_-8px_rgba(17,23,20,0.58)] ${s.outer} ${className}`}
     >
       <span
         className={`pointer-events-none absolute bg-[radial-gradient(circle_at_30%_7%,rgba(255,255,255,0.38),transparent_24%),linear-gradient(160deg,rgba(255,255,255,0.16),transparent_35%,rgba(0,0,0,0.42)_74%)] opacity-70 ${s.sheen}`}
@@ -168,12 +173,14 @@ export function PhoneFrame({
             <div
               className={`relative h-full w-full bg-[#050605] ${s.notchRadius}`}
             >
-              <span
-                className={`absolute top-0 rounded-br-lg ${s.notchCorner} ${s.notchShadowL}`}
-              />
-              <span
-                className={`absolute top-0 rounded-bl-lg ${s.notchCorner} ${s.notchShadowR}`}
-              />
+              {/* The flanking corner curves are drawn with fixed-pixel box
+                  shadows, so they only read correctly at the large size. */}
+              {s.detailedNotch && (
+                <>
+                  <span className="absolute -left-[8px] top-0 h-2 w-2 rounded-br-lg shadow-[8px_0_0_0_#050605]" />
+                  <span className="absolute -right-[8px] top-0 h-2 w-2 rounded-bl-lg shadow-[-8px_0_0_0_#050605]" />
+                </>
+              )}
               <span
                 className={`absolute left-1/2 -translate-x-1/2 rounded-full bg-white/16 ${s.speaker}`}
               />

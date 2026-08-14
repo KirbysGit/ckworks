@@ -22,7 +22,12 @@ import { LaptopFrame, PhoneFrame } from "@/components/ui/DeviceFrame";
  * - Keep the laptop lid at aspect-[16/10]; the frame relies on it
  */
 
-const phoneWidth = "w-[23%] min-w-[3.75rem] max-w-[7rem]";
+/**
+ * Phone column width. Everything inside the phone is sized in container units,
+ * so this single value drives the whole device — bezel, notch, and type all
+ * scale from it and the mockup never squashes.
+ */
+const phoneWidth = "w-[26%] min-w-[4.5rem] max-w-[8.5rem]";
 
 const buildItems = [
   "Real pages",
@@ -83,17 +88,19 @@ export default function BuildPhase() {
           aria-hidden
         >
           <div className="w-full rounded-2xl bg-sand px-4 py-5 sm:px-6 sm:py-6">
-            <div className="flex items-end gap-3 sm:gap-4">
-              <div className="min-w-0 flex-1">
-                <PanelLabel>Desktop</PanelLabel>
-                <LaptopFrame className="mt-3">
-                  <HearthDesktop />
-                </LaptopFrame>
-              </div>
+            {/* The phone overlaps the laptop's bottom-right rather than taking
+                its own column. Side by side, a ~230px panel at phone widths
+                left the phone about 50px wide; overlapping lets the laptop use
+                the full panel and still leaves the phone a readable size. */}
+            <div className="relative pr-[19%]">
+              <PanelLabel>Desktop</PanelLabel>
+              <LaptopFrame className="mt-2.5">
+                <HearthDesktop />
+              </LaptopFrame>
 
-              <div className={`${phoneWidth} shrink-0`}>
+              <div className={`absolute bottom-0 right-0 ${phoneWidth}`}>
                 <PanelLabel>Mobile</PanelLabel>
-                <PhoneFrame className="mt-3">
+                <PhoneFrame className="mt-2.5">
                   <HearthMobile />
                 </PhoneFrame>
               </div>
@@ -135,35 +142,38 @@ function PanelLabel({ children }: { children: string }) {
   );
 }
 
-/** Desktop screen: browser chrome, site nav, then a split hero. */
+/**
+ * Desktop screen: browser chrome, site nav, then a split hero.
+ *
+ * Sized in `cqw` against the lid, so the whole page scales as one piece.
+ * Fixed rem type here meant a 16.8px headline sat correctly in a 430px lid and
+ * then swamped a 145px one at phone widths.
+ */
 function HearthDesktop() {
   return (
     <div className="flex h-full flex-col bg-card">
-      <div className="flex shrink-0 items-center gap-1 border-b border-line/80 px-2 py-1.5">
+      <div className="flex shrink-0 items-center gap-[1.2cqw] border-b border-line/80 px-[2cqw] py-[1.4cqw]">
         {["#C87264", "#D8A847", "#5F9C69"].map((tone) => (
           <span
             key={tone}
-            className="h-1.5 w-1.5 rounded-full"
+            className="aspect-square w-[1.4cqw] rounded-full"
             style={{ backgroundColor: tone }}
           />
         ))}
       </div>
 
-      <div className="flex shrink-0 items-center gap-1.5 border-b border-line/70 px-3 py-2">
+      <div className="flex shrink-0 items-center gap-[1.4cqw] border-b border-line/70 px-[3cqw] py-[2cqw]">
         <Image
           src={hearth.logo}
           alt=""
           width={14}
           height={14}
-          className="h-3 w-3 shrink-0 object-contain"
+          className="aspect-square w-[3cqw] shrink-0 object-contain"
         />
-        <span className="font-serif text-[0.6rem] font-semibold tracking-[0.01em] text-ink">
+        <span className="font-serif text-[3cqw] font-semibold tracking-[0.01em] text-ink">
           Hearth &amp; Home
         </span>
-        {/* Hidden at phone widths, where the lid is too narrow to hold four
-            items without pushing past the card — same call as the Web Design
-            hero's chrome nav. */}
-        <span className="ml-auto hidden items-center gap-3 text-[0.42rem] font-semibold uppercase tracking-[0.12em] text-ink/60 sm:flex">
+        <span className="ml-auto flex items-center gap-[3cqw] text-[1.9cqw] font-semibold uppercase tracking-[0.12em] text-ink/60">
           {["Services", "Projects", "About", "Contact"].map((item) => (
             <span key={item}>{item}</span>
           ))}
@@ -171,17 +181,17 @@ function HearthDesktop() {
       </div>
 
       <div className="grid min-h-0 flex-1 grid-cols-[0.54fr_0.46fr]">
-        <div className="flex flex-col justify-center px-4 py-3">
-          <p className="font-serif text-[1.05rem] font-medium leading-[1.05] tracking-[-0.01em] text-ink">
+        <div className="flex flex-col justify-center px-[4cqw] py-[3cqw]">
+          <p className="font-serif text-[5.2cqw] font-medium leading-[1.05] tracking-[-0.01em] text-ink">
             Thoughtful spaces,
             <br />
             built around you.
           </p>
-          <p className="mt-2 text-[0.42rem] leading-[1.5] text-muted">
+          <p className="mt-[2cqw] text-[2cqw] leading-[1.5] text-muted">
             Interior design for calm, considered homes that work the way you
             live.
           </p>
-          <span className="mt-3 inline-flex w-fit rounded bg-forest px-2.5 py-1.5 text-[0.4rem] font-semibold uppercase tracking-[0.14em] text-ivory">
+          <span className="mt-[3cqw] inline-flex w-fit rounded-[0.8cqw] bg-forest px-[2.6cqw] py-[1.5cqw] text-[1.9cqw] font-semibold uppercase tracking-[0.14em] text-ivory">
             View our work
           </span>
         </div>
@@ -202,46 +212,53 @@ function HearthDesktop() {
   );
 }
 
-/** Mobile screen: the same page recomposed, not the desktop shot cropped. */
+/**
+ * Mobile screen: the same page recomposed, not the desktop shot cropped.
+ *
+ * `aspect-[9/18.5]` is what stops the squashing — height used to come from a
+ * fixed `min-h`, so as the column narrowed the screen kept its height and the
+ * device turned into a squat rectangle (0.63 aspect against a real phone's
+ * ~0.47). Everything inside is `cqw`, so it tracks the device at any width.
+ */
 function HearthMobile() {
   return (
-    <div className="flex min-h-[10.5rem] flex-col bg-card">
-      <div className="flex shrink-0 items-center gap-1 px-2 pb-1.5 pt-[13px]">
+    <div className="flex aspect-[9/18.5] w-full flex-col bg-card">
+      <div className="flex shrink-0 items-center gap-[2.5cqw] px-[6cqw] pb-[3cqw] pt-[11cqw]">
         <Image
           src={hearth.logo}
           alt=""
-          width={10}
-          height={10}
-          className="h-2 w-2 shrink-0 object-contain"
+          width={12}
+          height={12}
+          className="aspect-square w-[7cqw] shrink-0 object-contain"
         />
-        <span className="truncate font-serif text-[0.38rem] font-semibold text-ink">
+        <span className="truncate font-serif text-[6.4cqw] font-semibold leading-none text-ink">
           Hearth &amp; Home
         </span>
-        <span className="ml-auto space-y-[1.5px]" aria-hidden>
-          <span className="block h-px w-2 bg-ink/70" />
-          <span className="block h-px w-2 bg-ink/70" />
-          <span className="block h-px w-2 bg-ink/70" />
+        <span className="ml-auto flex shrink-0 flex-col gap-[1.4cqw]" aria-hidden>
+          <span className="block h-[0.9cqw] w-[6cqw] bg-ink/70" />
+          <span className="block h-[0.9cqw] w-[6cqw] bg-ink/70" />
+          <span className="block h-[0.9cqw] w-[6cqw] bg-ink/70" />
         </span>
       </div>
 
-      <div className="px-2 pb-2">
-        <p className="font-serif text-[0.52rem] font-medium leading-[1.12] text-ink">
+      <div className="px-[6cqw] pb-[4cqw]">
+        <p className="font-serif text-[9.6cqw] font-medium leading-[1.1] text-ink">
           Thoughtful spaces, built around you.
         </p>
-        <p className="mt-1 text-[0.3rem] leading-[1.5] text-muted">
+        <p className="mt-[3cqw] text-[5cqw] leading-[1.45] text-muted">
           Interior design for calm, considered homes.
         </p>
-        <span className="mt-1.5 inline-flex rounded bg-forest px-1.5 py-[3px] text-[0.28rem] font-semibold uppercase tracking-[0.12em] text-ivory">
+        <span className="mt-[4cqw] inline-flex rounded-[1.8cqw] bg-forest px-[4cqw] py-[2cqw] text-[4.4cqw] font-semibold uppercase tracking-[0.1em] text-ivory">
           View our work
         </span>
       </div>
 
-      <div className="relative mt-auto h-[3.75rem] shrink-0 overflow-hidden">
+      <div className="relative mt-auto min-h-0 w-full flex-1 overflow-hidden">
         <Image
           src={hearth.photo}
           alt=""
           fill
-          sizes="160px"
+          sizes="180px"
           className="object-cover"
         />
       </div>
