@@ -346,6 +346,21 @@
     animation-delay: var(--ck-anim-delay);
   }
 
+  /*
+   * Reveal-aware because a launch/result beat is almost always below the fold.
+   * The held state is the `opacity: 0` the base class already declares, and the
+   * reduced-motion reset at the bottom of this file already forces
+   * `opacity: 1` on any `.ck-resolve`, so both contracts are satisfied.
+   */
+  .ck-reveal .ck-resolve {
+    animation: none;
+  }
+
+  .ck-reveal.is-in .ck-resolve {
+    animation: ck-resolve 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--ck-anim-delay);
+  }
+
   /* One item in a sequence — icons and labels along a flow. */
   .ck-step {
     --ck-anim-delay: 0ms;
