@@ -21,6 +21,7 @@ components/contact/     Contact form and contact-channel helpers
 components/projects/    Project cards and case-study page instrumentation
 components/analytics/   Small client-side analytics view events
 components/page/        Reusable public-page sections and SEO-adjacent pieces
+components/process/     Process-page hero chain and the four phase bands
 components/ui/          Small reusable visual primitives
 lib/                    Content data, SEO helpers, navigation, motion, analytics
 public/images/          Versioned production assets organized by feature
@@ -49,7 +50,16 @@ the five top-level page experiences live there and
 | `components/projects/` | Portfolio cards and project-view instrumentation | Project facts, which stay in `lib/projects.ts` |
 | `components/analytics/` | Small client event emitters | GTM configuration or analytics event names, which stay in `lib/analytics.ts` |
 | `components/page/` | Repeatable public-page sections | Feature-specific visual systems |
+| `components/process/` | The `/process` hero chain and one file per phase band | Phase copy that belongs to the route, or device shells, which live in `components/ui/` |
 | `components/ui/` | Compact visual primitives with broad reuse | Feature-specific copy, layout, or data |
+
+`components/process/` is the worked example of the extraction rule below: each
+phase band is its own file (`GetClearPhase`, `ShapeDirectionPhase`,
+`BuildPhase`, `LaunchImprovePhase`) because each owns a distinct artefact, and
+`app/process/page.tsx` keeps only the route shell, hero copy, and band order.
+`PhaseVisuals.tsx` is the leftover from the earlier shared-visual approach and
+is now mostly dead — only `LaunchVisual` is still imported. Delete the unused
+exports once phase four stops depending on it.
 
 ## Route Responsibilities
 
@@ -71,6 +81,7 @@ Use `components/ui/` for compact primitives with broad reuse. Current contents:
 
 - `Button`
 - `Card`
+- `DeviceFrame`
 - `DrawUnderline`
 - `Logo`
 - `Reveal`
@@ -78,6 +89,14 @@ Use `components/ui/` for compact primitives with broad reuse. Current contents:
 - `SectionLabel`
 
 Keep these focused. They should not know page copy or service-specific data.
+
+`DeviceFrame` exports `LaptopFrame` and `PhoneFrame` — bezel shells only, with
+the screen passed as children. It carries the Web Design hero's original
+treatment as `size="lg"` and a `size="sm"` tuned for a device inside a card.
+The small variant sizes its radii, bezel, and notch in container units, so a
+device stays in proportion at any column width. Reach for this before drawing
+another laptop or phone; the Web Design hero still has its own inline copy and
+should adopt this when that page is next touched.
 
 ### Shared Page Sections
 
@@ -136,9 +155,12 @@ Use a subfolder only when it gives the filename context. Inside
 
 The `Page.tsx` files are the first extraction boundary, not the final desired
 size. Split a local page by its visible bands and visual systems when working
-in that service: `Hero.tsx`, `Transformation.tsx`, `Faq.tsx`, or
-`visuals/DevicePreview.tsx` are good next moves. Do not extract a file merely
-to satisfy a directory diagram.
+in that service: `Hero.tsx`, `Transformation.tsx`, and `Faq.tsx` are good next
+moves. Do not extract a file merely to satisfy a directory diagram.
+
+The device-preview extraction this section used to suggest now exists as
+`components/ui/DeviceFrame.tsx`. Use it rather than adding another local
+laptop or phone.
 
 ## Service Page Modularization Plan
 

@@ -77,11 +77,35 @@ components, and do not "fix" it as a side effect of unrelated work.
 - Keep production assets in `public/images/<feature>/<type>/`.
 - Use actual product, project, or client-relevant visuals instead of generic
   stock imagery when an image represents real work.
-- Reuse established mockups before creating a near-duplicate. The homepage phone
-  frame is the visual reference for phones elsewhere on the site.
+- Reuse established mockups before creating a near-duplicate. Laptop and phone
+  shells live in `components/ui/DeviceFrame.tsx`; reach for those first. The
+  homepage phone frame remains the visual reference the shells are drawn from.
 - Browser frames, phones, and laptops need physical logic: sensible aspect
   ratios, clear edge layering, restrained highlights, and no clipped status UI.
 - Demo content should be visibly illustrative when it is not a client project.
+
+### Sizing A Mockup
+
+Two failures show up repeatedly. Both are silent — the page looks fine at the
+width you designed at and degrades somewhere else.
+
+**Give a device its aspect ratio, never a fixed height.** A phone whose height
+comes from `min-h` keeps that height as its column narrows and flattens into a
+squat rectangle. Set `aspect-[9/18.5]` on the screen and let width drive it.
+
+**Size the contents in container units, not `rem`.** A mockup is a whole page
+shrunk into a frame, so its type has to scale with the frame. Mark the screen
+`[container-type:inline-size]` and size type, padding, and radii in `cqw`. Fixed
+type that reads correctly in a 430px lid will swamp the same lid at 145px. This
+also applies to frame details: the phone notch's flanking corner curves are
+drawn with fixed-pixel box shadows, so `DeviceFrame` omits them at `size="sm"`.
+
+**A third trap, on `next/image` `sizes`.** When `object-cover` puts a landscape
+source into a cell taller than it is wide, the image is scaled to cover the
+*height*. `sizes` must describe the source width that requires, not the cell's
+own width — otherwise the browser picks a variant that lands visibly upscaled.
+Verify by comparing `naturalWidth` against the rendered box rather than trusting
+the number.
 
 ## Responsive Behavior
 
