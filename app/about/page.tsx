@@ -4,9 +4,7 @@ import Link from "next/link";
 import {
   ArrowRight,
   BarChart3,
-  Building2,
   Code2,
-  MessageCircle,
   Monitor,
   Pencil,
   Settings,
@@ -16,27 +14,15 @@ import {
   UsersRound,
 } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
+import AboutHero from "@/components/about/AboutHero";
+import CreativeTechnicalSplit from "@/components/about/CreativeTechnicalSplit";
+import WhySection from "@/components/about/WhySection";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 
 const aboutDescription =
   "CK Works is a small digital studio led by Colin Kirby, combining design, software development, and systems thinking to build clearer websites and practical digital tools for growing businesses.";
-
-const beliefSteps = [
-  {
-    label: "Your business",
-    icon: Building2,
-  },
-  {
-    label: "Clear communication",
-    icon: MessageCircle,
-  },
-  {
-    label: "Stronger relationships",
-    icon: UserRound,
-  },
-];
 
 const studioCapabilities = [
   {
@@ -135,176 +121,12 @@ export default function AboutPage() {
 
       <AboutHero />
       <WhySection />
+      <CreativeTechnicalSplit />
       <FounderStudioSection />
       <AudienceSection />
       <SelectedWorkSection />
       <AboutClosingCTA />
     </SiteLayout>
-  );
-}
-
-function AboutHero() {
-  return (
-    <section className="overflow-hidden border-b border-line/70 bg-ivory py-12 sm:py-16 lg:py-20">
-      <div className="container-ck grid items-center gap-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(34rem,1fr)]">
-        <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-            About CK Works
-          </p>
-          <h1 className="mt-6 font-serif text-[3.25rem] font-medium leading-[1.02] text-ink sm:text-6xl lg:text-7xl">
-            A small studio for thoughtful digital work.
-          </h1>
-          <p className="mt-6 text-base leading-8 text-muted sm:text-lg">
-            CK Works is led by Colin Kirby and combines design, software
-            development, and systems thinking to build clearer websites and
-            practical digital tools for growing businesses.
-          </p>
-        </div>
-
-        <StudioDeskVisual />
-      </div>
-    </section>
-  );
-}
-
-function StudioDeskVisual() {
-  return (
-    <div className="relative mx-auto min-h-[25rem] w-full max-w-[46rem]">
-      <div className="absolute bottom-0 left-0 right-0 h-14 rounded-t-[3rem] border-t border-line bg-[linear-gradient(180deg,#EFE8DA,#D9CBB8)] shadow-[0_-18px_50px_-35px_rgba(31,36,32,0.45)]" />
-
-      <div className="absolute bottom-12 right-0 hidden h-72 w-24 sm:block">
-        <div className="absolute bottom-0 left-8 h-24 w-12 rounded-b-full rounded-t-lg border border-line bg-[#E4D8C7] shadow-soft" />
-        <div className="absolute bottom-20 left-[3.7rem] h-32 w-px rotate-[-6deg] bg-forest/50" />
-        {[0, 1, 2, 3, 4, 5].map((leaf) => (
-          <span
-            key={leaf}
-            className="absolute h-9 w-4 rounded-full bg-forest/65"
-            style={{
-              bottom: `${8.7 + leaf * 1.55}rem`,
-              left: `${leaf % 2 === 0 ? 3.3 : 4.35}rem`,
-              transform: `rotate(${leaf % 2 === 0 ? -38 : 38}deg)`,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="absolute left-5 top-8 z-10 hidden rotate-[-7deg] rounded-lg border border-line bg-card p-4 shadow-lift sm:block">
-        <div className="grid grid-cols-2 gap-3 text-[9px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-          <span className="rounded border border-line px-3 py-2 text-center">
-            Plan
-          </span>
-          <span className="rounded border border-line px-3 py-2 text-center">
-            Build
-          </span>
-          <span className="col-span-2 mx-auto rounded border border-line px-3 py-2 text-center">
-            Improve
-          </span>
-        </div>
-        <svg
-          viewBox="0 0 150 82"
-          className="absolute inset-x-4 top-8 h-20 text-forest/55"
-          fill="none"
-        >
-          <path
-            d="M45 18C62 5 89 5 106 18M105 18l-8-1M105 18l-1-8M105 63C88 77 61 77 44 63M44 63l8 1M44 63l1 8"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeDasharray="4 5"
-          />
-        </svg>
-      </div>
-
-      <div className="absolute bottom-20 left-12 z-20 hidden w-32 rotate-[2deg] rounded-md border border-line bg-[#F6EEDC] px-5 py-4 shadow-soft sm:block">
-        <p className="font-serif text-base leading-7 text-ink">
-          Focus
-          <br />
-          Clarity
-          <br />
-          Useful tools
-        </p>
-        <span className="absolute -top-2 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-[#C6A16F] shadow-soft" />
-      </div>
-
-      <div className="absolute bottom-[4.7rem] right-24 w-[64%] min-w-[20rem] max-w-[29rem]">
-        <div className="rounded-t-2xl bg-panel p-3 shadow-float">
-          <div className="aspect-[16/9] overflow-hidden rounded-sm bg-card">
-            <div className="flex items-center justify-between border-b border-line px-4 py-3">
-              <p className="font-serif text-sm uppercase tracking-[0.08em] text-ink">
-                CK Works
-              </p>
-              <div className="hidden gap-5 text-[10px] font-semibold text-ink/70 sm:flex">
-                <span>Work</span>
-                <span>Services</span>
-                <span>Process</span>
-                <span>About</span>
-              </div>
-            </div>
-            <div className="grid h-[calc(100%-2.75rem)] grid-cols-[1fr_0.85fr] gap-5 p-7">
-              <div>
-                <p className="font-serif text-3xl leading-none text-ink">
-                  Better systems.
-                  <br />
-                  Clearer growth.
-                </p>
-                <p className="mt-4 text-[11px] leading-5 text-muted">
-                  Practical tools and websites that help your business move
-                  forward.
-                </p>
-                <span className="mt-5 inline-flex rounded bg-forest px-4 py-2 text-[10px] font-semibold text-ivory">
-                  Start a project
-                </span>
-              </div>
-              <div className="rounded bg-[linear-gradient(135deg,#EFECE3,#BEB7A7)] p-5">
-                <div className="ml-auto mt-6 h-24 w-20 bg-card shadow-[22px_-26px_0_-12px_rgba(31,36,32,0.16),-36px_18px_0_-18px_rgba(47,91,63,0.18)]" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="mx-auto h-12 w-20 bg-[linear-gradient(180deg,#D5D1C8,#BDB7AA)]" />
-        <div className="mx-auto h-4 w-40 rounded-t-full bg-[linear-gradient(180deg,#CFC8BB,#AFA798)]" />
-      </div>
-    </div>
-  );
-}
-
-function WhySection() {
-  return (
-    <section className="border-b border-line/70 bg-card/30 py-10 lg:py-12">
-      <div className="container-ck grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(34rem,1fr)]">
-        <div className="max-w-xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-            Why CK Works Exists
-          </p>
-          <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl">
-            Good businesses deserve digital experiences that communicate clearly
-            and work reliably.
-          </h2>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center">
-          {beliefSteps.map(({ label, icon: Icon }, index) => (
-            <div key={label} className="contents">
-              <div
-                className="flex flex-col items-center text-center text-sm font-medium text-ink"
-              >
-                <span className="flex h-20 w-20 items-center justify-center rounded-full border border-line bg-ivory text-forest shadow-soft">
-                  <Icon className="h-8 w-8" strokeWidth={1.4} />
-                </span>
-                <span className="mt-4">{label}</span>
-              </div>
-              {index < beliefSteps.length - 1 && (
-                <ArrowRight
-                  className="mx-auto hidden h-5 w-5 text-muted/70 sm:block"
-                  strokeWidth={1.5}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 

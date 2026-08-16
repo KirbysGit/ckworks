@@ -10,7 +10,6 @@ import SchemaMarkup from "@/components/page/SchemaMarkup";
 import Reveal from "@/components/ui/Reveal";
 import SectionLabel from "@/components/ui/SectionLabel";
 import BuildPhase from "@/components/process/BuildPhase";
-import CreativeTechnicalSplit from "@/components/process/CreativeTechnicalSplit";
 import GetClearPhase from "@/components/process/GetClearPhase";
 import LaunchImprovePhase from "@/components/process/LaunchImprovePhase";
 import ShapeDirectionPhase from "@/components/process/ShapeDirectionPhase";
@@ -175,8 +174,6 @@ export default function ProcessPage() {
           </div>
         </div>
       </section>
-
-      <CreativeTechnicalSplit />
 
       <section className="bg-ivory py-14 lg:py-20">
         <div className="container-ck">

@@ -1,181 +1,142 @@
-import type { ReactNode } from "react";
 import Image from "next/image";
-import { Check } from "lucide-react";
+import { Menu } from "lucide-react";
 
 /**
- * The four illustrations beside the process phases.
- *
- * Deliberately restrained. `docs/design-system.md` warns against decorative
- * cards and card-inside-card compositions, so each of these is a single framed
- * surface sitting directly on the page band — no outer wrapper, no props
- * (paperclips, tape, stacked sheets), and no colour outside the tokens.
- *
- * 02 and 03 share one `BrowserFrame`: the same window holding a wireframe and
- * then a finished site is the rough-to-clean story told properly, and it keeps
- * the section from inventing a second device language. The near-black device
- * bezel used earlier is gone — `panel` is reserved for one use site-wide.
- *
- * These sit below the fold inside a `Reveal` (see `PhaseSection`), so they are
- * static: a `ck-*` primitive nested in a `Reveal` runs and finishes while the
- * section is still off-screen.
- *
- * Stage 03 uses the Hearth & Home demo registered for this page in
- * `docs/demo-registry.md`; the browser frame is its illustrative marker.
+ * Owns the device illustration used by Process phase three. Phases one, two,
+ * and four each own their complete card composition.
  */
 
-const briefRows = [
-  "Business goals",
-  "Target audience",
-  "Current site review",
-  "Top priorities",
-  "Success metrics",
-] as const;
+const hearth = {
+  logo: "/images/services/svg/01-hearth-logo-demo.svg",
+  photo: "/images/services/png/01-hearth-home-demo.png",
+} as const;
 
-const sitemapPages = ["About", "Services", "Work", "Contact"] as const;
-
-const launchChecklist = [
-  "Cross-browser testing",
-  "Mobile responsiveness",
-  "Performance checks",
-  "SEO basics",
-  "Forms & integrations",
-  "Analytics & tracking",
-  "Final review",
-] as const;
-
-/** Shared surface. Matches `components/ui/Card` without the extra nesting. */
-function Surface({ children }: { children: ReactNode }) {
-  return (
-    <div
-      className="overflow-hidden rounded-2xl border border-line bg-card shadow-soft"
-      aria-hidden
-    >
-      {children}
-    </div>
-  );
-}
-
-/** Neutral window chrome. No traffic-light colours — they sit outside the palette. */
-function BrowserFrame({ children }: { children: ReactNode }) {
-  return (
-    <Surface>
-      <div className="flex items-center gap-1.5 border-b border-line px-4 py-3">
-        {[0, 1, 2].map((dot) => (
-          <span key={dot} className="h-1.5 w-1.5 rounded-full bg-line" />
-        ))}
-        <span className="ml-2 h-1.5 w-24 rounded-full bg-line/60" />
-      </div>
-      {children}
-    </Surface>
-  );
-}
-
-function CheckRow({ label, rule = false }: { label: string; rule?: boolean }) {
-  return (
-    <div className="flex items-center gap-3">
-      <Check className="h-3.5 w-3.5 shrink-0 text-forest" strokeWidth={2.5} />
-      <span className="whitespace-nowrap text-sm text-ink/85">{label}</span>
-      {rule && <span className="h-px flex-1 bg-line" />}
-    </div>
-  );
-}
-
-/** 01 — the brief: what we need to know before anything gets designed. */
-export function BriefVisual() {
-  return (
-    <Surface>
-      <div className="px-6 py-7 sm:px-8 sm:py-9">
-        <p className="border-b border-line pb-4 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-muted">
-          Project Brief
-        </p>
-        <div className="mt-6 space-y-4">
-          {briefRows.map((row) => (
-            <CheckRow key={row} label={row} rule />
-          ))}
-        </div>
-      </div>
-    </Surface>
-  );
-}
-
-/** 02 — the same content, now with a shape: one page tree, one plan. */
-export function SitemapVisual() {
-  return (
-    <BrowserFrame>
-      <div className="flex flex-col items-center px-5 py-8 sm:px-8">
-        <span className="rounded-md border border-forest/30 bg-forest-soft/60 px-6 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-forest">
-          Home
-        </span>
-
-        {/* Trunk, then a rail spanning the outer children, then one drop each. */}
-        <span className="h-6 w-px bg-line" />
-        <span className="h-px w-[75%] bg-line" />
-
-        <div className="grid w-full grid-cols-4 gap-2 sm:gap-4">
-          {sitemapPages.map((page) => (
-            <div key={page} className="flex flex-col items-center">
-              <span className="h-6 w-px bg-line" />
-              <span className="w-full truncate rounded border border-line px-1 py-2 text-center text-[0.6rem] font-medium uppercase tracking-[0.08em] text-muted">
-                {page}
-              </span>
-              <div className="mt-3 w-full space-y-2">
-                <span className="block h-px w-full bg-line" />
-                <span className="block h-px w-4/5 bg-line" />
-                <span className="block h-px w-3/5 bg-line" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </BrowserFrame>
-  );
-}
-
-/** 03 — design and build: the plan becomes a real, responsive interface. */
+/** Shows the build result in a laptop and phone pair. */
 export function BuildVisual() {
   return (
-    <BrowserFrame>
-      <div className="relative aspect-[16/10]">
-        <Image
-          src="/images/services/png/01-hearth-home-demo.png"
-          alt=""
-          fill
-          sizes="(min-width: 1024px) 780px, 92vw"
-          className="object-cover object-top"
-        />
-      </div>
-    </BrowserFrame>
-  );
-}
-
-/** 04 — launch: what gets checked, and the moment it goes live. */
-export function LaunchVisual() {
-  return (
-    <Surface>
-      <div className="grid sm:grid-cols-[1.4fr_1fr]">
-        <div className="px-6 py-7 sm:px-8 sm:py-9">
-          <p className="border-b border-line pb-4 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-muted">
-            Launch Checklist
-          </p>
-          <div className="mt-6 space-y-3.5">
-            {launchChecklist.map((item) => (
-              <CheckRow key={item} label={item} />
-            ))}
+    <div className="relative pr-[15%]" aria-hidden>
+      <div className="relative">
+        <div className="rounded-t-xl bg-[linear-gradient(150deg,#2C332D_0%,#171D18_55%,#0B0E0B_100%)] p-[6px] shadow-[0_26px_46px_-30px_rgba(17,23,20,0.78)]">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-[0.35rem] bg-card">
+            <HearthDesktop />
           </div>
         </div>
-
-        <div className="flex flex-col items-center justify-center gap-3 border-t border-line px-6 py-8 text-center sm:border-l sm:border-t-0">
-          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-forest/40 text-forest">
-            <Check className="h-6 w-6" strokeWidth={1.75} />
-          </span>
-          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-ink">
-            Live
-          </p>
-          <p className="max-w-[9rem] text-xs leading-5 text-muted">
-            Your site is live and ready.
-          </p>
+        <div className="relative mx-[-5%] h-[13px] rounded-b-xl bg-[linear-gradient(180deg,#69746A_0%,#414B42_45%,#1B211C_100%)] shadow-[0_14px_22px_-16px_rgba(17,23,20,0.8)]">
+          <span className="absolute left-1/2 top-0 h-[5px] w-[15%] -translate-x-1/2 rounded-b-md bg-black/25" />
         </div>
       </div>
-    </Surface>
+
+      <div className="absolute bottom-0 right-0 w-[27%] min-w-[5.5rem] max-w-[8.5rem]">
+        <div className="rounded-[1.35rem] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_100%)] p-[2px] shadow-[0_18px_32px_-16px_rgba(17,23,20,0.72)]">
+          <div className="rounded-[1.25rem] bg-[linear-gradient(145deg,#030403_0%,#0C0F0C_45%,#272D27_58%,#050605_100%)] p-[3px]">
+            <div className="relative overflow-hidden rounded-[1.05rem] bg-card">
+              <span
+                className="pointer-events-none absolute left-1/2 top-[-4px] z-20 h-[11px] w-[38%] -translate-x-1/2 rounded-b-[6px] bg-[#050605]"
+                aria-hidden
+              />
+              <HearthMobile />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
+
+function HearthDesktop() {
+  return (
+    <div className="flex h-full flex-col">
+      <div className="flex shrink-0 items-center gap-1.5 border-b border-line px-3 py-2">
+        <Image
+          src={hearth.logo}
+          alt=""
+          width={14}
+          height={14}
+          className="h-3.5 w-3.5 shrink-0 object-contain"
+        />
+        <span className="font-serif text-[0.62rem] font-semibold text-ink">
+          Hearth &amp; Home
+        </span>
+        <span className="ml-auto flex items-center gap-2.5 text-[0.46rem] font-semibold text-ink/55">
+          {["Services", "Projects", "About"].map((item) => (
+            <span key={item}>{item}</span>
+          ))}
+        </span>
+      </div>
+
+      <div className="grid min-h-0 flex-1 grid-cols-[0.5fr_0.5fr]">
+        <div className="flex flex-col justify-center bg-[#243028] px-3 py-2 text-ivory">
+          <p className="font-serif text-[0.82rem] font-medium leading-[1.08]">
+            Thoughtful spaces, built around you.
+          </p>
+          <p className="mt-1 text-[0.46rem] leading-[1.35] text-ivory/78">
+            Interior design for calm, considered homes.
+          </p>
+          <span className="mt-2 inline-flex w-fit rounded bg-[#174A31] px-2 py-1 text-[0.44rem] font-semibold text-ivory">
+            View our work
+          </span>
+        </div>
+        <div className="relative min-h-0 overflow-hidden">
+          <Image
+            src={hearth.photo}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 560px, 60vw"
+            className="object-cover"
+          />
+        </div>
+      </div>
+
+      <div className="grid shrink-0 grid-cols-3 divide-x divide-line border-t border-line bg-[#FAF8F4]">
+        {["Warm spaces", "Refined detail", "Easy inquiry"].map((label) => (
+          <span
+            key={label}
+            className="px-0.5 py-1.5 text-center text-[0.42rem] font-semibold leading-tight text-ink/75"
+          >
+            {label}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HearthMobile() {
+  return (
+    <div className="flex min-h-[11rem] flex-col">
+      <div className="flex shrink-0 items-center gap-1 px-2 pb-1 pt-3">
+        <Image
+          src={hearth.logo}
+          alt=""
+          width={10}
+          height={10}
+          className="h-2.5 w-2.5 shrink-0 object-contain"
+        />
+        <span className="truncate font-serif text-[0.42rem] font-semibold text-ink">
+          Hearth &amp; Home
+        </span>
+        <Menu className="ml-auto h-2 w-2 shrink-0 text-muted" />
+      </div>
+
+      <div className="bg-[#243028] px-2 py-2 text-ivory">
+        <p className="font-serif text-[0.52rem] font-medium leading-[1.1]">
+          Thoughtful spaces, built around you.
+        </p>
+        <span className="mt-1.5 inline-flex rounded bg-[#174A31] px-1.5 py-0.5 text-[0.36rem] font-semibold text-ivory">
+          View our work
+        </span>
+      </div>
+
+      <div className="relative h-[4.5rem] shrink-0 overflow-hidden">
+        <Image
+          src={hearth.photo}
+          alt=""
+          fill
+          sizes="160px"
+          className="object-cover"
+        />
+      </div>
+    </div>
+  );
+}
+

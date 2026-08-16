@@ -4,8 +4,13 @@ import Reveal from "@/components/ui/Reveal";
 import { animDelay } from "@/lib/motion";
 
 /**
- * "Creative + technical split" band for /process: a Venn whose overlap is the
- * point of the section.
+ * "Creative + technical split" band for /about, sitting under `WhySection`:
+ * a Venn whose overlap is the point of the section.
+ *
+ * Shell matches the About page bands — `border-b`, `py-12 lg:py-16`, and the
+ * same heading scale as `WhySection`. Note the rest of the page below the fold
+ * is static; this section keeps the `Reveal` the design system asks for on
+ * below-the-fold content.
  *
  * The diagram is one SVG behind a three-column grid, both driven by the same
  * geometry below, so the tinted lens and the middle text column can never
@@ -91,14 +96,14 @@ const stackDelay = (index: number) =>
 
 export default function CreativeTechnicalSplit() {
   return (
-    <section className="border-t border-line/70 bg-ivory py-14 lg:py-20">
+    <section className="border-b border-line/70 bg-ivory py-12 lg:py-16">
       <div className="container-ck">
         <Reveal>
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
               Creative + Technical Split
             </p>
-            <h2 className="mt-5 font-serif text-[2.35rem] font-medium leading-[1.08] tracking-[-0.02em] text-ink sm:text-[2.75rem] lg:text-[3.15rem]">
+            <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl lg:text-[3.35rem]">
               I do both sides of the work.
             </h2>
           </div>
