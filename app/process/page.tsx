@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, CircleDot } from "lucide-react";
+import { ArrowRight, FileText, Pencil, Rocket, Settings2 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
-import ContactCTA from "@/components/page/ContactCTA";
+import WhatsAppContactLink from "@/components/contact/WhatsAppContactLink";
+import FAQSection from "@/components/page/FAQSection";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import Reveal from "@/components/ui/Reveal";
 import SectionLabel from "@/components/ui/SectionLabel";
+import BuildPhase from "@/components/process/BuildPhase";
+import CreativeTechnicalSplit from "@/components/process/CreativeTechnicalSplit";
+import GetClearPhase from "@/components/process/GetClearPhase";
+import LaunchImprovePhase from "@/components/process/LaunchImprovePhase";
+import ShapeDirectionPhase from "@/components/process/ShapeDirectionPhase";
 import StageChain from "@/components/process/StageChain";
-import {
-  BriefVisual,
-  BuildVisual,
-  LaunchVisual,
-  SitemapVisual,
-} from "@/components/process/PhaseVisuals";
 import { getCaseStudy } from "@/lib/projects";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
 
@@ -26,49 +26,6 @@ export const metadata: Metadata = createPageMetadata({
   description: processDescription,
   path: "/process",
 });
-
-type Phase = {
-  number: string;
-  title: string;
-  body: string;
-  outcome: string;
-  visual: ReactNode;
-};
-
-const phases: Phase[] = [
-  {
-    number: "01",
-    title: "Discovery & clarity",
-    body:
-      "We learn how the business works, what needs to improve, and what the project needs to accomplish. The goal is to turn a loose idea into a clear direction before design or development starts.",
-    outcome: "goals, priorities, and project direction",
-    visual: <BriefVisual />,
-  },
-  {
-    number: "02",
-    title: "Structure & direction",
-    body:
-      "We shape the pages, user paths, content priorities, and system requirements around the real goal. This gives the project a practical structure before the interface becomes polished.",
-    outcome: "sitemap, key flows, and content plan",
-    visual: <SitemapVisual />,
-  },
-  {
-    number: "03",
-    title: "Design & build",
-    body:
-      "The direction turns into a responsive interface and working implementation. I move between design details and code so the final site or system feels clear, usable, and reliable.",
-    outcome: "designed screens, working code, and tested flows",
-    visual: <BuildVisual />,
-  },
-  {
-    number: "04",
-    title: "Launch & improve",
-    body:
-      "Once the project is live, we check the important paths, fix the rough edges, and learn from real usage. The launch is treated as the start of a cleaner operating rhythm, not the end of the work.",
-    outcome: "live project, launch checks, and next improvements",
-    visual: <LaunchVisual />,
-  },
-];
 
 const faqs = [
   {
@@ -93,11 +50,19 @@ const faqs = [
   },
 ];
 
-const collaborationRows = [
-  ["Business knowledge", "Strategy and structure"],
-  ["Content and access", "Design and development"],
-  ["Feedback and decisions", "Testing and launch"],
+const fromYou = [
+  "Business context",
+  "Existing content / assets",
+  "Useful feedback",
+  "Final approval",
 ] as const;
+
+const fromCkWorks: { icon: LucideIcon; label: string }[] = [
+  { icon: FileText, label: "Structure + planning" },
+  { icon: Pencil, label: "Design + development" },
+  { icon: Settings2, label: "Technical setup" },
+  { icon: Rocket, label: "Testing + launch" },
+];
 
 /**
  * Hero entrance rhythm. Copy rises first; the stage chain picks the sequence up
@@ -194,188 +159,211 @@ export default function ProcessPage() {
       <section id="phases" className="scroll-mt-24 bg-ivory py-12 lg:py-16">
         <div className="container-ck">
           <Reveal>
-            <SectionLabel>The Process</SectionLabel>
+            <div>
+              <SectionLabel className="[&>span:first-child]:hidden">
+                The Process
+              </SectionLabel>
+              <span className="mt-3 block h-px w-12 bg-forest/55" aria-hidden />
+            </div>
           </Reveal>
 
-          <div className="mt-10 lg:mt-12">
-            {phases.map((phase, index) => (
-              <PhaseSection key={phase.number} phase={phase} index={index} />
-            ))}
+          <div className="mt-7 space-y-3.5 lg:mt-8 lg:space-y-4">
+            <GetClearPhase />
+            <ShapeDirectionPhase />
+            <BuildPhase />
+            <LaunchImprovePhase />
           </div>
         </div>
       </section>
 
-      <section className="bg-ivory py-12 lg:py-16">
+      <CreativeTechnicalSplit />
+
+      <section className="bg-ivory py-14 lg:py-20">
         <div className="container-ck">
-          <div className="rounded-2xl border border-line bg-card p-6 shadow-soft sm:p-8 lg:p-10">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-              Working Together
-            </p>
-            <div className="mt-7 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-              <div>
-                <h2 className="font-serif text-3xl font-medium text-ink">
-                  You bring
-                </h2>
-                <ul className="mt-5 space-y-4">
-                  {collaborationRows.map(([client]) => (
-                    <li
-                      key={client}
-                      className="flex items-center gap-3 text-base text-muted"
-                    >
-                      <CircleDot className="h-4 w-4 text-forest" />
-                      {client}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h2 className="font-serif text-3xl font-medium text-ink">
-                  CK Works handles
-                </h2>
-                <ul className="mt-5 space-y-4">
-                  {collaborationRows.map(([, studio]) => (
-                    <li
-                      key={studio}
-                      className="flex items-center gap-3 text-base text-muted"
-                    >
-                      <CheckCircle2 className="h-4 w-4 text-forest" />
-                      {studio}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <p className="mt-8 max-w-3xl border-t border-line/70 pt-6 text-base leading-8 text-ink/82">
-              Communication stays organized through clear milestones, review
-              points, and next steps.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-ivory py-12 lg:py-16">
-        <div className="container-ck grid gap-8 lg:grid-cols-[minmax(16rem,0.45fr)_minmax(0,1fr)]">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-              FAQ
-            </p>
-            <h2 className="mt-4 font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl">
-              The deeper details, without the word wall.
-            </h2>
-          </div>
-          <div className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card shadow-soft">
-            {faqs.map((faq) => (
-              <details key={faq.question} className="group p-5 open:bg-ivory/45">
-                <summary className="cursor-pointer list-none font-medium text-ink marker:hidden">
-                  <span className="flex items-center justify-between gap-4">
-                    {faq.question}
-                    <span className="text-forest transition-transform group-open:rotate-45">
-                      +
-                    </span>
-                  </span>
-                </summary>
-                <p className="mt-3 text-sm leading-7 text-muted">
-                  {faq.answer}
+          <Reveal>
+            <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)_minmax(0,0.85fr)] lg:gap-x-14 lg:gap-y-0">
+              <div className="max-w-xl">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+                  Working together
                 </p>
-              </details>
-            ))}
-          </div>
+                <span className="mt-3 block h-px w-10 bg-forest/55" aria-hidden />
+                <h2 className="mt-6 font-serif text-[2.35rem] font-medium leading-[1.08] tracking-[-0.02em] text-ink sm:text-[2.75rem] lg:text-[3.15rem]">
+                  A good project doesn&apos;t need to take over your week.
+                </h2>
+                <p className="mt-5 max-w-md text-base leading-7 text-ink/75 sm:text-[1.05rem] sm:leading-8">
+                  Most of the heavy lifting stays with me. I just need enough
+                  context and feedback to keep the project moving in the right
+                  direction.
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+                  From you
+                </p>
+                <ul className="mt-6 divide-y divide-line/80">
+                  {fromYou.map((item, index) => (
+                    <li
+                      key={item}
+                      className="flex items-center gap-4 py-4 first:pt-0 last:pb-0"
+                    >
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-[0.78rem] font-semibold tabular-nums text-forest">
+                        {index + 1}
+                      </span>
+                      <span className="text-[0.98rem] font-medium text-ink">
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="lg:border-l lg:border-line/80 lg:pl-14">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+                  From CK Works
+                </p>
+                <ul className="mt-6 divide-y divide-line/80">
+                  {fromCkWorks.map(({ icon: Icon, label }) => (
+                    <li
+                      key={label}
+                      className="flex items-center gap-4 py-4 first:pt-0 last:pb-0"
+                    >
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center text-forest">
+                        <Icon className="h-[1.15rem] w-[1.15rem]" strokeWidth={1.5} />
+                      </span>
+                      <span className="text-[0.98rem] font-medium text-ink">
+                        {label}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {tizirsso && (
-        <section className="bg-ivory py-12 lg:py-16">
-          <div className="container-ck">
-            <div className="rounded-2xl border border-line bg-card p-6 shadow-soft sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-                Process In Practice
-              </p>
-              <div className="mt-6 grid items-center gap-7 lg:grid-cols-[minmax(0,0.9fr)_minmax(22rem,0.8fr)]">
-                <div>
-                  <h2 className="font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl">
-                    {tizirsso.name}
-                  </h2>
-                  <p className="mt-4 max-w-2xl text-base leading-8 text-muted">
-                    From organizing the story and sponsorship goals to
-                    designing, developing, and launching the final site.
-                  </p>
-                  <Link
-                    href={`/${tizirsso.slug}`}
-                    className="group mt-6 inline-flex items-center gap-2 border-b border-forest pb-1 text-sm font-semibold text-forest transition-colors hover:text-ink"
-                  >
-                    View project
-                    <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-                  </Link>
-                </div>
-                {tizirsso.coverImage && (
-                  <Link
-                    href={`/${tizirsso.slug}`}
-                    className={`group relative block aspect-[16/9] overflow-hidden rounded-xl border border-line bg-gradient-to-br ${tizirsso.accent}`}
-                  >
-                    <Image
-                      src={tizirsso.coverImage.src}
-                      alt={tizirsso.coverImage.alt}
-                      fill
-                      sizes="(min-width: 1024px) 38vw, 100vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-ink/20 via-transparent to-transparent" />
-                  </Link>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+      <section className="border-t border-line/70 bg-ivory py-12 lg:py-14">
+        <div className="container-ck">
+          <Reveal>
+            <FAQSection
+              faqs={[...faqs]}
+              title="The deeper details, without the word wall."
+              description="Common questions about timelines, what you need before starting, feedback, and what happens after launch."
+            />
+          </Reveal>
+        </div>
+      </section>
 
-      <ContactCTA
-        title="Have a project that needs a clearer path?"
-        description="Send a note with where things stand now, and I will help you sort the next practical step."
-      />
+      
+      <ProcessFooterCta />
     </SiteLayout>
   );
 }
 
 /**
- * One phase as an editorial band.
- *
- * No outer card: `docs/design-system.md` separates page bands with a rule and
- * vertical padding rather than a floating surface, and wrapping these in one
- * would nest a card inside the framed visual it already contains. The split is
- * the house 0.9fr / 1.35fr — left introduces, right demonstrates — and the side
- * alternates so four similar blocks do not read as one column.
- *
- * Below the fold, so the band is a `Reveal` wrapping the whole article: the
- * copy and its illustration should arrive as one thought.
+ * Handwritten asides for the Process footer CTA.
+ * Tweak width / inset / top / opacity here — values are CSS lengths or %.
+ * `*Xl` applies from the xl breakpoint up.
  */
-function PhaseSection({ phase, index }: { phase: Phase; index: number }) {
-  const visualFirst = index % 2 === 1;
+const processFooterAsides = {
+  left: {
+    width: "9rem",
+    widthXl: "13rem",
+    left: "1.5rem",
+    leftXl: "3rem",
+    top: "22.5%",
+    opacity: 0.9,
+  },
+  right: {
+    width: "8rem",
+    widthXl: "13rem",
+    right: "1.5rem",
+    rightXl: "3rem",
+    top: "30%",
+    opacity: 0.9,
+  },
+} as const;
+
+function ProcessFooterCta() {
+  const { left, right } = processFooterAsides;
 
   return (
-    <Reveal
-      as="article"
-      delay={index * 60}
-      className="border-t border-line/70 py-10 first:border-t-0 first:pt-0 lg:py-14 lg:first:pt-0"
-    >
-      <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)] lg:gap-16">
-        <div className={visualFirst ? "lg:order-2" : ""}>
-          <SectionLabel>{`Phase ${phase.number}`}</SectionLabel>
-          <h2 className="mt-4 font-serif text-[2.35rem] font-medium leading-[1.06] text-ink sm:text-[2.75rem]">
-            {phase.title}
-          </h2>
-          <p className="mt-5 max-w-md text-base leading-8 text-muted">
-            {phase.body}
-          </p>
-          <p className="mt-6 max-w-md border-t border-line pt-4 text-sm leading-6 text-muted">
-            <span className="font-semibold uppercase tracking-[0.14em] text-forest">
-              Outcome
-            </span>
-            <span className="mt-1.5 block">{phase.outcome}</span>
-          </p>
-        </div>
+    <section className="border-t border-line/70 bg-ivory py-12 sm:py-14 lg:py-16">
+      <div className="container-ck">
+        <Reveal className="relative overflow-hidden rounded-[2rem] border border-line bg-card px-5 py-8 text-center shadow-soft sm:px-8 lg:px-10 lg:py-12">
+          <style>{`
+            .process-footer-aside-left {
+              left: ${left.left};
+              top: ${left.top};
+              width: ${left.width};
+              opacity: ${left.opacity};
+            }
+            .process-footer-aside-right {
+              right: ${right.right};
+              top: ${right.top};
+              width: ${right.width};
+              opacity: ${right.opacity};
+            }
+            @media (min-width: 1280px) {
+              .process-footer-aside-left {
+                left: ${left.leftXl};
+                width: ${left.widthXl};
+              }
+              .process-footer-aside-right {
+                right: ${right.rightXl};
+                width: ${right.widthXl};
+              }
+            }
+          `}</style>
+          <Image
+            src="/images/process/svg/process-footer-01.svg"
+            alt=""
+            width={300}
+            height={230}
+            aria-hidden
+            className="process-footer-aside-left pointer-events-none absolute hidden lg:block"
+          />
+          <Image
+            src="/images/process/svg/process-footer-02.svg"
+            alt=""
+            width={300}
+            height={250}
+            aria-hidden
+            className="process-footer-aside-right pointer-events-none absolute hidden lg:block"
+          />
 
-        <div className={visualFirst ? "lg:order-1" : ""}>{phase.visual}</div>
+          <div className="relative z-10 mx-auto max-w-4xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+              A clearer path
+            </p>
+            <h2 className="mx-auto mt-5 max-w-4xl font-serif text-[2.5rem] font-medium leading-[1.03] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[4rem]">
+              Need a clearer path?
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-muted sm:text-lg">
+              Share where things stand now, even if it is just a rough idea, and
+              I&apos;ll help map the next practical step.
+            </p>
+
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-3 rounded-md bg-forest px-7 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift sm:min-w-[13rem]"
+              >
+                Start a project
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <WhatsAppContactLink
+                location="process_footer_cta"
+                className="inline-flex items-center justify-center gap-3 rounded-md border border-forest/60 bg-transparent px-7 py-3.5 text-sm font-semibold text-forest transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest-soft/35 hover:shadow-soft sm:min-w-[12rem]"
+                iconClassName="h-5 w-5"
+              >
+                WhatsApp
+              </WhatsAppContactLink>
+            </div>
+          </div>
+        </Reveal>
       </div>
-    </Reveal>
+    </section>
   );
 }
