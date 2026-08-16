@@ -1,78 +1,52 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  BarChart3,
-  Code2,
-  Monitor,
-  Pencil,
-  Settings,
-  Sprout,
-  Store,
-  UserRound,
-  UsersRound,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
 import AboutHero from "@/components/about/AboutHero";
 import CreativeTechnicalSplit from "@/components/about/CreativeTechnicalSplit";
+import PracticeMeans from "@/components/about/PracticeMeans";
 import WhySection from "@/components/about/WhySection";
+import FAQSection from "@/components/page/FAQSection";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
+import Reveal from "@/components/ui/Reveal";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 
 const aboutDescription =
   "CK Works is a small digital studio led by Colin Kirby, combining design, software development, and systems thinking to build clearer websites and practical digital tools for growing businesses.";
 
-const studioCapabilities = [
-  {
-    title: "Design",
-    body: "Clarity in messaging and shape a better experience.",
-    icon: Pencil,
-  },
-  {
-    title: "Development",
-    body: "Build clean, maintainable sites and tools.",
-    icon: Code2,
-  },
-  {
-    title: "Systems",
-    body: "Organize data and workflows so things run smoothly.",
-    icon: Settings,
-  },
-  {
-    title: "Visibility",
-    body: "Improve how you are found, understood, and chosen.",
-    icon: BarChart3,
-  },
-];
-
-const audienceItems = [
-  {
-    title: "Founders",
-    body: "Building something important from the ground up.",
-    icon: UserRound,
-  },
-  {
-    title: "Small teams",
-    body: "Need an extra set of hands that plugs in quickly.",
-    icon: UsersRound,
-  },
-  {
-    title: "Local businesses",
-    body: "Want a professional online presence that reflects their work.",
-    icon: Store,
-  },
-  {
-    title: "Useful systems",
-    body: "Need a practical tool or workflow without a bloated agency process.",
-    icon: Monitor,
-  },
-];
-
 const selectedWork = ["tizirsso", "taylor", "centi"]
   .map((slug) => getCaseStudy(slug))
   .filter((study): study is CaseStudy => Boolean(study));
+
+const quickAnswers = [
+  {
+    question: "Do you only work with certain kinds of businesses?",
+    answer:
+      "No. CK Works isn’t built around one specific industry. The better fit is usually a business that has something online that feels outdated, unclear, disconnected, or ready for a stronger next version.",
+  },
+  {
+    question: "Can you work with a website or system I already have?",
+    answer:
+      "Absolutely. A project can start with something existing. Sometimes that means a full redesign, and other times it means improving a few specific parts, adding functionality, or connecting tools that are already in use.",
+  },
+  {
+    question: "Do I need to know exactly what I need before reaching out?",
+    answer:
+      "Nope. Bring what you have. If you know what feels off or what you’d like to improve, that’s usually enough to start figuring out the right direction together.",
+  },
+  {
+    question: "Who will I actually be working with?",
+    answer:
+      "You’ll work directly with me, Colin, through the planning, design, development, and launch. There isn’t a handoff between a bunch of different teams.",
+  },
+  {
+    question: "What happens after something launches?",
+    answer:
+      "That depends on what makes sense for the project. I can stick around for updates, fixes, search and analytics work, new features, or ongoing support, but there doesn’t need to be unnecessary monthly work just for the sake of it.",
+  },
+] as const;
 
 export const metadata: Metadata = createPageMetadata({
   title: "About",
@@ -115,6 +89,17 @@ export default function AboutPage() {
                 url: absoluteUrl(`/${study.slug}`),
               })),
             },
+            {
+              "@type": "FAQPage",
+              mainEntity: quickAnswers.map((faq) => ({
+                "@type": "Question",
+                name: faq.question,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: faq.answer,
+                },
+              })),
+            },
           ],
         }}
       />
@@ -122,95 +107,11 @@ export default function AboutPage() {
       <AboutHero />
       <WhySection />
       <CreativeTechnicalSplit />
-      <FounderStudioSection />
-      <AudienceSection />
+      <PracticeMeans />
       <SelectedWorkSection />
+      <AboutQuickAnswers />
       <AboutClosingCTA />
     </SiteLayout>
-  );
-}
-
-function FounderStudioSection() {
-  return (
-    <section className="border-b border-line/70 bg-ivory py-12 lg:py-16">
-      <div className="container-ck grid gap-12 lg:grid-cols-[minmax(18rem,0.65fr)_minmax(0,1fr)] lg:items-start">
-        <div className="max-w-lg">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-            Founder & Studio
-          </p>
-          <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-ink">
-            Colin Kirby
-          </h2>
-          <div className="mt-5 space-y-4 text-sm leading-7 text-muted sm:text-base">
-            <p>
-              I&apos;m a computer engineer by training and a builder by nature.
-              Years in software development gave me a deep respect for clean
-              systems and reliable code.
-            </p>
-            <p>
-              My continued interest in design grew out of a simple belief: good
-              design makes complex things easier to understand and use.
-            </p>
-            <p>
-              Today I combine both sides, engineering and design, to create
-              digital work that&apos;s clear, practical, and built to last.
-            </p>
-          </div>
-        </div>
-
-        <div className="grid overflow-hidden rounded-2xl border border-line bg-card shadow-soft sm:grid-cols-2">
-          {studioCapabilities.map(({ title, body, icon: Icon }, index) => (
-            <article
-              key={title}
-              className={`min-h-52 border-line p-7 ${
-                index % 2 === 0 ? "sm:border-r" : ""
-              } ${index < 2 ? "border-b" : index === 2 ? "border-b sm:border-b-0" : ""}`}
-            >
-              <Icon className="h-10 w-10 text-forest" strokeWidth={1.5} />
-              <h3 className="mt-5 font-serif text-2xl font-medium text-ink">
-                {title}
-              </h3>
-              <p className="mt-2 max-w-xs text-sm leading-6 text-muted">
-                {body}
-              </p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function AudienceSection() {
-  return (
-    <section className="border-b border-line/70 bg-card/25 py-10 lg:py-12">
-      <div className="container-ck">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-          Who CK Works Works With
-        </p>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
-          {audienceItems.map(({ title, body, icon: Icon }, index) => (
-            <article
-              key={title}
-              className={`flex gap-5 lg:px-8 ${
-                index > 0 ? "lg:border-l lg:border-line" : ""
-              }`}
-            >
-              <Icon
-                className="mt-1 h-9 w-9 shrink-0 text-forest"
-                strokeWidth={1.5}
-              />
-              <div>
-                <h3 className="font-serif text-xl font-medium text-ink">
-                  {title}
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-muted">{body}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -218,7 +119,7 @@ function SelectedWorkSection() {
   return (
     <section className="border-b border-line/70 bg-ivory py-12 lg:py-14">
       <div className="container-ck">
-        <div className="flex items-end justify-between gap-6">
+        <Reveal className="flex items-end justify-between gap-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
               Selected Work
@@ -234,11 +135,15 @@ function SelectedWorkSection() {
             View all work
             <ArrowRight className="h-4 w-4" />
           </Link>
-        </div>
+        </Reveal>
 
+        {/* Independent grid items with no sibling selectors between them, so a
+            Reveal per card is right here rather than one around the grid. */}
         <div className="mt-8 grid gap-5 lg:grid-cols-3">
-          {selectedWork.map((study) => (
-            <AboutWorkCard key={study.slug} study={study} />
+          {selectedWork.map((study, index) => (
+            <Reveal key={study.slug} delay={index * 90} className="min-w-0">
+              <AboutWorkCard study={study} />
+            </Reveal>
           ))}
         </div>
       </div>
@@ -282,47 +187,58 @@ function AboutWorkCard({ study }: { study: CaseStudy }) {
   );
 }
 
+function AboutQuickAnswers() {
+  return (
+    <section className="border-b border-line/70 bg-ivory py-12 lg:py-14">
+      <div className="container-ck">
+        <Reveal>
+          <FAQSection
+            faqs={[...quickAnswers]}
+            label="Quick Answers"
+            title="A few things you might be wondering."
+            description="You don’t need to know exactly what you need before reaching out. These are just a few common questions about how I work and what CK Works can help with."
+          />
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function AboutClosingCTA() {
   return (
-    <section className="bg-[linear-gradient(180deg,#FAF7F0_0%,#E8EFE3_100%)] py-12 lg:py-16">
-      <div className="container-ck grid items-center gap-8 lg:grid-cols-[minmax(14rem,0.45fr)_minmax(0,1fr)]">
-        <div className="flex justify-center lg:justify-start">
-          <div className="relative h-28 w-44 text-forest/80">
-            <Sprout
-              className="absolute left-12 top-1 h-20 w-20"
-              strokeWidth={1.35}
-            />
-            <svg
-              viewBox="0 0 210 95"
-              className="absolute inset-0 h-full w-full"
-              fill="none"
-              aria-hidden
-            >
-              <path
-                d="M13 72C50 38 101 33 145 50C168 58 184 69 198 78"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
+    <section className="bg-ivory py-10 sm:py-12 lg:py-14">
+      <div className="container-ck">
+        <Reveal className="flex flex-col gap-6 rounded-xl border border-line bg-card px-6 py-7 shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+          <div className="max-w-xl">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
+              About CK Works
+            </p>
+            <h2 className="mt-3 font-serif text-[1.85rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.15rem]">
+              Have something that needs to work better?
+            </h2>
+            <p className="mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
+              Tell me a little about your business and what you&apos;d like to
+              improve.
+            </p>
           </div>
-        </div>
-        <div>
-          <h2 className="font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl">
-            Have something that needs to work better?
-          </h2>
-          <p className="mt-3 max-w-2xl text-base leading-7 text-muted">
-            Tell me a little about your business and what you&apos;d like to
-            improve.
-          </p>
-          <Link
-            href="/contact"
-            className="mt-6 inline-flex items-center justify-center gap-3 rounded-xl bg-forest px-7 py-3 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"
-          >
-            Start a project
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+
+          <div className="flex w-fit shrink-0 flex-col items-stretch gap-4">
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-forest px-6 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"
+            >
+              Start a project
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/process"
+              className="group inline-flex items-center justify-center gap-1.5 border-b border-forest pb-1.5 text-sm font-semibold text-forest transition-colors hover:text-ink"
+            >
+              See how the process works
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

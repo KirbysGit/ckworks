@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { Check, X } from "lucide-react";
+import Reveal from "@/components/ui/Reveal";
+import { animDelay } from "@/lib/motion";
 
 /**
  * Owns the About page's "Why CK Works exists" band: the gap story on the
@@ -17,7 +19,7 @@ import { Check, X } from "lucide-react";
  */
 
 const comparisonArt = {
-  padX: "1rem",
+  padX: "0.7rem",
   padTop: "1.75rem",
   wellHeight: "7.25rem",
   cropInset: "0.7rem",
@@ -25,13 +27,13 @@ const comparisonArt = {
     width: "18rem",
     offsetX: "0rem",
     offsetY: "0.75rem",
-    textOffsetX: "2rem",
+    textOffsetX: "0rem",
   },
   browser: {
     width: "16rem",
     offsetX: "0rem",
     offsetY: "3.875rem",
-    textOffsetX: "2rem",
+    textOffsetX: "0rem",
   },
 } as const;
 
@@ -50,15 +52,15 @@ const digitalSide = [
 export default function WhySection() {
   return (
     <section className="border-b border-line/70 bg-ivory py-12 lg:py-16">
-      <div className="container-ck grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.15fr)] lg:gap-14">
+      <Reveal className="container-ck grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.15fr)] lg:gap-14">
         <div className="max-w-xl">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
             Why CK Works Exists
           </p>
-          <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl lg:text-[3.35rem]">
+          <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl lg:text-[3.35rem] max-w-md">
             I kept noticing the same gap.
           </h2>
-          <div className="mt-6 space-y-4 text-base leading-7 text-ink/80 sm:text-[1.05rem] sm:leading-8">
+          <div className="mt-6 space-y-4 text-base leading-7 text-ink/80 sm:text-[1.05rem] sm:leading-8 max-w-lg">
             <p>
               Many businesses are strong in real life, but their website or
               digital side undersells them.
@@ -74,7 +76,7 @@ export default function WhySection() {
         </div>
 
         <GapComparison />
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -86,6 +88,7 @@ function GapComparison() {
         label="Real Business"
         items={realBusiness}
         tone="positive"
+        delay={120}
         image={{
           src: "/images/about/svg/about-section-01.svg",
           alt: "Line drawing of a storefront",
@@ -94,7 +97,7 @@ function GapComparison() {
         className="border-b border-line sm:border-b-0 sm:border-r"
       />
 
-      <span className="relative z-10 mx-auto -my-3.5 flex h-9 w-9 items-center justify-center rounded-full border border-line bg-ivory text-[0.68rem] font-semibold text-ink sm:hidden">
+      <span className="relative z-10 mx-auto -my-4 flex h-11 w-11 items-center justify-center rounded-full border border-line bg-ivory text-[0.8rem] font-semibold text-ink sm:hidden">
         vs.
       </span>
 
@@ -102,6 +105,7 @@ function GapComparison() {
         label="Digital Side"
         items={digitalSide}
         tone="negative"
+        delay={260}
         image={{
           src: "/images/about/svg/about-section-02.svg",
           alt: "Line drawing of a generic website layout",
@@ -109,7 +113,7 @@ function GapComparison() {
         }}
       />
 
-      <span className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-ivory text-[0.72rem] font-semibold text-ink shadow-[0_4px_12px_-8px_rgba(31,36,32,0.45)] sm:flex">
+      <span className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-ivory text-[0.85rem] font-semibold text-ink shadow-[0_4px_12px_-8px_rgba(31,36,32,0.45)] sm:flex">
         vs.
       </span>
     </div>
@@ -121,11 +125,13 @@ function ComparisonColumn({
   items,
   tone,
   image,
+  delay = 0,
   className = "",
 }: {
   label: string;
   items: readonly string[];
   tone: "positive" | "negative";
+  delay?: number;
   image: {
     src: string;
     alt: string;
@@ -140,22 +146,23 @@ function ComparisonColumn({
 }) {
   return (
     <div
-      className={`flex min-h-[20rem] flex-col sm:min-h-[21.5rem] ${className}`}
+      className={`ck-step flex min-h-[20rem] flex-col sm:min-h-[21.5rem] ${className}`}
       style={{
         paddingLeft: comparisonArt.padX,
         paddingRight: comparisonArt.padX,
         paddingTop: comparisonArt.padTop,
         paddingBottom: comparisonArt.cropInset,
+        ...animDelay(delay),
       }}
     >
       <div
-        className="mx-auto w-full"
+        className="mx-auto w-fit"
         style={{
           maxWidth: image.layout.width,
           transform: `translateX(${image.layout.textOffsetX})`,
         }}
       >
-        <p className="text-[1.35rem] font-bold uppercase tracking-[0.12em] text-ink sm:text-[1.3rem]">
+        <p className="text-[1.25rem] font-bold uppercase tracking-[0.12em] text-ink sm:text-[1rem]">
           {label}
         </p>
         <ul className="mt-5 space-y-5">
@@ -165,8 +172,8 @@ function ComparisonColumn({
               className="flex items-center gap-3 text-sm font-medium text-ink sm:text-[0.95rem]"
             >
               {tone === "positive" ? (
-                <span className="flex size-[1.125rem] shrink-0 items-center justify-center rounded-full bg-forest">
-                  <Check className="size-2.5 text-ivory" strokeWidth={3} />
+                <span className="flex size-[1.125rem] shrink-0 items-center justify-center rounded-full border border-forest bg-ivory">
+                  <Check className="size-2.5 text-forest" strokeWidth={3} />
                 </span>
               ) : (
                 <span className="flex size-[1.125rem] shrink-0 items-center justify-center rounded-full border border-muted/45 text-muted">

@@ -1,11 +1,42 @@
+import type { CSSProperties } from "react";
 import Image from "next/image";
-import { PhoneFrame } from "@/components/ui/DeviceFrame";
+import { Truck } from "lucide-react";
+import { PhoneFrame, PhoneStatusBar } from "@/components/ui/DeviceFrame";
+import { animDelay } from "@/lib/motion";
 
 /**
  * Owns the About page opening: studio introduction plus an illustrative
  * storefront and mobile commerce composition. The device uses the shared
  * phone shell so its physical treatment stays consistent with service pages.
+ *
+ * The visual plays as one sequence: the storefront lands, the dashed elbow
+ * draws out of its top-right and turns down, the phone arrives where the line
+ * finishes, and the site inside it loads. Above the fold, so these are plain
+ * CSS animations rather than `Reveal`.
+ *
+ * The loading beat reuses the Web Design hero's primitives —`ck-loadbar`,
+ * `ck-skeleton`, then `ck-resolve` — so a site coming up looks the same
+ * everywhere on the site.
  */
+
+/**
+ * Hero choreography (ms). Everything is started by ~2s and settled by ~2.4s.
+ * Keep `storefront` early: it is the priority image and the likely LCP element.
+ */
+const aboutHeroTiming = {
+  eyebrow: 0,
+  title: 80,
+  lead: 170,
+  storefront: 250,
+  caption: 420,
+  elbow: 540,
+  phone: 1160,
+  loadbar: 1300,
+  skeleton: 1380,
+  screen: 1700,
+  headline: 1840,
+  cta: 1960,
+} as const;
 
 const aboutHeroLayout = {
   // Direct values keep image and device placement easy to tune, including negatives.
@@ -18,35 +49,66 @@ const aboutHeroLayout = {
   phone: {
     right: "0%",
     bottom: "clamp(1.5rem, 3vw, 3rem)",
-    width: "clamp(8.5rem, 42%, 13rem)",
+    // Canonical Web Design hero phone; `scale` enlarges island, icons, and screen together.
+    width: "10.5rem",
+    scale: 1.24,
   },
   caption: {
     left: "17%",
     bottom: "0%",
+    // Moves the L-shape and caption together.
+    offsetX: "-50px",
+    offsetY: "-37.5px",
     connectorWidth: "5rem",
     connectorHeight: "2.5rem",
-    connectorOffsetX: "-50px",
-    connectorOffsetY: "-37.5px",
     dotSize: "0.375rem",
     textWidth: "15rem",
-    textSize: "0.875rem",
+    textSize: "1.125rem",
     textLineHeight: "1.5rem",
+    // Drops the copy onto the connector's horizontal bar.
+    textOffsetY: "2.1rem",
   },
   visualHeight: "min-h-[25rem] sm:min-h-[34rem] lg:min-h-[40rem]",
+  /**
+   * Dashed elbow from the storefront's top-right into the phone.
+   * Starts inset from the image edge, turns down, and lands on the phone top.
+   */
+  phoneLink: {
+    startInsetX: "0rem",
+    startY: "5rem",
+    radius: "1.35rem",
+    stroke: "2.5px",
+    dot: "0.625rem",
+    // Nudges the end-dot onto the stroke (positive = right).
+    dotOffsetX: "0.04cqw",
+    // Unscaled PhoneFrame (12px chrome) + 19.5rem screen.
+    phoneHeight: "20.25rem",
+    endOffsetX: "0px",
+    endOffsetY: "0px",
+  },
 } as const;
 
 export default function AboutHero() {
   return (
-    <section className="bg-ivory py-6 sm:py-8 lg:py-10">
-      <div className="container-ck grid items-center gap-10 py-8 sm:py-12 lg:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)] lg:gap-14 lg:py-14">
+    <section className="bg-ivory pb-6 pt-4 sm:pb-8 sm:pt-5 lg:pb-10 lg:pt-6">
+      <div className="container-ck grid items-center gap-10 pb-8 pt-2 sm:pb-12 sm:pt-3 lg:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)] lg:gap-14 lg:pb-14 lg:pt-4">
         <div>
-          <p className="ck-rise text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+          <p
+            className="ck-rise text-xs font-semibold uppercase tracking-[0.28em] text-forest"
+            style={{ animationDelay: `${aboutHeroTiming.eyebrow}ms` }}
+          >
             About CK Works
           </p>
-          <h1 className="ck-rise mt-5 max-w-4xl font-serif text-[2.5rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[4rem]">
+          <h1
+            className="ck-rise mt-5 max-w-4xl font-serif text-[2.5rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[4rem]"
+            style={{ animationDelay: `${aboutHeroTiming.title}ms` }}
+          >
             A small studio for thoughtful digital work.
           </h1>
-          <p className="ck-rise mt-6 max-w-2xl text-base leading-7 text-ink/76 sm:text-lg">
+          <p
+            className="ck-rise mt-6 max-w-2xl text-base leading-7 text-ink/76 sm:text-lg"
+            style={{ animationDelay: `${aboutHeroTiming.lead}ms` }}
+          >
             CK Works is led by Colin Kirby and combines design, software
             development, and systems thinking to build clearer websites and
             practical digital tools for growing businesses.
@@ -65,8 +127,11 @@ function StorefrontVisual() {
       className={`relative mx-auto mt-12 w-full max-w-[42rem] lg:mt-0 ${aboutHeroLayout.visualHeight}`}
     >
       <div
-        className="absolute overflow-hidden rounded-xl border border-line/80 bg-sand shadow-[0_22px_48px_-32px_rgba(31,36,32,0.44)]"
-        style={aboutHeroLayout.storefront}
+        className="ck-lift absolute overflow-hidden rounded-xl border border-line/80 bg-sand shadow-[0_22px_48px_-32px_rgba(31,36,32,0.44)]"
+        style={{
+          ...aboutHeroLayout.storefront,
+          animationDelay: `${aboutHeroTiming.storefront}ms`,
+        }}
       >
         <Image
           src="/images/about/png/about-hero-demo.png"
@@ -78,25 +143,53 @@ function StorefrontVisual() {
         />
       </div>
 
-      <div className="absolute z-20" style={aboutHeroLayout.phone}>
-        <PhoneFrame size="lg">
-          <FieldAndForgePhone />
-        </PhoneFrame>
+      {/* ck-pop sits on the outer box; the inner one owns the layout scale, and
+          a primitive ends at `transform: none` so sharing an element would
+          flatten the phone to its unscaled size. */}
+      <div
+        className="ck-pop absolute z-20"
+        style={{
+          right: aboutHeroLayout.phone.right,
+          bottom: aboutHeroLayout.phone.bottom,
+          width: `calc(${aboutHeroLayout.phone.width} * ${aboutHeroLayout.phone.scale})`,
+          animationDelay: `${aboutHeroTiming.phone}ms`,
+        }}
+      >
+        <div
+          className="ml-auto"
+          style={{
+            width: aboutHeroLayout.phone.width,
+            transform: `scale(${aboutHeroLayout.phone.scale})`,
+            transformOrigin: "bottom right",
+          }}
+        >
+          <PhoneFrame size="lg">
+            <FieldAndForgePhone />
+          </PhoneFrame>
+        </div>
       </div>
 
+      <PhoneLinkConnector />
+
+      {/* The positioning translate stays on the outer box so the inner one is
+          free to carry ck-rise. */}
       <div
-        className="absolute hidden items-end gap-4 text-forest lg:flex"
+        className="absolute hidden lg:block"
         style={{
           left: aboutHeroLayout.caption.left,
           bottom: aboutHeroLayout.caption.bottom,
+          transform: `translate(${aboutHeroLayout.caption.offsetX}, ${aboutHeroLayout.caption.offsetY})`,
         }}
       >
+      <div
+        className="ck-rise flex items-end gap-3 text-forest"
+        style={{ animationDelay: `${aboutHeroTiming.caption}ms` }}
+      >
         <span
-          className="relative rounded-bl-xl border-b-2 border-l-2 border-forest/80"
+          className="relative shrink-0 rounded-bl-xl border-b-2 border-l-2 border-forest/80"
           style={{
             width: aboutHeroLayout.caption.connectorWidth,
             height: aboutHeroLayout.caption.connectorHeight,
-            transform: `translate(${aboutHeroLayout.caption.connectorOffsetX}, ${aboutHeroLayout.caption.connectorOffsetY})`,
           }}
         >
           <span
@@ -114,47 +207,109 @@ function StorefrontVisual() {
             maxWidth: aboutHeroLayout.caption.textWidth,
             fontSize: aboutHeroLayout.caption.textSize,
             lineHeight: aboutHeroLayout.caption.textLineHeight,
+            transform: `translateY(${aboutHeroLayout.caption.textOffsetY})`,
           }}
         >
           Helping small businesses look their best online.
         </span>
       </div>
+      </div>
+    </div>
+  );
+}
+
+function PhoneLinkConnector() {
+  const { storefront, phone, phoneLink } = aboutHeroLayout;
+  const phoneCenterFromRight = `calc(${phone.width} * ${phone.scale} / 2 - ${phoneLink.endOffsetX})`;
+  const phoneTopFromBottom = `calc(${phone.bottom} + ${phoneLink.phoneHeight} * ${phone.scale} - ${phoneLink.endOffsetY})`;
+
+  return (
+    <div
+      className="ck-draw-elbow pointer-events-none absolute z-30 hidden border-forest/70 lg:block"
+      style={
+        {
+          left: `calc(${storefront.width} - ${phoneLink.startInsetX})`,
+          top: phoneLink.startY,
+          right: phoneCenterFromRight,
+          bottom: phoneTopFromBottom,
+          borderTopWidth: phoneLink.stroke,
+          borderRightWidth: phoneLink.stroke,
+          borderTopStyle: "dashed",
+          borderRightStyle: "dashed",
+          borderTopRightRadius: phoneLink.radius,
+          // At least the rendered border width; 2.5px here renders as 2px, so
+          // this over-covers slightly, which is the safe direction.
+          "--ck-elbow-strip": phoneLink.stroke,
+          ...animDelay(aboutHeroTiming.elbow),
+        } as CSSProperties
+      }
+      aria-hidden
+    >
+      <span
+        className="absolute z-40 rounded-full bg-forest"
+        style={{
+          width: phoneLink.dot,
+          height: phoneLink.dot,
+          right: `calc(${phoneLink.dot} / -2 - ${phoneLink.dotOffsetX})`,
+          bottom: `calc(${phoneLink.dot} / -2)`,
+        }}
+      />
     </div>
   );
 }
 
 function FieldAndForgePhone() {
   return (
-    <div className="flex aspect-[9/18.5] w-full flex-col bg-card">
-      <div className="relative z-20 flex h-[10cqw] items-start justify-between px-[8cqw] pt-[3cqw] text-[3.4cqw] font-semibold leading-none text-ink">
-        <span>9:41</span>
-        <span className="flex items-center gap-[1.4cqw] pt-[0.4cqw]" aria-hidden>
-          <span className="flex h-[3.6cqw] items-end gap-[0.6cqw]">
-            <span className="h-[1.2cqw] w-[0.65cqw] bg-ink" />
-            <span className="h-[2cqw] w-[0.65cqw] bg-ink" />
-            <span className="h-[2.8cqw] w-[0.65cqw] bg-ink" />
-          </span>
-          <span className="h-[3cqw] w-[5cqw] rounded-[0.7cqw] border-[0.65cqw] border-ink" />
-        </span>
+    <div className="relative flex h-[19.5rem] w-full flex-col bg-card">
+      {/* Progress sweep under the status bar, then placeholders, then the real
+          page resolving in — the same three beats the Web Design hero uses. */}
+      <span
+        className="ck-loadbar absolute inset-x-0 top-[6cqw] z-30 h-[0.7cqw] bg-forest"
+        style={animDelay(aboutHeroTiming.loadbar)}
+        aria-hidden
+      />
+
+      <div
+        className="ck-skeleton absolute inset-0 z-20 bg-card px-[7cqw] pt-[13cqw]"
+        style={animDelay(aboutHeroTiming.skeleton)}
+        aria-hidden
+      >
+        <div className="ck-skeleton-block h-[4cqw] w-[55%] rounded-[1cqw]" />
+        <div className="ck-skeleton-block mt-[6cqw] h-[66cqw] w-full rounded-[1cqw] opacity-80" />
+        <div className="ck-skeleton-block mt-[6cqw] h-[5cqw] w-[80%] rounded-[1cqw] opacity-70" />
+        <div className="ck-skeleton-block mt-[3cqw] h-[3cqw] w-[62%] rounded-[1cqw] opacity-55" />
       </div>
+
+      <PhoneStatusBar />
 
       <div className="flex items-center justify-between px-[7cqw] pb-[5cqw] pt-[2cqw]">
         <span>
-          <span className="block font-serif text-[6.1cqw] font-semibold tracking-[0.07em] text-ink">
+          <span className="block font-serif text-[6cqw] font-bold uppercase tracking-[0.08em] text-ink">
             Field &amp; Forge
           </span>
-          <span className="mt-[0.5cqw] block text-[2.3cqw] font-semibold uppercase tracking-[0.2em] text-ink/70">
+          <span className="mt-[0.5cqw] block text-center text-[2.3cqw] font-semibold uppercase tracking-[0.2em] text-ink/70">
             Goods and supply
           </span>
         </span>
-        <span className="space-y-[1.3cqw]" aria-hidden>
-          <span className="block h-[0.7cqw] w-[6cqw] bg-ink/80" />
-          <span className="block h-[0.7cqw] w-[6cqw] bg-ink/80" />
-          <span className="block h-[0.7cqw] w-[6cqw] bg-ink/80" />
-        </span>
+        <svg
+          viewBox="0 0 12 10"
+          className="h-3 w-3 shrink-0 text-ink"
+          aria-hidden
+        >
+          <path
+            d="M1 1.5h10M1 5h10M1 8.5h10"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.25"
+            strokeLinecap="square"
+          />
+        </svg>
       </div>
 
-      <div className="relative h-[66cqw] shrink-0 overflow-hidden">
+      <div
+        className="ck-resolve relative h-[66cqw] shrink-0 overflow-hidden"
+        style={animDelay(aboutHeroTiming.screen)}
+      >
         <Image
           src="/images/about/png/about-hero-mobile-demo.png"
           alt=""
@@ -164,25 +319,36 @@ function FieldAndForgePhone() {
         />
       </div>
 
-      <div className="flex flex-1 flex-col px-[7cqw] py-[6cqw]">
-        <p className="font-serif text-[9cqw] font-medium leading-[1.04] text-ink">
+      <div className="flex flex-col px-[7cqw] pb-[2.5cqw] pt-[6cqw]">
+        <p
+          className="ck-rise font-serif text-[10cqw] font-medium leading-[1.1] text-ink"
+          style={{ animationDelay: `${aboutHeroTiming.headline}ms` }}
+        >
           Quality goods for daily life.
         </p>
-        <p className="mt-[3cqw] text-[3.9cqw] leading-[1.45] text-muted">
+        <p
+          className="ck-rise mt-[3cqw] text-[3.9cqw] leading-[1.45] text-muted"
+          style={{ animationDelay: `${aboutHeroTiming.headline + 90}ms` }}
+        >
           Carefully chosen items for the home, workshop, and everyday living.
         </p>
-        <span className="mt-[4cqw] inline-flex w-fit rounded-[1.4cqw] bg-forest px-[4cqw] py-[2.4cqw] text-[3.6cqw] font-semibold uppercase tracking-[0.1em] text-ivory">
+        <span
+          className="ck-pop mt-[4cqw] inline-flex w-fit items-center justify-center rounded-[1.4cqw] bg-[#1F4532] py-[2.6cqw] pl-[4cqw] pr-[3.6cqw] text-[3.6cqw] font-semibold uppercase leading-none tracking-[0.1em] text-ivory"
+          style={{ animationDelay: `${aboutHeroTiming.cta}ms` }}
+        >
           Shop all
         </span>
       </div>
 
-      <div className="grid shrink-0 grid-cols-[auto_1fr] gap-[3cqw] border-t border-line/80 px-[7cqw] py-[4.2cqw]">
-        <span className="mt-[1cqw] h-[8cqw] w-[9cqw] rounded-[1.2cqw] border-[1.1cqw] border-ink/70" aria-hidden />
+      <div className="mt-[5cqw] grid shrink-0 grid-cols-[auto_1fr] items-center gap-[7cqw] border-t border-line/80 px-[7cqw] pb-[4.2cqw] pt-[5cqw]">
+        <span className="flex text-ink/80" aria-hidden>
+          <Truck className="h-[9cqw] w-[9cqw]" strokeWidth={1.7} />
+        </span>
         <span>
-          <span className="block text-[2.8cqw] font-bold uppercase tracking-[0.12em] text-ink/80">
+          <span className="block text-[3.5cqw] font-bold uppercase tracking-[0.12em] text-ink/80">
             Free local delivery
           </span>
-          <span className="mt-[1cqw] block text-[2.9cqw] leading-[1.35] text-muted">
+          <span className="mt-[1cqw] block text-[3.5cqw] leading-[1.35] text-muted">
             For orders over $75 in the greater Portland area.
           </span>
         </span>
