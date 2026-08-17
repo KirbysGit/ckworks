@@ -94,44 +94,65 @@ export default function Header() {
         </Link>
 
         <nav className="hidden items-center lg:flex" aria-label="Primary">
-          {primaryNav.map((item) => {
+          {primaryNav.map((item, index) => {
             const active = isActive(item.href);
             const isHovered = hoveredHref === item.href;
             const hasChildren = "children" in item && Boolean(item.children);
 
             return (
-              <div
-                key={item.href}
-                className="relative"
-                onMouseEnter={() => setHoveredHref(item.href)}
-                onMouseLeave={() => setHoveredHref(null)}
-              >
-                <Link
-                  href={item.href}
-                  className={`flex items-center gap-1.5 border-r border-line/80 px-6 py-1 font-sans text-sm font-medium tracking-wide transition-colors duration-200 last:border-r-0 ${
-                    active ? "text-ink" : "text-ink/70 hover:text-ink"
-                  }`}
-                >
-                  <span className="relative inline-block">
-                    {item.label}
-                    <DrawUnderline show={active || isHovered} />
-                  </span>
-                  {hasChildren && (
-                    <ChevronDown
-                      className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                        isHovered ? "rotate-180" : ""
-                      }`}
-                    />
-                  )}
-                </Link>
-
-                {hasChildren && (
-                  <AnimatePresence>
-                    {isHovered && (
-                      <ServicesDropdown services={item.children ?? []} />
-                    )}
-                  </AnimatePresence>
+              <div key={item.href} className="flex items-center">
+                {index > 0 && (
+                  <span
+                    className="mx-1 h-3.5 w-px shrink-0 bg-line/70"
+                    aria-hidden
+                  />
                 )}
+                <div
+                  className="relative"
+                  onMouseEnter={() => setHoveredHref(item.href)}
+                  onMouseLeave={() => setHoveredHref(null)}
+                >
+                  <Link
+                    href={item.href}
+                    className={`flex items-center gap-1.5 px-5 py-1 font-sans text-sm font-medium tracking-wide transition-colors duration-200 ${
+                      active ? "text-ink" : "text-ink/70 hover:text-ink"
+                    }`}
+                  >
+                    <span className="relative inline-block">
+                      {item.label}
+                      {/* Active: static lighter underline. Hover: dark draw covers it. */}
+                      {active ? (
+                        <span
+                          className="pointer-events-none absolute -bottom-2.5 left-1/2 block h-[9px] w-[120%] -translate-x-1/2 overflow-hidden opacity-[0.32]"
+                          aria-hidden
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src="/images/nav/svg/underline.svg"
+                            alt=""
+                            className="h-full w-full select-none object-fill"
+                          />
+                        </span>
+                      ) : null}
+                      <DrawUnderline show={isHovered} />
+                    </span>
+                    {hasChildren && (
+                      <ChevronDown
+                        className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                          isHovered ? "rotate-180" : ""
+                        }`}
+                      />
+                    )}
+                  </Link>
+
+                  {hasChildren && (
+                    <AnimatePresence>
+                      {isHovered && (
+                        <ServicesDropdown services={item.children ?? []} />
+                      )}
+                    </AnimatePresence>
+                  )}
+                </div>
               </div>
             );
           })}

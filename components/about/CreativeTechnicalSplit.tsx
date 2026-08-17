@@ -1,16 +1,15 @@
 import type { LucideIcon } from "lucide-react";
-import { CodeXml, Leaf, PenLine } from "lucide-react";
+import { PenLine, Share2 } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 import { animDelay } from "@/lib/motion";
 
 /**
- * "Creative + technical split" band for /about, sitting under `WhySection`:
- * a Venn whose overlap is the point of the section.
+ * "Creative + technical split" band for /about, sitting under `WhySection`.
  *
- * Shell matches the About page bands — `border-b`, `py-12 lg:py-16`, and the
- * same heading scale as `WhySection`. Note the rest of the page below the fold
- * is static; this section keeps the `Reveal` the design system asks for on
- * below-the-fold content.
+ * Desktop is three parts: an outer Creative column, the Venn, an outer
+ * Technical column. The circles only hold the side questions plus the
+ * overlap copy; titles and trait lists sit outside so the lens can stay
+ * quiet. Mobile stacks the same content.
  *
  * The diagram is one SVG behind a three-column grid, both driven by the same
  * geometry below, so the tinted lens and the middle text column can never
@@ -22,36 +21,39 @@ import { animDelay } from "@/lib/motion";
  * - `radius`   circle size
  * - `centerGap` distance between the two centres
  *
- * Overlap width is `2 * radius - centerGap`. Keep `centerGap` between roughly
- * 1.3x and 1.7x `radius`: tighter and the lens swallows the circles, wider and
- * they pull apart into two separate rings.
+ * Overlap width is `2 * radius - centerGap`. That is the middle column.
+ * Raising `radius` while holding or slightly dropping `centerGap` widens the
+ * lens; scaling both together just enlarges the drawing. Keep `centerGap`
+ * between roughly 1.3x and 1.7x `radius`: tighter and the lens swallows the
+ * circles, wider and they pull apart into two separate rings.
  *
- * `sideTextPad` keeps the side text off the curve. A column is a rectangle but
- * a circle is not: text centred vertically sits at the widest point, yet its
- * first and last lines reach out to where the circle has already narrowed. So
- * each side column is padded asymmetrically — hard on the outer edge, light on
- * the lens side — which lands the text block just inside the arc at its
- * corners and leaves a gap before the overlap begins.
- *
- * Filling the column edge to edge puts every corner outside the circle.
+ * `leftQuestions` places the three Creative questions in the left crescent.
+ * `x` / `y` are CSS lengths. `y` is from the top of the diagram. Positive `x`
+ * moves toward the outer rim; the Technical side uses `-x` and the same `y`.
  */
+
 const venn = {
-  radius: 100,
-  centerGap: 144,
-  sideTextPad: { outer: "24%", inner: "6%" },
+  radius: 110,
+  centerGap: 140,
+  leftQuestions: [
+    { x: "-2rem", y: "22%" },
+    { x: "-0.2rem", y: "50%" },
+    { x: "-2rem", y: "78%" },
+  ],
 } as const;
 
-const vennWidth = venn.centerGap + venn.radius * 2; // 344
-const vennHeight = venn.radius * 2; // 200
-const leftCx = venn.radius; // 100
-const rightCx = venn.radius + venn.centerGap; // 244
-const overlapWidth = venn.radius * 2 - venn.centerGap; // 56
-const sideColumn = vennWidth - venn.radius * 2; // 144
+const vennWidth = venn.centerGap + venn.radius * 2; // 360
+const vennHeight = venn.radius * 2; // 220
+const leftCx = venn.radius; // 110
+const rightCx = venn.radius + venn.centerGap; // 250
+const overlapWidth = venn.radius * 2 - venn.centerGap; // 80
+const sideColumn = vennWidth - venn.radius * 2; // 140
 
 type Side = {
   key: string;
   icon: LucideIcon;
   title: string;
+  traits: readonly string[];
   questions: readonly string[];
 };
 
@@ -60,6 +62,7 @@ const sides: readonly [Side, Side] = [
     key: "creative",
     icon: PenLine,
     title: "Creative",
+    traits: ["Message", "Tone", "Clarity", "Hierarchy"],
     questions: [
       "How should this feel?",
       "What matters first?",
@@ -68,8 +71,9 @@ const sides: readonly [Side, Side] = [
   },
   {
     key: "technical",
-    icon: CodeXml,
+    icon: Share2,
     title: "Technical",
+    traits: ["Structure", "Function", "Integrations", "Reliability"],
     questions: [
       "How should this work?",
       "What needs to connect?",
@@ -108,17 +112,17 @@ export default function CreativeTechnicalSplit() {
             </h2>
           </div>
 
-          {/* Phone widths get the same content stacked. Two overlapping
-              circles need horizontal room; below sm there is none, and
-              shrinking the diagram makes the text illegible. */}
-          {/* Order mirrors the diagram — the meeting sits between the two
-              sides, not after them, so both breakpoints read the same way. */}
-          <div className="mt-10 space-y-3 sm:hidden">
+          {/* Phone and tablet get the same content stacked. The outer columns
+              plus two overlapping circles need horizontal room; below lg
+              there is none, and shrinking the diagram makes the text
+              illegible. */}
+          <div className="mt-10 space-y-3 lg:hidden">
             <div
               className="ck-step rounded-2xl border border-line bg-card px-6 py-7 text-center"
               style={animDelay(stackDelay(0))}
             >
-              <SideContent side={sides[0]} />
+              <OuterColumn side={sides[0]} />
+              <CircleQuestions questions={sides[0].questions} className="mt-5" />
             </div>
 
             <div
@@ -132,86 +136,107 @@ export default function CreativeTechnicalSplit() {
               className="ck-step rounded-2xl border border-line bg-card px-6 py-7 text-center"
               style={animDelay(stackDelay(2))}
             >
-              <SideContent side={sides[1]} />
+              <OuterColumn side={sides[1]} />
+              <CircleQuestions questions={sides[1].questions} className="mt-5" />
             </div>
           </div>
 
-          <div className="relative mx-auto mt-12 hidden aspect-[344/200] w-full max-w-[38rem] sm:block lg:mt-14">
-            <svg
-              viewBox={`0 0 ${vennWidth} ${vennHeight}`}
-              className="absolute inset-0 h-full w-full"
-              fill="none"
-              aria-hidden
+          <div className="mt-12 hidden items-center gap-8 lg:mt-14 lg:grid lg:grid-cols-[minmax(8rem,0.7fr)_minmax(0,1.5fr)_minmax(8rem,0.7fr)] lg:gap-12">
+            <div
+              className="ck-step justify-self-end pb-10"
+              style={animDelay(splitTiming.creative)}
             >
-              <defs>
-                <clipPath id="ck-venn-left">
-                  <circle cx={leftCx} cy={venn.radius} r={venn.radius} />
-                </clipPath>
-              </defs>
+              <OuterColumn side={sides[0]} />
+            </div>
 
-              {/* The lens: right circle clipped to the left one. */}
-              <circle
-                cx={rightCx}
-                cy={venn.radius}
-                r={venn.radius}
-                fill="#DDD6C8"
-                fillOpacity={0.38}
-                clipPath="url(#ck-venn-left)"
-              />
+            <div
+              className="relative mx-auto w-full max-w-[40rem] overflow-visible"
+              style={{ aspectRatio: `${vennWidth} / ${vennHeight}` }}
+            >
+              <svg
+                viewBox={`0 0 ${vennWidth} ${vennHeight}`}
+                className="absolute inset-0 h-full w-full overflow-visible"
+                overflow="visible"
+                fill="none"
+                aria-hidden
+              >
+                <defs>
+                  <clipPath id="ck-venn-left">
+                    <circle cx={leftCx} cy={venn.radius} r={venn.radius} />
+                  </clipPath>
+                </defs>
 
-              {[leftCx, rightCx].map((cx) => (
+                {/* The lens: right circle clipped to the left one. */}
                 <circle
-                  key={cx}
-                  cx={cx}
+                  cx={rightCx}
                   cy={venn.radius}
                   r={venn.radius}
-                  stroke="#DDD6C8"
-                  strokeWidth={1}
-                  vectorEffect="non-scaling-stroke"
+                  fill="#DDD6C8"
+                  fillOpacity={0.38}
+                  clipPath="url(#ck-venn-left)"
                 />
-              ))}
-            </svg>
 
-            {/* Columns match the geometry exactly: left-only region, lens,
-                right-only region. */}
+                {[leftCx, rightCx].map((cx) => (
+                  <circle
+                    key={cx}
+                    cx={cx}
+                    cy={venn.radius}
+                    r={venn.radius}
+                    stroke="#DDD6C8"
+                    strokeWidth={1.25}
+                    vectorEffect="non-scaling-stroke"
+                  />
+                ))}
+              </svg>
+
+              {/* Columns match the geometry exactly: left-only region, lens,
+                  right-only region. */}
+              <div
+                className="absolute inset-0 grid"
+                style={{
+                  gridTemplateColumns: `${sideColumn}fr ${overlapWidth}fr ${sideColumn}fr`,
+                }}
+              >
+                <div
+                  className="ck-step relative h-full text-center"
+                  style={animDelay(splitTiming.creative)}
+                >
+                  <CircleQuestions
+                    questions={sides[0].questions}
+                    compact
+                    side="left"
+                  />
+                </div>
+
+                <div
+                  className="ck-step flex min-w-0 items-center justify-center text-center"
+                  style={animDelay(splitTiming.meeting)}
+                >
+                  <MeetingContent compact />
+                </div>
+
+                <div
+                  className="ck-step relative h-full text-center"
+                  style={animDelay(splitTiming.technical)}
+                >
+                  <CircleQuestions
+                    questions={sides[1].questions}
+                    compact
+                    side="right"
+                  />
+                </div>
+              </div>
+            </div>
+
             <div
-              className="absolute inset-0 grid items-center"
-              style={{
-                gridTemplateColumns: `${sideColumn}fr ${overlapWidth}fr ${sideColumn}fr`,
-              }}
+              className="ck-step justify-self-start pb-10"
+              style={animDelay(splitTiming.technical)}
             >
-              <div
-                className="ck-step text-center"
-                style={{
-                  ...animDelay(splitTiming.creative),
-                  paddingLeft: venn.sideTextPad.outer,
-                  paddingRight: venn.sideTextPad.inner,
-                }}
-              >
-                <SideContent side={sides[0]} compact />
-              </div>
-
-              <div
-                className="ck-step min-w-0 text-center"
-                style={animDelay(splitTiming.meeting)}
-              >
-                <MeetingContent compact />
-              </div>
-
-              <div
-                className="ck-step text-center"
-                style={{
-                  ...animDelay(splitTiming.technical),
-                  paddingLeft: venn.sideTextPad.inner,
-                  paddingRight: venn.sideTextPad.outer,
-                }}
-              >
-                <SideContent side={sides[1]} compact />
-              </div>
+              <OuterColumn side={sides[1]} />
             </div>
           </div>
 
-          <p className="mt-10 text-center text-sm text-muted sm:mt-12 sm:text-[0.95rem]">
+          <p className="mt-10 text-center text-lg font-semibold text-ink sm:mt-12 sm:text-lg">
             Most projects need some of both.
           </p>
         </Reveal>
@@ -220,57 +245,135 @@ export default function CreativeTechnicalSplit() {
   );
 }
 
-function SideContent({ side, compact = false }: { side: Side; compact?: boolean }) {
+function OuterColumn({ side }: { side: Side }) {
   const Icon = side.icon;
 
   return (
-    <>
+    <div className="text-center">
       <Icon
-        className={`mx-auto text-forest ${compact ? "h-5 w-5" : "h-6 w-6"}`}
-        strokeWidth={1.6}
+        className="mx-auto h-7 w-7 text-forest"
+        strokeWidth={1.45}
         aria-hidden
       />
-      <p
-        className={`mt-3 font-serif font-medium text-forest ${
-          compact ? "text-[1.45rem] lg:text-[1.7rem]" : "text-[1.6rem]"
-        }`}
-      >
+      <p className="mt-2.5 font-serif text-[1.65rem] font-semibold tracking-[-0.02em] text-forest lg:text-[1.85rem]">
         {side.title}
       </p>
-      <span className="mx-auto mt-2.5 block h-px w-8 bg-forest/45" aria-hidden />
-      {/* Sized so the longest question ("How do we keep it reliable?") stays on
-          one line. A wrap there makes the two halves visibly uneven and pushes
-          the block's corners out toward the arc. */}
+      <span className="mx-auto mt-2 block h-px w-9 bg-forest/50" aria-hidden />
+      <ul className="mt-6 text-[0.95rem] leading-none text-ink">
+        {side.traits.map((trait, index) => (
+          <li key={trait} className="flex flex-col items-center">
+            <span>{trait}</span>
+            {index < side.traits.length - 1 ? (
+              <span
+                className="my-5 size-1 rounded-full bg-forest/50"
+                aria-hidden
+              />
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function invertX(value: string) {
+  const trimmed = value.trim();
+  if (trimmed === "0" || /^0(?:px|rem|em|%)$/.test(trimmed)) return trimmed;
+  return trimmed.startsWith("-") ? trimmed.slice(1) : `-${trimmed}`;
+}
+
+function CircleQuestions({
+  questions,
+  compact = false,
+  side,
+  className = "",
+}: {
+  questions: readonly string[];
+  compact?: boolean;
+  side?: "left" | "right";
+  className?: string;
+}) {
+  if (!compact || !side) {
+    return (
       <ul
-        className={`mt-4 space-y-2 text-ink/80 ${
-          compact
-            ? "whitespace-nowrap text-[0.72rem] md:text-[0.78rem] lg:text-[0.86rem]"
-            : "text-[0.92rem]"
-        }`}
+        className={`space-y-3 text-[0.95rem] font-medium leading-7 text-ink ${className}`}
       >
-        {side.questions.map((question) => (
+        {questions.map((question) => (
           <li key={question}>{question}</li>
         ))}
       </ul>
-    </>
+    );
+  }
+
+  return (
+    <ul className={`absolute inset-0 text-ink ${className}`}>
+      {questions.map((question, index) => {
+        const place = venn.leftQuestions[index];
+        if (!place) return null;
+        const x = side === "left" ? invertX(place.x) : place.x;
+
+        return (
+          <li
+            key={question}
+            className="absolute left-1/2 whitespace-nowrap text-[0.86rem] font-medium leading-snug text-ink [text-shadow:0_0_6px_#FAF7F0,0_0_10px_#FAF7F0] lg:text-[0.95rem]"
+            style={{
+              top: place.y,
+              transform: `translate(calc(-50% + ${x}), -50%)`,
+            }}
+          >
+            {question}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function VennMark({ compact = false }: { compact?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 16"
+      className={`mx-auto text-forest ${compact ? "h-3.5 w-[1.35rem]" : "h-4 w-6"}`}
+      fill="none"
+      aria-hidden
+    >
+      <circle
+        cx="8.6"
+        cy="8"
+        r="6.2"
+        stroke="currentColor"
+        strokeWidth="1.45"
+      />
+      <circle
+        cx="15.4"
+        cy="8"
+        r="6.2"
+        stroke="currentColor"
+        strokeWidth="1.45"
+      />
+    </svg>
   );
 }
 
 function MeetingContent({ compact = false }: { compact?: boolean }) {
   return (
-    <>
-      <Leaf
-        className={`mx-auto text-forest ${compact ? "h-4 w-4" : "h-5 w-5"}`}
-        strokeWidth={1.6}
-        aria-hidden
-      />
+    <div className="text-center">
+      <VennMark compact={compact} />
       <p
-        className={`mt-2.5 font-medium leading-[1.45] text-ink ${
-          compact ? "text-[0.8rem] lg:text-[0.9rem]" : "text-[0.95rem]"
+        className={`mt-3.5 font-medium text-ink ${
+          compact
+            ? "text-[0.8rem] leading-[1.85] lg:text-[0.9rem]"
+            : "text-[0.95rem] leading-[1.9]"
         }`}
       >
-        Where great work comes together.
+        Where
+        <br />
+        great work
+        <br />
+        comes
+        <br />
+        together.
       </p>
-    </>
+    </div>
   );
 }

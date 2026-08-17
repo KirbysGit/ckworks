@@ -105,7 +105,7 @@ export default function ProcessPage() {
         }}
       />
 
-      <section className="bg-ivory py-12 sm:py-14 lg:py-20">
+      <section className="bg-ivory pb-12 pt-16 sm:pb-14 sm:pt-18 lg:pb-20 lg:pt-24">
         <div className="container-ck">
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.5fr)] lg:gap-12">
             <div>
@@ -129,25 +129,6 @@ export default function ProcessPage() {
                 digital systems through a focused process that keeps decisions
                 clear and the work moving.
               </p>
-              <div
-                className="ck-rise mt-8 flex flex-col gap-3 sm:flex-row"
-                style={{ animationDelay: `${processHeroTiming.actions}ms` }}
-              >
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center gap-3 rounded-md bg-forest px-7 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"
-                >
-                  Start a project
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="#phases"
-                  className="inline-flex items-center justify-center gap-3 rounded-md border border-forest/60 bg-transparent px-7 py-3.5 text-sm font-semibold text-forest transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest-soft/35 hover:shadow-soft"
-                >
-                  See how it works
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
             </div>
 
             <StageChain />

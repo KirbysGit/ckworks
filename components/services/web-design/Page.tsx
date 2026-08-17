@@ -59,6 +59,7 @@ import {
 } from "react-icons/si";
 import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
+import { PhoneStatusBar } from "@/components/ui/DeviceFrame";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import type { ServiceArea } from "@/lib/services";
@@ -378,7 +379,7 @@ function WebDesignDevicePreview() {
               </div>
 
               <div className="h-[19.5rem] overflow-hidden bg-card">
-                <WebDesignPhoneStatusBar />
+                <PhoneStatusBar />
                 <div className="px-4 pb-4 pt-1">
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-1.5">
@@ -533,73 +534,6 @@ function LaptopBrowserContent() {
           </span>
         </div>
       </div>
-    </div>
-  );
-}
-
-function ServiceCellularSignal() {
-  return (
-    <span className="flex h-[6px] items-end gap-[0.75px]" aria-hidden>
-      {[2.5, 3.5, 4.5, 5.5].map((height) => (
-        <span
-          key={height}
-          className="w-px rounded-full bg-ink"
-          style={{ height }}
-        />
-      ))}
-    </span>
-  );
-}
-
-function ServiceWifiSignal() {
-  return (
-    <svg viewBox="0 0 10 8" className="h-[7px] w-[9px] text-ink" aria-hidden>
-      <path
-        d="M1.3 2.5C3.4.8 6.6.8 8.7 2.5"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.1"
-      />
-      <path
-        d="M2.9 4.2C4.1 3.3 5.9 3.3 7.1 4.2"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.1"
-      />
-      <path
-        d="M4.5 6C4.8 5.8 5.2 5.8 5.5 6"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.1"
-      />
-    </svg>
-  );
-}
-
-function ServiceBatteryIcon() {
-  return (
-    <span className="relative inline-flex h-[3.5px] w-[8px] shrink-0" aria-hidden>
-      <span className="absolute inset-0 rounded-[1px] border border-ink/80" />
-      <span className="absolute bottom-[1px] right-[-1.5px] top-[1px] w-px rounded-r bg-ink/70" />
-      <span className="absolute bottom-[1px] left-[1px] top-[1px] w-[4.75px] rounded-[0.5px] bg-ink" />
-    </span>
-  );
-}
-
-function WebDesignPhoneStatusBar() {
-  return (
-    <div className="relative z-20 flex h-[18px] items-start justify-between px-[15px] pt-[5px]">
-      <span className="pl-1.5 text-[6px] font-semibold leading-none text-ink">
-        9:41
-      </span>
-      <span className="flex shrink-0 items-center justify-end gap-[2px]">
-        <ServiceCellularSignal />
-        <ServiceWifiSignal />
-        <ServiceBatteryIcon />
-      </span>
     </div>
   );
 }

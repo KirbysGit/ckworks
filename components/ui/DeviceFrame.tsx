@@ -9,7 +9,8 @@ import type { ReactNode } from "react";
  * rather than near-duplicated. Shell only: pass the screen as children.
  *
  * `size` swaps the radii, bezel thickness, and base proportions. "lg" carries
- * the hero's original values; "sm" is tuned for a device sitting inside a card.
+ * the hero's full chrome treatment; "sm" preserves its phone silhouette with
+ * a quieter, card-scale shell that does not turn into a glossy capsule.
  * The Web Design hero can adopt these once its entrance choreography is
  * untangled — its `ck-lift` wrappers already sit outside the frame markup.
  */
@@ -111,24 +112,40 @@ export function LaptopFrame({
  */
 const phoneSizing = {
   sm: {
-    outer: "rounded-[13cqw] p-[1.2cqw]",
-    sheen: "inset-[0.6cqw] rounded-[12.4cqw]",
-    button: "top-[26%] h-[13%] w-[1.6cqw]",
-    inner: "rounded-[12cqw] p-[2.2cqw]",
-    screen: "rounded-[10cqw]",
-    notch: "h-[9cqw] w-[32cqw]",
-    notchRadius: "rounded-b-[3.5cqw]",
-    speaker: "top-[3cqw] h-[1.1cqw] w-[11cqw]",
+    // At this scale, the hero's broad metallic sweep overwhelms the screen.
+    // Keep the same dark, layered device language, but reduce it to a thin
+    // graphite rim and one subtle light catch near the top edge.
+    shell:
+      "border border-black/85 bg-[#080A08] shadow-[0_15px_26px_-15px_rgba(17,23,20,0.78),0_5px_10px_-8px_rgba(17,23,20,0.52)]",
+    sheen:
+      "inset-[0.75cqw] rounded-[16.25cqw] bg-[radial-gradient(circle_at_24%_7%,rgba(255,255,255,0.22),transparent_17%),linear-gradient(180deg,rgba(255,255,255,0.08),transparent_16%,rgba(0,0,0,0.2)_100%)] opacity-75",
+    button: "top-[28%] h-[13%] w-[1.5cqw]",
+    inner:
+      "rounded-[15.5cqw] p-[1.45cqw]",
+    innerSurface:
+      "bg-[#030403] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.13),inset_-1px_-2px_3px_rgba(0,0,0,0.8)]",
+    outer: "rounded-[17cqw] p-[1.15cqw]",
+    screen: "rounded-[13.5cqw]",
+    notch: "h-[9.5cqw] w-[32cqw]",
+    notchRadius: "rounded-b-[4cqw]",
+    speaker: "top-[3.6cqw] h-[1cqw] w-[11.5cqw]",
+    notchOffset: "top-0",
     detailedNotch: false,
   },
   lg: {
+    shell:
+      "bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] shadow-[0_18px_38px_-18px_rgba(17,23,20,0.7),0_6px_14px_-8px_rgba(17,23,20,0.58)]",
+    sheen:
+      "inset-[1px] rounded-[2.2rem] bg-[radial-gradient(circle_at_30%_7%,rgba(255,255,255,0.38),transparent_24%),linear-gradient(160deg,rgba(255,255,255,0.16),transparent_35%,rgba(0,0,0,0.42)_74%)] opacity-70",
+    innerSurface:
+      "bg-[linear-gradient(145deg,#030403_0%,#0C0F0C_46%,#252B25_58%,#050605_100%)] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.16),inset_-2px_-2px_4px_rgba(0,0,0,0.82)]",
     outer: "rounded-[2.3rem] p-[2px]",
-    sheen: "inset-[1px] rounded-[2.2rem]",
     button: "top-24 h-11 w-[3px]",
     inner: "rounded-[2.15rem] p-[4px]",
     screen: "rounded-[1.75rem]",
-    notch: "h-[20px] w-[62px]",
+    notch: "h-[14px] w-[62px]",
     notchRadius: "rounded-b-[8px]",
+    notchOffset: "top-[2px]",
     speaker: "top-[9px] h-[2px] w-[22px]",
     detailedNotch: true,
   },
@@ -149,10 +166,10 @@ export function PhoneFrame({
     // The outer shell is the query container, so every part of the phone —
     // bezel, radii, notch, and the screen content — scales from one width.
     <div
-      className={`relative [container-type:inline-size] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] shadow-[0_18px_38px_-18px_rgba(17,23,20,0.7),0_6px_14px_-8px_rgba(17,23,20,0.58)] ${s.outer} ${className}`}
+      className={`relative [container-type:inline-size] ${s.shell} ${s.outer} ${className}`}
     >
       <span
-        className={`pointer-events-none absolute bg-[radial-gradient(circle_at_30%_7%,rgba(255,255,255,0.38),transparent_24%),linear-gradient(160deg,rgba(255,255,255,0.16),transparent_35%,rgba(0,0,0,0.42)_74%)] opacity-70 ${s.sheen}`}
+        className={`pointer-events-none absolute ${s.sheen}`}
         aria-hidden
       />
       <span
@@ -161,35 +178,105 @@ export function PhoneFrame({
       />
 
       <div
-        className={`relative bg-[linear-gradient(145deg,#030403_0%,#0C0F0C_46%,#252B25_58%,#050605_100%)] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.16),inset_-2px_-2px_4px_rgba(0,0,0,0.82)] ${s.inner}`}
+        className={`relative ${s.innerSurface} ${s.inner}`}
       >
         <div
           className={`relative overflow-hidden bg-card shadow-[inset_0_0_0_1px_rgba(31,36,32,0.05)] ${s.screen}`}
         >
-          <div
-            className={`pointer-events-none absolute left-1/2 top-[-1px] z-30 -translate-x-1/2 ${s.notch}`}
-            aria-hidden
-          >
-            <div
-              className={`relative h-full w-full bg-[#050605] ${s.notchRadius}`}
-            >
-              {/* The flanking corner curves are drawn with fixed-pixel box
-                  shadows, so they only read correctly at the large size. */}
-              {s.detailedNotch && (
-                <>
-                  <span className="absolute -left-[8px] top-0 h-2 w-2 rounded-br-lg shadow-[8px_0_0_0_#050605]" />
-                  <span className="absolute -right-[8px] top-0 h-2 w-2 rounded-bl-lg shadow-[-8px_0_0_0_#050605]" />
-                </>
-              )}
-              <span
-                className={`absolute left-1/2 -translate-x-1/2 rounded-full bg-white/16 ${s.speaker}`}
-              />
-            </div>
-          </div>
-
           {children}
         </div>
+
+        {/* Island lives on the inner bezel, not the screen, so the ivory
+            screen edge and inner highlight cannot show above it. */}
+        <div
+          className={`pointer-events-none absolute left-1/2 z-30 -translate-x-1/2 ${s.notchOffset} ${s.notch}`}
+          aria-hidden
+        >
+          <div
+            className={`relative h-full w-full bg-[#050605] ${s.notchRadius} ${
+              s.detailedNotch ? "shadow-[0_1px_0_rgba(5,6,5,0.95)]" : ""
+            }`}
+          >
+            {s.detailedNotch && (
+              <>
+                <span className="absolute -left-[8px] top-0 h-2 w-2 rounded-br-lg shadow-[8px_0_0_0_#050605]" />
+                <span className="absolute -right-[8px] top-0 h-2 w-2 rounded-bl-lg shadow-[-8px_0_0_0_#050605]" />
+              </>
+            )}
+            <span
+              className={`absolute left-1/2 -translate-x-1/2 rounded-full bg-white/16 ${s.speaker}`}
+            />
+          </div>
+        </div>
       </div>
+    </div>
+  );
+}
+
+/** Status chrome used inside phone screens. Matches the Web Design hero. */
+function CellularSignal() {
+  return (
+    <span className="flex h-[6px] items-end gap-[0.75px]" aria-hidden>
+      {[2.5, 3.5, 4.5, 5.5].map((height) => (
+        <span
+          key={height}
+          className="w-px rounded-full bg-ink"
+          style={{ height }}
+        />
+      ))}
+    </span>
+  );
+}
+
+function WifiSignal() {
+  return (
+    <svg viewBox="0 0 10 8" className="h-[7px] w-[9px] text-ink" aria-hidden>
+      <path
+        d="M1.3 2.5C3.4.8 6.6.8 8.7 2.5"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.1"
+      />
+      <path
+        d="M2.9 4.2C4.1 3.3 5.9 3.3 7.1 4.2"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.1"
+      />
+      <path
+        d="M4.5 6C4.8 5.8 5.2 5.8 5.5 6"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.1"
+      />
+    </svg>
+  );
+}
+
+function BatteryIcon() {
+  return (
+    <span className="relative inline-flex h-[3.5px] w-[8px] shrink-0" aria-hidden>
+      <span className="absolute inset-0 rounded-[1px] border border-ink/80" />
+      <span className="absolute bottom-[1px] right-[-1.5px] top-[1px] w-px rounded-r bg-ink/70" />
+      <span className="absolute bottom-[1px] left-[1px] top-[1px] w-[4.75px] rounded-[0.5px] bg-ink" />
+    </span>
+  );
+}
+
+export function PhoneStatusBar() {
+  return (
+    <div className="relative z-20 flex h-[18px] items-start justify-between px-[15px] pt-[5px]">
+      <span className="pl-1.5 text-[6px] font-semibold leading-none text-ink">
+        9:41
+      </span>
+      <span className="flex shrink-0 items-center justify-end gap-[2px]">
+        <CellularSignal />
+        <WifiSignal />
+        <BatteryIcon />
+      </span>
     </div>
   );
 }

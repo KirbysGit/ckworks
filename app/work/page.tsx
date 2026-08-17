@@ -490,8 +490,10 @@ function EditorialWorkCardContent({
 
   return (
     <div
-      className={`grid items-stretch gap-7 lg:grid-cols-[minmax(16rem,0.34fr)_minmax(0,0.66fr)] lg:gap-10 ${
-        isEven ? "lg:grid-cols-[minmax(0,0.66fr)_minmax(16rem,0.34fr)]" : ""
+      className={`grid items-stretch gap-7 lg:gap-10 ${
+        isEven
+          ? "lg:grid-cols-[minmax(0,0.66fr)_minmax(16rem,0.34fr)]"
+          : "lg:grid-cols-[minmax(16rem,0.34fr)_minmax(0,0.66fr)]"
       }`}
     >
       {/* Text Content */}
