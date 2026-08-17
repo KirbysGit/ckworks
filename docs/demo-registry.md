@@ -79,6 +79,22 @@ Verified against the repository on 2026-08-07.
 - **Never imply**: a real interior-design client, an actual support retainer,
   or a measured redesign outcome.
 
+### Field & Forge
+
+- **Represents**: a general goods and supply shop
+- **Used in**: `components/about/AboutHero.tsx`
+- **Purpose**: the About hero, where a physical storefront connects to a phone
+  running the same shop online. It is the "business comes to life online" story
+  the page opens with, so it needs to read as an ordinary local shop rather
+  than a studio-flavoured brand.
+- **Assets**: `public/images/about/png/about-hero-demo.png`,
+  `public/images/about/png/about-hero-mobile-demo.png`
+- **Labeling**: the storefront image carries an "Illustrative Field and Forge
+  storefront" alt, and the site is framed inside the shared phone shell. The
+  `/terms` page also names it as a fictional business.
+- **Never imply**: a real retail client, an ecommerce build CK Works shipped, or
+  that the free-delivery and pricing details describe a real offer.
+
 ## People And Companies In Demo Data
 
 Invented names used inside dashboards, inquiry cards, and activity feeds. Keep

@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
+
 import { BarChart3, Cloud, Mail, MousePointerClick } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
 import PageHero from "@/components/page/PageHero";
-import { contactEmail } from "@/lib/data";
+import {
+  LegalCallout,
+  LegalEmail,
+  LegalListItem,
+  LegalSection,
+  LegalUpdatedBar,
+} from "@/components/page/LegalSection";
 import { createPageMetadata } from "@/lib/seo";
 
 /**
@@ -77,17 +83,9 @@ export default function PrivacyPolicyPage() {
         description="CK Works is a one-person studio. The site collects very little: what you choose to send through the inquiry form, and analytics about how pages are used."
       />
 
-      <div className="border-b border-line/70 bg-card/30">
-        <div className="container-ck flex flex-wrap items-center gap-x-3 gap-y-1 py-4">
-          <span className="h-1.5 w-1.5 rounded-full bg-forest" aria-hidden />
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-forest">
-            Last updated
-          </span>
-          <span className="text-sm text-muted">{lastUpdated}</span>
-        </div>
-      </div>
+      <LegalUpdatedBar date={lastUpdated} />
 
-      <PolicySection
+      <LegalSection
         number="01"
         label="What you send"
         title="Information you provide directly."
@@ -103,9 +101,9 @@ export default function PrivacyPolicyPage() {
           profiling, or any automated decision-making. If you email, message, or
           call directly, I keep that correspondence for the same reason.
         </p>
-      </PolicySection>
+      </LegalSection>
 
-      <PolicySection
+      <LegalSection
         number="02"
         label="Collected automatically"
         title="Analytics and session recording."
@@ -116,13 +114,7 @@ export default function PrivacyPolicyPage() {
         </p>
         <ul className="not-prose space-y-2.5 pt-1">
           {trackedInteractions.map((interaction) => (
-            <li key={interaction} className="flex items-start gap-3">
-              <span
-                className="mt-[0.7rem] h-1.5 w-1.5 shrink-0 rounded-full bg-forest"
-                aria-hidden
-              />
-              <span>{interaction}</span>
-            </li>
+            <LegalListItem key={interaction}>{interaction}</LegalListItem>
           ))}
         </ul>
         <p>
@@ -133,13 +125,13 @@ export default function PrivacyPolicyPage() {
           use it to understand layout problems rather than to identify
           individual visitors.
         </p>
-        <Callout>
+        <LegalCallout>
           None of this is sold, and none of it is shared with anyone beyond the
           providers listed below.
-        </Callout>
-      </PolicySection>
+        </LegalCallout>
+      </LegalSection>
 
-      <PolicySection
+      <LegalSection
         number="03"
         label="Cookies"
         title="What gets stored in your browser."
@@ -155,9 +147,9 @@ export default function PrivacyPolicyPage() {
           Google&apos;s Analytics opt-out browser add-on, or through
           Clarity&apos;s opt-out. The site works normally either way.
         </p>
-      </PolicySection>
+      </LegalSection>
 
-      <PolicySection
+      <LegalSection
         number="04"
         label="Providers"
         title="Who else handles this information."
@@ -183,9 +175,9 @@ export default function PrivacyPolicyPage() {
           Each of these handles the data under its own terms and privacy policy.
           CK Works does not share your information with anyone else.
         </p>
-      </PolicySection>
+      </LegalSection>
 
-      <PolicySection
+      <LegalSection
         number="05"
         label="Retention and choices"
         title="How long it is kept, and how to have it removed."
@@ -198,12 +190,12 @@ export default function PrivacyPolicyPage() {
         </p>
         <p>
           You can ask what I hold about you, ask for it to be corrected, or ask
-          for it to be deleted, by emailing <PolicyEmail />. There is no form to
+          for it to be deleted, by emailing <LegalEmail />. There is no form to
           fill out and no account to close, and I will handle it directly.
         </p>
-      </PolicySection>
+      </LegalSection>
 
-      <PolicySection
+      <LegalSection
         number="06"
         label="Scope"
         title="A few practical notes."
@@ -217,81 +209,10 @@ export default function PrivacyPolicyPage() {
         <p>
           If this policy changes in any meaningful way, the date at the top of
           the page changes with it. Questions about any of this are welcome at{" "}
-          <PolicyEmail />.
+          <LegalEmail />.
         </p>
-      </PolicySection>
+      </LegalSection>
     </SiteLayout>
   );
 }
 
-/**
- * One policy band. The number sits on a forest disc in the left column with
- * the label and title, so the eye has an anchor per section and the prose
- * keeps a comfortable measure on the right.
- */
-function PolicySection({
-  number,
-  label,
-  title,
-  children,
-  wide = false,
-  last = false,
-}: {
-  number: string;
-  label: string;
-  title: string;
-  children: ReactNode;
-  wide?: boolean;
-  last?: boolean;
-}) {
-  return (
-    <section
-      className={`bg-ivory py-12 lg:py-16 ${last ? "" : "border-b border-line/70"}`}
-    >
-      <div className="container-ck grid gap-8 lg:grid-cols-[minmax(0,0.6fr)_minmax(0,1fr)] lg:gap-16">
-        <div className="lg:sticky lg:top-28 lg:self-start">
-          <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest text-[0.72rem] font-semibold text-ivory">
-              {number}
-            </span>
-            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
-              {label}
-            </span>
-          </div>
-          <h2 className="mt-5 max-w-sm font-serif text-[1.9rem] font-medium leading-[1.15] text-ink sm:text-[2.15rem]">
-            {title}
-          </h2>
-          <span className="mt-5 block h-px w-10 bg-forest/50" aria-hidden />
-        </div>
-
-        <div
-          className={`space-y-5 text-base leading-8 text-ink/80 ${
-            wide ? "" : "max-w-[38rem]"
-          }`}
-        >
-          {children}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/** Pulled out so the one emphasized line reads as a note, not a paragraph. */
-function Callout({ children }: { children: ReactNode }) {
-  return (
-    <p className="rounded-xl border border-forest/25 bg-forest-soft/35 px-5 py-4 text-[0.97rem] leading-7 text-ink">
-      {children}
-    </p>
-  );
-}
-
-function PolicyEmail() {
-  return (
-    <a
-      className="font-medium text-forest underline decoration-forest/35 underline-offset-4 transition-colors hover:text-ink hover:decoration-ink/40"
-      href={`mailto:${contactEmail}`}
-    >
-      {contactEmail}
-    </a>
-  );
-}
