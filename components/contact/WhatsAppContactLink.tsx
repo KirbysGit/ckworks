@@ -9,6 +9,8 @@ type WhatsAppContactLinkProps = {
   children?: ReactNode;
   className?: string;
   iconClassName?: string;
+  /** Forest circle behind the icon, matching the contact aside Mail treatment. */
+  iconBadge?: boolean;
   location: string;
 };
 
@@ -16,8 +18,15 @@ export default function WhatsAppContactLink({
   children = "WhatsApp",
   className = "",
   iconClassName = "h-4 w-4",
+  iconBadge = false,
   location,
 }: WhatsAppContactLinkProps) {
+  const icon = (
+    <FaWhatsapp
+      className={`${iconClassName}${iconBadge ? " text-ivory" : ""}`}
+    />
+  );
+
   return (
     <a
       href={contactWhatsAppUrl}
@@ -32,7 +41,13 @@ export default function WhatsAppContactLink({
       }
       className={className}
     >
-      <FaWhatsapp className={iconClassName} />
+      {iconBadge ? (
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-forest text-ivory">
+          {icon}
+        </span>
+      ) : (
+        icon
+      )}
       {children}
     </a>
   );

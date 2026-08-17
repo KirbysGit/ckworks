@@ -52,11 +52,8 @@ export default function ContactPage() {
             No perfect brief needed. Share where things stand, what feels
             unclear, and what you&apos;d like the site or system to help with.
           </p>
-          <p className="mt-2.5 font-serif text-base italic text-muted">
-            Not sure what service you need? That&apos;s completely fine.
-          </p>
 
-          <div className="mt-5 overflow-hidden rounded-2xl border border-line bg-card shadow-soft lg:mt-6">
+          <div className="mt-5 rounded-2xl border border-line bg-card shadow-soft lg:mt-6">
             <div className="grid lg:grid-cols-[minmax(0,1fr)_20rem]">
               <ContactForm />
               <ContactAside />
@@ -70,7 +67,7 @@ export default function ContactPage() {
 
 function ContactAside() {
   return (
-    <aside className="border-t border-line bg-card px-6 py-7 sm:px-7 lg:border-l lg:border-t-0 lg:px-7 lg:py-8">
+    <aside className="rounded-b-2xl border-t border-line bg-card px-6 py-7 sm:px-7 lg:rounded-b-none lg:rounded-r-2xl lg:border-l lg:border-t-0 lg:px-7 lg:py-8">
       <AsideHeading>Other ways to reach me</AsideHeading>
 
       <div className="mt-5 space-y-3.5">
@@ -88,6 +85,7 @@ function ContactAside() {
 
         <WhatsAppContactLink
           location="contact_page"
+          iconBadge
           className="group flex items-center gap-3 text-sm font-medium text-ink transition-colors hover:text-forest"
           iconClassName="h-4 w-4"
         >

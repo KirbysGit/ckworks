@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronDown, Loader2, X } from "lucide-react";
 import Logo from "../ui/Logo";
@@ -470,6 +471,20 @@ export default function ProjectInquiryModal({
                           </>
                         )}
                       </button>
+
+                      {/* Escape hatch for anyone who arrives with more context
+                          than the quick form holds. A real link, so it also
+                          works if the modal is reached without JS behaving. */}
+                      <p className="mt-3 text-center text-[11px] text-muted sm:text-xs">
+                        Have more to share?{" "}
+                        <Link
+                          href="/contact"
+                          onClick={onClose}
+                          className="font-medium text-forest underline decoration-forest/35 underline-offset-4 transition-colors hover:text-ink hover:decoration-ink/40"
+                        >
+                          Use the full contact form
+                        </Link>
+                      </p>
 
                       <ModalBottomNote />
                     </form>

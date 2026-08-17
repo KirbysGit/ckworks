@@ -3,8 +3,9 @@
 import { type CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import Button from "../ui/Button";
+import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import WhatsAppContactLink from "../contact/WhatsAppContactLink";
+import { contactEmail } from "@/lib/data";
 import { fadeUp, inView } from "@/lib/motion";
 
 /**
@@ -84,13 +85,13 @@ export default function CTA() {
             there.
           </p>
 
+          {/* "Send me a note" used to sit here pointing at the same /contact
+              href as "Start a project" — two buttons, one destination. The
+              email line below replaces it with an actually different channel. */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button href="/contact">
+            <ProjectInquiryTrigger source="home_bottom_cta">
               Start a project <ArrowRight className="h-4 w-4" />
-            </Button>
-            <Button href="/contact" variant="secondary">
-              Send me a note
-            </Button>
+            </ProjectInquiryTrigger>
             <WhatsAppContactLink
               location="site_cta"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-forest/50 bg-transparent px-6 py-3 text-sm font-medium text-forest transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest-soft/40 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:ring-offset-ivory"
@@ -98,6 +99,16 @@ export default function CTA() {
               WhatsApp
             </WhatsAppContactLink>
           </div>
+
+          <p className="mt-5 text-sm text-muted">
+            Prefer email?{" "}
+            <a
+              href={`mailto:${contactEmail}`}
+              className="font-medium text-forest underline decoration-forest/35 underline-offset-4 transition-colors hover:text-ink hover:decoration-ink/40"
+            >
+              {contactEmail}
+            </a>
+          </p>
         </motion.div>
       </div>
     </section>

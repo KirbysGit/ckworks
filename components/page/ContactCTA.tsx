@@ -1,13 +1,22 @@
 import { ArrowRight } from "lucide-react";
-import Button from "@/components/ui/Button";
+import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import WhatsAppContactLink from "@/components/contact/WhatsAppContactLink";
 
+/**
+ * Bottom-of-page CTA shared by /work, /process, /about, and the service pages.
+ *
+ * `source` names the surface so a conversion here is distinguishable from the
+ * header or the homepage hero. Pass it whenever this is used on a new page;
+ * the default is deliberately generic so a missing one is obvious in reporting.
+ */
 export default function ContactCTA({
   title = "Ready to talk through the next step?",
   description = "Send a note with what you are working on, and I will help you figure out what makes sense next.",
+  source = "page_bottom_cta",
 }: {
   title?: string;
   description?: string;
+  source?: string;
 }) {
   return (
     <section className="border-t border-line/70 bg-ivory py-14 lg:py-20">
@@ -23,9 +32,9 @@ export default function ContactCTA({
             {description}
           </p>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button href="/contact">
+            <ProjectInquiryTrigger source={source}>
               Start a project <ArrowRight className="h-4 w-4" />
-            </Button>
+            </ProjectInquiryTrigger>
             <WhatsAppContactLink
               location="contact_cta"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-forest/50 bg-transparent px-6 py-3 text-sm font-medium text-forest transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest-soft/40 hover:shadow-soft"

@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import Logo from "../ui/Logo";
 import DrawUnderline from "../ui/DrawUnderline";
+import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import { primaryNav } from "@/lib/navigation";
 import type { ServiceArea, ServiceSlug } from "@/lib/services";
 
@@ -158,13 +159,14 @@ export default function Header() {
           })}
         </nav>
 
+        {/* Nav carries Contact as a page; this button is the action. */}
         <div className="hidden lg:block">
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-forest px-6 py-3 text-sm font-medium text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:ring-offset-ivory"
+          <ProjectInquiryTrigger
+            source="header"
+            className="rounded-xl hover:bg-ink"
           >
             Start a project <ArrowRight className="h-4 w-4" />
-          </Link>
+          </ProjectInquiryTrigger>
         </div>
 
         <button
@@ -248,13 +250,13 @@ export default function Header() {
                 }}
                 transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
               >
-                <Link
-                  href="/contact"
-                  onClick={closeMobileMenu}
-                  className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-forest px-6 py-3 text-sm font-medium text-ivory shadow-soft transition-colors hover:bg-ink"
+                <ProjectInquiryTrigger
+                  source="header_mobile"
+                  onOpen={closeMobileMenu}
+                  className="mt-3 w-full rounded-xl hover:bg-ink"
                 >
                   Start a project <ArrowRight className="h-4 w-4" />
-                </Link>
+                </ProjectInquiryTrigger>
               </motion.div>
             </motion.nav>
           </motion.div>

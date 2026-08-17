@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
+import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import AboutHero from "@/components/about/AboutHero";
 import CreativeTechnicalSplit from "@/components/about/CreativeTechnicalSplit";
 import PracticeMeans from "@/components/about/PracticeMeans";
@@ -223,13 +224,13 @@ function AboutClosingCTA() {
           </div>
 
           <div className="flex w-fit shrink-0 flex-col items-stretch gap-4">
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-forest px-6 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"
+            <ProjectInquiryTrigger
+              source="about_footer_cta"
+              className="rounded-lg px-6 py-3.5 text-sm font-semibold hover:bg-ink"
             >
               Start a project
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </ProjectInquiryTrigger>
             <Link
               href="/process"
               className="group inline-flex items-center justify-center gap-1.5 border-b border-forest pb-1.5 text-sm font-semibold text-forest transition-colors hover:text-ink"

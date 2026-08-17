@@ -1,7 +1,7 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { ArrowRight, ChevronDown, Loader2 } from "lucide-react";
 import { serviceAreas } from "@/lib/services";
 import { trackEvent } from "@/lib/analytics";
 
@@ -45,7 +45,7 @@ const referralOptions = [
 ];
 
 const fieldClass =
-  "mt-1.5 w-full rounded-xl border border-line bg-ivory/70 px-4 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-forest focus:ring-2 focus:ring-forest/15";
+  "mt-1.5 w-full rounded-xl border-2 border-line bg-ivory/70 px-4 py-2.5 text-sm text-ink outline-none transition-[border-color,background-color] duration-500 ease-out placeholder:text-muted/55 hover:border-forest/40 hover:bg-card focus:border-forest focus:bg-card";
 
 export default function ContactForm() {
   const [form, setForm] = useState<ContactFormState>(initialForm);
@@ -183,7 +183,7 @@ export default function ContactForm() {
     // so the form and the aside read as one panel rather than two stacked ones.
     <form
       onSubmit={handleSubmit}
-      className="bg-card px-6 py-5 sm:px-7 sm:py-6"
+      className="rounded-t-2xl bg-card px-6 py-5 sm:px-7 sm:py-6 lg:rounded-l-2xl lg:rounded-tr-none"
     >
       <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden">
         <label htmlFor="contact-website">Website</label>
@@ -201,6 +201,7 @@ export default function ContactForm() {
           label="Name"
           required
           value={form.name}
+          placeholder="Your name"
           onChange={(value) => updateField("name", value)}
         />
         <TextField
@@ -208,11 +209,13 @@ export default function ContactForm() {
           required
           type="email"
           value={form.email}
+          placeholder="you@company.com"
           onChange={(value) => updateField("email", value)}
         />
         <TextField
           label="Company"
           value={form.company}
+          placeholder="Your business"
           onChange={(value) => updateField("company", value)}
         />
         <TextField
@@ -332,26 +335,97 @@ function SelectField({
   options: string[];
   optional?: boolean;
 }) {
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  function chooseOption(option: string) {
+    onChange(option);
+    setOpen(false);
+  }
+
   return (
-    <label className="block">
+    <div
+      ref={wrapperRef}
+      className="relative block"
+      onBlur={(event) => {
+        const next = event.relatedTarget;
+        if (!next || !event.currentTarget.contains(next as Node)) {
+          setOpen(false);
+        }
+      }}
+    >
       <span className="text-sm font-semibold text-ink">
         {label}
         {optional && (
           <span className="ml-1.5 font-normal text-muted">(optional)</span>
         )}
       </span>
-      <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className={fieldClass}
+      <button
+        type="button"
+        aria-label={label}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") setOpen(false);
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            setOpen(true);
+            wrapperRef.current
+              ?.querySelector<HTMLButtonElement>("[data-select-option]")
+              ?.focus();
+          }
+        }}
+        className={`${fieldClass} flex items-center justify-between gap-3 text-left ${
+          open ? "border-forest bg-card" : ""
+        }`}
       >
-        <option value="">Select an option</option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </label>
+        <span className={`min-w-0 truncate ${value ? "text-ink" : "text-muted/55"}`}>
+          {value || "Select an option"}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-forest/75 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+          strokeWidth={1.8}
+        />
+      </button>
+
+      {open && (
+        <div
+          role="listbox"
+          className="absolute left-0 right-0 top-full z-50 mt-1.5 overflow-hidden rounded-xl border-2 border-line bg-card py-1 shadow-soft"
+        >
+          {options.map((option) => {
+            const selected = value === option;
+            return (
+              <button
+                key={option}
+                type="button"
+                role="option"
+                aria-selected={selected}
+                data-select-option
+                onClick={() => chooseOption(option)}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") {
+                    setOpen(false);
+                    wrapperRef.current
+                      ?.querySelector<HTMLButtonElement>("[aria-haspopup]")
+                      ?.focus();
+                  }
+                }}
+                className={`block w-full px-4 py-2.5 text-left text-sm transition-colors focus:outline-none ${
+                  selected
+                    ? "bg-forest-soft/80 font-medium text-forest"
+                    : "text-ink hover:bg-forest-soft/55 hover:text-forest focus:bg-forest-soft/55 focus:text-forest"
+                }`}
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }

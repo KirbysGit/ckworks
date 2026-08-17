@@ -15,6 +15,7 @@ import {
   Workflow,
 } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
+import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import WhatsAppContactLink from "@/components/contact/WhatsAppContactLink";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import Reveal from "@/components/ui/Reveal";
@@ -728,13 +729,13 @@ function WorkFooterCta() {
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-3 rounded-md bg-forest px-7 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift sm:min-w-[13rem]"
+              <ProjectInquiryTrigger
+                source="work_footer_cta"
+                className="rounded-md px-7 py-3.5 text-sm font-semibold hover:bg-ink sm:min-w-[13rem]"
               >
                 Start a project
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </ProjectInquiryTrigger>
               <WhatsAppContactLink
                 location="work_footer_cta"
                 className="inline-flex items-center justify-center gap-3 rounded-md border border-forest/60 bg-transparent px-7 py-3.5 text-sm font-semibold text-forest transition-all duration-200 hover:-translate-y-0.5 hover:bg-forest-soft/35 hover:shadow-soft sm:min-w-[12rem]"
