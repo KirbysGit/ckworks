@@ -45,7 +45,7 @@ const referralOptions = [
 ];
 
 const fieldClass =
-  "mt-2 w-full rounded-xl border border-line bg-ivory/70 px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-forest focus:ring-2 focus:ring-forest/15";
+  "mt-1.5 w-full rounded-xl border border-line bg-ivory/70 px-4 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-forest focus:ring-2 focus:ring-forest/15";
 
 export default function ContactForm() {
   const [form, setForm] = useState<ContactFormState>(initialForm);
@@ -179,9 +179,11 @@ export default function ContactForm() {
   }
 
   return (
+    // The card border and radius live on the wrapper in `app/contact/page.tsx`
+    // so the form and the aside read as one panel rather than two stacked ones.
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-line bg-card p-5 shadow-soft sm:p-7"
+      className="bg-card px-6 py-5 sm:px-7 sm:py-6"
     >
       <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden">
         <label htmlFor="contact-website">Website</label>
@@ -194,7 +196,7 @@ export default function ContactForm() {
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-3.5 sm:grid-cols-2">
         <TextField
           label="Name"
           required
@@ -220,7 +222,7 @@ export default function ContactForm() {
           onChange={(value) => updateField("currentWebsite", value)}
         />
         <SelectField
-          label="Service needed"
+          label="What can I help with?"
           value={form.serviceNeeded}
           onChange={(value) => updateField("serviceNeeded", value)}
           options={serviceAreas.map((service) => service.title)}
@@ -233,29 +235,32 @@ export default function ContactForm() {
         />
       </div>
 
-      <div className="mt-4">
-        <SelectField
-          label="How did you hear about CK Works?"
-          value={form.heardAbout}
-          onChange={(value) => updateField("heardAbout", value)}
-          options={referralOptions}
-        />
-      </div>
-
-      <label className="mt-4 block">
+      {/* Required field before the optional one, and four rows rather than six
+          so the submit button stays reachable without scrolling. */}
+      <label className="mt-3 block">
         <span className="text-sm font-semibold text-ink">
-          Project description <span className="text-forest">*</span>
+          Tell me about the project <span className="text-forest">*</span>
         </span>
         <textarea
           value={form.projectDescription}
           onChange={(event) =>
             updateField("projectDescription", event.target.value)
           }
-          rows={6}
+          rows={4}
           className={`${fieldClass} resize-y`}
-          placeholder="Tell me what you are working on, what feels messy, and what you want the site or system to help with."
+          placeholder="Share as much or as little as you'd like..."
         />
       </label>
+
+      <div className="mt-3">
+        <SelectField
+          label="How did you hear about CK Works?"
+          value={form.heardAbout}
+          onChange={(value) => updateField("heardAbout", value)}
+          options={referralOptions}
+          optional
+        />
+      </div>
 
       {error && (
         <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
@@ -319,21 +324,28 @@ function SelectField({
   value,
   onChange,
   options,
+  optional = false,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   options: string[];
+  optional?: boolean;
 }) {
   return (
     <label className="block">
-      <span className="text-sm font-semibold text-ink">{label}</span>
+      <span className="text-sm font-semibold text-ink">
+        {label}
+        {optional && (
+          <span className="ml-1.5 font-normal text-muted">(optional)</span>
+        )}
+      </span>
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
         className={fieldClass}
       >
-        <option value="">Choose one</option>
+        <option value="">Select an option</option>
         {options.map((option) => (
           <option key={option} value={option}>
             {option}
