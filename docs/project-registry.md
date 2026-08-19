@@ -59,18 +59,6 @@ Status strings come from `lib/projects.ts` and carry real meaning:
   revenue attributable to the site
 - **Source**: `lib/projects.ts`, `projects.md`
 
-### Halo Reserve (`halo-reserve`)
-
-- **Status**: Client Work / Brand Phase — `hidden: true` in `lib/projects.ts`
-- **Demonstrates**: brand design and art direction for a wellness and recovery
-  concept
-- **Handling**: hidden from public listings. Do not surface it on a public page,
-  in schema, or in a related-work module without an explicit request.
-- **Never imply**: a launched website or a completed engagement
-- **Source**: `lib/projects.ts`
-
-## Personal Products
-
 ### Taylor.io (`taylor`)
 
 - **Status**: Personal Product / Early Release — live at `trytaylor.io`

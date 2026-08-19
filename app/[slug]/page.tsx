@@ -10,7 +10,8 @@ import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import WhatsAppContactLink from "@/components/contact/WhatsAppContactLink";
 import Button from "@/components/ui/Button";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
-import { caseStudies, getCaseStudy } from "@/lib/projects";
+import { caseStudies, getCaseStudy, type CaseStudy } from "@/lib/projects";
+import { serviceAreas } from "@/lib/services";
 import { absoluteUrl } from "@/lib/seo";
 
 type Props = {
@@ -27,13 +28,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!study) return {};
 
   return {
-    title: study.name,
+    title: study.metaTitle,
     description: study.oneLiner,
     alternates: {
       canonical: `/${study.slug}`,
     },
     openGraph: {
-      title: study.name,
+      title: study.metaTitle,
       description: study.oneLiner,
       url: `/${study.slug}`,
       type: "article",
@@ -50,7 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: study.name,
+      title: study.metaTitle,
       description: study.oneLiner,
     },
   };
@@ -151,13 +152,28 @@ export default async function CaseStudyPage({ params }: Props) {
               {study.oneLiner}
             </p>
 
-            <div className="mt-8 grid gap-6 rounded-2xl border border-line bg-card p-6 shadow-soft sm:grid-cols-3">
+            {/* The proof line. Sits above the fold on purpose — a visitor
+                scanning the page should get what changed before they decide
+                whether to read the write-up underneath. */}
+            <p className="mt-6 border-l-2 border-forest pl-4 text-lg leading-relaxed text-ink">
+              {study.outcomeLine}
+            </p>
+
+            <div className="mt-8 grid gap-6 rounded-2xl border border-line bg-card p-6 shadow-soft sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
                   Role
                 </p>
                 <p className="mt-1.5 text-sm leading-relaxed text-ink">
                   {study.role}
+                </p>
+              </div>
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+                  Timeframe
+                </p>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink">
+                  {study.timeframe}
                 </p>
               </div>
               <div>
@@ -250,11 +266,60 @@ export default async function CaseStudyPage({ params }: Props) {
             />
           </div>
 
+          <CaseStudyLinks study={study} />
+
           <ProjectPageCta />
         </article>
       </main>
       <Footer />
     </>
+  );
+}
+
+/**
+ * The two links the case studies were missing. Until now a project connected
+ * to its service only through the footer, and dead-ended at the CTA — so a
+ * reader who finished one had nowhere to go and a crawler saw a leaf node.
+ */
+function CaseStudyLinks({ study }: { study: CaseStudy }) {
+  const service = serviceAreas.find((area) => area.slug === study.serviceSlug);
+  const others = caseStudies.filter((item) => item.slug !== study.slug);
+  const next = others[(caseStudies.indexOf(study) + 1) % Math.max(others.length, 1)];
+
+  if (!service && !next) return null;
+
+  return (
+    <div className="mx-auto mt-10 grid max-w-3xl gap-3 sm:grid-cols-2">
+      {service && (
+        <Link
+          href={service.href}
+          className="group flex flex-col rounded-xl border border-line bg-card px-5 py-4 shadow-soft transition-colors duration-200 hover:border-forest/40 hover:bg-forest-soft/30"
+        >
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+            The service behind this
+          </span>
+          <span className="mt-1.5 inline-flex items-center gap-2 text-sm font-semibold text-forest">
+            {service.title}
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </span>
+        </Link>
+      )}
+
+      {next && (
+        <Link
+          href={`/${next.slug}`}
+          className="group flex flex-col rounded-xl border border-line bg-card px-5 py-4 shadow-soft transition-colors duration-200 hover:border-forest/40 hover:bg-forest-soft/30"
+        >
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+            Next project
+          </span>
+          <span className="mt-1.5 inline-flex items-center gap-2 text-sm font-semibold text-forest">
+            {next.name}
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </span>
+        </Link>
+      )}
+    </div>
   );
 }
 

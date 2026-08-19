@@ -6,11 +6,19 @@
  * not rendered.
  */
 
+import type { ServiceSlug } from "@/lib/services";
+
 export type Group = "client" | "product" | "prototype";
 
 export type CaseStudy = {
   slug: string;
   name: string;
+  /**
+   * Browser/search title. Names the kind of work so "Centi" is not the only
+   * context a result gives. Say what it is, not what it was built with —
+   * nobody hiring a web designer searches for the tech stack.
+   */
+  metaTitle: string;
   /** Short card pill — what the work actually is, not a vague bucket. */
   badge: string;
   category: string;
@@ -25,6 +33,17 @@ export type CaseStudy = {
   role: string;
   stack: string[];
   status: string;
+  /** When the work happened. Plain months, not a range object. */
+  timeframe: string;
+  /**
+   * One sentence naming what CHANGED because the project exists — not what
+   * it does and not what it was built with. Must be defensible on a call:
+   * no invented metrics. For personal work the honest outcome is often a
+   * capability or a decision, and that is fine.
+   */
+  outcomeLine: string;
+  /** The CK Works service this proves. Drives the contextual link. */
+  serviceSlug: ServiceSlug;
   /** Placeholder gradient until real screenshots exist. */
   accent: string;
   coverImage?: {
@@ -64,64 +83,9 @@ export const groups: { id: Group; title: string; blurb: string }[] = [
 
 const allCaseStudies: CaseStudy[] = [
   {
-    slug: "halo-reserve",
-    name: "Halo Reserve",
-    badge: "Brand Identity",
-    category: "Brand Identity / Wellness Direction",
-    group: "client",
-    featured: false,
-    hidden: true,
-    oneLiner:
-      "A wellness identity designed to feel calm, premium, and distinct enough to grow into a larger brand.",
-    teaser:
-      "A premium identity for a salt, wellness, and recovery concept that was still finding its visual direction.",
-    workedOn: [
-      "Logo Design",
-      "Brand Direction",
-      "Signage Lockup",
-      "Visual Exploration",
-    ],
-    role: "Brand Design, Art Direction",
-    stack: ["Figma", "Illustrator"],
-    status: "Client Work / Brand Phase",
-    accent: "from-[#3a4d3f] to-[#6d7d5f]",
-    shortVersion: [
-      "Halo Reserve started with a client who had the name, the general wellness direction, and a rough idea of how she wanted the business to feel, but not a finished visual identity yet.",
-      "I explored several logo systems, type directions, color palettes, and storefront applications before narrowing everything into a calmer luxury direction built around salt, wellness, and recovery.",
-      "The final system uses a stacked primary logo, a horizontal storefront version, a muted gold accent, and a custom O inspired by the Greek letter Phi.",
-    ],
-    problem: [
-      "The business needed to look premium without turning into another soft, interchangeable spa brand.",
-      "It also needed a logo that could work in two very different situations: as a refined brand mark and across a long, narrow storefront sign that still had to be readable from a distance.",
-    ],
-    built: [
-      "primary stacked logo system",
-      "horizontal storefront lockup",
-      "custom Phi-inspired letterform",
-      "charcoal, ivory, white, and muted gold color direction",
-      "signage and brand presentation mockups",
-      "export-ready logo variations",
-    ],
-    designDecisions: [
-      "I kept the system mostly typographic because the name already carried a strong luxury feel. The custom O and gold A add enough character without making the logo overly decorative.",
-      "The horizontal sign version was treated as its own practical lockup instead of forcing the primary stacked logo into a space it was not designed for.",
-    ],
-    technicalDecisions: [],
-    challenges: [
-      "The hardest part was finding the point where the identity felt calm but not empty, and premium but not cold.",
-      "There were also a lot of possible directions early on, so the work became as much about narrowing the brand as it was about drawing the logo.",
-    ],
-    outcome: [
-      "The project ended with a clearer identity the client could use for the storefront, early marketing, and the next phase of the business.",
-      "It also gave me a much better understanding of how logo decisions change once they have to work on actual signage instead of only inside a presentation board.",
-    ],
-    improveNext: [
-      "The next phase would be extending the identity into the website, service menus, membership materials, and real photography once the business details are fully defined.",
-    ],
-  },
-  {
     slug: "tizirsso",
     name: "Tizirsso Racing",
+    metaTitle: "Tizirsso Racing Website Design",
     badge: "Client Site",
     category: "Website Design & Development",
     group: "client",
@@ -140,6 +104,10 @@ const allCaseStudies: CaseStudy[] = [
     role: "Design, Development, Brand Direction, Hosting",
     stack: ["Next.js", "Tailwind CSS", "Framer Motion", "Figma", "Vercel"],
     status: "Client Work / Live V1",
+    timeframe: "April 2026",
+    outcomeLine:
+      "Gave Tiziano one professional destination for presenting his racing career and starting conversations with potential sponsors.",
+    serviceSlug: "web-design-development",
     accent: "from-[#2F5B3F] to-[#4f7a58]",
     coverImage: {
       src: "/images/projects/png/tizirsso.png",
@@ -187,6 +155,7 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "taylor",
     name: "Taylor.io",
+    metaTitle: "Taylor.io Resume Platform",
     badge: "Full-Stack Product",
     category: "AI Resume Platform",
     group: "product",
@@ -211,7 +180,11 @@ const allCaseStudies: CaseStudy[] = [
       "Tailwind CSS",
       "Playwright",
     ],
-    status: "Personal Product / Early Release",
+    status: "Personal Product / Live",
+    timeframe: "December 2025 – July 2026",
+    outcomeLine:
+      "Turns unstructured resume files into editable profiles through a complete workflow from upload to export.",
+    serviceSlug: "digital-systems-integrations",
     accent: "from-[#43524a] to-[#7a8a72]",
     coverImage: {
       src: "/images/projects/png/taylor.png",
@@ -265,6 +238,7 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "centi",
     name: "Centi",
+    metaTitle: "Centi Personal Finance Dashboard",
     badge: "Finance Dashboard",
     category: "Personal Finance · API Integrations",
     group: "product",
@@ -290,6 +264,10 @@ const allCaseStudies: CaseStudy[] = [
       "Railway",
     ],
     status: "Personal Product / Working Build",
+    timeframe: "June 2025 – August 2025",
+    outcomeLine:
+      "Took Centi from a dashboard idea to a working product connected to real financial accounts.",
+    serviceSlug: "digital-systems-integrations",
     accent: "from-[#2F5B3F] to-[#6d7d5f]",
     coverImage: {
       src: "/images/projects/png/centi.png",
@@ -340,6 +318,7 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "setlst",
     name: "SETLST",
+    metaTitle: "SETLST Fitness App Concept",
     badge: "Product Concept",
     category: "Music-Driven Fitness App",
     group: "product",
@@ -358,6 +337,10 @@ const allCaseStudies: CaseStudy[] = [
     role: "Product Design, Brand Direction, Frontend Prototyping",
     stack: ["Figma", "React", "Tailwind CSS"],
     status: "Collaborative Product Concept / In Progress",
+    timeframe: "June 2026 – present",
+    outcomeLine:
+      "Turned an early idea about music and training into a defined product direction ready for validation.",
+    serviceSlug: "web-design-development",
     accent: "from-[#14242b] to-[#297b88]",
     coverImage: {
       src: "/images/projects/png/setlst.png",
@@ -409,6 +392,7 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "ck-dev",
     name: "CK Dev",
+    metaTitle: "CK Dev Frontend Portfolio",
     badge: "Portfolio Site",
     category: "Creative Frontend Portfolio",
     group: "prototype",
@@ -426,6 +410,10 @@ const allCaseStudies: CaseStudy[] = [
     role: "Design, Frontend Development",
     stack: ["CSS", "JavaScript"],
     status: "Personal Portfolio / Archived",
+    timeframe: "August 2025 – December 2025",
+    outcomeLine:
+      "Established the visual and interaction foundation that later shaped the direction of CK Works.",
+    serviceSlug: "web-design-development",
     accent: "from-[#241f35] to-[#62527b]",
     coverImage: {
       src: "/images/projects/png/ck-dev.png",
@@ -470,6 +458,7 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "sentiment-trader",
     name: "SentimentTrader",
+    metaTitle: "SentimentTrader Data Pipeline",
     badge: "Data Pipeline",
     category: "Financial NLP · Market Data",
     group: "prototype",
@@ -495,6 +484,10 @@ const allCaseStudies: CaseStudy[] = [
       "yfinance",
     ],
     status: "Personal Project / Data Collection in Progress",
+    timeframe: "January 2025 – May 2025, resumed December 2025",
+    outcomeLine:
+      "Creates a growing historical dataset for testing how online investor sentiment relates to market activity.",
+    serviceSlug: "analytics-lead-tracking",
     accent: "from-[#1f342a] to-[#58715f]",
     coverImage: {
       src: "/images/projects/png/sentiment-trader.png",
@@ -550,6 +543,7 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "internal-automation-tool",
     name: "Internal Automation Tool",
+    metaTitle: "Internal Automation Portal",
     badge: "Internship Build",
     category: "Internal Automation Platform",
     group: "product",
@@ -567,7 +561,11 @@ const allCaseStudies: CaseStudy[] = [
     ],
     role: "Full-Stack Development, Internal Systems",
     stack: ["Python", "Django", "React", "PostgreSQL", "AWS EC2"],
-    status: "Professional Work / Generalized",
+    status: "Software engineering internship / Client unnamed",
+    timeframe: "May 2024 – June 2025",
+    outcomeLine:
+      "Automated 15-plus manual IT workflows into one-click operations, saving roughly 150 staff hours a year.",
+    serviceSlug: "digital-systems-integrations",
     accent: "from-[#43524a] to-[#5F665F]",
     shortVersion: [
       "During my software engineering internship, I worked on an internal portal that brought recurring scripts and operational workflows into one place instead of leaving them as separate tools that had to be run, checked, and debugged manually.",
@@ -610,6 +608,7 @@ const allCaseStudies: CaseStudy[] = [
   {
     slug: "securescape",
     name: "SecureScape",
+    metaTitle: "SecureScape Security Prototype",
     badge: "Senior Design",
     category: "Portable Security · Embedded Systems",
     group: "prototype",
@@ -633,6 +632,10 @@ const allCaseStudies: CaseStudy[] = [
       "TensorFlow Lite",
     ],
     status: "Senior Design Prototype",
+    timeframe: "August 2024 – May 2025",
+    outcomeLine:
+      "Made person detection and phone alerts possible in remote locations without relying on an internet connection.",
+    serviceSlug: "digital-systems-integrations",
     accent: "from-[#111714] to-[#43524a]",
     coverImage: {
       src: "/images/projects/png/secure-scape.png",

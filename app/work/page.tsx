@@ -26,9 +26,10 @@ import {
   secondaryCaseStudies,
   type CaseStudy,
 } from "@/lib/projects";
+import { serviceAreas, type ServiceSlug } from "@/lib/services";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Selected Work",
+  title: "Web Design & Systems Work",
   description:
     "A clean portfolio of CK Works websites, products, systems, integrations, and prototypes built around clearer business goals.",
   path: "/work",
@@ -55,6 +56,11 @@ const secondaryIcons: Record<string, LucideIcon> = {
   "internal-automation-tool": Workflow,
   securescape: ShieldCheck,
 };
+
+/** Service name for a case study, for the index meta row. */
+function serviceTitle(slug: ServiceSlug) {
+  return serviceAreas.find((area) => area.slug === slug)?.title ?? "";
+}
 
 export default function WorkPage() {
   return (
@@ -516,6 +522,18 @@ function EditorialWorkCardContent({
           {study.teaser}
         </p>
 
+        {/* Outcome and context, so the index answers "is this real client work
+            and when" without a click. Service is plain text rather than a link
+            — the card already has one call to action. */}
+        <p className="mt-5 max-w-sm border-l-2 border-forest/60 pl-3.5 text-[0.92rem] leading-6 text-ink">
+          {study.outcomeLine}
+        </p>
+
+        <ul className="mt-4 flex max-w-sm flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.78rem] text-muted [&>li:not(:first-child)]:before:mr-2.5 [&>li:not(:first-child)]:before:text-line [&>li:not(:first-child)]:before:content-['·']">
+          <li>{study.timeframe}</li>
+          <li>{serviceTitle(study.serviceSlug)}</li>
+        </ul>
+
         <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-3">
           <Link
             href={`/${study.slug}`}
@@ -649,8 +667,13 @@ function TechnicalWorkRow({
         </p>
       </div>
 
+      {/* Compact row, so it gets the timeframe rather than the full outcome
+          line the featured cards carry — that belongs on the detail page. */}
       <span className="hidden justify-self-end text-right font-sans text-[0.76rem] font-medium uppercase tracking-[0.07em] text-muted sm:block">
         {summary?.status ?? groupLabels[study.group]}
+        <span className="mt-1 block normal-case tracking-normal text-muted/80">
+          {study.timeframe}
+        </span>
       </span>
 
       <span className="inline-flex items-center gap-2 text-sm font-semibold text-forest sm:justify-self-end">
