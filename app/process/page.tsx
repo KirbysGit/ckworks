@@ -22,7 +22,7 @@ const processDescription =
   "CK Works plans, designs, builds, and improves websites and digital systems through a calm process built around clarity, structure, launch, and ongoing improvement.";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Process",
+  title: "How a Website Project Works",
   description: processDescription,
   path: "/process",
 });
@@ -41,7 +41,7 @@ const faqs = [
   {
     question: "How are feedback and revisions handled?",
     answer:
-      "Feedback is organized around clear milestones instead of scattered one-off changes. We review direction, structure, design, and build stages at the right moments so decisions stay focused and the project keeps moving.",
+      "Feedback is organized around clear milestones instead of scattered one-off changes. We'll review direction, structure, design, and build stages at the right moments so decisions stay focused and the project keeps moving.",
   },
   {
     question: "What happens after launch?",

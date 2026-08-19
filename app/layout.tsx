@@ -58,7 +58,9 @@ const sourceSerifDisplay = Source_Serif_4({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteName} | ${siteTagline}`,
+    // The homepage H1 is a brand line by design, so the service and the city
+    // live here instead. `siteTagline` still carries the brand voice in OG.
+    default: `Web Design & Digital Systems in Orlando | ${siteName}`,
     template: `%s | ${siteName}`,
   },
   description: siteDescription,

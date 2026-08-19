@@ -50,7 +50,7 @@ const quickAnswers = [
 ] as const;
 
 export const metadata: Metadata = createPageMetadata({
-  title: "About",
+  title: "About Colin Kirby",
   description: aboutDescription,
   path: "/about",
 });

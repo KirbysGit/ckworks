@@ -26,7 +26,7 @@ import { createPageMetadata, absoluteUrl } from "@/lib/seo";
 import { serviceAreas, type ServiceArea, type ServiceSlug } from "@/lib/services";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Services",
+  title: "Web Design & Digital System Services",
   description:
     "Websites, search visibility, analytics, digital systems, integrations, and ongoing support for businesses that need a clearer digital foundation.",
   path: "/services",
