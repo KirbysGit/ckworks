@@ -104,3 +104,40 @@ work.
   them.
 - Validate public API requests on the server and keep personal information out
   of analytics.
+
+## 2026-08-18: Canonical Host Is www
+
+- `https://www.ckworks.studio` is the canonical host. `ckworks.studio`
+  permanently redirects to it, so every other signal must agree with the
+  redirect target.
+- `lib/site.ts` is the only place the host is written. Canonicals,
+  `metadataBase`, Open Graph URLs, `robots.txt` host and sitemap lines, sitemap
+  entries, and the schema `@id` values in `app/layout.tsx` all derive from it.
+  Do not hardcode the domain anywhere else.
+- `NEXT_PUBLIC_SITE_URL` overrides the constant. It is deliberately unset in
+  Vercel so the committed value is authoritative in production. Setting it to a
+  non-www host would silently undo this.
+- After a deploy that changes host signals, resubmit the sitemap in Search
+  Console and request indexing on the priority pages.
+
+## 2026-08-18: Sitemap lastmod Is Explicit
+
+- `app/sitemap.ts` carries a hand-maintained date per route. It must never go
+  back to `new Date()`: a build timestamp claims every page changed on every
+  deploy, which is a signal Google learns to discount.
+- Build-time git dates are not a substitute. Vercel clones shallowly, so
+  `git log` on a file returns the deploy commit and the result is the same.
+- Bump a route's date when its content meaningfully changes. Cosmetic tweaks do
+  not count — the date should track what a returning crawler would find new.
+- Initial values were seeded from each route's real last commit date.
+
+## 2026-08-18: Solo Studio Voice
+
+- CK Works is one person. Public copy uses **CK Works** for capabilities,
+  **I** for the working relationship, and **we** only when it means Colin plus
+  the client.
+- Do not use studio-we for positioning ("We turn ideas into…", "We build
+  websites…"). That implies a team that is not there.
+- The rule lives in `docs/content-discovery.md` under Voice. Apply it to new
+  public copy; case-study "we" that genuinely means client collaboration can
+  stay.

@@ -1,7 +1,7 @@
 /** Canonical production site config. Override locally with NEXT_PUBLIC_SITE_URL. */
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://ckworks.studio";
+  "https://www.ckworks.studio";
 
 export const siteName = "CK Works";
 
