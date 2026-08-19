@@ -371,14 +371,11 @@ function MoreWorkSection() {
           <SectionIntro
             label="More Technical Work"
             title="Smaller builds with useful technical range."
-            description="A selection of experiments, prototypes, and systems that reflect how I approach product and engineering problems."
+            description="A few focused projects that explore frontend development, data, and automation—each built to learn, ship, and solve real problems."
           />
         </Reveal>
 
-        <Reveal
-          className="mt-10 rounded-xl border border-line/70 bg-card/70 sm:mt-12"
-          delay={90}
-        >
+        <Reveal className="mt-10 space-y-3 sm:mt-12" delay={90}>
           {secondaryCaseStudies.map((study, index) => (
             <TechnicalWorkRow
               key={study.slug}
@@ -499,8 +496,8 @@ function EditorialWorkCardContent({
     <div
       className={`grid items-stretch gap-7 lg:gap-10 ${
         isEven
-          ? "lg:grid-cols-[minmax(0,0.66fr)_minmax(16rem,0.34fr)]"
-          : "lg:grid-cols-[minmax(16rem,0.34fr)_minmax(0,0.66fr)]"
+          ? "lg:grid-cols-[minmax(0,0.58fr)_minmax(20rem,0.42fr)]"
+          : "lg:grid-cols-[minmax(20rem,0.42fr)_minmax(0,0.58fr)]"
       }`}
     >
       {/* Text Content */}
@@ -518,23 +515,24 @@ function EditorialWorkCardContent({
           </h3>
         </div>
 
-        <p className="mt-6 max-w-sm text-[0.98rem] leading-7 text-muted">
-          {study.teaser}
-        </p>
-
-        {/* Outcome and context, so the index answers "is this real client work
-            and when" without a click. Service is plain text rather than a link
-            — the card already has one call to action. */}
-        <p className="mt-5 max-w-sm border-l-2 border-forest/60 pl-3.5 text-[0.92rem] leading-6 text-ink">
+        {/* The teaser used to sit here too, but it and the outcome line said
+            nearly the same thing twenty pixels apart. The name and category
+            already say what the project is, so the index keeps the outcome —
+            the line that actually differentiates one card from the next. */}
+        <p className="mt-6 max-w-sm border-l-2 border-forest/60 pl-3.5 text-[0.98rem] leading-7 text-ink">
           {study.outcomeLine}
         </p>
 
-        <ul className="mt-4 flex max-w-sm flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.78rem] text-muted [&>li:not(:first-child)]:before:mr-2.5 [&>li:not(:first-child)]:before:text-line [&>li:not(:first-child)]:before:content-['·']">
-          <li>{study.timeframe}</li>
-          <li>{serviceTitle(study.serviceSlug)}</li>
+        <ul className="mt-5 flex items-center gap-2">
+          <li className="whitespace-nowrap rounded-full bg-forest-soft/70 px-3 py-1 text-[0.76rem] font-medium text-forest">
+            {study.timeframe}
+          </li>
+          <li className="whitespace-nowrap rounded-full border border-line bg-card px-3 py-1 text-[0.76rem] font-medium text-ink/75">
+            {serviceTitle(study.serviceSlug)}
+          </li>
         </ul>
 
-        <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-3">
+        <div className="mt-6 mb-4 flex flex-wrap items-center gap-x-8 gap-y-3">
           <Link
             href={`/${study.slug}`}
             className="group/link inline-flex items-center gap-2 border-b border-forest/45 pb-1 font-sans text-sm font-semibold text-forest transition-colors duration-200 hover:border-forest hover:text-ink"
@@ -587,29 +585,38 @@ function EditorialWorkCardContent({
 
 const technicalWorkSummaries: Record<
   string,
-  { summary: string; stack: string; status: string; image?: string }
+  {
+    description: string;
+    skills: string[];
+    status: string;
+    image?: string;
+  }
 > = {
   "ck-dev": {
-    summary: "Creative frontend portfolio",
+    description:
+      "Creative frontend portfolio built around UI and interaction experiments.",
     status: "Personal build",
-    stack: "Frontend · UI experiments",
+    skills: ["Frontend", "UI experiments"],
     image: "/images/projects/png/ck-dev.png",
   },
   "sentiment-trader": {
-    summary: "Financial sentiment data pipeline",
+    description:
+      "Financial sentiment data pipeline for exploring market signals and text data.",
     status: "Active experiment",
-    stack: "Python · NLP · Market data",
+    skills: ["Python", "NLP", "Market data"],
     image: "/images/projects/png/sentiment-trader.png",
   },
   "internal-automation-tool": {
-    summary: "Internal operations platform",
+    description:
+      "Internal operations platform built to organize recurring workflows and backend tasks.",
     status: "Internship work",
-    stack: "Automation · Backend systems",
+    skills: ["Automation", "Backend systems"],
   },
   securescape: {
-    summary: "Hardware/software security prototype",
+    description:
+      "Portable security prototype connecting embedded cameras, local detection, and mobile controls.",
     status: "Senior design",
-    stack: "Embedded systems · Computer vision",
+    skills: ["Embedded systems", "Computer vision"],
     image: "/images/projects/png/secure-scape.png",
   },
 };
@@ -625,66 +632,68 @@ function TechnicalWorkRow({
   const summary = technicalWorkSummaries[study.slug];
 
   return (
-    <Link
-      href={`/${study.slug}`}
-      className="group grid gap-4 border-b border-line px-4 py-5 transition-colors duration-200 last:border-b-0 hover:bg-forest-soft/18 sm:grid-cols-[3.5rem_12.5rem_minmax(0,1fr)_minmax(9rem,0.16fr)_2rem] sm:items-center sm:px-7 lg:px-8"
-    >
-      <div className="flex items-center sm:justify-center">
-        <span className="font-source-serif-display text-xl font-medium tabular-nums text-forest">
-          {String(index).padStart(2, "0")}
-        </span>
-      </div>
-
-      <div className="relative aspect-[1.9/1] overflow-hidden rounded-lg border border-line bg-forest-soft shadow-[0_10px_24px_-20px_rgba(31,36,32,0.6)]">
-        {summary?.image ? (
-          <Image
-            src={summary.image}
-            alt=""
-            fill
-            sizes="220px"
-            className="object-cover"
-          />
-        ) : study.slug === "internal-automation-tool" ? (
-          <InternalAutomationThumb />
-        ) : (
-          <span className="flex h-full w-full items-center justify-center text-forest">
-            <Icon className="h-6 w-6" strokeWidth={1.55} />
+    <article className="overflow-hidden rounded-xl border border-line/80 bg-card/70 shadow-[0_12px_30px_-28px_rgba(31,36,32,0.45)]">
+      <Link
+        href={`/${study.slug}`}
+        aria-label={`View ${study.name} project`}
+        className="group grid grid-cols-[1fr_auto] gap-4 px-4 py-5 transition-colors duration-200 hover:bg-forest-soft/18 sm:grid-cols-[3.75rem_12.5rem_minmax(0,1fr)_2rem] sm:items-center sm:px-6 lg:grid-cols-[5rem_19rem_minmax(0,1fr)_2.5rem] lg:gap-7 lg:px-7 lg:py-6"
+      >
+        <div className="col-start-1 row-start-1 flex items-center sm:h-full sm:justify-center sm:border-r sm:border-line/80 sm:pr-4 lg:pr-6">
+          <span className="font-source-serif-display text-xl font-medium tabular-nums text-forest lg:text-[1.8rem]">
+            {String(index).padStart(2, "0")}
           </span>
-        )}
-      </div>
+        </div>
 
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <h3 className="font-serif text-[1.55rem] font-medium leading-tight text-ink sm:text-[1.85rem]">
+        <div className="relative col-span-2 aspect-[1.9/1] overflow-hidden rounded-lg border border-line bg-forest-soft shadow-[0_10px_24px_-20px_rgba(31,36,32,0.6)] sm:col-span-1 sm:col-start-2 sm:row-start-1">
+          {summary?.image ? (
+            <Image
+              src={summary.image}
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 304px, 200px"
+              className="object-cover"
+            />
+          ) : study.slug === "internal-automation-tool" ? (
+            <InternalAutomationThumb />
+          ) : (
+            <span className="flex h-full w-full items-center justify-center text-forest">
+              <Icon className="h-6 w-6" strokeWidth={1.55} />
+            </span>
+          )}
+        </div>
+
+        <div className="col-span-2 min-w-0 sm:col-span-1 sm:col-start-3 sm:row-start-1 sm:py-1">
+          <h3 className="font-serif text-[1.65rem] font-medium leading-tight tracking-[-0.015em] text-ink sm:text-[1.85rem] lg:text-[2.15rem]">
             {study.name}
           </h3>
-          <p className="text-[0.72rem] font-semibold leading-5 text-forest sm:text-[0.82rem]">
-            {summary?.summary ?? cleanText(study.category)}
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted sm:text-[0.98rem]">
+            {summary?.description ?? study.teaser}
           </p>
+
+          {/* Keep useful context visible without turning the row into a
+              second case study. The detail page owns the full outcome. */}
+          <ul
+            aria-label={`${study.name} project details`}
+            className="mt-4 flex flex-wrap gap-x-2 gap-y-1 text-[0.75rem] leading-5 text-muted sm:mt-5 sm:text-[0.8rem] [&>li:not(:first-child)]:before:mr-2 [&>li:not(:first-child)]:before:text-line [&>li:not(:first-child)]:before:content-['·']"
+          >
+            <li>{summary?.status ?? groupLabels[study.group]}</li>
+            <li>{study.timeframe}</li>
+            {(summary?.skills ?? [cleanText(study.category)]).map((skill) => (
+              <li key={skill}>{skill}</li>
+            ))}
+          </ul>
         </div>
-        <p className="mt-1.5 text-sm leading-6 text-muted sm:text-[1rem]">
-          {summary?.stack ?? cleanText(study.category)}
-        </p>
-      </div>
 
-      {/* Compact row, so it gets the timeframe rather than the full outcome
-          line the featured cards carry — that belongs on the detail page. */}
-      <span className="hidden justify-self-end text-right font-sans text-[0.76rem] font-medium uppercase tracking-[0.07em] text-muted sm:block">
-        {summary?.status ?? groupLabels[study.group]}
-        <span className="mt-1 block normal-case tracking-normal text-muted/80">
-          {study.timeframe}
+        <span className="col-start-2 row-start-1 inline-flex items-center gap-2 justify-self-end text-sm font-semibold text-forest sm:col-start-4 sm:justify-self-end">
+          <span className="sr-only">View {study.name}</span>
+          <ArrowRight
+            className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1 lg:h-6 lg:w-6"
+            strokeWidth={1.55}
+            aria-hidden
+          />
         </span>
-      </span>
-
-      <span className="inline-flex items-center gap-2 text-sm font-semibold text-forest sm:justify-self-end">
-        <span className="sr-only">View {study.name}</span>
-        <ArrowRight
-          className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
-          strokeWidth={1.55}
-          aria-hidden
-        />
-      </span>
-    </Link>
+      </Link>
+    </article>
   );
 }
 

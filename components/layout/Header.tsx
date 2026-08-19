@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -33,7 +33,8 @@ type ServiceDropdownItem = {
  * Services dropdown tuning knobs.
  * x/y are relative to the Services nav item:
  *   x: negative moves left, positive moves right
- *   y: controls the gap below the nav row
+ *   y: controls the gap below the nav row (kept hoverable)
+ * Open/close delays absorb quick mouse flicks so the menu is not remounted.
  */
 const servicesDropdownLayout = {
   width: "26rem",
@@ -41,6 +42,8 @@ const servicesDropdownLayout = {
   y: "0.8rem",
   padding: "1.25rem",
   notchSize: "0.9rem",
+  openDelay: 90,
+  closeDelay: 220,
 } as const;
 
 const serviceDropdownItems: Record<ServiceSlug, ServiceDropdownItem> = {
@@ -75,7 +78,36 @@ const serviceDropdownItems: Record<ServiceSlug, ServiceDropdownItem> = {
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
+  const [servicesOpen, setServicesOpen] = useState(false);
   const pathname = usePathname();
+  const menuTimers = useRef<{
+    open: ReturnType<typeof setTimeout> | null;
+    close: ReturnType<typeof setTimeout> | null;
+  }>({ open: null, close: null });
+
+  function clearMenuTimers() {
+    if (menuTimers.current.open) clearTimeout(menuTimers.current.open);
+    if (menuTimers.current.close) clearTimeout(menuTimers.current.close);
+    menuTimers.current.open = null;
+    menuTimers.current.close = null;
+  }
+
+  function scheduleServicesOpen() {
+    clearMenuTimers();
+    if (servicesOpen) return;
+    menuTimers.current.open = setTimeout(() => {
+      setServicesOpen(true);
+    }, servicesDropdownLayout.openDelay);
+  }
+
+  function scheduleServicesClose() {
+    clearMenuTimers();
+    menuTimers.current.close = setTimeout(() => {
+      setServicesOpen(false);
+    }, servicesDropdownLayout.closeDelay);
+  }
+
+  useEffect(() => () => clearMenuTimers(), []);
 
   function isActive(href: string) {
     if (href === "/") return pathname === "/";
@@ -110,8 +142,14 @@ export default function Header() {
                 )}
                 <div
                   className="relative"
-                  onMouseEnter={() => setHoveredHref(item.href)}
-                  onMouseLeave={() => setHoveredHref(null)}
+                  onMouseEnter={() => {
+                    setHoveredHref(item.href);
+                    if (hasChildren) scheduleServicesOpen();
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredHref(null);
+                    if (hasChildren) scheduleServicesClose();
+                  }}
                 >
                   <Link
                     href={item.href}
@@ -139,8 +177,8 @@ export default function Header() {
                     </span>
                     {hasChildren && (
                       <ChevronDown
-                        className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                          isHovered ? "rotate-180" : ""
+                        className={`h-3.5 w-3.5 transition-transform duration-300 ${
+                          servicesOpen ? "rotate-180" : ""
                         }`}
                       />
                     )}
@@ -148,7 +186,7 @@ export default function Header() {
 
                   {hasChildren && (
                     <AnimatePresence>
-                      {isHovered && (
+                      {servicesOpen && (
                         <ServicesDropdown services={item.children ?? []} />
                       )}
                     </AnimatePresence>
@@ -272,19 +310,20 @@ function ServicesDropdown({ services }: { services: ServiceArea[] }) {
   return (
     <motion.div
       key="services-menu"
-      initial={{ opacity: 0, x: dropdownX, y: 10, scale: 0.985 }}
+      initial={{ opacity: 0, x: dropdownX, y: 8, scale: 0.985 }}
       animate={{ opacity: 1, x: dropdownX, y: 0, scale: 1 }}
-      exit={{ opacity: 0, x: dropdownX, y: 10, scale: 0.985 }}
+      exit={{ opacity: 0, x: dropdownX, y: 6, scale: 0.99 }}
       transition={{
-        duration: 0.2,
+        duration: 0.28,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="absolute left-1/2 top-full z-50 overflow-hidden rounded-[1.1rem] border border-line bg-card shadow-[0_24px_60px_-28px_rgba(31,36,32,0.32)]"
+      className="absolute left-1/2 top-full z-50"
       style={{
         width: servicesDropdownLayout.width,
-        marginTop: servicesDropdownLayout.y,
+        paddingTop: servicesDropdownLayout.y,
       }}
     >
+      <div className="relative overflow-hidden rounded-[1.1rem] border border-line bg-card shadow-[0_24px_60px_-28px_rgba(31,36,32,0.32)]">
       <span
         className="absolute left-1/2 -translate-x-1/2 rotate-45 border-l border-t border-line bg-card"
         style={{
@@ -352,6 +391,7 @@ function ServicesDropdown({ services }: { services: ServiceArea[] }) {
             </Link>
           );
         })}
+      </div>
       </div>
     </motion.div>
   );

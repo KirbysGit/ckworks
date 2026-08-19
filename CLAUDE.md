@@ -26,7 +26,6 @@ overrides or restates `AGENTS.md`.
 | Known issues and next work | [`docs/backlog.md`](docs/backlog.md) |
 | How to execute and review a task | [`docs/agent-workflow.md`](docs/agent-workflow.md) |
 | Durable decisions not to reverse | [`docs/decisions.md`](docs/decisions.md) |
-| Handing off a new task | [`.agents/brief-template.md`](.agents/brief-template.md) |
 
 ## Notes For Claude Code
 

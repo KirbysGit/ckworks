@@ -2,7 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, ExternalLink } from "lucide-react";
+import {
+  Activity,
+  ArrowLeft,
+  ArrowRight,
+  CalendarDays,
+  Check,
+  CircleHelp,
+  Cpu,
+  ExternalLink,
+  FileText,
+  Hammer,
+  Mountain,
+  Palette,
+  Target,
+  TrendingUp,
+  UserRound,
+  type LucideIcon,
+} from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CaseStudyViewed from "@/components/projects/CaseStudyViewed";
@@ -10,6 +27,7 @@ import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import WhatsAppContactLink from "@/components/contact/WhatsAppContactLink";
 import Button from "@/components/ui/Button";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
+import Reveal from "@/components/ui/Reveal";
 import { caseStudies, getCaseStudy, type CaseStudy } from "@/lib/projects";
 import { serviceAreas } from "@/lib/services";
 import { absoluteUrl } from "@/lib/seo";
@@ -57,22 +75,132 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function Section({ label, paragraphs }: { label: string; paragraphs: string[] }) {
+/**
+ * Hero entrance (ms). Above the fold, so CSS primitives rather than Reveal —
+ * the copy must not wait on hydration. Body sections below use Reveal.
+ */
+const caseStudyHeroTiming = {
+  eyebrow: 0,
+  title: 80,
+  lead: 170,
+  outcome: 240,
+  facts: 320,
+} as const;
+
+/** Small forest circle + label used above each fact group and body section. */
+function SectionLabel({ icon: Icon, children }: { icon: LucideIcon; children: string }) {
+  return (
+    <h2 className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-forest">
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-forest-soft">
+        <Icon className="h-3.5 w-3.5" strokeWidth={1.9} />
+      </span>
+      {children}
+    </h2>
+  );
+}
+
+function Pill({ children }: { children: string }) {
+  return (
+    <span className="rounded-full bg-forest-soft/70 px-3 py-1 text-[0.78rem] font-medium text-forest">
+      {children}
+    </span>
+  );
+}
+
+/**
+ * Role, timeframe, status, contributions, and stack in one card.
+ *
+ * Stack and `workedOn` are lists, and a four-column text grid rendered them as
+ * comma runs that wrapped mid-phrase — which is what made this block feel
+ * cramped. Lists are pills now; only the three single-value facts stay in the
+ * grid. `workedOn` was written for every project and had never been rendered.
+ */
+function ProjectFacts({ study }: { study: CaseStudy }) {
+  const facts = [
+    { label: "Role", value: study.role, icon: UserRound },
+    { label: "Timeframe", value: study.timeframe, icon: CalendarDays },
+    { label: "Status", value: study.status, icon: Activity },
+  ];
+
+  return (
+    <div
+      className="ck-lift mt-8 overflow-hidden rounded-2xl border border-line bg-card shadow-soft"
+      style={{ animationDelay: `${caseStudyHeroTiming.facts}ms` }}
+    >
+      <div className="grid gap-6 p-6 sm:grid-cols-3">
+        {facts.map(({ label, value, icon: Icon }) => (
+          <div key={label} className="flex gap-3">
+            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-forest-soft text-forest">
+              <Icon className="h-4 w-4" strokeWidth={1.8} />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+                {label}
+              </span>
+              <span className="mt-1 block text-sm leading-relaxed text-ink">
+                {value}
+              </span>
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {study.workedOn.length > 0 && (
+        <div className="border-t border-line/70 px-6 py-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+            What I worked on
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {study.workedOn.map((item) => (
+              <Pill key={item}>{item}</Pill>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {study.stack.length > 0 && (
+        <div className="border-t border-line/70 bg-ivory/50 px-6 py-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+            Stack
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {study.stack.map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-line bg-card px-3 py-1 text-[0.78rem] font-medium text-ink/80"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Section({
+  label,
+  paragraphs,
+  icon,
+}: {
+  label: string;
+  paragraphs: string[];
+  icon: LucideIcon;
+}) {
   if (paragraphs.length === 0) return null;
 
   return (
-    <section className="border-t border-line/70 py-10">
-      <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
-        {label}
-      </h2>
-      <div className="mt-5 space-y-4">
+    <Reveal as="section" className="border-t border-line/70 py-10">
+      <SectionLabel icon={icon}>{label}</SectionLabel>
+      <div className="mt-5 space-y-4 sm:pl-[2.4rem]">
         {paragraphs.map((p, i) => (
           <p key={i} className="text-base leading-relaxed text-ink/85 sm:text-lg">
             {p}
           </p>
         ))}
       </div>
-    </section>
+    </Reveal>
   );
 }
 
@@ -142,57 +270,36 @@ export default async function CaseStudyPage({ params }: Props) {
           </Link>
 
           <div className="mx-auto mt-10 max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
+            <p
+              className="ck-rise text-xs font-semibold uppercase tracking-[0.18em] text-forest"
+              style={{ animationDelay: `${caseStudyHeroTiming.eyebrow}ms` }}
+            >
               {study.category}
             </p>
-            <h1 className="mt-4 font-serif text-5xl font-medium leading-tight text-ink sm:text-6xl">
+            <h1
+              className="ck-rise mt-4 font-serif text-5xl font-medium leading-tight text-ink sm:text-6xl"
+              style={{ animationDelay: `${caseStudyHeroTiming.title}ms` }}
+            >
               {study.name}
             </h1>
-            <p className="mt-5 text-xl leading-relaxed text-muted">
+            <p
+              className="ck-rise mt-5 text-xl leading-relaxed text-muted"
+              style={{ animationDelay: `${caseStudyHeroTiming.lead}ms` }}
+            >
               {study.oneLiner}
             </p>
 
             {/* The proof line. Sits above the fold on purpose — a visitor
                 scanning the page should get what changed before they decide
                 whether to read the write-up underneath. */}
-            <p className="mt-6 border-l-2 border-forest pl-4 text-lg leading-relaxed text-ink">
+            <p
+              className="ck-rise mt-6 border-l-2 border-forest pl-4 text-lg leading-relaxed text-ink"
+              style={{ animationDelay: `${caseStudyHeroTiming.outcome}ms` }}
+            >
               {study.outcomeLine}
             </p>
 
-            <div className="mt-8 grid gap-6 rounded-2xl border border-line bg-card p-6 shadow-soft sm:grid-cols-2 lg:grid-cols-4">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
-                  Role
-                </p>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink">
-                  {study.role}
-                </p>
-              </div>
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
-                  Timeframe
-                </p>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink">
-                  {study.timeframe}
-                </p>
-              </div>
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
-                  Stack
-                </p>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink">
-                  {study.stack.join(", ")}
-                </p>
-              </div>
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
-                  Status
-                </p>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink">
-                  {study.status}
-                </p>
-              </div>
-            </div>
+            <ProjectFacts study={study} />
 
             {study.liveUrl && (
               <a
@@ -229,15 +336,13 @@ export default async function CaseStudyPage({ params }: Props) {
 
         <article className="container-ck pb-16">
           <div className="mx-auto max-w-3xl">
-            <Section label="The short version" paragraphs={study.shortVersion} />
-            <Section label="The problem" paragraphs={study.problem} />
+            <Section label="The short version" paragraphs={study.shortVersion} icon={FileText} />
+            <Section label="The problem" paragraphs={study.problem} icon={CircleHelp} />
 
             {study.built.length > 0 && (
-              <section className="border-t border-line/70 py-10">
-                <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
-                  What I built
-                </h2>
-                <ul className="mt-5 space-y-3">
+              <Reveal as="section" className="border-t border-line/70 py-10">
+                <SectionLabel icon={Hammer}>What I built</SectionLabel>
+                <ul className="mt-5 space-y-3 sm:pl-[2.4rem]">
                   {study.built.map((item) => (
                     <li
                       key={item}
@@ -250,19 +355,25 @@ export default async function CaseStudyPage({ params }: Props) {
                     </li>
                   ))}
                 </ul>
-              </section>
+              </Reveal>
             )}
 
-            <Section label="Design decisions" paragraphs={study.designDecisions} />
+            <Section
+              label="Design decisions"
+              paragraphs={study.designDecisions}
+              icon={Palette}
+            />
             <Section
               label="Technical decisions"
               paragraphs={study.technicalDecisions}
+              icon={Cpu}
             />
-            <Section label="Challenges" paragraphs={study.challenges} />
-            <Section label="The outcome" paragraphs={study.outcome} />
+            <Section label="Challenges" paragraphs={study.challenges} icon={Mountain} />
+            <Section label="The outcome" paragraphs={study.outcome} icon={Target} />
             <Section
-              label="What I'd improve next"
+              label="What I&apos;d improve next"
               paragraphs={study.improveNext}
+              icon={TrendingUp}
             />
           </div>
 

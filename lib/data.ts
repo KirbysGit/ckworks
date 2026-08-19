@@ -81,7 +81,7 @@ export const steps: Step[] = [
   {
     number: "1",
     title: "Discover",
-    body: "We start with a conversation about your goals, challenges, and what success looks like.",
+    body: "We'll start with a conversation about your goals, challenges, and what success looks like.",
   },
   {
     number: "2",
@@ -101,7 +101,7 @@ export const steps: Step[] = [
   {
     number: "5",
     title: "Launch & Support",
-    body: "We launch, test, and stay in your corner for what comes next.",
+    body: "I launch and test it. Then we stay with what comes next.",
   },
 ];
 

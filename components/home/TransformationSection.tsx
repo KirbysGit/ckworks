@@ -535,6 +535,9 @@ function IdeaOutputSwipe() {
               <SwipeSlide label={activeSlide.label} dot={activeSlide.dot}>
                 <div className="relative h-[19.25rem] pb-10 pt-1">
                   <CleanBrowserCard />
+                  <p className="pointer-events-none absolute bottom-9 left-0 z-10 max-w-[9.5rem] text-left text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted">
+                    Illustrative example
+                  </p>
                   <div className="absolute bottom-2 right-0 w-[8.15rem] rotate-[1.5deg]">
                     <MiniPhone />
                   </div>
@@ -602,7 +605,7 @@ export default function TransformationSection() {
             <SectionHeader
               label="The Difference"
               title="From scattered ideas to a clearer digital presence."
-              subtitle="We turn ideas into intentional, calming experiences that connect with your audience and drive real results."
+              subtitle="CK Works turns the notes, drafts, and loose ideas into a clearer website that is easier to use."
               className="text-center sm:text-left [&_h2]:mx-auto [&_p]:mx-auto sm:[&_h2]:mx-0 sm:[&_p]:mx-0"
             />
           </motion.div>
@@ -861,12 +864,14 @@ function AfterBoard() {
       <div className="relative mt-3 min-h-[29.5rem] sm:min-h-[31rem]">
         <div className="relative z-10 sm:pr-[3.6rem] lg:pr-[4rem]">
           <BrowserPreview />
+          <p className="pointer-events-none mt-2 hidden pr-[6.75rem] text-right text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted sm:block lg:pr-[5.5rem]">
+            Illustrative example
+          </p>
         </div>
         <AfterConnector />
         <InquiryCard />
         <PhonePreview />
       </div>
-
     </div>
   );
 }

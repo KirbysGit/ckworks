@@ -19,7 +19,6 @@ that section actually uses.
 | `images/process/svg/`          | Book background, chapter illustrations             | `Process.tsx`              |
 | `images/founder/svg/`, `jpg/`  | Note drawing, portrait                             | `FounderNote.tsx`          |
 | `images/cta/svg/`               | Left/right flanking art                            | `CTA.tsx`                   |
-| `images/_unused/`               | Archived assets not currently referenced anywhere. Safe to delete once you're sure they won't come back — check with a repo-wide grep for the filename first. | — |
 
 **A file used by more than one section** (e.g. the straight underline shared
 by Process and Founder) lives in `brand/` rather than being duplicated —

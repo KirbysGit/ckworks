@@ -154,7 +154,6 @@ Read this file before making changes. For deeper context, use the documents in
 - `docs/backlog.md` - verified issues, investigations, and next work
 - `docs/agent-workflow.md` - how to work through a task safely
 - `docs/decisions.md` - current durable design and product decisions
-- `.agents/brief-template.md` - a repeatable brief for handing work to an agent
 
 `CLAUDE.md` is a thin adapter pointing Claude Code at this file. Edit `AGENTS.md`
 only; do not duplicate rules into `CLAUDE.md`.

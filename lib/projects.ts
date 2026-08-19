@@ -273,7 +273,7 @@ const allCaseStudies: CaseStudy[] = [
       src: "/images/projects/png/centi.png",
       alt: "Centi personal finance dashboard preview",
     },
-    liveUrl: "https://centi.dev",
+    liveUrl: "https://centi.money",
     shortVersion: [
       "Centi was the first full-stack application I built outside of school. I started it near the end of my final semester at UCF because I wanted to stay sharp after senior design, get better at styling real interfaces, and build something I would personally use.",
       "At the same time, I was trying to understand my spending before graduating. I had previously used Mint, but once it shut down I no longer had one clear place to look at my accounts and transactions. Combining those two problems gave me the project.",

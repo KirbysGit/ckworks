@@ -66,7 +66,7 @@ Verified against the repository on 2026-08-07.
 - **Represents**: an interior design studio
 - **Used in**: `components/services/web-design/Page.tsx`,
   `components/services/support/Page.tsx`, `components/process/StageChain.tsx`,
-  `components/process/BuildPhase.tsx`, `components/process/PhaseVisuals.tsx`
+  `components/process/BuildPhase.tsx`
 - **Purpose**: on Web Design, the hero device mockups and the four-stage
   transformation showing an outdated site becoming a launched one. On Ongoing
   Support, the browser preview of a site being actively looked after. On

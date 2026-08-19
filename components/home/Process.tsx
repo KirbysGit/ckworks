@@ -46,14 +46,14 @@ const processChapters: Chapter[] = [
   {
     number: "1",
     label: "Chapter 01",
-    title: "We get clear.",
-    body: "We start with your goals, your audience, and what the site actually needs to do.",
+    title: "We'll get clear.",
+    body: "We'll figure out your goals, who you serve, and what the site actually needs to do.",
   },
   {
     number: "2",
     label: "Chapter 02",
-    title: "We shape the direction.",
-    body: "We define the structure, messaging, and visual direction so the project has a strong foundation.",
+    title: "We'll shape the direction.",
+    body: "I turn what we learned into structure, messaging, and a visual direction we can build from.",
   },
   {
     number: "3",
@@ -64,8 +64,8 @@ const processChapters: Chapter[] = [
   {
     number: "4",
     label: "Chapter 04",
-    title: "We launch, respond, and improve.",
-    body: "Once it is live, we test, refine, and keep improving what needs attention.",
+    title: "I launch. We improve.",
+    body: "Once it is live, I test the important paths. Then we refine based on how people actually use it.",
   },
 ];
 

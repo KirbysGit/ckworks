@@ -8,8 +8,8 @@ not restate those facts here or let the two drift.
 
 This file adds what an agent needs and the data file does not carry: what each
 project actually demonstrates, which service it supports, what may be claimed,
-and what must never be implied. Narrative background lives in the root
-`projects.md`.
+and what must never be implied. Narrative background lives in
+`docs/projects.md`.
 
 Verified against `lib/projects.ts` on 2026-08-07.
 
@@ -70,7 +70,7 @@ Status strings come from `lib/projects.ts` and carry real meaning:
 - **Limitations**: this is the only shipped client website in the portfolio
 - **Never imply**: sponsorship secured, traffic gains, ranking improvements, or
   revenue attributable to the site
-- **Source**: `lib/projects.ts`, `projects.md`
+- **Source**: `lib/projects.ts`, `docs/projects.md`
 
 ### Taylor.io (`taylor`)
 
@@ -88,7 +88,7 @@ Status strings come from `lib/projects.ts` and carry real meaning:
 - **Never imply**: job-placement outcomes, interview or hiring-rate
   improvements, user counts, revenue, or that it is a mature commercial
   platform
-- **Source**: `lib/projects.ts`, `projects.md`
+- **Source**: `lib/projects.ts`, `docs/projects.md`
 
 ### Centi (`centi`)
 
@@ -108,7 +108,7 @@ Status strings come from `lib/projects.ts` and carry real meaning:
   product with external users or regulatory compliance
 - **Never imply**: regulatory compliance, security certification, or handling of
   third-party financial data at scale
-- **Source**: `lib/projects.ts`, `projects.md`
+- **Source**: `lib/projects.ts`, `docs/projects.md`
 
 ### SETLST (`setlst`)
 
@@ -125,7 +125,7 @@ Status strings come from `lib/projects.ts` and carry real meaning:
   avoids live location tracking as a scope decision
 - **Never imply**: an available app, a release date, downloads, or real-world
   users
-- **Source**: `lib/projects.ts`, `projects.md`
+- **Source**: `lib/projects.ts`, `docs/projects.md`
 
 ## Professional And Research Work
 
@@ -172,7 +172,7 @@ Status strings come from `lib/projects.ts` and carry real meaning:
 - **Limitations**: archived and no longer maintained; does not reflect current
   CK Works standards
 - **Never imply**: current work or a client project
-- **Source**: `lib/projects.ts`, `projects.md`
+- **Source**: `lib/projects.ts`, `docs/projects.md`
 
 ### SecureScape (`securescape`)
 
@@ -210,5 +210,5 @@ Strengthening that evidence base is tracked in [`backlog.md`](backlog.md).
 1. Add the public facts to `lib/projects.ts`.
 2. Add an entry here with status, what it demonstrates, allowed claims,
    limitations, and prohibited implications.
-3. Add narrative background to `projects.md` if useful.
+3. Add narrative background to `docs/projects.md` if useful.
 4. Confirm the claims on any page referencing it match this entry.

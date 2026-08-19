@@ -77,7 +77,7 @@ const sides: readonly [Side, Side] = [
     questions: [
       "How should this work?",
       "What needs to connect?",
-      "How do we keep it reliable?",
+      "How does it stay reliable?",
     ],
   },
 ] as const;

@@ -3,9 +3,10 @@ import type { Variants } from "framer-motion";
 
 /**
  * Delay for a `ck-*` primitive that reads `--ck-anim-delay` — `ck-step`,
- * `ck-draw-x`, `ck-resolve`, `ck-loadbar`, `ck-skeleton`. Those set their own
- * `animation-delay`, so a plain `animationDelay` style is ignored on them.
- * Everything else takes `style={{ animationDelay }}` instead.
+ * `ck-draw-x`, `ck-resolve`, `ck-loadbar`, `ck-boot-screen`, `ck-boot-spin`,
+ * `ck-skeleton`. Those set their own `animation-delay`, so a plain
+ * `animationDelay` style is ignored on them. Everything else takes
+ * `style={{ animationDelay }}` instead.
  */
 export const animDelay = (ms: number) =>
   ({ "--ck-anim-delay": `${ms}ms` }) as CSSProperties;

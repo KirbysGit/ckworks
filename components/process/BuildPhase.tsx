@@ -85,7 +85,7 @@ export default function BuildPhase() {
           </p>
           <div className="mt-8 max-w-[28rem]">
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-forest">
-              We build:
+              I build:
             </p>
             <p className="mt-2.5 text-[0.92rem] font-medium leading-6 text-ink/80 sm:text-[0.98rem]">
               {buildItems.map((item, index) => (
@@ -204,6 +204,9 @@ function HearthDesktop() {
             style={{ backgroundColor: tone }}
           />
         ))}
+        <span className="ml-auto text-[1.35cqw] font-semibold uppercase tracking-[0.14em] text-muted">
+          Illustrative example
+        </span>
       </div>
 
       <div className="flex shrink-0 items-center gap-[1.4cqw] border-b border-line/70 px-[3cqw] py-[2cqw]">

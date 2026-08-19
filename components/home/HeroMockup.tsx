@@ -243,6 +243,7 @@ export default function HeroMockup() {
             {showGrid && <DebugGrid />}
 
             {/* ── Main browser: Windermere Wellness ─────────────────── */}
+            <div className="relative z-10">
             <motion.div
               variants={floatIn}
               initial="hidden"
@@ -253,7 +254,7 @@ export default function HeroMockup() {
                 transform: `scale(${browser.scale})`,
                 transformOrigin: "top left",
               }}
-              className="relative z-10 overflow-hidden rounded-2xl border border-line bg-card shadow-float"
+              className="overflow-hidden rounded-2xl border border-line bg-card shadow-float"
             >
               {/* chrome */}
               <div className="flex items-center gap-3 border-b border-line/80 px-4 py-3">
@@ -297,9 +298,9 @@ export default function HeroMockup() {
                     Care that feels personal. Support that fits{" "}
                     <em className="italic">your life</em>.
                   </p>
-                  <p className="mt-3 max-w-[240px] text-[11px] leading-relaxed text-muted">
-                    Compassionate therapy and wellness services for individuals
-                    and couples in Windermere and the surrounding communities.
+                  <p className="mt-3 max-w-[13.5rem] text-[10px] leading-relaxed text-muted/75">
+                    Support for individuals and couples in Windermere. In person
+                    or online, at a pace that fits.
                   </p>
                   <div className="mt-4 flex items-center gap-3">
                     <span className="cursor-pointer rounded-md bg-forest px-3.5 py-2 text-[11px] font-medium text-ivory transition-all duration-150 hover:-translate-y-px hover:bg-[#3D6E4F] hover:shadow-sm">
@@ -350,6 +351,26 @@ export default function HeroMockup() {
                 ))}
               </div>
             </motion.div>
+
+            {/* Below the browser, toward the right, still left of the phone.
+                Pops in after the mockup cards finish landing. */}
+            <motion.p
+              className="pointer-events-none absolute z-10 hidden whitespace-nowrap text-left text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted lg:block"
+              style={{
+                top: `calc(${browser.scale * 105}% + 2.1rem)`,
+                left: "77%",
+              }}
+              initial={{ opacity: 0, y: 10, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                delay: connectorTiming.delay + 0.15,
+                duration: 0.45,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              Illustrative example
+            </motion.p>
+            </div>
 
             {/* ── Connectors ──────────────────────────────────────────
                 Lines draw in AFTER the cards land: the dotted path is
