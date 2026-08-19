@@ -11,8 +11,6 @@ work.
   not duplicate the instruction set; edit `AGENTS.md` only.
 - `docs/` provides the deeper architecture, design, discovery, and workflow
   context without turning the root guide into an essay.
-- `.agents/brief-template.md` is the preferred starting point for a new design
-  or implementation handoff.
 - Documentation records verified repository state. Confirm a claim before
   writing it down, and mark an unconfirmed item as an open investigation rather
   than a fact.
@@ -141,3 +139,21 @@ work.
 - The rule lives in `docs/content-discovery.md` under Voice. Apply it to new
   public copy; case-study "we" that genuinely means client collaboration can
   stay.
+
+## 2026-08-19: One Line Per Surface For A Case Study
+
+- A case study says a different thing on each surface. Do not repeat one on
+  another.
+  - Detail page hero: `oneLiner` describes it, `outcomeLine` proves it.
+  - `/work` index: `outcomeLine` only. The teaser used to sit beside it saying
+    nearly the same thing; the name and category already establish what the
+    project is, so the outcome is the line that differentiates one card from
+    the next.
+  - Homepage carousel and service-page related cards: teaser, tags, and year.
+    These are browse surfaces, not evaluation surfaces, and an outcome line
+    clutters them. Their treatment is deliberate, not stale.
+- `outcomeLine`, `timeframe`, and `serviceSlug` exist on every case study.
+  Rules for writing an outcome live in `project-registry.md`.
+- Every case study links to the service it proves and to the next project.
+  Before this they reached their service only through the footer and then
+  dead-ended, so each was a leaf node.

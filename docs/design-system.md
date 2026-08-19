@@ -71,6 +71,24 @@ components, and do not "fix" it as a side effect of unrelated work.
 - Keep borders subtle. Shadows should create a small amount of depth, not a
   floating-dashboard effect.
 
+### Facts, Pills, And Section Labels
+
+Patterns established on the case study pages. Reuse them before inventing
+another way to present the same shape of information.
+
+- **A list renders as pills, never as a comma run.** Stack and contribution
+  chips in a text grid cell wrapped mid-phrase and read as cramped prose. Two
+  pill styles: `bg-forest-soft/70` with forest text for contributions, and
+  `border-line bg-card` with muted ink for neutral facts such as a tech stack.
+- **Single-value facts stay in a grid**, each with a small forest circle icon,
+  an uppercase micro label, and the value beneath.
+- **Group related facts in one card with divided tiers** rather than nesting
+  cards. The case study facts card runs meta grid, then contributions, then
+  stack, separated by `border-line/70`.
+- **A repeated section label is an icon in a `bg-forest-soft` circle plus
+  uppercase forest text.** When a page stacks many prose sections, give each a
+  distinct icon — otherwise the page reads as one undifferentiated document.
+
 ## Visual Assets And Mockups
 
 - Use `next/image` for raster images and give it accurate `sizes` values.

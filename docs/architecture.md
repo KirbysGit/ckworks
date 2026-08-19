@@ -26,7 +26,6 @@ components/ui/          Small reusable visual primitives
 lib/                    Content data, SEO helpers, navigation, motion, analytics
 public/images/          Versioned production assets organized by feature
 docs/                   Durable decisions and agent guidance
-.agents/                Reusable task briefs for agent handoffs
 
 components/services/    Bespoke service experiences plus small shared service pieces
 ```
@@ -57,9 +56,6 @@ the five top-level page experiences live there and
 phase band is its own file (`GetClearPhase`, `ShapeDirectionPhase`,
 `BuildPhase`, `LaunchImprovePhase`) because each owns a distinct artefact, and
 `app/process/page.tsx` keeps only the route shell, hero copy, and band order.
-`PhaseVisuals.tsx` is the leftover from the earlier shared-visual approach and
-is now mostly dead — only `LaunchVisual` is still imported. Delete the unused
-exports once phase four stops depending on it.
 
 ## Route Responsibilities
 
@@ -147,6 +143,7 @@ components/services/
     ServiceFrame.tsx
     GenericServicePage.tsx
     ProjectWorkCard.tsx
+    ServiceTimeline.tsx
     styles.ts
 ```
 
