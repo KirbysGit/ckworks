@@ -58,8 +58,9 @@ import {
 import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
+import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
-import type { ServiceArea } from "@/lib/services";
+import { searchVisibilityTimeline, type ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
 import ProjectWorkCard from "../shared/ProjectWorkCard";
 import {
@@ -181,8 +182,8 @@ const searchVisibilityFaqs = [
   },
   {
     question: "How long does it take to see results?",
-    answer:
-      "Technical fixes and indexation updates can be visible fairly quickly, while meaningful search growth usually takes time. We start with the changes that make the site easier to understand now, then use real signals to guide what comes next.",
+    // Figure comes from the same object the hero reads, so the two cannot drift.
+    answer: `The first pass takes ${searchVisibilityTimeline.value}. Technical fixes and indexation updates can show up fairly quickly, while meaningful search growth builds over the months after — this is a starting point rather than an end date. I begin with the changes that make the site easier to understand now, then use real signals to guide what comes next.`,
   },
   {
     question: "Do you work with a specific platform?",
@@ -226,7 +227,7 @@ export default function Page({ service }: { service: ServiceArea }) {
   return (
     <ServiceFrame service={service}><section className="bg-ivory py-10 sm:py-12 lg:py-16">
         <div className={serviceContainer}>
-          <SearchVisibilityHero />
+          <SearchVisibilityHero timeline={service.timeline} />
           <SearchVisibilityBenefits />
           <SearchVisibilityScope />
           <SearchVisibilitySignals />
@@ -238,7 +239,7 @@ export default function Page({ service }: { service: ServiceArea }) {
   );
 }
 
-function SearchVisibilityHero() {
+function SearchVisibilityHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
   return (
     <section className="grid items-start gap-10 border-b border-line pb-10 lg:grid-cols-[minmax(0,0.74fr)_minmax(0,1.26fr)] lg:gap-14">
       <div className="max-w-xl">
@@ -263,6 +264,11 @@ function SearchVisibilityHero() {
           Search-friendly structure, indexing basics, and clearer content
           signals so people and answer engines can understand your site.
         </p>
+        <ServiceTimeline
+          timeline={timeline}
+          className="ck-rise mt-7"
+          style={{ animationDelay: `${searchVisibilityHeroTiming.actions}ms` }}
+        />
         <div
           className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
           style={{ animationDelay: `${searchVisibilityHeroTiming.actions}ms` }}
@@ -1291,9 +1297,14 @@ function SearchVisibilitySignals() {
             </OutboundSignalCard>
           </Reveal>
           <Reveal delay={640}>
-            <OutboundSignalCard offsetY={signalOutboundArrow.cards[1].offsetY}>
-              <AiOverviewSnapshot />
-            </OutboundSignalCard>
+            <div>
+              <OutboundSignalCard offsetY={signalOutboundArrow.cards[1].offsetY}>
+                <AiOverviewSnapshot />
+              </OutboundSignalCard>
+              <p className="mt-2 text-center text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted">
+                Illustrative example
+              </p>
+            </div>
           </Reveal>
         </div>
       </div>

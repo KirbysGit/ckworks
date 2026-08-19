@@ -62,6 +62,7 @@ import {
 import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
+import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import type { ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
@@ -182,12 +183,12 @@ const analyticsFaqs = [
   {
     question: "Can you improve an existing analytics setup?",
     answer:
-      "Yes. If GA4, Search Console, or event tracking are already in place, we can audit what exists, fix gaps or double-counting, and reorganize it into reporting you can actually read.",
+      "Yes. If GA4, Search Console, or event tracking are already in place, I can audit what exists, fix gaps or double-counting, and reorganize it into reporting you can actually read.",
   },
   {
     question: "Can leads be connected to their original source?",
     answer:
-      "In most cases, yes. By capturing landing page, referrer, and UTM details when an inquiry comes in, we can tie a lead back to the campaign, search, or page that produced it — so you know what is working.",
+      "In most cases, yes. By capturing landing page, referrer, and UTM details when an inquiry comes in, I can tie a lead back to the campaign, search, or page that produced it — so you know what is working.",
   },
   {
     question: "Do you build custom dashboards?",
@@ -240,7 +241,7 @@ export default function Page({ service }: { service: ServiceArea }) {
   return (
     <ServiceFrame service={service}><section className="bg-ivory py-10 sm:py-12 lg:py-16">
         <div className={serviceContainer}>
-          <AnalyticsHero />
+          <AnalyticsHero timeline={service.timeline} />
           <AnalyticsWhyMeasurement />
           <AnalyticsReportingSection />
           <AnalyticsScope />
@@ -253,7 +254,7 @@ export default function Page({ service }: { service: ServiceArea }) {
   );
 }
 
-function AnalyticsHero() {
+function AnalyticsHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
   return (
     <div className="grid items-start gap-10 border-b border-line pb-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-14">
       <div className="max-w-xl">
@@ -275,10 +276,15 @@ function AnalyticsHero() {
           className="ck-rise mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]"
           style={{ animationDelay: `${analyticsHeroTiming.leadCopy}ms` }}
         >
-          Clean measurement that shows you what&apos;s working. We track
+          Clean measurement that shows you what&apos;s working. CK Works tracks
           traffic, forms, CTAs, search activity, and lead sources — so you can
           make confident decisions.
         </p>
+        <ServiceTimeline
+          timeline={timeline}
+          className="ck-rise mt-7"
+          style={{ animationDelay: `${analyticsHeroTiming.actions}ms` }}
+        />
         <div
           className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
           style={{ animationDelay: `${analyticsHeroTiming.actions}ms` }}
@@ -580,7 +586,13 @@ function AnalyticsReportingSection() {
         />
 
         <Reveal className="relative mx-auto block max-w-6xl">
-          <div className="overflow-hidden rounded-2xl border border-line bg-card shadow-[0_28px_58px_-38px_rgba(31,36,32,0.42)]">
+          {/* Fictional client and fictional figures. `data-nosnippet` keeps the
+              invented growth numbers out of search snippets, and the caption
+              below keeps a reader from taking this as a real CK Works result. */}
+          <div
+            className="overflow-hidden rounded-2xl border border-line bg-card shadow-[0_28px_58px_-38px_rgba(31,36,32,0.42)]"
+            data-nosnippet
+          >
             <header className="flex flex-col gap-4 px-5 pb-4 pt-5 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-7 lg:pb-5 lg:pt-7">
               <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
@@ -793,6 +805,10 @@ function AnalyticsReportingSection() {
               </ul>
             </section>
           </div>
+
+          <p className="mt-4 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted">
+            Illustrative reporting example
+          </p>
         </Reveal>
       </div>
     </section>

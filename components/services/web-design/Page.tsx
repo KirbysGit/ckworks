@@ -61,8 +61,9 @@ import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
 import { PhoneStatusBar } from "@/components/ui/DeviceFrame";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
+import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
-import type { ServiceArea } from "@/lib/services";
+import { webDesignTimeline, type ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
 import ProjectWorkCard from "../shared/ProjectWorkCard";
 import {
@@ -125,7 +126,7 @@ const webDesignIncludes = [
   },
   {
     title: "Easy to manage",
-    body: "Set up so you can update content yourself, or we can handle it for you.",
+    body: "Set up so you can update content yourself, or I can handle it for you.",
     icon: Settings2,
   },
   {
@@ -165,17 +166,17 @@ const webDesignTransformation = [
 const webDesignProcess = [
   {
     title: "Understand the business",
-    body: "We learn what you do, who you serve, and what the website needs to accomplish.",
+    body: "I'll learn what you do, who you serve, and what the website needs to accomplish.",
     icon: Search,
   },
   {
     title: "Design & Build",
-    body: "We shape the structure, design, and development into a clear, modern site.",
+    body: "I shape the structure, design, and development into a clear, modern site.",
     icon: LayoutTemplate,
   },
   {
     title: "Launch & Improve",
-    body: "We launch carefully, then keep refining based on how the site is used.",
+    body: "I launch carefully, then we keep refining based on how the site is used.",
     icon: Rocket,
   },
 ] as const;
@@ -188,13 +189,13 @@ const webDesignFaqs = [
   },
   {
     question: "How long does a website project usually take?",
-    answer:
-      "A focused small-business site often lands in a few weeks. Redesigns, richer content, or custom features take longer. Timeline depends on feedback speed and how ready the content is.",
+    // Range comes from the same const the hero reads, so the two cannot drift.
+    answer: `Most small-business sites run ${webDesignTimeline.value} — ${webDesignTimeline.note}. What moves the number: how many pages there are, how ready your content is, how quickly feedback comes back, and whether the site needs integrations. Redesigns and custom features sit at the longer end.`,
   },
   {
     question: "Can CK Works redesign my existing website?",
     answer:
-      "Yes. We can keep what still works, clean up the structure and messaging, and rebuild the experience so it looks sharper and converts more clearly.",
+      "Yes. I can keep what still works, clean up the structure and messaging, and rebuild the experience so it looks sharper and converts more clearly.",
   },
   {
     question: "What will you need from me during the project?",
@@ -204,7 +205,7 @@ const webDesignFaqs = [
   {
     question: "Will I be able to update the website after launch?",
     answer:
-      "Yes. We can set it up so you can handle common updates yourself, or keep CK Works involved for ongoing changes, depending on how hands-on you want to be.",
+      "Yes. I can set it up so you can handle common updates yourself, or keep CK Works involved for ongoing changes, depending on how hands-on you want to be.",
   },
 ] as const;
 
@@ -218,7 +219,7 @@ export default function Page({ service }: { service: ServiceArea }) {
   return (
     <ServiceFrame service={service}><section className="bg-ivory py-10 sm:py-12 lg:py-16">
         <div className={serviceContainer}>
-          <WebDesignHero />
+          <WebDesignHero timeline={service.timeline} />
           <WebDesignIncludes />
           <WebDesignTransformation />
           <WebDesignProcess />
@@ -231,7 +232,7 @@ export default function Page({ service }: { service: ServiceArea }) {
   );
 }
 
-function WebDesignHero() {
+function WebDesignHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
   return (
     <div className="grid items-start gap-10 border-b border-line pb-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
       <div className="max-w-xl">
@@ -258,9 +259,14 @@ function WebDesignHero() {
           className="ck-rise mt-5 max-w-lg text-base leading-7 text-ink/78"
           style={{ animationDelay: `${webDesignHeroTiming.supportCopy}ms` }}
         >
-          We plan, design, and build modern websites that look great, work
-          everywhere, and make it easy for your customers to take action.
+          CK Works plans, designs, and builds modern websites that look clear,
+          work well, and make the next step easy to take.
         </p>
+        <ServiceTimeline
+          timeline={timeline}
+          className="ck-rise mt-7"
+          style={{ animationDelay: `${webDesignHeroTiming.actions}ms` }}
+        />
         <div
           className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row"
           style={{ animationDelay: `${webDesignHeroTiming.actions}ms` }}
@@ -276,7 +282,7 @@ function WebDesignHero() {
             href="/work"
             className="inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-semibold text-ink transition-colors hover:text-forest"
           >
-            View our work
+            See the work
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -349,6 +355,10 @@ function WebDesignDevicePreview() {
               aria-hidden
             />
           </div>
+
+          <p className="absolute left-1/2 top-[calc(100%+1.65rem)] -translate-x-1/2 whitespace-nowrap text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted">
+            Illustrative website concept
+          </p>
         </div>
       </div>
 
@@ -549,8 +559,8 @@ function WebDesignIncludes() {
           Everything you need in a website.
         </h2>
         <p className={serviceSectionBodyClassName}>
-          From structure and design to development and launch, we build
-          websites that look professional and help your business get results.
+          From structure and design to development and launch, CK Works builds
+          websites that look professional and help people know what to do next.
         </p>
         <Link
           href="/services"
@@ -984,7 +994,7 @@ function LaunchedSitePreview() {
 }
 
 /**
- * Process sticky knobs (How we work).
+ * Process sticky knobs (How I work).
  *   size      — post-it width in px
  *   x / y     — offset from its natural spot (px; +x right, +y down)
  *   rotate    — degrees; negative tilts left
@@ -1044,7 +1054,7 @@ function WebDesignProcess() {
   return (
     <section className="grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)] lg:gap-16 lg:py-16">
       <Reveal className="max-w-md">
-        <p className={serviceSectionLabelClassName}>How we work</p>
+        <p className={serviceSectionLabelClassName}>How I work</p>
         <h2 className={serviceSectionTitleClassName}>
           A clear path from start to launch.
         </h2>

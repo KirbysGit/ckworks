@@ -23,6 +23,7 @@ import { SiAirtable, SiGooglecalendar, SiStripe } from "react-icons/si";
 import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
+import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import type { ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
@@ -266,7 +267,7 @@ const systemsFaqs = [
   {
     question: "Do I need a full system, or just one integration?",
     answer:
-      "Often just one. Many businesses get the most value from a single dashboard or one reliable connection. We start with the piece that removes the most manual work, then grow only if it earns its place.",
+      "Often just one. Many businesses get the most value from a single dashboard or one reliable connection. I start with the piece that removes the most manual work, then grow only if it earns its place.",
   },
   {
     question: "What parts of my process can be automated?",
@@ -276,7 +277,7 @@ const systemsFaqs = [
   {
     question: "Will this work with my existing website?",
     answer:
-      "In most cases, yes. Systems and integrations can sit alongside your current site or connect directly to it. We review how it is built and what access is available before recommending an approach.",
+      "In most cases, yes. Systems and integrations can sit alongside your current site or connect directly to it. I'll review how it is built and what access is available before recommending an approach.",
   },
   {
     question: "Who maintains the system after launch?",
@@ -295,7 +296,7 @@ export default function Page({ service }: { service: ServiceArea }) {
   return (
     <ServiceFrame service={service}><section className="bg-ivory pb-10 pt-5 sm:pb-12 sm:pt-6 lg:pb-16 lg:pt-6">
         <div className={serviceContainer}>
-          <SystemsHero />
+          <SystemsHero timeline={service.timeline} />
           <SystemsWhyItMatters />
           <SystemsToolGrid />
           <SystemsHowItWorks />
@@ -308,7 +309,7 @@ export default function Page({ service }: { service: ServiceArea }) {
   );
 }
 
-function SystemsHero() {
+function SystemsHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
   return (
     <div className="grid items-center gap-10 border-b border-line pb-11 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-14 lg:pb-14">
       <div className="max-w-xl">
@@ -328,7 +329,7 @@ function SystemsHero() {
           className="ck-rise mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]"
           style={{ animationDelay: `${systemsHeroTiming.leadCopy}ms` }}
         >
-          We build internal dashboards, connected forms, workflow automations,
+          CK Works builds internal dashboards, connected forms, workflow automations,
           and integrations that bring your tools and information together.
         </p>
         <p
@@ -338,6 +339,11 @@ function SystemsHero() {
           The goal is simple: less copying, fewer missed steps, and a clearer
           view of what&apos;s happening.
         </p>
+        <ServiceTimeline
+          timeline={timeline}
+          className="ck-rise mt-7"
+          style={{ animationDelay: `${systemsHeroTiming.actions}ms` }}
+        />
         <div
           className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
           style={{ animationDelay: `${systemsHeroTiming.actions}ms` }}
@@ -379,7 +385,7 @@ function SystemsWhyItMatters() {
           inboxes, and disconnected tools.
         </p>
         <p className="mt-3 text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
-          We connect the pieces so your team can move faster with confidence.
+          CK Works connects the pieces so information moves without the extra handoffs.
         </p>
       </Reveal>
 

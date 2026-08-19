@@ -7,6 +7,7 @@ import PageHero from "@/components/page/PageHero";
 import RelatedProjects from "@/components/page/RelatedProjects";
 import RelatedServices from "@/components/page/RelatedServices";
 import type { ServiceArea } from "@/lib/services";
+import ServiceTimeline from "./ServiceTimeline";
 import ServiceFrame from "./ServiceFrame";
 
 export default function GenericServicePage({
@@ -26,6 +27,14 @@ export default function GenericServicePage({
           { label: service.title },
         ]}
       />
+
+      {/* PageHero takes no children, so the timeline sits just beneath it —
+          still above the first section, matching the bespoke pages. */}
+      {service.timeline ? (
+        <div className="container-ck -mt-4 pb-2">
+          <ServiceTimeline timeline={service.timeline} />
+        </div>
+      ) : null}
 
       <ContentSection
         label="Who It Is For"

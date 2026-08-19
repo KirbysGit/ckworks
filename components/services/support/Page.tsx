@@ -31,8 +31,9 @@ import {
 import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
+import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
-import type { ServiceArea } from "@/lib/services";
+import { supportTimeline, type ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
 import ProjectWorkCard from "../shared/ProjectWorkCard";
 import SupportCareView, { supportHeroTiming } from "./SupportCareView";
@@ -77,9 +78,9 @@ const supportIncludes = [
   },
   {
     title: "Fixes and troubleshooting",
-    body: "Investigate issues and make clarifications to get things back on track.",
+    body: "Investigate issues and make corrections to get things back on track.",
     icon: Wrench,
-    tags: ["Bug fixes", "Errors", "Clarifications"],
+    tags: ["Bug fixes", "Errors", "Corrections"],
   },
   {
     title: "Content and small improvements",
@@ -189,12 +190,12 @@ const supportFaqs = [
   {
     question: "Is support monthly or request-based?",
     answer:
-      "Either. Some businesses prefer a steady monthly arrangement for regular attention; others just reach out when something comes up. We pick whatever matches how often the site actually needs changes.",
+      "Either. Some businesses prefer a steady monthly arrangement for regular attention; others just reach out when something comes up. We'll pick whatever matches how often the site actually needs changes.",
   },
   {
     question: "How quickly are support requests handled?",
-    answer:
-      "It depends on the request and how urgent it is. Small fixes are usually quick; anything larger gets a clear timeline up front. Routine requests typically turn around within a couple of days.",
+    // Figure comes from the same object the hero reads, so the two cannot drift.
+    answer: `Most requests turn around in ${supportTimeline.value}. Small fixes are usually quicker than that; anything larger gets a clear date up front, and urgent breakage jumps the queue.`,
   },
   {
     question: "What access will CK Works need?",
@@ -207,7 +208,7 @@ export default function Page({ service }: { service: ServiceArea }) {
   return (
     <ServiceFrame service={service}><section className="bg-ivory pb-10 pt-6 sm:pb-12 sm:pt-8 lg:pb-16 lg:pt-10">
         <div className={serviceContainer}>
-          <SupportHero />
+          <SupportHero timeline={service.timeline} />
           <SupportWhyItMatters />
           <SupportIncludes />
           <SupportRequests />
@@ -222,7 +223,7 @@ export default function Page({ service }: { service: ServiceArea }) {
   );
 }
 
-function SupportHero() {
+function SupportHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
   return (
     <div className="border-b border-line pb-11 lg:pb-14">
       <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-14">
@@ -246,6 +247,11 @@ function SupportHero() {
             Updates, fixes, technical cleanup, and continued improvements that
             keep your website or system useful after launch.
           </p>
+          <ServiceTimeline
+            timeline={timeline}
+            className="ck-rise mt-7"
+            style={{ animationDelay: `${supportHeroTiming.actions}ms` }}
+          />
           <div
             className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
             style={{ animationDelay: `${supportHeroTiming.actions}ms` }}
