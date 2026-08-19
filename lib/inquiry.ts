@@ -37,15 +37,19 @@ export const referralOptions = [
  * Modal only — someone opening it has already clicked "Start a project", so a
  * qualifying question is fair there in a way it is not on a cold page.
  *
- * TODO(Colin): these bands anchor low for the work they describe. A build
- * quoted at 6-10 weeks does not belong in the same range as "Under $1,500",
- * and "$5,000+" puts a small site and a large one in one bucket. Raise the
- * floor and split the top once you have settled pricing.
+ * These describe how settled the money is, not how much of it there is. Dollar
+ * bands used to sit here and they had two problems: the lowest one advertised
+ * a floor no 6-10 week build would ever justify, and every figure would need
+ * revisiting as rates change. Readiness answers the question that actually
+ * matters — is this someone exploring, or someone able to start — and it stays
+ * true whatever CK Works charges next year.
+ *
+ * Keep these distinct from `timingOptions`: that field is the calendar, this
+ * one is the budget.
  */
-export const budgetOptions = [
+export const readinessOptions = [
   "Not sure yet",
-  "Under $1,500",
-  "$1,500-$3,000",
-  "$3,000-$5,000",
-  "$5,000+",
+  "Just exploring",
+  "I have a range in mind",
+  "Ready to move forward",
 ];

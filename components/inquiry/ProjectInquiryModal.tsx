@@ -8,8 +8,9 @@ import Logo from "../ui/Logo";
 import WhatsAppContactLink from "../contact/WhatsAppContactLink";
 import { trackEvent } from "@/lib/analytics";
 import { contactEmail } from "@/lib/data";
+import { readAttribution } from "@/lib/attribution";
 import {
-  budgetOptions,
+  readinessOptions,
   serviceOptions,
   timingOptions,
 } from "@/lib/inquiry";
@@ -162,6 +163,10 @@ export default function ProjectInquiryModal({
           sourcePage:
             typeof window === "undefined" ? source : window.location.pathname,
           source,
+          // Read at submit, not on open: the modal can sit open while the
+          // visitor keeps reading, and this is the same shape the contact
+          // page sends so both leads report a source.
+          ...readAttribution(),
         }),
       });
 
@@ -381,10 +386,10 @@ export default function ProjectInquiryModal({
                           onChange={(value) => updateField("timeline", value)}
                         />
                         <SelectField
-                          label="Budget range"
+                          label="Budget"
                           value={form.budget}
-                          options={budgetOptions}
-                          placeholder="Choose a range"
+                          options={readinessOptions}
+                          placeholder="Choose an option"
                           onChange={(value) => updateField("budget", value)}
                         />
                       </div>

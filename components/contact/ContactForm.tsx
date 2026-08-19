@@ -9,6 +9,7 @@ import {
 } from "@/lib/inquiry";
 import { trackEvent } from "@/lib/analytics";
 import { animDelay } from "@/lib/motion";
+import { readAttribution } from "@/lib/attribution";
 
 type ContactFormState = {
   name: string;
@@ -53,26 +54,7 @@ export default function ContactForm() {
     });
   }, []);
 
-  const attribution = useMemo(() => {
-    if (typeof window === "undefined") {
-      return {
-        landingPage: "",
-        referrer: "",
-        utmSource: "",
-        utmMedium: "",
-        utmCampaign: "",
-      };
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    return {
-      landingPage: window.location.pathname,
-      referrer: document.referrer,
-      utmSource: params.get("utm_source") ?? "",
-      utmMedium: params.get("utm_medium") ?? "",
-      utmCampaign: params.get("utm_campaign") ?? "",
-    };
-  }, []);
+  const attribution = useMemo(readAttribution, []);
 
   function updateField(field: keyof ContactFormState, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
