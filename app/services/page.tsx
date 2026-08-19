@@ -56,7 +56,7 @@ const serviceCards: ServiceCardConfig[] = [
     number: "02",
     visual: "search",
     description:
-      "We help your business show up more clearly in search results and AI-driven discovery.",
+      "CK Works helps your business show up more clearly in search results and AI-driven discovery.",
   },
   {
     slug: "analytics-lead-tracking",
@@ -78,7 +78,7 @@ const serviceCards: ServiceCardConfig[] = [
     visual: "support",
     className: "lg:col-span-2",
     description:
-      "We handle updates, maintenance, fixes, and improvements so your site and systems stay secure, fast, and effective after launch.",
+      "I handle updates, maintenance, fixes, and improvements so your site and systems stay secure, fast, and effective after launch.",
   },
 ];
 
@@ -128,7 +128,7 @@ export default function ServicesPage() {
               href="#services-list"
               className="group mt-6 inline-flex items-center gap-2 border-b border-forest pb-1 text-sm font-semibold text-ink transition-colors hover:text-forest"
             >
-              How we can help
+              How I can help
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </a>
           </Reveal>
@@ -223,7 +223,14 @@ function ServiceOverviewCard({
           </Link>
         </div>
 
-        <SupportVisual />
+        {/* Support gets its own full-bleed layout, so it needs the same
+            labelling the shared card path applies to the other four. */}
+        <div className="flex min-w-0 flex-col justify-center" data-nosnippet>
+          <SupportVisual />
+          <p className="px-5 pb-5 pt-3 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted">
+            Illustrative website concept
+          </p>
+        </div>
       </article>
     );
   }
@@ -249,12 +256,24 @@ function ServiceOverviewCard({
         </Link>
       </div>
 
+      {/* Every card visual is a fictional Riverstone Builders mock-up — a site,
+          a search result with an AI Overview, and invented traffic figures.
+          Labelling and `data-nosnippet` sit here so all five are covered at
+          once rather than per-visual. */}
       <div
-        className="flex min-h-[16rem] min-w-0 items-center justify-center px-5 pb-5 pt-1 sm:px-6 sm:pb-6 md:px-4 md:py-5 lg:px-5"
+        className="flex min-h-[16rem] min-w-0 flex-col items-center justify-center px-5 pb-5 pt-1 sm:px-6 sm:pb-6 md:px-4 md:py-5 lg:px-5"
+        data-nosnippet
       >
         <div className="flex w-full max-w-[96%] origin-center scale-[0.925] items-center justify-center transform-gpu transition-transform duration-300 ease-out group-hover/card:scale-[0.95]">
           <ServiceVisual kind={card.visual} />
         </div>
+        <p className="mt-2 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted">
+          {card.visual === "search"
+            ? "Illustrative search example"
+            : card.visual === "analytics"
+              ? "Illustrative reporting example"
+              : "Illustrative website concept"}
+        </p>
       </div>
     </article>
   );

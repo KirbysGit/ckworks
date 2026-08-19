@@ -116,6 +116,12 @@ export default function StageChain() {
           <p className="mt-1 text-xs leading-5 text-muted">{stage.body}</p>
         </div>
       ))}
+
+      {/* One caption for the whole chain: the stage cells are fixed-aspect and
+          far too small to carry a label each. */}
+      <p className="col-span-2 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted lg:col-span-4">
+        Illustrative website concept
+      </p>
     </div>
   );
 }
@@ -226,7 +232,7 @@ function DesignStage() {
 }
 
 /**
- * 04 — a real launched site. Hearth & Home (same demo as Web Design / Support)
+ * 04 — a launched-site mock-up. Hearth & Home (same demo as Web Design / Support)
  * fills the structure Design only sketched in grayscale.
  */
 function LiveStage() {

@@ -57,7 +57,14 @@ export default function LaunchImprovePhase() {
 function LaunchArtefact() {
   return (
     <div className="relative order-2 flex min-w-0 items-center justify-center border-t border-line/75 px-5 py-7 sm:px-8 sm:py-8 lg:order-1 lg:border-r lg:border-t-0 lg:px-8 lg:py-7">
-      <LiveSiteWindow />
+      {/* Column wrapper so the caption stacks under the window — the artefact
+          itself is a centering flex row. */}
+      <div className="flex w-full max-w-[34rem] flex-col items-center">
+        <LiveSiteWindow />
+        <p className="mt-3 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted">
+          Illustrative website concept
+        </p>
+      </div>
 
       <span className="pointer-events-none absolute right-0 top-[42%] z-10 hidden h-10 w-10 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-forest text-[0.74rem] font-semibold text-ivory shadow-[0_4px_12px_-7px_rgba(31,36,32,0.65)] lg:flex lg:h-11 lg:w-11 lg:text-sm">
         04
@@ -176,8 +183,8 @@ function LaunchCopy() {
       </div>
 
       <p className="mt-6 max-w-[28rem] text-base font-medium leading-7 text-ink/84 sm:text-lg sm:leading-8">
-        We test the important paths, launch with confidence, and hand off a
-        site that is ready to use.
+        I test the important paths, launch carefully, and hand off a site that
+        is ready to use.
       </p>
 
       <div className="mt-6">
