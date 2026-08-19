@@ -1,293 +1,107 @@
-"use client";
+﻿"use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import Link from "next/link";
 import {
   animate,
   motion,
   useInView as useMotionInView,
 } from "framer-motion";
-import { ArrowRight, CheckCircle2, Minus, Plus, Sparkle } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUp,
+  ChartNoAxesColumn,
+  Filter,
+  Search,
+  Sparkle,
+  Target,
+  UserRound,
+} from "lucide-react";
 import SectionHeader from "../ui/SectionHeader";
+import {
+  SupportServiceVisual,
+  SystemsServiceVisual,
+} from "./ServiceWideVisuals";
 import { trackEvent } from "@/lib/analytics";
-import { services } from "@/lib/data";
 import { fadeUp, stagger, inView } from "@/lib/motion";
+import { serviceAreas, type ServiceSlug } from "@/lib/services";
 
-type VisualKind = "website" | "systems" | "integrations" | "support";
+type VisualKind =
+  | "website"
+  | "search"
+  | "systems"
+  | "integrations"
+  | "support";
 
-type ServiceDetails = {
+/**
+ * `tall` cards stack icon over copy and sit three across. `wide` cards put the
+ * icon beside the copy and take half the row, which gives their multi-panel
+ * visuals room to breathe.
+ */
+type CardLayout = "tall" | "wide";
+
+type HomeServiceConfig = {
+  slug: ServiceSlug;
+  description?: string;
   tags: string[];
   visual: VisualKind;
-  featured?: boolean;
+  layout: CardLayout;
 };
 
-const serviceDetails: Record<string, ServiceDetails> = {
-  "Web Design": {
+// Homepage cards stay deliberately brief; each leads to the fuller service page.
+const homeServiceCards: HomeServiceConfig[] = [
+  {
+    slug: "web-design-development",
+    description:
+      "Clear, responsive websites that explain what your business does, build confidence quickly, and make the next step easy to take.",
     tags: ["Websites", "Mobile-ready", "Messaging"],
     visual: "website",
+    layout: "tall",
   },
-  "Digital Systems": {
-    tags: ["Dashboards", "Internal tools", "Workflows"],
+  {
+    slug: "search-ai-visibility",
+    tags: ["SEO", "Local search", "AI visibility"],
+    visual: "search",
+    layout: "tall",
+  },
+  {
+    slug: "analytics-lead-tracking",
+    tags: ["Analytics", "Tracking", "Reporting"],
     visual: "systems",
-    featured: true,
+    layout: "tall",
   },
-  Integrations: {
-    tags: ["Forms", "APIs", "Email + SMS"],
+  {
+    slug: "digital-systems-integrations",
+    tags: ["Dashboards", "Automation", "APIs"],
     visual: "integrations",
+    layout: "wide",
   },
-  "Ongoing Support": {
+  {
+    slug: "ongoing-support",
     tags: ["Updates", "Fixes", "Improvements"],
     visual: "support",
+    layout: "wide",
   },
-};
+];
 
-const serviceIncludes: Record<string, string[]> = {
-  "Web Design": [
-    "Landing pages, portfolio sites, and small business websites",
-    "Page structure, layout, and visual direction",
-    "Mobile-friendly responsive design",
-    "Clear calls-to-action and content organization",
-  ],
-  "Digital Systems": [
-    "Internal dashboards and admin views",
-    "Workflow cleanup for repetitive tasks",
-    "Simple tools for tracking, organizing, or managing information",
-    "Systems designed around how the business actually works",
-  ],
-  Integrations: [
-    "Form submissions routed to the right place",
-    "API connections between tools or databases",
-    "Auth, accounts, or data connection flows where needed",
-    "Email or SMS notifications for important actions",
-  ],
-  "Ongoing Support": [
-    "Website updates and small content changes",
-    "Bug fixes and technical cleanup",
-    "Post-launch testing and improvements",
-    "Ongoing adjustments as the business grows",
-  ],
-};
+const homeServices = homeServiceCards.map((config) => {
+  const service = serviceAreas.find((area) => area.slug === config.slug);
 
-function getServiceDetails(service: (typeof services)[number]) {
-  const details = serviceDetails[service.title];
+  if (!service) {
+    throw new Error(`Missing service configuration for ${config.slug}`);
+  }
 
-  return {
-    ...details,
-    tags: service.tags ?? details.tags,
-    visual: service.visual ?? details.visual,
-    featured: service.featured ?? details.featured,
-  };
-}
-
-function getServicePanelId(scope: "mobile" | "desktop", title: string) {
-  return `${scope}-service-includes-${title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "")}`;
-}
-
-type IntegrationSurface = "desktop" | "mobile";
-
-type IntegrationNodeLayout = {
-  label: string;
-  icon: string;
-  x: string;
-  y: string;
-  size: number;
-  iconSize: number;
-  iconOffsetX: number;
-  iconOffsetY: number;
-  delay: number;
-};
-
-type IntegrationLayout = {
-  viewBox: string;
-  /** Stretch SVG to the card so path % matches node % (fixes mobile gaps). */
-  preserveAspectRatio: string;
-  lines: {
-    path: string;
-    x: number;
-    y: number;
-    /** Uniform scale around the hub (1 = no change). */
-    scale: number;
-    /** Horizontal reach around the hub — bump this on mobile if lines fall short. */
-    scaleX: number;
-    scaleY: number;
-    strokeWidth: number;
-    strokeOpacity: number;
-    dash: string;
-  };
-  center: {
-    x: string;
-    y: string;
-    size: number;
-    iconSize: number;
-    iconOffsetX: number;
-    iconOffsetY: number;
-  };
-  nodes: IntegrationNodeLayout[];
-};
-
-// Integration card tuning: move boxes with x/y, move connectors with lines,
-// and nudge logos inside their squares with iconOffsetX/iconOffsetY.
-// Use the `mobile` block for accordion / narrow cards.
-const integrationLayouts: Record<IntegrationSurface, IntegrationLayout> = {
-  desktop: {
-    viewBox: "0 0 260 150",
-    // Letterbox like before — desktop positions were tuned against this.
-    preserveAspectRatio: "xMidYMid meet",
-    lines: {
-      path: "M42 45 C92 45 80 72 130 72 M42 105 C92 105 80 78 130 78 M218 45 C168 45 180 72 130 72 M218 105 C168 105 180 78 130 78",
-      x: 0,
-      y: 0,
-      scale: 1,
-      scaleX: 1,
-      scaleY: 1,
-      strokeWidth: 2,
-      strokeOpacity: 0.5,
-      dash: "4 5",
-    },
-    center: {
-      x: "41.5%",
-      y: "32%",
-      size: 48,
-      iconSize: 20,
-      iconOffsetX: 0,
-      iconOffsetY: 0,
-    },
-    nodes: [
-      {
-        label: "Sheets",
-        icon: "/images/services/svg/excel-logo.svg",
-        x: "8%",
-        y: "18%",
-        size: 40,
-        iconSize: 30,
-        iconOffsetX: -1,
-        iconOffsetY: 0,
-        delay: 0.28,
-      },
-      {
-        label: "AI",
-        icon: "/images/services/svg/openai-logo.svg",
-        x: "8%",
-        y: "58%",
-        size: 40,
-        iconSize: 20,
-        iconOffsetX: 0,
-        iconOffsetY: 0,
-        delay: 0.4,
-      },
-      {
-        label: "Chat",
-        icon: "/images/services/svg/slack-logo.svg",
-        x: "77%",
-        y: "18%",
-        size: 40,
-        iconSize: 20,
-        iconOffsetX: 0,
-        iconOffsetY: 0,
-        delay: 0.52,
-      },
-      {
-        label: "Mail",
-        icon: "/images/services/svg/gmail-logo.svg",
-        x: "77%",
-        y: "58%",
-        size: 40,
-        iconSize: 20,
-        iconOffsetX: 0,
-        iconOffsetY: 0,
-        delay: 0.64,
-      },
-    ],
-  },
-  mobile: {
-    viewBox: "0 0 260 150",
-    // Stretch to the card so connectors track the icon % positions.
-    preserveAspectRatio: "none",
-    lines: {
-      path: "M36 42 C90 42 80 72 130 72 M36 108 C90 108 80 78 130 78 M224 42 C170 42 180 72 130 72 M224 108 C170 108 180 78 130 78",
-      x: 0,
-      y: 0,
-      scale: 1,
-      /** Primary mobile knob: >1 reaches farther toward the outer icons. */
-      scaleX: 1.06,
-      scaleY: 1.02,
-      strokeWidth: 2,
-      strokeOpacity: 0.5,
-      dash: "4 5",
-    },
-    center: {
-      x: "43.5%",
-      y: "33%",
-      size: 48,
-      iconSize: 20,
-      iconOffsetX: 0,
-      iconOffsetY: 0,
-    },
-    nodes: [
-      {
-        label: "Sheets",
-        icon: "/images/services/svg/excel-logo.svg",
-        // Nudge inward if lines overshoot; outward if they still fall short.
-        x: "7%",
-        y: "16%",
-        size: 40,
-        iconSize: 30,
-        iconOffsetX: -1,
-        iconOffsetY: 0,
-        delay: 0.28,
-      },
-      {
-        label: "AI",
-        icon: "/images/services/svg/openai-logo.svg",
-        x: "7%",
-        y: "58%",
-        size: 40,
-        iconSize: 20,
-        iconOffsetX: 0,
-        iconOffsetY: 0,
-        delay: 0.4,
-      },
-      {
-        label: "Chat",
-        icon: "/images/services/svg/slack-logo.svg",
-        x: "78%",
-        y: "16%",
-        size: 40,
-        iconSize: 20,
-        iconOffsetX: 0,
-        iconOffsetY: 0,
-        delay: 0.52,
-      },
-      {
-        label: "Mail",
-        icon: "/images/services/svg/gmail-logo.svg",
-        x: "78%",
-        y: "58%",
-        size: 40,
-        iconSize: 20,
-        iconOffsetX: 0,
-        iconOffsetY: 0,
-        delay: 0.64,
-      },
-    ],
-  },
-};
+  return { ...service, ...config };
+});
 
 export default function Services() {
-  const [openService, setOpenService] = useState<string | null>(null);
-  const [openMobileService, setOpenMobileService] = useState<string | null>(
-    services[0]?.title ?? null,
-  );
-
   return (
     <section id="what-i-do" className="bg-ivory py-12 md:py-14 lg:py-20">
       <div className="container-ck">
         <SectionHeader
           label="What I Do"
           title="A few ways I can help your business."
-          subtitle="From clean, conversion-focused websites to smart systems and ongoing support, I build the digital foundation your business can grow on."
+          subtitle="From websites and search visibility to reporting, systems, and ongoing support, I help make the digital side of your business easier to run."
           className="text-center md:text-left [&_h2]:mx-auto [&_p]:mx-auto md:[&_h2]:mx-0 md:[&_p]:mx-0"
         />
 
@@ -298,110 +112,39 @@ export default function Services() {
           viewport={inView}
           className="mt-8 space-y-3 md:hidden"
         >
-          {services.map((service) => {
-            const { icon: Icon, title, body } = service;
-            const isOpen = openMobileService === title;
-            const details = getServiceDetails(service);
-            const panelId = getServicePanelId("mobile", title);
-
+          {homeServices.map((service) => {
+            const Icon = service.icon;
             return (
               <motion.article
-                key={title}
+                key={service.slug}
                 variants={fadeUp}
-                className={`overflow-hidden rounded-2xl border border-line bg-card shadow-soft transition-shadow duration-200 ${
-                  isOpen ? "shadow-lift" : ""
-                }`}
+                className="overflow-hidden rounded-2xl border border-line bg-card shadow-soft transition-shadow duration-200 hover:shadow-lift"
               >
-                <button
-                  type="button"
-                  aria-expanded={isOpen}
-                  aria-controls={panelId}
+                <Link
+                  href={service.href}
                   onClick={() =>
-                    setOpenMobileService((current) => {
-                      const next = current === title ? null : title;
-
-                      if (next) {
-                        trackEvent("service_viewed", {
-                          service: title,
-                          surface: "mobile",
-                        });
-                      }
-
-                      return next;
+                    trackEvent("service_viewed", {
+                      service: service.title,
+                      surface: "homepage-mobile",
                     })
                   }
-                  className="flex w-full items-center gap-4 p-4 text-left"
+                  className="flex items-center gap-4 p-4 text-left"
                 >
                   <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-forest-soft/75">
                     <Icon className="h-6 w-6 text-forest" strokeWidth={1.8} />
                   </span>
 
                   <span className="min-w-0 flex-1">
-                    <span className="block text-xl font-semibold leading-tight text-ink">
-                      {title}
+                    <span className="block font-serif text-[1.45rem] font-semibold leading-tight text-ink">
+                      {service.title}
                     </span>
                     <span className="mt-1.5 block text-sm leading-6 text-muted">
-                      {body}
+                      {service.description}
                     </span>
                   </span>
 
-                  <motion.span
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest-soft/75 text-forest"
-                    aria-hidden
-                  >
-                    {isOpen ? (
-                      <Minus className="h-5 w-5" />
-                    ) : (
-                      <Plus className="h-5 w-5" />
-                    )}
-                  </motion.span>
-                </button>
-
-                <motion.div
-                  id={panelId}
-                  initial={false}
-                  animate={
-                    isOpen
-                      ? { height: "auto", opacity: 1 }
-                      : { height: 0, opacity: 0 }
-                  }
-                  transition={{
-                    duration: 0.26,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="overflow-hidden"
-                  aria-hidden={!isOpen}
-                >
-                  <div className="px-4 pb-5">
-                    <ServiceVisual kind={details.visual} surface="mobile" />
-
-                    <div className="mt-5">
-                      <div className="flex items-center gap-3">
-                        <h4 className="shrink-0 text-xs font-semibold uppercase tracking-[0.18em] text-forest">
-                          What's included
-                        </h4>
-                        <span
-                          className="h-px flex-1 bg-line/80"
-                          aria-hidden
-                        />
-                      </div>
-
-                      <ul className="mt-3 space-y-2.5">
-                        {serviceIncludes[title].slice(0, 3).map((item) => (
-                          <li
-                            key={item}
-                            className="flex items-start gap-3 text-sm leading-6 text-muted"
-                          >
-                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-forest" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </motion.div>
+                  <ArrowRight className="h-5 w-5 shrink-0 text-forest" />
+                </Link>
               </motion.article>
             );
           })}
@@ -412,108 +155,74 @@ export default function Services() {
           initial="hidden"
           whileInView="show"
           viewport={inView}
-          className="mt-12 hidden items-start gap-4 md:grid md:grid-cols-2 xl:grid-cols-4"
+          className="mt-12 hidden gap-4 md:grid md:grid-cols-2 xl:grid-cols-6"
         >
-          {services.map((service) => {
-            const { icon: Icon, title, body } = service;
-            const isOpen = openService === title;
-            const details = getServiceDetails(service);
-            const panelId = getServicePanelId("desktop", title);
+          {homeServices.map((service, index) => {
+            const Icon = service.icon;
+            const isWide = service.layout === "wide";
+            // The two wide cards take half the row each; index 4 still centers
+            // itself at `md`, where it is the odd card on its own line.
+            const cardPlacement =
+              index === 3
+                ? "xl:col-span-3"
+                : index === 4
+                  ? "md:col-span-2 md:mx-auto md:w-[calc(50%-0.5rem)] xl:col-span-3 xl:mx-0 xl:w-auto"
+                  : "xl:col-span-2";
 
             return (
-              <motion.div key={title} variants={fadeUp}>
+              <motion.div
+                key={service.slug}
+                variants={fadeUp}
+                className={`h-full ${cardPlacement}`}
+              >
                 <article
-                  className={`group relative flex min-h-[22.5rem] flex-col overflow-hidden rounded-2xl border bg-card p-5 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:shadow-lift ${
-                    details.featured
-                      ? "border-forest/60"
-                      : "border-line hover:border-forest/30"
+                  className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-card p-5 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:border-forest/30 hover:shadow-lift ${
+                    isWide ? "" : "min-h-[26rem]"
                   }`}
                 >
-                {details.featured && (
-                  <span className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-forest text-ivory shadow-soft">
-                    <Sparkle className="h-4 w-4" />
-                  </span>
-                )}
-
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-forest-soft">
-                  <Icon className="h-5 w-5 text-forest" />
-                </span>
-
-                <h3 className="mt-5 font-serif text-2xl font-semibold leading-tight text-ink">
-                  {title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
-                  {body}
-                </p>
-
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {details.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-md bg-forest-soft/75 px-2.5 py-1 text-[11px] font-medium text-forest"
-                    >
-                      {tag}
+                  <div className={isWide ? "flex items-start gap-4" : "flex flex-col"}>
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-forest-soft">
+                      <Icon className="h-5 w-5 text-forest" />
                     </span>
-                  ))}
-                </div>
 
-                <ServiceVisual kind={details.visual} surface="desktop" />
+                    <div className={isWide ? "min-w-0 flex-1" : "mt-5"}>
+                      <h3 className="font-serif text-[1.7rem] font-semibold leading-tight text-ink">
+                        {service.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-muted">
+                        {service.description}
+                      </p>
 
-                <div className="mt-auto pt-5">
-                  <button
-                    type="button"
-                    aria-expanded={isOpen}
-                    aria-controls={panelId}
-                    onClick={() =>
-                      setOpenService((current) => {
-                        const next = current === title ? null : title;
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {service.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded-md bg-forest-soft/75 px-2.5 py-1 text-[11px] font-medium text-forest"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
 
-                        if (next) {
-                          trackEvent("service_viewed", {
-                            service: title,
-                            surface: "desktop",
-                          });
-                        }
+                  <ServiceVisual kind={service.visual} />
 
-                        return next;
-                      })
-                    }
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-forest transition-colors duration-200 hover:text-ink"
-                  >
-                    What this includes
-                    <motion.span
-                      animate={{ rotate: isOpen ? 90 : 0 }}
-                      transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                  <div className="mt-auto pt-5">
+                    <Link
+                      href={service.href}
+                      onClick={() =>
+                        trackEvent("service_viewed", {
+                          service: service.title,
+                          surface: "homepage-desktop",
+                        })
+                      }
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-forest transition-colors duration-200 hover:text-ink"
                     >
+                      Explore service
                       <ArrowRight className="h-4 w-4" />
-                    </motion.span>
-                  </button>
-
-                  <motion.div
-                    id={panelId}
-                    initial={false}
-                    animate={
-                      isOpen
-                        ? { height: "auto", opacity: 1 }
-                        : { height: 0, opacity: 0 }
-                    }
-                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                    className="overflow-hidden"
-                    aria-hidden={!isOpen}
-                  >
-                    <ul className="mt-4 space-y-2 border-t border-line/80 pt-4">
-                      {serviceIncludes[title].map((item) => (
-                        <li
-                          key={item}
-                          className="flex gap-2 text-xs leading-relaxed text-muted"
-                        >
-                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-forest/70" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                </div>
+                    </Link>
+                  </div>
                 </article>
               </motion.div>
             );
@@ -524,16 +233,123 @@ export default function Services() {
   );
 }
 
-function ServiceVisual({
-  kind,
-  surface = "desktop",
-}: {
-  kind: VisualKind;
-  surface?: IntegrationSurface;
-}) {
+// Shared height keeps the top-row service previews visually level.
+const homepageVisual = {
+  height: "h-44",
+} as const;
+
+type TwinHills = {
+  /** Half-width of each hill. */
+  halfWidth: number;
+  /** Left peak y — lower = taller. */
+  leftPeakY: number;
+  /** Right peak y — lower = taller. */
+  rightPeakY: number;
+  /** Center x of the left hill. */
+  leftCenter: number;
+  /** Center x of the right hill. */
+  rightCenter: number;
+  /** Vertical inset for crest + trough Q shoulders (same rounding both ways). */
+  round: number;
+  opacity: number;
+};
+
+/**
+ * One silhouette: two isosceles hills joined by a rounded trough.
+ * Crest Q control = geometric tip; trough Q control = slope intersection
+ * (inverse of the crest) so every curve matches the slope it flows into.
+ */
+function buildTwinHillsPath({
+  halfWidth: w,
+  leftPeakY: p1,
+  rightPeakY: p2,
+  leftCenter: c1,
+  rightCenter: c2,
+  round,
+}: TwinHills) {
+  const baseY = 72;
+  const h1 = baseY - p1;
+  const h2 = baseY - p2;
+
+  // Trough where the inner slopes would meet (handles unequal peak heights).
+  const span = c2 - c1;
+  const troughY =
+    (span / w + p1 / h1 + p2 / h2) / (1 / h1 + 1 / h2);
+  const troughX = c1 + w * ((troughY - p1) / h1);
+
+  const onSlope = (
+    center: number,
+    peakY: number,
+    height: number,
+    side: 1 | -1,
+    y: number,
+  ) => {
+    const t = (y - peakY) / height;
+    return [center + side * w * t, y] as const;
+  };
+
+  const crest1 = Math.min(round, (troughY - p1) * 0.45);
+  const crest2 = Math.min(round, (troughY - p2) * 0.45);
+  const troughRound = Math.min(
+    round,
+    (troughY - p1) * 0.45,
+    (troughY - p2) * 0.45,
+  );
+
+  const p1Y = p1 + crest1;
+  const [p1l, p1r] = [
+    onSlope(c1, p1, h1, -1, p1Y),
+    onSlope(c1, p1, h1, 1, p1Y),
+  ];
+
+  const tY = troughY - troughRound;
+  const [tL, tR] = [
+    onSlope(c1, p1, h1, 1, tY),
+    onSlope(c2, p2, h2, -1, tY),
+  ];
+
+  const p2Y = p2 + crest2;
+  const [p2l, p2r] = [
+    onSlope(c2, p2, h2, -1, p2Y),
+    onSlope(c2, p2, h2, 1, p2Y),
+  ];
+
+  return [
+    `M${c1 - w} ${baseY}`,
+    `L${p1l[0]} ${p1l[1]}`,
+    `Q${c1} ${p1} ${p1r[0]} ${p1r[1]}`,
+    `L${tL[0]} ${tL[1]}`,
+    `Q${troughX} ${troughY} ${tR[0]} ${tR[1]}`,
+    `L${p2l[0]} ${p2l[1]}`,
+    `Q${c2} ${p2} ${p2r[0]} ${p2r[1]}`,
+    `L${c2 + w} ${baseY}`,
+    "Z",
+  ].join(" ");
+}
+
+// These controls keep the miniature website composition easy to tune in one place.
+const websiteVisual = {
+  // bottom-0 keeps the mountain base flush with the image panel.
+  imageInset: "inset-x-2.5 top-2 bottom-0",
+  // Twin hills as one flowing outline (rounded crests + inverse trough).
+  mountains: {
+    halfWidth: 38,
+    leftPeakY: 12,
+    rightPeakY: 26,
+    leftCenter: 34,
+    rightCenter: 86,
+    round: 9,
+    opacity: 0.5,
+  } satisfies TwinHills,
+  sun: { cx: 104, cy: 14, r: 6.5 },
+} as const;
+
+const mountainShape = buildTwinHillsPath(websiteVisual.mountains);
+
+function ServiceVisual({ kind }: { kind: VisualKind }) {
   if (kind === "website") {
     return (
-      <div className="relative mt-5 h-36 overflow-hidden rounded-lg border border-line bg-ivory/75">
+      <div className={`relative mt-5 flex ${homepageVisual.height} shrink-0 flex-col overflow-hidden rounded-lg border border-line bg-ivory/75`}>
         <motion.span
           className="pointer-events-none absolute inset-y-0 z-20 w-16 bg-gradient-to-r from-transparent via-white/70 to-transparent"
           initial={{ x: "-140%" }}
@@ -542,103 +358,179 @@ function ServiceVisual({
           transition={{ duration: 1.45, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           aria-hidden
         />
-        <div className="flex h-5 items-center gap-1.5 border-b border-line px-3">
-          <span className="h-1.5 w-1.5 rounded-full bg-forest/35" />
-          <span className="h-1.5 w-1.5 rounded-full bg-forest/25" />
-          <span className="h-1.5 w-1.5 rounded-full bg-forest/20" />
-          <AnimatedBar className="ml-auto h-1.5 rounded-full bg-line" width="2.5rem" delay={0.18} />
-          <AnimatedBar className="h-1.5 rounded-full bg-line" width="1.75rem" delay={0.26} />
+        <div className="flex h-6 shrink-0 items-center gap-1.5 border-b border-line bg-sand/85 px-3">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#D86E5E]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[#DDAE4B]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[#6D9B70]" />
         </div>
-        <div className="grid gap-2 p-3">
-          <div className="space-y-1.5">
-            <AnimatedBar className="block h-2 rounded-full bg-ink/70" width="4rem" delay={0.12} />
-            <AnimatedBar className="block h-2 rounded-full bg-line" width="7rem" delay={0.22} />
-            <AnimatedBar className="block h-2 rounded-full bg-line" width="5rem" delay={0.32} />
-          </div>
-          <div className="grid grid-cols-[1.2fr_0.8fr] gap-3">
-            <motion.div
-              className="h-10 rounded-md bg-forest-soft/70"
-              initial={{ opacity: 0, scale: 0.96 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={inView}
-              transition={{ duration: 0.55, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
-            />
-            <motion.div
-              className="h-10 rounded-md bg-sand"
-              initial={{ opacity: 0, scale: 0.96 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={inView}
-              transition={{ duration: 0.55, delay: 0.48, ease: [0.22, 1, 0.36, 1] }}
-            />
-          </div>
-          <div className="grid grid-cols-3 gap-2">
-            {[0, 1, 2].map((item) => (
-              <motion.span
-                key={item}
-                className="h-5 rounded-md bg-sand"
-                initial={{ opacity: 0, y: 4 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={inView}
-                transition={{
-                  duration: 0.45,
-                  delay: 0.56 + item * 0.08,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
+        <div className="grid min-h-0 flex-1 grid-cols-[1.1fr_0.9fr] gap-3.5 p-3.5">
+          <div className="relative overflow-hidden rounded-md bg-gradient-to-br from-forest-soft/65 via-forest-soft/40 to-sand">
+            <svg
+              viewBox="0 0 120 72"
+              preserveAspectRatio="xMidYMax meet"
+              className={`absolute ${websiteVisual.imageInset} text-forest/45`}
+              aria-hidden
+            >
+              <circle
+                cx={websiteVisual.sun.cx}
+                cy={websiteVisual.sun.cy}
+                r={websiteVisual.sun.r}
+                fill="currentColor"
+                opacity={websiteVisual.mountains.opacity}
               />
-            ))}
+              <path
+                d={mountainShape}
+                fill="currentColor"
+                opacity={websiteVisual.mountains.opacity}
+              />
+            </svg>
+          </div>
+          <div className="flex min-w-0 flex-col justify-center">
+            <AnimatedBar className="block h-1.5 rounded-full bg-ink/70" width="76%" delay={0.12} />
+            <div className="mt-2.5 flex flex-col gap-1.5">
+              <AnimatedBar className="block h-1.5 rounded-full bg-line" width="97%" delay={0.22} />
+              <AnimatedBar className="block h-1.5 rounded-full bg-line" width="88%" delay={0.3} />
+              <AnimatedBar className="block h-1.5 rounded-full bg-line" width="72%" delay={0.36} />
+            </div>
+            <div className="mt-3 flex items-center gap-1.5">
+              <motion.span
+                className="inline-flex h-4 w-10 rounded-sm bg-forest/75"
+                initial={{ opacity: 0, scale: 0.96 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={inView}
+                transition={{ duration: 0.45, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              />
+              <motion.span
+                className="inline-flex h-4 w-7 rounded-sm bg-line/80"
+                initial={{ opacity: 0, scale: 0.96 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={inView}
+                transition={{ duration: 0.45, delay: 0.48, ease: [0.22, 1, 0.36, 1] }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="h-10 shrink-0 overflow-hidden border-t border-line bg-card/70 px-3 pt-2">
+          <div className="grid h-12 grid-cols-3 gap-2">
+          {[0, 1, 2].map((index) => (
+            <motion.div
+              key={index}
+              className="h-full rounded-t-md border border-line/55 bg-line/45"
+              initial={{ opacity: 0, y: 4 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={inView}
+              transition={{
+                duration: 0.45,
+                delay: 0.48 + index * 0.08,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            />
+          ))}
           </div>
         </div>
       </div>
     );
   }
 
+  if (kind === "search") {
+    return <SearchServiceVisual />;
+  }
+
   if (kind === "systems") {
+    const metrics = [
+      { label: "Visitors", value: 2356, change: "12%" },
+      { label: "Leads", value: 143, change: "18%" },
+      { label: "Forms", value: 87, change: "15%" },
+    ];
+    const analyticsNav = [ChartNoAxesColumn, UserRound, Filter, Target];
+
     return (
-      <div className="mt-5 h-36 overflow-hidden rounded-lg border border-line bg-ivory/75 p-3">
-        <div className="grid grid-cols-[1.6rem_1fr] gap-3">
-          <div className="space-y-3 border-r border-line pr-2 pt-1">
-            {[0, 1, 2].map((item) => (
+      <div className={`mt-5 flex ${homepageVisual.height} shrink-0 flex-col overflow-hidden rounded-lg border border-line bg-ivory/75`}>
+        <div className="grid h-full grid-cols-[2.25rem_1fr]">
+          <div className="flex flex-col items-center gap-3 border-r border-line bg-sand/55 pt-3 text-forest">
+            {analyticsNav.map((NavIcon, index) => (
               <span
-                key={item}
-                className="block h-2 w-2 rounded-full border border-line bg-card"
-              />
+                key={NavIcon.displayName ?? index}
+                className={index === 0 ? "rounded-md bg-forest-soft/70 p-1" : ""}
+              >
+                <NavIcon
+                  className={index === 0 ? "h-3.5 w-3.5" : "h-3.5 w-3.5 text-ink/65"}
+                  strokeWidth={index === 0 ? 2.1 : 1.8}
+                />
+              </span>
             ))}
           </div>
-          <div>
+          <div className="min-w-0 p-3">
             <p className="text-[10px] font-semibold text-ink">Overview</p>
-            <div className="mt-2 grid grid-cols-3 gap-2">
-              {[128, 37, 12].map((value, index) => (
-                <div key={value} className="rounded-md border border-line bg-card p-2">
-                  <p className="text-sm font-semibold text-ink">
-                    <AnimatedNumber value={value} delay={0.2 + index * 0.12} />
+            <div className="mt-2 grid grid-cols-3 gap-1.5">
+              {metrics.map((metric, index) => (
+                <div key={metric.label} className="rounded-md border border-line bg-card px-2 py-1.5">
+                  <p className="truncate text-[8px] font-medium text-muted">
+                    {metric.label}
                   </p>
-                  <span className="block h-1.5 w-10 rounded-full bg-line" />
+                  <p className="mt-0.5 flex items-end justify-between gap-1 leading-none">
+                    <span className="text-[0.9rem] font-semibold text-ink">
+                      <AnimatedNumber
+                        value={metric.value}
+                        delay={0.2 + index * 0.12}
+                      />
+                    </span>
+                    <span className="inline-flex shrink-0 items-center gap-0.5 text-[8px] font-semibold text-forest">
+                      <ArrowUp className="h-2.5 w-2.5" strokeWidth={2.25} />
+                      {metric.change}
+                    </span>
+                  </p>
                 </div>
               ))}
             </div>
-            <div className="mt-2 grid grid-cols-[1.3fr_0.7fr] gap-2">
-              <div className="rounded-md border border-line bg-card p-1.5">
-                <svg viewBox="0 0 116 44" className="h-9 w-full">
-                  <motion.path
-                    d="M3 35 C18 15 31 41 45 24 S70 11 86 25 103 28 113 11"
-                    fill="none"
+            <div className="mt-2 border-t border-line/80 pt-1.5">
+              <svg viewBox="0 0 220 48" className="h-[3.35rem] w-full" aria-hidden>
+                <path
+                  d="M0 39 H220 M0 20 H220"
+                  fill="none"
+                  stroke="#DDD6C8"
+                  strokeDasharray="3 3"
+                  strokeWidth="1"
+                />
+                <motion.path
+                  d="M8 37 C18 28 27 19 38 24 S58 36 70 29 S91 14 103 17 S125 28 136 22 S157 7 169 12 S187 25 196 20 S207 9 212 7"
+                  fill="none"
+                  stroke="#2F5B3F"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  initial={{ pathLength: 0, opacity: 0.45 }}
+                  whileInView={{ pathLength: 1, opacity: 1 }}
+                  viewport={inView}
+                  transition={{ duration: 1.15, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                />
+                {[
+                  [8, 37],
+                  [38, 24],
+                  [70, 29],
+                  [103, 17],
+                  [136, 22],
+                  [169, 12],
+                  [196, 20],
+                  [212, 7],
+                ].map(([cx, cy]) => (
+                  <circle
+                    key={`${cx}-${cy}`}
+                    cx={cx}
+                    cy={cy}
+                    r="2.2"
+                    fill="#FFFDF8"
                     stroke="#2F5B3F"
-                    strokeLinecap="round"
-                    strokeWidth="2"
-                    initial={{ pathLength: 0, opacity: 0.45 }}
-                    whileInView={{ pathLength: 1, opacity: 1 }}
-                    viewport={inView}
-                    transition={{ duration: 1.15, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    strokeWidth="1.7"
                   />
-                </svg>
-              </div>
-              <div className="space-y-1.5 rounded-md border border-line bg-card p-2">
-                {[0, 1, 2].map((item) => (
-                  <span key={item} className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-forest" />
-                    <span className="h-1.5 flex-1 rounded-full bg-line" />
-                  </span>
                 ))}
+              </svg>
+              <div className="flex justify-between px-1 text-[7px] font-medium text-muted">
+                <span>May 1</span>
+                <span>May 8</span>
+                <span>May 15</span>
+                <span>May 22</span>
+                <span>May 29</span>
               </div>
             </div>
           </div>
@@ -648,212 +540,90 @@ function ServiceVisual({
   }
 
   if (kind === "integrations") {
-    const layout = integrationLayouts[surface];
-    const { lines, center, nodes } = layout;
-    // Scale connectors around the hub (130, 75) so scaleX/scaleY don't drift the star join.
-    const lineTransform = [
-      `translate(${lines.x} ${lines.y})`,
-      "translate(130 75)",
-      `scale(${lines.scale * lines.scaleX} ${lines.scale * lines.scaleY})`,
-      "translate(-130 -75)",
-    ].join(" ");
-
-    return (
-      <div className="relative mt-5 h-36 overflow-hidden rounded-lg border border-line bg-ivory/75">
-        <svg
-          viewBox={layout.viewBox}
-          preserveAspectRatio={layout.preserveAspectRatio}
-          className="absolute inset-0 h-full w-full text-forest"
-          aria-hidden
-        >
-          {/*
-            Don't animate pathLength here: Framer uses stroke-dasharray for that,
-            which fights our dotted dash pattern and often leaves the lines
-            invisible on iOS Safari (especially inside the mobile accordion).
-          */}
-          <motion.path
-            d={lines.path}
-            fill="none"
-            stroke="currentColor"
-            strokeDasharray={lines.dash}
-            strokeLinecap="round"
-            strokeOpacity={lines.strokeOpacity}
-            strokeWidth={lines.strokeWidth}
-            vectorEffect="non-scaling-stroke"
-            transform={lineTransform}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-          />
-        </svg>
-        {nodes.map((node) => (
-          <IntegrationNode key={node.label} {...node} />
-        ))}
-        <motion.div
-          className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-xl border border-line bg-card shadow-soft"
-          style={{
-            left: center.x,
-            top: center.y,
-            width: center.size,
-            height: center.size,
-          }}
-          initial={{ opacity: 0, scale: 0.82 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <Sparkle
-            className="text-forest"
-            style={{
-              width: center.iconSize,
-              height: center.iconSize,
-              transform: `translate(${center.iconOffsetX}px, ${center.iconOffsetY}px)`,
-            }}
-          />
-        </motion.div>
-      </div>
-    );
+    return <SystemsServiceVisual />;
   }
 
+  return <SupportServiceVisual />;
+}
+
+/** Line widths as % of the result column / AI card. Height stays uniform. */
+const searchVisual = {
+  line: "h-1.5 rounded-full",
+  results: [
+    { width: "72%", tone: "bg-forest" },
+    { width: "94%", tone: "bg-line" },
+    { width: "78%", tone: "bg-line" },
+    { width: "56%", tone: "bg-line" },
+    { width: "62%", tone: "bg-[#8BB4E8]" },
+    { width: "84%", tone: "bg-line" },
+    { width: "46%", tone: "bg-line" },
+  ],
+  overview: {
+    summary: "90%",
+    line: "70%",
+    bullets: ["78%", "56%"],
+  },
+} as const;
+
+function SearchServiceVisual() {
   return (
-    <div className="mt-5 h-36 overflow-hidden rounded-lg border border-line bg-ivory/75 p-3">
-      <p className="text-[11px] font-semibold text-ink">System Status</p>
-      <div className="mt-2 rounded-md border border-line bg-card p-2.5">
-        <div className="relative h-[1.75rem] overflow-hidden rounded-md bg-forest-soft/65 px-2.5 py-1.5 text-[10px] font-medium text-forest">
-          <motion.span
-            className="absolute inset-0 flex items-center gap-2 px-2.5"
-            initial={{ opacity: 1, y: 0 }}
-            whileInView={{ opacity: 0, y: -8 }}
-            viewport={inView}
-            transition={{ duration: 0.28, delay: 0.82, ease: [0.22, 1, 0.36, 1] }}
-          >
-            Checking systems
-            <LoadingDots />
-          </motion.span>
-          <motion.span
-            className="absolute inset-0 flex items-center gap-2 px-2.5"
-            initial={{ opacity: 0, y: 8, scale: 0.98 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={inView}
-            transition={{ duration: 0.38, delay: 1.02, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <motion.span
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={inView}
-              transition={{ duration: 0.32, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <CheckCircle2 className="h-3.5 w-3.5" />
-            </motion.span>
-            All systems operational
-          </motion.span>
-        </div>
-        <div className="mt-2.5 space-y-2">
-          {["Website", "Automations", "Integrations"].map((item, index) => (
-            <div key={item} className="flex items-center gap-3">
-              <span className="w-20 text-[10px] font-medium text-ink">
-                {item}
-              </span>
-              <motion.span
-                className="h-1.5 flex-1 rounded-full bg-line"
-                initial={{ opacity: 0.55, scaleX: 0.7 }}
-                whileInView={{ opacity: 1, scaleX: 1 }}
-                viewport={inView}
-                transition={{
-                  duration: 0.42,
-                  delay: 1.12 + index * 0.14,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                style={{ transformOrigin: "left" }}
-              />
-              <motion.span
-                initial={{ opacity: 0, scale: 0.35, rotate: -20 }}
-                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                viewport={inView}
-                transition={{
-                  duration: 0.38,
-                  delay: 1.24 + index * 0.16,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                <CheckCircle2 className="h-3.5 w-3.5 text-forest" />
-              </motion.span>
-            </div>
+    <div
+      className={`mt-5 flex ${homepageVisual.height} shrink-0 flex-col overflow-hidden rounded-lg border border-line bg-ivory/75 p-3`}
+      aria-hidden
+    >
+      <div className="flex h-7 shrink-0 items-center justify-end rounded-full border border-line bg-card px-2.5">
+        <Search className="h-3.5 w-3.5 text-muted/70" strokeWidth={1.8} />
+      </div>
+
+      <div className="mt-2.5 grid min-h-0 flex-1 grid-cols-[1.2fr_0.95fr] items-stretch gap-2.5">
+        <div className="flex flex-col justify-between py-0.5">
+          {searchVisual.results.map((result, index) => (
+            <AnimatedBar
+              key={`${result.tone}-${result.width}`}
+              className={`${searchVisual.line} ${result.tone}`}
+              width={result.width}
+              delay={0.14 + index * 0.05}
+            />
           ))}
         </div>
+
+        <motion.div
+          className="flex h-full flex-col justify-between rounded-md border border-line bg-card px-2.5 py-2"
+          initial={{ opacity: 0, y: 4 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={inView}
+          transition={{ duration: 0.45, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="flex items-center gap-1 text-[8px] font-semibold tracking-tight text-ink">
+            <Sparkle
+              className="h-2.5 w-2.5 fill-[#6B9AE8] text-[#6B9AE8]"
+              strokeWidth={1.4}
+            />
+            AI Overview
+          </span>
+          <AnimatedBar
+            className={`${searchVisual.line} bg-forest/40`}
+            width={searchVisual.overview.summary}
+            delay={0.38}
+          />
+          <AnimatedBar
+            className={`${searchVisual.line} bg-line`}
+            width={searchVisual.overview.line}
+            delay={0.44}
+          />
+          {searchVisual.overview.bullets.map((width, index) => (
+            <span key={width} className="flex w-full items-center gap-1.5">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-forest" />
+              <AnimatedBar
+                className={`${searchVisual.line} min-w-0 bg-line`}
+                width={width}
+                delay={0.5 + index * 0.08}
+              />
+            </span>
+          ))}
+        </motion.div>
       </div>
     </div>
-  );
-}
-
-function LoadingDots() {
-  return (
-    <span className="inline-flex items-center gap-1" aria-hidden>
-      {[0, 1, 2].map((dot) => (
-        <motion.span
-          key={dot}
-          className="h-1 w-1 rounded-full bg-forest"
-          initial={{ opacity: 0.35, y: 0 }}
-          whileInView={{ opacity: [0.35, 1, 0.35], y: [0, -2, 0] }}
-          viewport={inView}
-          transition={{
-            duration: 0.55,
-            delay: 0.18 + dot * 0.11,
-            repeat: 2,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </span>
-  );
-}
-
-function IntegrationNode({
-  label,
-  icon,
-  x,
-  y,
-  size,
-  iconSize,
-  iconOffsetX,
-  iconOffsetY,
-  delay,
-}: {
-  label: string;
-  icon: string;
-  x: string;
-  y: string;
-  size: number;
-  iconSize: number;
-  iconOffsetX: number;
-  iconOffsetY: number;
-  delay: number;
-}) {
-  return (
-    <motion.div
-      aria-label={label}
-      className="absolute z-10 flex items-center justify-center rounded-lg border border-line bg-card shadow-soft"
-      style={{
-        left: x,
-        top: y,
-        width: size,
-        height: size,
-      }}
-      initial={{ opacity: 0, scale: 0.72 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <img
-        src={icon}
-        alt=""
-        aria-hidden="true"
-        className="object-contain"
-        style={{
-          width: iconSize,
-          height: iconSize,
-          transform: `translate(${iconOffsetX}px, ${iconOffsetY}px)`,
-        }}
-      />
-    </motion.div>
   );
 }
 

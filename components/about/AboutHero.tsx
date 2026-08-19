@@ -14,14 +14,14 @@ import { animDelay } from "@/lib/motion";
  * finishes, and the site inside it loads. Above the fold, so these are plain
  * CSS animations rather than `Reveal`.
  *
- * The loading beat reuses the Web Design hero's primitives —`ck-loadbar`,
- * `ck-skeleton`, then `ck-resolve` — so a site coming up looks the same
- * everywhere on the site.
+ * The loading beat is a branded boot: white splash, clover spinning once,
+ * forest arc drawing around it, then `ck-resolve` on the real screen.
  */
 
 /**
- * Hero choreography (ms). Everything is started by ~2s and settled by ~2.4s.
- * Keep `storefront` early: it is the priority image and the likely LCP element.
+ * Hero choreography (ms). Boot holds through the 700ms arc, then the splash
+ * fades and the page settles a little after 2s. Keep `storefront` early: it
+ * is the priority image and the likely LCP element.
  */
 const aboutHeroTiming = {
   eyebrow: 0,
@@ -31,11 +31,10 @@ const aboutHeroTiming = {
   caption: 420,
   elbow: 540,
   phone: 1160,
-  loadbar: 1300,
-  skeleton: 1380,
-  screen: 1700,
-  headline: 1840,
-  cta: 1960,
+  boot: 1300,
+  screen: 1980,
+  headline: 2140,
+  cta: 2260,
 } as const;
 
 const aboutHeroLayout = {
@@ -69,6 +68,12 @@ const aboutHeroLayout = {
     textOffsetY: "2.1rem",
   },
   visualHeight: "min-h-[25rem] sm:min-h-[34rem] lg:min-h-[40rem]",
+  // Centered clover + progress ring on the white boot splash.
+  boot: {
+    size: "38cqw",
+    ringWidth: 2.7,
+    clover: "h-[44%] w-auto",
+  },
   /**
    * Dashed elbow from the storefront's top-right into the phone.
    * Starts inset from the image edge, turns down, and lands on the phone top.
@@ -109,7 +114,8 @@ export default function AboutHero() {
             className="ck-rise mt-6 max-w-2xl text-base leading-7 text-ink/76 sm:text-lg"
             style={{ animationDelay: `${aboutHeroTiming.lead}ms` }}
           >
-            CK Works is led by Colin Kirby and combines design, software
+            CK Works is an Orlando, Florida studio led by Colin Kirby, working
+            with businesses across the U.S. It combines design, software
             development, and systems thinking to build clearer websites and
             practical digital tools for growing businesses.
           </p>
@@ -141,6 +147,12 @@ function StorefrontVisual() {
           sizes="(min-width: 1024px) 35rem, (min-width: 640px) 60vw, 82vw"
           className="object-cover object-center"
         />
+        <p
+          className="ck-fade absolute right-3 top-3 z-10 text-right text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-ivory"
+          style={{ animationDelay: `${aboutHeroTiming.caption}ms` }}
+        >
+          Illustrative example
+        </p>
       </div>
 
       {/* ck-pop sits on the outer box; the inner one owns the layout scale, and
@@ -261,24 +273,7 @@ function PhoneLinkConnector() {
 function FieldAndForgePhone() {
   return (
     <div className="relative flex h-[19.5rem] w-full flex-col bg-card">
-      {/* Progress sweep under the status bar, then placeholders, then the real
-          page resolving in — the same three beats the Web Design hero uses. */}
-      <span
-        className="ck-loadbar absolute inset-x-0 top-[6cqw] z-30 h-[0.7cqw] bg-forest"
-        style={animDelay(aboutHeroTiming.loadbar)}
-        aria-hidden
-      />
-
-      <div
-        className="ck-skeleton absolute inset-0 z-20 bg-card px-[7cqw] pt-[13cqw]"
-        style={animDelay(aboutHeroTiming.skeleton)}
-        aria-hidden
-      >
-        <div className="ck-skeleton-block h-[4cqw] w-[55%] rounded-[1cqw]" />
-        <div className="ck-skeleton-block mt-[6cqw] h-[66cqw] w-full rounded-[1cqw] opacity-80" />
-        <div className="ck-skeleton-block mt-[6cqw] h-[5cqw] w-[80%] rounded-[1cqw] opacity-70" />
-        <div className="ck-skeleton-block mt-[3cqw] h-[3cqw] w-[62%] rounded-[1cqw] opacity-55" />
-      </div>
+      <PhoneBootScreen />
 
       <PhoneStatusBar />
 
@@ -351,6 +346,68 @@ function FieldAndForgePhone() {
           <span className="mt-[1cqw] block text-[3.5cqw] leading-[1.35] text-muted">
             For orders over $75 in the greater Portland area.
           </span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * White splash over the phone screen: clover turns once while a forest arc
+ * draws around it, then the overlay yields to Field & Forge.
+ */
+function PhoneBootScreen() {
+  const delay = animDelay(aboutHeroTiming.boot);
+  const { size, ringWidth, clover } = aboutHeroLayout.boot;
+
+  return (
+    <div
+      className="ck-boot-screen absolute inset-0 z-10 flex items-center justify-center bg-white"
+      style={delay}
+      aria-hidden
+    >
+      <div className="relative aspect-square" style={{ width: size }}>
+        <svg
+          viewBox="0 0 42 42"
+          className="block h-auto w-full -rotate-90 text-forest"
+        >
+          <circle
+            cx="21"
+            cy="21"
+            r="15.9155"
+            fill="none"
+            className="text-forest-soft"
+            stroke="currentColor"
+            strokeWidth={ringWidth}
+          />
+          <circle
+            className="ck-draw-arc"
+            style={{
+              ...delay,
+              // Linear-ish fill so the ring reads as progress, not a pop-on donut.
+              animationTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+            }}
+            cx="21"
+            cy="21"
+            r="15.9155"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={ringWidth}
+            strokeLinecap="round"
+            strokeDasharray="100 100"
+          />
+        </svg>
+        <span
+          className="ck-boot-spin absolute inset-0 flex items-center justify-center"
+          style={delay}
+        >
+          <Image
+            src="/images/brand/ck-icon-logo.png"
+            alt=""
+            width={761}
+            height={777}
+            className={clover}
+          />
         </span>
       </div>
     </div>

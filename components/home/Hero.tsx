@@ -1,9 +1,10 @@
 "use client";
 
+import { useEffect, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
+import DrawUnderline from "@/components/ui/DrawUnderline";
 import {
   ArrowRight,
   LayoutTemplate,
@@ -13,35 +14,22 @@ import {
 } from "lucide-react";
 import HeroMockup, { WindermereBrand } from "./HeroMockup";
 
+/** Seconds after mount before the "your business" underline starts drawing. */
+const heroUnderlineDelay = 1.2;
+
 /**
- * Reading-order accents in the headline.
- * Tuned to run while the right-side mockup cards are still settling in.
- *
- * Sequence: "show up" emphasizes → pause → "meant to" underline draws.
- *
- * "show up" keeps the same upright serif glyphs — each letter skews and
- * stretches slightly instead of switching to a true italic cut.
+ * Desktop inset for the copy column. Keeps the eyebrow in the upper half of
+ * the mockup without leaving a large empty band under the trust row.
  */
-const heroAccentTiming = {
-  /** Seconds after mount before "show up" starts emphasizing */
-  showUpDelay: 1.4,
-  /** How long the green + letter-slant takes */
-  showUpDuration: 0.55,
-  /** Per-letter lean in degrees (negative = italic-like lean to the right) */
-  showUpSkewDeg: -11,
-  /** Horizontal stretch on each letter (1 = none) */
-  showUpStretchX: 1.04,
-  /** Pause after "show up" finishes, before the underline starts */
-  betweenDelay: 0.22,
-  /** How long the "meant to" underline takes to draw left → right */
-  underlineDuration: 0.55,
+const heroCopyLayout = {
+  offsetY: "6.5rem",
 } as const;
 
 /**
  * Copy entrance (ms). CSS rather than Framer: these gate whether the hero is
- * visible at all, so they must not wait on hydration. The letter accent and
- * underline draws below stay on Framer -- they enhance text that is already
- * on screen, which is what the design system reserves Framer for.
+ * visible at all, so they must not wait on hydration. The underline draw stays
+ * on Framer -- it enhances text that is already on screen, which is what the
+ * design system reserves Framer for.
  *
  * Values mirror the old stagger (0.05 delayChildren + 0.08 per child).
  */
@@ -54,58 +42,42 @@ const heroTiming = {
   trust: 330,
 } as const;
 
-const meantToUnderlineDelay =
-  heroAccentTiming.showUpDelay +
-  heroAccentTiming.showUpDuration +
-  heroAccentTiming.betweenDelay;
-
-const showUpLetters = ["s", "h", "o", "w", " ", "u", "p"] as const;
-
 const heroTrustItems = [
   {
     icon: MessageSquareText,
     title: "Clearer messaging",
-    body: "Words that resonate and convert.",
+    body: "What you do, in plain words.",
   },
   {
     icon: LayoutTemplate,
     title: "Better structure",
-    body: "Thoughtful systems that scale.",
+    body: "A clearer path for visitors.",
   },
   {
     icon: Workflow,
     title: "Practical systems",
-    body: "Tools and handoff you can actually use.",
+    body: "Work that's easier to run.",
   },
 ];
 
-function ShowUpAccent() {
+function YourBusinessMark() {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      setShow(true);
+    }, heroUnderlineDelay * 1000);
+    return () => window.clearTimeout(id);
+  }, []);
+
   return (
-    <span className="inline-block whitespace-nowrap" aria-label="show up">
-      {showUpLetters.map((letter, index) => (
-        <motion.span
-          key={`${letter}-${index}`}
-          aria-hidden
-          className="inline-block origin-[50%_70%]"
-          initial={{
-            color: "#1F2420",
-            skewX: 0,
-            scaleX: 1,
-          }}
-          animate={{
-            color: "#2F5B3F",
-            skewX: heroAccentTiming.showUpSkewDeg,
-            scaleX: heroAccentTiming.showUpStretchX,
-          }}
-          transition={{
-            delay: heroAccentTiming.showUpDelay,
-            duration: heroAccentTiming.showUpDuration,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        >
-          {letter === " " ? "\u00A0" : letter}
-        </motion.span>
-      ))}
+    <span className="relative inline-block whitespace-nowrap">
+      your business
+      <DrawUnderline
+        show={show}
+        src="/images/hero/svg/underline.svg"
+        className="pointer-events-none absolute -bottom-[0.3em] left-[0%] block h-[0.4em] w-[100%] overflow-hidden"
+      />
     </span>
   );
 }
@@ -160,8 +132,14 @@ function MobilePhoneStatusBar() {
   );
 }
 
+/**
+ * Mobile-only counterpart to `HeroMockup`, which is `hidden md:block`. It needs
+ * its own "Illustrative example" caption — the one inside `HeroMockup` never
+ * renders at this breakpoint.
+ */
 function MobileHeroPreview() {
   return (
+    <>
     <div
       className="ck-rise relative mx-auto mt-9 h-[22.75rem] w-full max-w-[23rem] overflow-visible md:hidden"
       aria-label="Layered preview of a calm website and mobile view"
@@ -212,8 +190,8 @@ function MobileHeroPreview() {
               Care that fits{" "}
               <em className="italic">your life</em>.
             </h3>
-            <p className="mt-2 max-w-[8rem] text-[7px] leading-relaxed text-muted">
-              Compassionate care with a calmer path forward.
+            <p className="mt-2 max-w-[8.5rem] text-[7px] leading-relaxed text-muted/75">
+              Support for individuals and couples nearby. In person or online.
             </p>
             <span className="mt-3 inline-flex rounded-md bg-forest px-3 py-1.5 text-[7px] font-medium text-ivory shadow-[0_8px_18px_-14px_rgba(47,91,63,0.85)]">
               Book a call
@@ -292,6 +270,11 @@ function MobileHeroPreview() {
         </div>
       </div>
     </div>
+
+    <p className="mt-4 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted md:hidden">
+      Illustrative example
+    </p>
+    </>
   );
 }
 
@@ -300,85 +283,30 @@ export default function Hero() {
     <section id="home" className="relative overflow-hidden">
       <div className="container-ck grid items-start gap-4 pb-4 pt-6 sm:pt-8 md:grid-cols-[0.8fr_1fr] md:gap-4 md:pb-4 lg:pt-10">
         {/* Left: copy */}
-        <div className="mx-auto max-w-2xl text-center md:mx-0 md:pt-8 md:text-left lg:pt-10">
+        <div
+          className="mx-auto max-w-2xl text-center md:mx-0 md:pt-[var(--hero-copy-y)] md:text-left"
+          style={{ "--hero-copy-y": heroCopyLayout.offsetY } as CSSProperties}
+        >
           <span
             className="ck-rise block text-xs font-semibold uppercase tracking-[0.18em] text-forest"
             style={{ animationDelay: `${heroTiming.eyebrow}ms` }}
           >
-            Web Design &amp; Digital Systems
+            A Small Digital Studio Based in Orlando
           </span>
 
-          {/* Fixed line breaks on md+; phone uses its own centered rhythm. */}
+          {/*
+            The headline speaks to the reader; the sentence under it names the
+            service. Orlando rides in the eyebrow rather than leading the page —
+            the city is a fact about the studio, not the subject of it, and
+            local relevance comes from schema plus About/Contact regardless.
+          */}
           <h1
-            className="ck-rise mt-5 font-serif text-[2.82rem] font-medium leading-[1.08] tracking-normal text-ink md:text-[3rem] md:leading-[1.05] lg:text-[3.5rem]"
+            className="ck-rise mt-5 font-serif text-[2.6rem] font-medium leading-[1.12] tracking-normal text-ink md:text-[3rem] lg:text-[3.5rem]"
             style={{ animationDelay: `${heroTiming.title}ms` }}
           >
-            <span className="block md:hidden">
-              Websites and
-              <br />
-              systems that help
-              <br />
-              your business
-              <br />
-              <span className="relative inline-block whitespace-nowrap text-forest">
-                <ShowUpAccent />
-                <motion.span
-                  className="pointer-events-none absolute -bottom-2 left-0 block w-full overflow-hidden"
-                  initial={{ clipPath: "inset(0 100% 0 0)" }}
-                  animate={{ clipPath: "inset(0 0% 0 0)" }}
-                  transition={{
-                    delay: meantToUnderlineDelay,
-                    duration: heroAccentTiming.underlineDuration,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  aria-hidden
-                >
-                  <Image
-                    src="/images/hero/svg/underline.svg"
-                    alt=""
-                    width={3785}
-                    height={429}
-                    className="h-auto w-full"
-                  />
-                </motion.span>
-              </span>
-              <br />
-              the way it was
-              <br />
-              meant to.
-            </span>
-            <span className="hidden md:inline">
-              Websites and systems{" "}
-              <br className="hidden md:block" />
-              that help your business{" "}
-              <br className="hidden md:block" />
-              <ShowUpAccent />{" "}
-              the way it{" "}
-              <br className="hidden md:block" />
-              was{" "}
-              <span className="relative inline-block">
-                meant to
-                <motion.span
-                  className="pointer-events-none absolute -bottom-2 left-0 block w-full overflow-hidden sm:-bottom-3"
-                  initial={{ clipPath: "inset(0 100% 0 0)" }}
-                  animate={{ clipPath: "inset(0 0% 0 0)" }}
-                  transition={{
-                    delay: meantToUnderlineDelay,
-                    duration: heroAccentTiming.underlineDuration,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  aria-hidden
-                >
-                  <Image
-                    src="/images/hero/svg/underline.svg"
-                    alt=""
-                    width={3785}
-                    height={429}
-                    className="h-auto w-full"
-                  />
-                </motion.span>
-              </span>
-              .
+            <span className="block">Make your website</span>
+            <span className="block">
+              reflect <YourBusinessMark />.
             </span>
           </h1>
 
@@ -386,9 +314,9 @@ export default function Hero() {
             className="ck-rise mx-auto mt-5 max-w-[21rem] text-base leading-7 text-muted md:mx-0 md:mt-6 md:max-w-[85%] md:text-lg md:leading-relaxed"
             style={{ animationDelay: `${heroTiming.lead}ms` }}
           >
-            I help businesses clean up their websites, sharpen how they come
-            across, and build the systems behind the scenes so everything feels
-            easier to run.
+            {/* Carries the service words the headline deliberately leaves out. */}
+            Websites and practical digital systems that make your business
+            clearer online and easier to run behind the scenes.
           </p>
 
           <div
