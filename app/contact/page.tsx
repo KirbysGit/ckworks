@@ -53,6 +53,18 @@ export default function ContactPage() {
             unclear, and what you&apos;d like the site or system to help with.
           </p>
 
+          {/*
+            Location and response time are facts, not prose. Folding them into
+            the paragraph above turned an invitation into a run-on; as a
+            separated row they stay scannable and still carry the Orlando
+            signal. Dots are CSS content, so they stay out of the a11y tree.
+          */}
+          <ul className="mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm text-muted [&>li:not(:first-child)]:before:mr-2.5 [&>li:not(:first-child)]:before:text-line [&>li:not(:first-child)]:before:content-['·']">
+            <li>Orlando, Florida</li>
+            <li>Working nationwide</li>
+            <li>Replies within one business day</li>
+          </ul>
+
           <div className="mt-5 rounded-2xl border border-line bg-card shadow-soft lg:mt-6">
             <div className="grid lg:grid-cols-[minmax(0,1fr)_20rem]">
               <ContactForm />

@@ -2,8 +2,13 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, Loader2 } from "lucide-react";
-import { serviceAreas } from "@/lib/services";
+import {
+  referralOptions,
+  serviceOptions,
+  timingOptions,
+} from "@/lib/inquiry";
 import { trackEvent } from "@/lib/analytics";
+import { animDelay } from "@/lib/motion";
 
 type ContactFormState = {
   name: string;
@@ -28,21 +33,6 @@ const initialForm: ContactFormState = {
   heardAbout: "",
   website: "",
 };
-
-const timingOptions = [
-  "No rush",
-  "Next few weeks",
-  "This month",
-  "As soon as possible",
-];
-
-const referralOptions = [
-  "Google",
-  "LinkedIn",
-  "Referral",
-  "Past project",
-  "Other",
-];
 
 const fieldClass =
   "mt-1.5 w-full rounded-xl border-2 border-line bg-ivory/70 px-4 py-2.5 text-sm text-ink outline-none transition-[border-color,background-color] duration-500 ease-out placeholder:text-muted/55 hover:border-forest/40 hover:bg-card focus:border-forest focus:bg-card";
@@ -152,30 +142,7 @@ export default function ContactForm() {
   }
 
   if (status === "success") {
-    return (
-      <div className="rounded-2xl border border-forest/25 bg-forest-soft/55 p-6 text-center shadow-soft">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-forest">
-          Message Sent
-        </p>
-        <h2 className="mt-3 font-serif text-3xl font-medium text-ink">
-          Got it.
-        </h2>
-        <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-muted">
-          Your note is with CK Works now. I will review it and reply soon with
-          any useful questions, ideas, or next steps.
-        </p>
-        <button
-          type="button"
-          onClick={() => {
-            setStatus("idle");
-            setHasTrackedStart(false);
-          }}
-          className="mt-5 rounded-xl border border-forest/50 px-5 py-2.5 text-sm font-medium text-forest transition-colors hover:bg-ivory"
-        >
-          Send another note
-        </button>
-      </div>
-    );
+    return <ContactSuccess />;
   }
 
   return (
@@ -228,7 +195,7 @@ export default function ContactForm() {
           label="What can I help with?"
           value={form.serviceNeeded}
           onChange={(value) => updateField("serviceNeeded", value)}
-          options={serviceAreas.map((service) => service.title)}
+          options={serviceOptions}
         />
         <SelectField
           label="Estimated timing"
@@ -288,6 +255,80 @@ export default function ContactForm() {
         )}
       </button>
     </form>
+  );
+}
+
+const successSteps = ["Note received", "I'll review it", "I'll reply soon"];
+
+function ContactSuccess() {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
+
+  return (
+    <div
+      role="status"
+      className="flex min-h-[28rem] flex-col items-center justify-center rounded-t-2xl px-6 py-10 text-center sm:px-8 sm:py-12 lg:min-h-full lg:rounded-l-2xl lg:rounded-tr-none"
+    >
+      <div
+        className="ck-pop relative flex h-24 w-28 items-center justify-center sm:h-28 sm:w-32"
+        style={{ animationDelay: "80ms" }}
+        aria-hidden
+      >
+        <span className="absolute inset-0 rounded-full bg-forest-soft/40 blur-2xl" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/modal/modal-after-check.svg"
+          alt=""
+          className="relative h-full w-full select-none object-contain"
+        />
+      </div>
+
+      <h2
+        ref={headingRef}
+        tabIndex={-1}
+        className="ck-rise mt-3 font-serif text-[2.35rem] font-medium leading-none text-forest outline-none sm:text-[2.75rem]"
+        style={{ animationDelay: "200ms" }}
+      >
+        Got it.
+      </h2>
+      <p
+        className="ck-rise mx-auto mt-2.5 max-w-[24rem] text-sm leading-6 text-ink sm:text-[0.95rem]"
+        style={{ animationDelay: "300ms" }}
+      >
+        Your note is with CK Works now.
+        <br className="hidden sm:block" /> I usually reply within one business
+        day with any follow-up questions, ideas, or next steps.
+      </p>
+
+      <ol className="mt-8 grid w-full max-w-[26rem] grid-cols-3 items-start gap-2">
+        {successSteps.map((step, index) => (
+          <li key={step} className="relative text-center">
+            {index < successSteps.length - 1 && (
+              <span
+                className="ck-draw-x absolute left-[58%] top-4 hidden h-px w-[84%] border-t border-dotted border-forest/80 sm:block"
+                style={animDelay(520 + index * 140)}
+                aria-hidden
+              />
+            )}
+            <span
+              className="ck-pop relative z-10 mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-forest text-xs font-semibold text-ivory shadow-soft"
+              style={{ animationDelay: `${460 + index * 120}ms` }}
+            >
+              {index + 1}
+            </span>
+            <p
+              className="ck-rise mt-2 text-xs font-bold leading-snug text-ink sm:text-sm"
+              style={{ animationDelay: `${520 + index * 120}ms` }}
+            >
+              {step}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
 

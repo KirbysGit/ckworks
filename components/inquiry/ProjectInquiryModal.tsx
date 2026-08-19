@@ -8,6 +8,11 @@ import Logo from "../ui/Logo";
 import WhatsAppContactLink from "../contact/WhatsAppContactLink";
 import { trackEvent } from "@/lib/analytics";
 import { contactEmail } from "@/lib/data";
+import {
+  budgetOptions,
+  serviceOptions,
+  timingOptions,
+} from "@/lib/inquiry";
 
 type ProjectInquiryModalProps = {
   isOpen: boolean;
@@ -40,30 +45,6 @@ const initialForm: FormState = {
   message: "",
   website: "",
 };
-
-const projectTypes = [
-  "Website",
-  "Website updates",
-  "Logo / brand direction",
-  "Dashboard or internal tool",
-  "Integration / backend feature",
-  "Not sure yet",
-];
-
-const timelines = [
-  "No rush",
-  "Next few weeks",
-  "This month",
-  "As soon as possible",
-];
-
-const budgets = [
-  "Not sure yet",
-  "Under $1,500",
-  "$1,500-$3,000",
-  "$3,000-$5,000",
-  "$5,000+",
-];
 
 const focusableSelector =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -375,34 +356,34 @@ export default function ProjectInquiryModal({
 
                       <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3">
                         <TextField
-                          label="Business"
+                          label="Company"
                           value={form.businessName}
-                          placeholder="Business name"
+                          placeholder="Your business"
                           onChange={(value) =>
                             updateField("businessName", value)
                           }
                         />
                         <SelectField
-                          label="Project type"
+                          label="What can I help with?"
                           value={form.projectType}
-                          options={projectTypes}
-                          placeholder="Choose a type"
+                          options={serviceOptions}
+                          placeholder="Choose a service"
                           onChange={(value) => updateField("projectType", value)}
                         />
                       </div>
 
                       <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3">
                         <SelectField
-                          label="Timeline"
+                          label="Estimated timing"
                           value={form.timeline}
-                          options={timelines}
+                          options={timingOptions}
                           placeholder="Choose a timeline"
                           onChange={(value) => updateField("timeline", value)}
                         />
                         <SelectField
                           label="Budget range"
                           value={form.budget}
-                          options={budgets}
+                          options={budgetOptions}
                           placeholder="Choose a range"
                           onChange={(value) => updateField("budget", value)}
                         />
