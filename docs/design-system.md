@@ -171,10 +171,12 @@ Defined in `app/globals.css`. All are disabled under `prefers-reduced-motion`.
 | `ck-draw-elbow` | `clip-path` across, then down, 820ms | An elbow connector drawing itself |
 | `ck-draw-arc` | `stroke-dasharray` 0 to its own value, 700ms | SVG donut segments |
 | `ck-loadbar` | Sweep left to right, then fade, 920ms | Browser progress bar |
+| `ck-boot-screen` | Hold opaque, then fade, 1000ms | White splash over a loading screen |
+| `ck-boot-spin` | One 360° turn, 700ms | Clover (or mark) inside a boot splash |
 | `ck-skeleton` | Fade in, hold, fade out, 900ms | Placeholder shown while "loading" |
 | `ck-skeleton-block` | Looping shimmer sweep | Individual skeleton bars |
 
-`ck-resolve`, `ck-loadbar`, `ck-skeleton`, `ck-step`, `ck-draw-x`,
+`ck-resolve`, `ck-loadbar`, `ck-boot-screen`, `ck-boot-spin`, `ck-skeleton`, `ck-step`, `ck-draw-x`,
 `ck-draw-elbow`, and `ck-draw-arc` take their delay from a `--ck-anim-delay`
 custom property rather than `animationDelay`, because they set
 `animation-delay` themselves. The others take a plain `animationDelay`.
@@ -193,9 +195,9 @@ Sequence with a named timing constant near the component (for example
 `webDesignHeroTiming` or `searchVisibilityHeroTiming`) rather than scattering
 literal delays.
 
-`ck-loadbar` starts at `opacity: 0` so it stays hidden if the animation never
-runs. Keep that pattern for any primitive whose resting state should be
-invisible.
+`ck-loadbar` and `ck-boot-screen` start at `opacity: 0` so they stay hidden if
+the animation never runs. Keep that pattern for any primitive whose resting
+state should be invisible.
 
 An element carrying `ck-resolve` or a long delay may be the LCP element. Keep
 its reveal early and mark the underlying image `priority`.

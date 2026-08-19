@@ -6,32 +6,9 @@ Only record something here after confirming it in the repository. Note what was
 checked so the next agent does not have to rediscover it. Move durable rules to
 [`decisions.md`](decisions.md); remove an entry once it is genuinely resolved.
 
-**Last verified: 2026-08-07**
+**Last verified: 2026-08-19**
 
 ## Discovery And Positioning
-
-### No Orlando positioning in CK Works' own content
-
-**Verified.** "Orlando" appears 11 times in the codebase, all inside the
-Riverstone Builders demo in `app/services/page.tsx` and
-`app/services/[slug]/page.tsx` ("custom home builder Orlando", "Custom Homes &
-Renovations in Orlando, Florida", the "Orlando location" signal label).
-
-CK Works' own copy, metadata, and structured data contain none. `lib/site.ts`,
-`lib/data.ts`, the homepage, and every service description are location-free.
-
-The demo business therefore carries a stronger local signal than the actual
-business. Fix by adding truthful Orlando context to the homepage title,
-`siteDescription`, hero eyebrow, and introduction. See
-[`seo-strategy.md`](seo-strategy.md) for the ladder and truthful-use rules.
-
-### Homepage title is brand-first
-
-**Verified.** `lib/site.ts` sets `siteTagline` to "Websites. Systems. Clarity.",
-producing `CK Works | Websites. Systems. Clarity.` It contains no service term
-and no location, so it cannot match a service or local search.
-
-Service pages are better: their titles lead with the service name.
 
 ### Demo copy dominates the homepage DOM
 
@@ -41,10 +18,12 @@ transformation). In the rendered text order it is the largest body of prose in
 the upper half of the page, appearing before the real "What I do" service
 content.
 
-The strongest topical signals near the top are therefore therapy and wellness
-terms rather than web design. Options: reduce duplicate rendering, mark the
-mockup with a `<figure>` and caption, or `aria-hidden` the purely decorative
-demo prose. Coordinate with the duplicate-DOM item below.
+**Partly addressed 2026-08-19.** Every demo now carries a visible
+"Illustrative example" caption, and the bottom-row service visuals are
+`aria-hidden` with `data-nosnippet`. The hero and transformation mockups still
+render their prose roughly four times in the DOM, so the volume problem stands
+even though the labelling one does not. Coordinate with the duplicate-DOM item
+below.
 
 ### Commercial proof is thin
 
@@ -153,6 +132,14 @@ This is a private routing value, not a public identity leak, and `.co` may be a
 deliberate mailbox choice. Confirm with Colin before changing anything.
 
 ## Recently Resolved
+
+- **2026-08-19** — Orlando positioning now appears in CK Works own content:
+  the homepage hero eyebrow, the About hero, the contact page, and the
+  homepage title. It is no longer only the Riverstone demo carrying a local
+  signal.
+- **2026-08-19** — Homepage title leads with the service and the city rather
+  than the tagline. Every other page title names what the page is, and case
+  studies use `metaTitle` instead of a bare project name.
 
 - **2026-08-07** — `excel-logo.svg` reduced from roughly 349KB to 6.4KB. All
   SVGs under `public/images/services/svg/` are now 21KB or smaller. The asset is

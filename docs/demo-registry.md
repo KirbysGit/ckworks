@@ -15,7 +15,10 @@ Verified against the repository on 2026-08-07.
 1. **Reuse before inventing.** Check this file first. Add a new fictional entity
    only when no existing one fits, and record it here in the same change.
 2. **Label it.** Any demo that could be mistaken for real work carries a visible
-   illustrative marker — a caption, an eyebrow, or nearby copy.
+   illustrative marker — a caption, an eyebrow, or nearby copy. A demo carrying
+   invented figures also gets `data-nosnippet` so the numbers stay out of search
+   snippets, and `aria-hidden` when the visual is decorative rather than
+   informative.
 3. **Never claim it.** A demo may not appear in a case study, testimonial,
    client list, statistic, or schema.
 4. **Keep it plausible, not impressive.** Demo metrics should look like an
@@ -35,8 +38,9 @@ Verified against the repository on 2026-08-07.
 - **Purpose**: the homepage hero mockup and the before/after transformation
   story
 - **Assets**: `public/images/hero/`, `public/images/transformation/`
-- **Labeling**: currently thin. The demo copy is substantial and sits high in
-  the homepage DOM, which creates a topical-signal problem tracked in
+- **Labeling**: the homepage transformation After mockup (Clear and connected)
+  carries an "Illustrative example" caption. The hero mockup is still unlabeled;
+  demo copy in the upper homepage DOM remains a topical-signal issue tracked in
   [`backlog.md`](backlog.md).
 - **Never imply**: that CK Works serves wellness or therapy clients, or that
   this is a delivered project.

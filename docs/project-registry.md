@@ -27,6 +27,19 @@ rates, user growth — without measured evidence. Most of these projects are
 personal or in-progress builds, so they prove capability, not commercial
 traction.
 
+## Outcome Lines
+
+Each project carries an `outcomeLine` in `lib/projects.ts`, shown above the
+fold on its case study and on the `/work` index. It names what **changed**
+because the project exists — not what it does and not what it was built with.
+
+- It must survive a client call word for word. No invented metrics.
+- For personal or school work the honest outcome is usually a capability or a
+  decision. Say that plainly rather than dressing it up as business impact.
+- Only the Internal Automation Tool carries figures, and they describe the
+  internal operations of an unnamed former employer. Keep the client unnamed
+  and the numbers exactly as sourced.
+
 ## Status Vocabulary
 
 Status strings come from `lib/projects.ts` and carry real meaning:

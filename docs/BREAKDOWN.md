@@ -5,7 +5,7 @@ Current state of the CK Works site and what is actively in progress.
 Keep this short and dated. Durable rules belong in [`decisions.md`](decisions.md);
 verified problems belong in [`backlog.md`](backlog.md).
 
-**Last verified: 2026-08-08**
+**Last verified: 2026-08-19**
 
 ## What This Is
 
@@ -50,6 +50,23 @@ FounderNote → CTA → Footer`
 
 Homepage sections are client components using Framer Motion. This is the main
 page still using hydration-gated entrances.
+
+## Discovery State
+
+Closed in the 2026-08-19 pass, so do not re-litigate these:
+
+- `https://www.ckworks.studio` is the canonical host and every signal agrees
+  with the redirect. `lib/site.ts` is the only place the domain is written.
+- Sitemap `lastmod` is an explicit date per route, never a build timestamp.
+- Page titles name what each page is. The homepage H1 is a brand line by
+  design, so the title tag carries the service and the city.
+- Orlando appears in CK Works own copy: hero eyebrow, About, and Contact.
+- Every fictional demo carries a visible "Illustrative example" caption; the
+  invented metrics also carry `data-nosnippet`.
+- Each service states a timeline; each case study states an outcome, a
+  timeframe, and the service it proves, and links to both.
+
+See [`decisions.md`](decisions.md) for the rules behind the first two.
 
 ## Component Ownership Migration
 
@@ -121,7 +138,9 @@ closing CTA.
   should be split by visible band first. See [`architecture.md`](architecture.md).
 - Only one shipped client website exists in the portfolio (Tizirsso Racing), so
   commercial proof is thin. See [`project-registry.md`](project-registry.md).
-- The site has no Orlando positioning yet. See [`seo-strategy.md`](seo-strategy.md).
+- Orlando now appears in CK Works own copy, but only as studio location. There
+  is no location page and no `LocalBusiness` schema. See
+  [`seo-strategy.md`](seo-strategy.md) for the caution around both.
 - No ESLint configuration exists despite a `lint` script. See
   [`backlog.md`](backlog.md).
 

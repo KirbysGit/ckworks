@@ -204,6 +204,13 @@ Current `lib/` modules and what each owns:
 | `lib/analytics.ts` | Client analytics event names and payloads |
 | `lib/motion.ts` | Shared Framer Motion variants for homepage compositions |
 | `lib/heroMockupLayout.ts` | Tuning values for the homepage hero mockup |
+| `lib/inquiry.ts` | Option lists shared by the contact form and the inquiry modal |
+| `lib/attribution.ts` | Lead-source fields both inquiry surfaces send |
+
+- The two inquiry surfaces ask for different amounts of detail on purpose, but
+  they must offer the same vocabulary and report the same attribution. Both
+  drifted once — the modal invented its own service categories and sent no UTM
+  data at all — which is why these two modules exist rather than local copies.
 
 - Layout tuning that belongs to one visual stays next to that visual in a
   clearly named `const`. `lib/heroMockupLayout.ts` is the exception, kept

@@ -29,6 +29,20 @@ business owner understand what changes and why it matters.
 - Before publishing, ask whether another agency could use the same sentence
   without changing it. If so, add real CK Works context or remove it.
 
+## Voice: I, CK Works, And We
+
+CK Works is a one-person studio. Pronouns should not imply a team.
+
+- Use **CK Works** for positioning and capabilities: what the studio builds,
+  who it works with, what a service includes.
+- Use **I** for the working relationship: how Colin starts, shares work, builds,
+  launches, and stays involved after.
+- Use **we** only when it means Colin and the client together: deciding
+  direction, reviewing milestones, or refining after launch.
+- Do not use **we** for studio capability ("We build websites…"). That reads as
+  a larger agency.
+- "Let's" and "we'll take it from there" are fine when the next step is shared.
+
 ## SEO Foundations
 
 For each public page:
@@ -99,6 +113,19 @@ personally identifiable form data into analytics.
 
 ## Inquiry And Contact
 
+There are two surfaces: the contact page form and the `Start a project` modal.
+They ask for different amounts of detail on purpose — the modal is
+quick-capture fired mid-browse, the page is the considered version — but they
+must not diverge on anything else.
+
+- Option lists come from `lib/inquiry.ts`. Never hand-write a service list in a
+  form; it is the same `serviceAreas` the nav and sitemap read.
+- Both surfaces send `readAttribution()` from `lib/attribution.ts`. A lead that
+  cannot report its source is not worth much, and answer-engine referrals such
+  as `utm_source=chatgpt.com` arrive through this path as ordinary UTM values.
+- The budget question asks how settled the budget is, not how large. Dollar
+  bands went away because they advertised a floor the work does not justify and
+  would need revisiting whenever rates change.
 - The inquiry form is a lead path, not an analytics demo.
 - Preserve honeypot and timing checks in `app/api/inquiry/route.ts`.
 - Do not expose Resend credentials or change recipient behavior without an
