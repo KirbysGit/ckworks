@@ -146,7 +146,7 @@ const allCaseStudies: CaseStudy[] = [
     ],
     outcome: [
       "We launched a complete first version that gives the driver one professional place to share his background, achievements, media, and sponsorship value.",
-      "I have continued handling the hosting and maintenance, so the project also became useful experience in supporting a client after the initial design and build were finished.",
+      "I have continued handling the hosting and maintenance, so the engagement carried on past launch into ongoing support rather than ending at handoff.",
     ],
     improveNext: [
       "I would eventually add a lightweight content system for race updates, results, and new media so the client can keep the site current throughout a season without needing a code change each time.",
@@ -228,7 +228,7 @@ const allCaseStudies: CaseStudy[] = [
     ],
     outcome: [
       "Taylor.io is now an early working product instead of an idea I keep redesigning privately. It can take existing resume information, structure it, tailor the presentation for a role, and export a usable document.",
-      "There are still imperfections, but shipping it gave me a real system to test, evaluate, and improve. It also became the clearest example of how I approach a product from the first frustration through the data model, interface, AI behavior, and deployment.",
+      "There are still imperfections, but shipping it turned a private redesign loop into a real system that can be tested, evaluated, and improved. It also became the clearest example of how I approach a product from the first frustration through the data model, interface, AI behavior, and deployment.",
     ],
     improveNext: [
       "The next version needs a cleaner onboarding flow, stronger version comparison, and an easier way to move between a base profile and several tailored resumes.",
@@ -309,7 +309,7 @@ const allCaseStudies: CaseStudy[] = [
     ],
     outcome: [
       "Centi became a working personal finance product and the project that moved me from building assignments to thinking through a full application as one connected system.",
-      "Even though it is still evolving, it gave me a strong foundation in API integration, data modeling, authentication, deployment, and the quieter work required to make a dashboard feel trustworthy.",
+      "Centi runs account syncing, categorized spending views, and a health summary on one deployed stack, covering API integration, data modeling, authentication, and the quieter work required to make a dashboard feel trustworthy.",
     ],
     improveNext: [
       "The next version would improve categorization by learning from user corrections, add clearer forecasting, and make the main spending story feel even more immediate on mobile.",
@@ -383,7 +383,7 @@ const allCaseStudies: CaseStudy[] = [
     ],
     outcome: [
       "SETLST currently has a much clearer identity and product direction than the original map idea. We know the central experience should be music-driven gym activity, with social and consistency features supporting it.",
-      "The project has also been good practice in collaborative product thinking because I am not only designing my own idea. I am helping another person's original concept become more focused, presentable, and technically realistic.",
+      "Because the concept started with someone else, the work has been as much about turning another person's original idea into something more focused, presentable, and technically realistic as it has been about design.",
     ],
     improveNext: [
       "The next step is to lock the smallest useful first version, validate it with people who actually train regularly, and prototype the privacy controls before investing in deeper location or music integrations.",
@@ -531,7 +531,7 @@ const allCaseStudies: CaseStudy[] = [
     ],
     outcome: [
       "SentimentTrader is currently operating as a data-collection and feature-engineering pipeline.",
-      "It has given me hands-on experience with external APIs, natural-language processing, scheduled data workflows, noisy real-world datasets, financial time-series data, and the practical limits of machine-learning projects.",
+      "The pipeline handles external APIs, natural-language processing, scheduled data workflows, noisy real-world datasets, and financial time-series data as one running system, built within the practical limits of machine-learning projects.",
       "The project is now accumulating historical observations that can later be divided into training, validation, and out-of-sample testing periods.",
     ],
     improveNext: [
@@ -598,8 +598,8 @@ const allCaseStudies: CaseStudy[] = [
       "Performance also mattered once several workflows and users were active at the same time, so backend queries and data handling had to be tightened as the portal grew.",
     ],
     outcome: [
-      "The portal supported more than 20 automated workflows, reduced repeated manual work by roughly 150 hours per year, and made internal operations easier to monitor from one place.",
-      "I also improved API query performance by about 25 percent under concurrent load while working through the system's backend bottlenecks.",
+      "The portal automated more than 15 recurring IT workflows, cut roughly 150 hours of repeated manual work a year, and made internal operations easier to monitor from one place.",
+      "I also worked through the backend bottlenecks behind the portal, improving API query performance under concurrent load.",
     ],
     improveNext: [
       "A later version could make more workflow configuration self-service while still preserving approvals, permissions, and safe failure behavior.",
@@ -673,7 +673,7 @@ const allCaseStudies: CaseStudy[] = [
     ],
     outcome: [
       "The team completed a working prototype that connected embedded cameras, local detection, backend communication, a mobile interface, and alerts in one end-to-end system.",
-      "The project gave me practical experience working across hardware and software boundaries where debugging requires understanding the whole path instead of only one codebase.",
+      "The build spans hardware and software boundaries, where debugging means tracing the whole path from camera to detection to backend to phone rather than any one codebase in isolation.",
     ],
     improveNext: [
       "A production version would need stronger hardware enclosures, better battery behavior, more reliable networking, hardened device security, and much more testing outside a controlled demo environment.",
