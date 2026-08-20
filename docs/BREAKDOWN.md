@@ -97,7 +97,7 @@ for any service without a bespoke branch.
 | Service | Signature visual |
 | --- | --- |
 | Web Design & Development | Hearth & Home laptop and phone mockups; four-stage transformation |
-| Search & AI Visibility | Google result and AI Overview cards; search-ready site preview |
+| SEO & AI Search Visibility | Google result and AI Overview cards; search-ready site preview |
 | Analytics & Lead Tracking | Measurement snapshot with donut; lead report with conversion funnel, source attribution, and inquiry table |
 | Digital Systems & Integrations | Inquiry-to-workflow hero; tool grid around a "Your business" hub |
 | Ongoing Support | Example support view; request tracker |
@@ -111,7 +111,7 @@ closing CTA.
 - Bespoke designs for all five service pages
 - Motion system: CSS entrance primitives in `app/globals.css` plus
   `components/ui/Reveal.tsx`. Now applied to all five service pages — Web
-  Design, Search & AI Visibility (`ck-draw-x`, the first reveal-aware
+  Design, SEO & AI Search Visibility (`ck-draw-x`, the first reveal-aware
   primitive), Analytics (`ck-draw-arc`, plus a skeleton-to-figures load in the
   hero), Digital Systems (`ck-step`, and the first sequenced flow diagrams),
   and Ongoing Support. The homepage is now the main surface still using
@@ -133,8 +133,8 @@ closing CTA.
 
 - The service route is now a small metadata and selection layer. The first
   extraction keeps each service page intact inside its own feature folder, so
-  the largest modules are still single files: Search & AI Visibility (~1,600
-  lines) and Web Design (~1,390). Search & AI Visibility is now the biggest and
+  the largest modules are still single files: SEO & AI Search Visibility (~1,600
+  lines) and Web Design (~1,390). SEO & AI Search Visibility is now the biggest and
   should be split by visible band first. See [`architecture.md`](architecture.md).
 - Only one shipped client website exists in the portfolio (Tizirsso Racing), so
   commercial proof is thin. See [`project-registry.md`](project-registry.md).

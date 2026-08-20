@@ -8,7 +8,7 @@ established demo for a given page instead of inventing another one** — the sit
 should read as a handful of clear illustrations, not a directory of imaginary
 companies.
 
-Verified against the repository on 2026-08-07.
+Verified against the repository on 2026-08-19.
 
 ## Rules
 
@@ -49,15 +49,16 @@ Verified against the repository on 2026-08-07.
 
 - **Represents**: a local residential home builder in Orlando
 - **Used in**: `components/services/search-visibility/Page.tsx`,
-  `app/services/page.tsx`
+  `components/services/analytics/Page.tsx`, `app/services/page.tsx`
 - **Purpose**: demonstrating a search-ready site, local business profile,
-  search result, AI Overview, and site-context signals so visitors can see
-  what visibility work changes
+  search result, AI Overview, site-context signals, and a sample lead report so
+  visitors can see what visibility and measurement work change
 - **Assets**: `public/images/services/png/02-riverstone-demo.png`,
   `02-riverstone-demo-2.png`
 - **Labeling**: "Illustrative search example", "Illustrative Riverstone
   Builders result", "Illustrative local builder homepage", "Illustrative
-  featured project"
+  featured project", "Illustrative snapshot — sample data", and "Illustrative
+  report — sample data"
 - **Never imply**: that CK Works achieved these rankings, that this business
   exists, or that the AI Overview text was produced by a real engine.
 

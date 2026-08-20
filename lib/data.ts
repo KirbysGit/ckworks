@@ -117,5 +117,6 @@ export const contactEmail = "hello@ckworks.studio";
 export const contactPhoneE164 = "+14078768172";
 export const contactPhoneDisplay = "(407) 876-8172";
 export const contactLinkedInUrl = "https://www.linkedin.com/company/ckworks";
+export const founderLinkedInUrl = "https://www.linkedin.com/in/colinwkirby";
 export const contactWhatsAppUrl =
   "https://wa.me/14078768172?text=Hi%2C%20I%20found%20CK%20Works%20on%20Google%20and%20wanted%20to%20learn%20more%20about%20working%20together.";

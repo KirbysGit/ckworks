@@ -157,6 +157,7 @@ function AboutWorkCard({ study }: { study: CaseStudy }) {
     <article className="group grid overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift sm:grid-cols-[minmax(9rem,0.75fr)_1fr] lg:grid-cols-[minmax(9rem,0.9fr)_1fr]">
       <Link
         href={`/${study.slug}`}
+        aria-label={`View the ${study.name} case study`}
         className={`relative min-h-40 bg-gradient-to-br ${study.accent}`}
       >
         {study.coverImage && (

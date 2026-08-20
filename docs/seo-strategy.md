@@ -149,7 +149,7 @@ This serves a scanning human and a retrieving model with the same sentence.
 
 ## Prohibited Patterns
 
-**No thin synonym pages.** One substantial Search & AI Visibility page covers
+**No thin synonym pages.** One substantial SEO & AI Search Visibility page covers
 the related concepts. Do not create `/services/seo`, `/services/aeo`,
 `/services/geo`, `/services/ai-seo`, or `/services/search-visibility` as
 separate routes. Splitting one topic across near-identical pages divides

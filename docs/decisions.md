@@ -140,7 +140,7 @@ work.
   public copy; case-study "we" that genuinely means client collaboration can
   stay.
 
-## 2026-08-19: One Line Per Surface For A Case Study
+## 2026-08-20: One Line Per Surface For A Case Study
 
 - A case study says a different thing on each surface. Do not repeat one on
   another.

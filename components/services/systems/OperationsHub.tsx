@@ -102,7 +102,13 @@ const outcomes: { icon: LucideIcon; title: string; body: string }[] = [
 
 export default function OperationsHub() {
   return (
-    <div className="relative">
+    <div className="relative" data-nosnippet>
+      <p
+        className="ck-rise mb-3 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted"
+        style={{ animationDelay: `${systemsHeroTiming.banner}ms` }}
+      >
+        Illustrative workflow — fictional client
+      </p>
       <AutomationBanner />
       <div className={`mt-7 grid gap-6 ${operationsHubLayout.columns} lg:gap-x-16 lg:gap-y-10`}>
         <HubWindow />

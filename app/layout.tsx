@@ -20,8 +20,9 @@ import {
   contactLinkedInUrl,
   contactPhoneE164,
   contactWhatsAppUrl,
-  services,
+  founderLinkedInUrl,
 } from "@/lib/data";
+import { serviceAreas } from "@/lib/services";
 import "./globals.css";
 
 const serif = Cormorant_Garamond({
@@ -133,13 +134,23 @@ const jsonLd = {
         "@type": "Person",
         name: "Colin Kirby",
         jobTitle: "Founder",
-        url: siteUrl,
-        sameAs: [contactLinkedInUrl],
+        url: `${siteUrl}/about`,
+        sameAs: [founderLinkedInUrl],
       },
-      areaServed: {
-        "@type": "Country",
-        name: "United States",
-      },
+      areaServed: [
+        {
+          "@type": "City",
+          name: "Orlando",
+          containedInPlace: {
+            "@type": "State",
+            name: "Florida",
+          },
+        },
+        {
+          "@type": "Country",
+          name: "United States",
+        },
+      ],
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "sales",
@@ -149,22 +160,29 @@ const jsonLd = {
         availableLanguage: ["English"],
       },
       knowsAbout: [
-        "Web design",
+        "Web design and development",
+        "Technical SEO",
+        "Local search visibility",
+        "AI search visibility",
+        "Website analytics",
+        "Lead tracking",
+        "Workflow automation",
         "Digital systems",
-        "Business automations",
         "Software integrations",
-        "Website support",
+        "Website maintenance",
       ],
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "CK Works services",
-        itemListElement: services.map((service, index) => ({
+        itemListElement: serviceAreas.map((service, index) => ({
           "@type": "Offer",
           position: index + 1,
           itemOffered: {
             "@type": "Service",
             name: service.title,
-            description: service.body,
+            description: service.description,
+            url: `${siteUrl}${service.href}`,
+            provider: { "@id": organizationId },
           },
         })),
       },

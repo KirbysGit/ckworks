@@ -6,7 +6,7 @@ Only record something here after confirming it in the repository. Note what was
 checked so the next agent does not have to rediscover it. Move durable rules to
 [`decisions.md`](decisions.md); remove an entry once it is genuinely resolved.
 
-**Last verified: 2026-08-19**
+**Last verified: 2026-08-20**
 
 ## Discovery And Positioning
 
@@ -18,7 +18,7 @@ transformation). In the rendered text order it is the largest body of prose in
 the upper half of the page, appearing before the real "What I do" service
 content.
 
-**Partly addressed 2026-08-19.** Every demo now carries a visible
+**Partly addressed 2026-08-20.** Every demo now carries a visible
 "Illustrative example" caption, and the bottom-row service visuals are
 `aria-hidden` with `data-nosnippet`. The hero and transformation mockups still
 render their prose roughly four times in the DOM, so the volume problem stands
@@ -133,11 +133,11 @@ deliberate mailbox choice. Confirm with Colin before changing anything.
 
 ## Recently Resolved
 
-- **2026-08-19** — Orlando positioning now appears in CK Works own content:
+- **2026-08-20** — Orlando positioning now appears in CK Works own content:
   the homepage hero eyebrow, the About hero, the contact page, and the
   homepage title. It is no longer only the Riverstone demo carrying a local
   signal.
-- **2026-08-19** — Homepage title leads with the service and the city rather
+- **2026-08-20** — Homepage title leads with the service and the city rather
   than the tagline. Every other page title names what the page is, and case
   studies use `metaTitle` instead of a bare project name.
 

@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import HeroMockup, { WindermereBrand } from "./HeroMockup";
 
-/** Seconds after mount before the "your business" underline starts drawing. */
+/** Seconds after mount before the "should too" underline starts drawing. */
 const heroUnderlineDelay = 1.2;
 
 /**
@@ -60,7 +60,7 @@ const heroTrustItems = [
   },
 ];
 
-function YourBusinessMark() {
+function ShouldTooMark() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function YourBusinessMark() {
 
   return (
     <span className="relative inline-block whitespace-nowrap">
-      your business
+      should too
       <DrawUnderline
         show={show}
         src="/images/hero/svg/underline.svg"
@@ -304,9 +304,9 @@ export default function Hero() {
             className="ck-rise mt-5 font-serif text-[2.6rem] font-medium leading-[1.12] tracking-normal text-ink md:text-[3rem] lg:text-[3.5rem]"
             style={{ animationDelay: `${heroTiming.title}ms` }}
           >
-            <span className="block">Make your website</span>
+            <span className="block">Your business works.</span>
             <span className="block">
-              reflect <YourBusinessMark />.
+              Your website <ShouldTooMark />.
             </span>
           </h1>
 

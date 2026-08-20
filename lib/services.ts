@@ -167,12 +167,12 @@ export const serviceAreas: ServiceArea[] = [
   },
   {
     slug: "search-ai-visibility",
-    title: "Search & AI Visibility",
-    shortTitle: "Search Visibility",
+    title: "SEO & AI Search Visibility",
+    shortTitle: "SEO & AI Visibility",
     href: "/services/search-ai-visibility",
     eyebrow: "Visibility",
     description:
-      "Search-friendly structure, indexing basics, and clearer content signals so people and answer engines can understand the site.",
+      "Technical SEO, local search structure, indexing, and clearer content signals so customers and answer engines can understand the site.",
     timeline: searchVisibilityTimeline,
     whoFor: [
       "Businesses that want to be easier to find online.",

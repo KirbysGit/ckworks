@@ -61,7 +61,7 @@ Status strings come from `lib/projects.ts` and carry real meaning:
 ### Tizirsso Racing (`tizirsso`)
 
 - **Status**: Client Work / Live V1 — live at `tizianorossoorcel.com`
-- **Supports**: Web Design & Development, Search & AI Visibility, Ongoing Support
+- **Supports**: Web Design & Development, SEO & AI Search Visibility, Ongoing Support
 - **Demonstrates**: brand direction, web design, development, content structure,
   and hosting for a real client, delivered through several rounds of feedback
 - **Allowed claims**: a real client website; CK Works handled design,
@@ -195,7 +195,7 @@ actually demonstrate.
 | Service | Lead proof | Supporting |
 | --- | --- | --- |
 | Web Design & Development | Tizirsso Racing | Centi, SETLST |
-| Search & AI Visibility | Tizirsso Racing | CK Dev |
+| SEO & AI Search Visibility | Tizirsso Racing | CK Dev |
 | AI/LLM Pipeline Design | Taylor.io | — |
 | Analytics & Lead Tracking | Centi | Internal Automation Tool, SentimentTrader |
 | Digital Systems & Integrations | Internal Automation Tool | Centi, SETLST |

@@ -18,27 +18,27 @@ import { siteUrl } from "@/lib/site";
  * do not count — this should track what a returning crawler would find new.
  */
 const routeUpdated = {
-  "": "2026-08-17",
-  "/services": "2026-08-11",
-  "/work": "2026-08-17",
-  "/process": "2026-08-17",
-  "/about": "2026-08-17",
-  "/contact": "2026-08-17",
+  "": "2026-08-20",
+  "/services": "2026-08-20",
+  "/work": "2026-08-20",
+  "/process": "2026-08-20",
+  "/about": "2026-08-20",
+  "/contact": "2026-08-18",
   "/privacy-policy": "2026-08-17",
   "/terms": "2026-08-17",
 } as const;
 
 /** Keyed by service slug. Bump when that service's page copy changes. */
 const serviceUpdated: Record<string, string> = {
-  "web-design-development": "2026-08-16",
-  "search-ai-visibility": "2026-08-09",
-  "analytics-lead-tracking": "2026-08-09",
-  "digital-systems-integrations": "2026-08-11",
-  "ongoing-support": "2026-08-11",
+  "web-design-development": "2026-08-18",
+  "search-ai-visibility": "2026-08-20",
+  "analytics-lead-tracking": "2026-08-20",
+  "digital-systems-integrations": "2026-08-20",
+  "ongoing-support": "2026-08-20",
 };
 
 /** Case studies are all driven by `lib/projects.ts`, so they share its date. */
-const caseStudyUpdated = "2026-07-18";
+const caseStudyUpdated = "2026-08-20";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPageConfig = [

@@ -272,7 +272,9 @@ function ServiceOverviewCard({
             ? "Illustrative search example"
             : card.visual === "analytics"
               ? "Illustrative reporting example"
-              : "Illustrative website concept"}
+              : card.visual === "systems"
+                ? "Illustrative workflow example"
+                : "Illustrative website concept"}
         </p>
       </div>
     </article>
