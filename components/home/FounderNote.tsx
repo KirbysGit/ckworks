@@ -54,6 +54,8 @@ export default function FounderNote() {
         src="/images/founder/svg/note-bg.svg"
         alt=""
         aria-hidden
+        loading="lazy"
+        decoding="async"
         className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover opacity-80"
       />
       <div className="container-ck relative">
@@ -93,6 +95,8 @@ export default function FounderNote() {
               src="/images/founder/svg/note-drawing.svg"
               alt=""
               aria-hidden
+              loading="lazy"
+              decoding="async"
               className="pointer-events-none absolute left-1/2 top-1/2 max-w-none select-none object-contain"
               style={{
                 height: `${drawing.scale * 100}%`,
@@ -157,6 +161,8 @@ export default function FounderNote() {
                     src="/images/brand/svg/underline-straight.svg"
                     alt=""
                     aria-hidden
+                    loading="lazy"
+                    decoding="async"
                     className="absolute -bottom-3 left-1/2 h-3 w-[72%] -translate-x-1/2 object-fill"
                   />
                 </span>

@@ -518,6 +518,8 @@ function IdeaOutputSwipe() {
                   <img
                     src="/images/transformation/svg/mobile-whiteboard-marker.svg"
                     alt=""
+                    loading="lazy"
+                    decoding="async"
                     className="pointer-events-none absolute z-20 select-none object-contain drop-shadow-[0_5px_7px_rgba(31,36,32,0.12)]"
                     style={{
                       left: mobileWhiteboardMarker.x,
@@ -679,6 +681,8 @@ function BeforeAssetImage({ asset }: { asset: BeforeAsset }) {
     <img
       src={asset.src}
       alt={asset.alt}
+      loading="lazy"
+      decoding="async"
       className="pointer-events-none absolute h-auto select-none"
       style={{
         left: `${asset.x}%`,
@@ -771,6 +775,8 @@ function PostIt({
         <img
           src={note.src}
           alt=""
+          loading="lazy"
+          decoding="async"
           className="h-full w-full select-none object-contain"
         />
       </span>

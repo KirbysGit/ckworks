@@ -50,6 +50,49 @@ export type ConnectorPath = {
   cornerRadius?: number;
 };
 
+type ClusterNudge = { x: number; y: number };
+
+/**
+ * Monthly Overview + post-it + both of their dotted lines:
+ *   browser → monthly, and monthly → post-it.
+ * Negative x = left, negative y = up.
+ */
+const lowerClusterNudge = { x: -18, y: -45 } as const satisfies ClusterNudge;
+
+/**
+ * Phone + the dotted line from the demo to the phone.
+ * Negative x = left, negative y = up.
+ */
+const rightClusterNudge = { x: -55, y: -40 } as const satisfies ClusterNudge;
+
+/**
+ * Extra px the demo→phone line reaches past its outer end — and the same
+ * amount the phone shifts right, so it stays centered on that drop.
+ * Larger = a longer horizontal run, farther from the demo.
+ */
+const phoneConnectorExtendX = 36;
+
+function nudgeCard(base: CardPlacement, nudge: ClusterNudge): CardPlacement {
+  const { x, y } = nudge;
+  return {
+    ...base,
+    ...(typeof base.left === "number" ? { left: base.left + x } : {}),
+    ...(typeof base.right === "number" ? { right: base.right - x } : {}),
+    ...(typeof base.top === "number" ? { top: base.top + y } : {}),
+    ...(typeof base.bottom === "number" ? { bottom: base.bottom - y } : {}),
+  };
+}
+
+function nudgeConnector(path: ConnectorPath, nudge: ClusterNudge): ConnectorPath {
+  const { x, y } = nudge;
+  const dx = path.anchor?.x === "right" ? -x : x;
+  const dy = path.anchor?.y === "bottom" ? -y : y;
+  return {
+    ...path,
+    points: path.points.map(([px, py]) => [px + dx, py + dy]),
+  };
+}
+
 export const heroMockupLayout = {
   /** Overall composition scale (e.g. 0.9 = 90%, 1.05 = 105%) */
   scale: 1,
@@ -100,29 +143,48 @@ export const heroMockupLayout = {
     } satisfies CardPlacement,
 
     // Right edge, overlapping the browser's corner, extending below it
-    phone: {
-      right: -100,
-      top: 170,
-      width: 172,
-      delay: 0.25,
-    } satisfies CardPlacement,
+    phone: nudgeCard(
+      {
+        right: -100 - phoneConnectorExtendX,
+        top: 170,
+        width: 172,
+        delay: 0.25,
+      },
+      rightClusterNudge,
+    ),
 
     // Directly below the browser, left-aligned with its edge (≈ paddingLeft + 12)
-    monthly: {
-      left: 108,
-      bottom: 75,
-      width: 400,
-      delay: 0.35,
-    } satisfies CardPlacement,
+    monthly: nudgeCard(
+      {
+        left: 108,
+        bottom: 75,
+        width: 400,
+        delay: 0.35,
+      },
+      lowerClusterNudge,
+    ),
 
     // Bottom right; straight backing card, the note itself tilts (-rotate-2
     // in HeroMockup). Blank until the hero-postit.svg text drops in.
-    postIt: {
-      right: -30,
-      bottom: 70,
-      width: 195,
-      delay: 0.45,
-    } satisfies CardPlacement,
+    postIt: nudgeCard(
+      {
+        right: -30,
+        bottom: 70,
+        width: 195,
+        delay: 0.45,
+      },
+      lowerClusterNudge,
+    ),
+  },
+
+  /**
+   * "Illustrative example" sits just under the *visual* (scaled) browser,
+   * left-aligned — not in the gap the phone and Monthly Overview occupy.
+   * offsetY is from the scaled bottom; offsetX is from the browser's left.
+   */
+  caption: {
+    offsetY: "0.45rem",
+    offsetX: "0.15rem",
   },
 
   /**
@@ -148,36 +210,46 @@ export const heroMockupLayout = {
       nodeAt: [2],
       cornerRadius: 10,
     },
-    // Browser bottom → short link into Monthly Overview's top edge
-    {
-      anchor: { y: "bottom" },
-      points: [
-        [300, 380],
-        [300, 346],
-      ],
-      nodeAt: [0, 1],
-    },
-    // Phone top → up, loose end node
-    {
-      anchor: { x: "right" },
-      points: [
-        [54, 100],
-        [-14, 100],
-        [-14, 170],
-      ],
-      nodeAt: [0, 2],
-    },
-    // Monthly Overview right edge → across to the post-it
-    {
-      anchor: { x: "right", y: "bottom" },
-      points: [
-        [204, 190],
-        [150, 190],
-      ],
-      nodeAt: [0, 1],
-    },
+    // Browser bottom → Monthly Overview (lower cluster)
+    nudgeConnector(
+      {
+        anchor: { y: "bottom" },
+        points: [
+          [300, 380],
+          [300, 346],
+        ],
+        nodeAt: [0, 1],
+      },
+      lowerClusterNudge,
+    ),
+    // Demo → phone (right cluster)
+    nudgeConnector(
+      {
+        anchor: { x: "right" },
+        points: [
+          [54, 100],
+          [-14 - phoneConnectorExtendX, 100],
+          [-14 - phoneConnectorExtendX, 170],
+        ],
+        nodeAt: [0, 2],
+        cornerRadius: 10,
+      },
+      rightClusterNudge,
+    ),
+    // Monthly Overview → post-it (lower cluster)
+    nudgeConnector(
+      {
+        anchor: { x: "right", y: "bottom" },
+        points: [
+          [204, 190],
+          [150, 190],
+        ],
+        nodeAt: [0, 1],
+      },
+      lowerClusterNudge,
+    ),
   ] satisfies ConnectorPath[],
-} as const;
+};
 
 export function cardPlacementStyle(placement: CardPlacement): CSSProperties {
   const style: CSSProperties = {};

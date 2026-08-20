@@ -131,6 +131,8 @@ function CtaArt({ side, art }: { side: "left" | "right"; art: ArtPlacement }) {
       src={art.src}
       alt=""
       aria-hidden
+      loading="lazy"
+      decoding="async"
       style={style}
       className="pointer-events-none absolute z-0 hidden h-auto select-none lg:block"
     />

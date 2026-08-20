@@ -183,6 +183,8 @@ export function SystemsServiceVisual() {
                   src={logo.src}
                   alt=""
                   aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
                   className="object-contain"
                   style={{ width: logo.size, height: logo.size }}
                 />

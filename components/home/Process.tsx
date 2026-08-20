@@ -373,6 +373,10 @@ function MobileProcessTimeline() {
                       src="/images/hero/svg/underline.svg"
                       alt=""
                       aria-hidden
+                      width={3785}
+                      height={429}
+                      loading="lazy"
+                      decoding="async"
                       className="mr-auto mt-1.5 block h-auto select-none"
                       style={{
                         width: mobileChapterUnderline.width,
@@ -399,6 +403,10 @@ function MobileProcessTimeline() {
                       src={drawing.src}
                       alt=""
                       aria-hidden
+                      width={1254}
+                      height={1254}
+                      loading="lazy"
+                      decoding="async"
                       className="block select-none object-contain"
                       style={{
                         width: drawing.size,
@@ -488,6 +496,10 @@ function ProcessBook() {
           src="/images/process/svg/book-bg.svg"
           alt=""
           aria-hidden
+          width={1672}
+          height={941}
+          loading="lazy"
+          decoding="async"
           className="relative z-[2] block w-full select-none"
         />
 
@@ -536,6 +548,10 @@ function ProcessBook() {
             <img
               src={drawing.src}
               alt=""
+              width={1254}
+              height={1254}
+              loading="lazy"
+              decoding="async"
               className="block w-full select-none object-contain"
             />
           </div>
@@ -580,6 +596,10 @@ function ProcessBook() {
                 src="/images/brand/svg/underline-straight.svg"
                 alt=""
                 aria-hidden
+                width={968}
+                height={42}
+                loading="lazy"
+                decoding="async"
                 className="mx-auto mt-1.5 h-[10px] w-[72%] max-w-[10rem] origin-center select-none object-fill"
                 style={{
                   transform: `${

@@ -198,6 +198,7 @@ export default function HeroMockup() {
     connectors,
     connectorTiming,
     browser,
+    caption,
     showDebugGrid,
   } = heroMockupLayout;
 
@@ -349,13 +350,13 @@ export default function HeroMockup() {
               </div>
             </div>
 
-            {/* Below the browser, toward the right, still left of the phone.
-                Pops in after the mockup cards finish landing. */}
+            {/* Tucked under the visual browser so it doesn't sit in the
+                gap the phone and Monthly Overview use to connect. */}
             <motion.p
               className="pointer-events-none absolute z-10 hidden whitespace-nowrap text-left text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted lg:block"
               style={{
-                top: `calc(${browser.scale * 105}% + 2.1rem)`,
-                left: "77%",
+                top: `calc(${browser.scale * 100}% + ${caption.offsetY})`,
+                left: caption.offsetX,
               }}
               initial={{ opacity: 0, y: 10, scale: 0.92 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}

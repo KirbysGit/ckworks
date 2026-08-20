@@ -123,7 +123,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-line/80 bg-ivory/85 backdrop-blur-md">
       <div className="container-ck flex h-20 items-center justify-between py-4">
         <Link href="/" aria-label="CK Works home">
-          <Logo />
+          <Logo priority />
         </Link>
 
         <nav className="hidden items-center lg:flex" aria-label="Primary">

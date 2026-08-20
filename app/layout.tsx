@@ -45,6 +45,7 @@ const display = Bodoni_Moda({
   weight: ["400", "500", "600", "700"],
   variable: "--font-display",
   display: "swap",
+  preload: false,
 });
 
 /** Sturdy old-style serif with optical sizing (good for badge numerals). */
@@ -54,6 +55,7 @@ const sourceSerifDisplay = Source_Serif_4({
   axes: ["opsz"],
   variable: "--font-source-serif-display",
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {

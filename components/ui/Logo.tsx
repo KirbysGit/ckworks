@@ -7,6 +7,7 @@ type Size = "sm" | "md" | "lg";
 
 type Props = {
   className?: string;
+  priority?: boolean;
   showWordmark?: boolean;
   size?: Size;
 };
@@ -36,6 +37,7 @@ const scales: Record<Size, { icon: string; wordmark: string; gap: string }> = {
 
 export default function Logo({
   className = "",
+  priority = false,
   showWordmark = true,
   size = "md",
 }: Props) {
@@ -70,7 +72,8 @@ export default function Logo({
           alt={showWordmark ? "" : "CK Works"}
           width={761}
           height={777}
-          priority
+          priority={priority}
+          sizes={size === "sm" ? "28px" : size === "lg" ? "56px" : "48px"}
           className={`${s.icon} w-auto`}
         />
       </motion.span>
@@ -83,7 +86,7 @@ export default function Logo({
             alt="CK Works"
             width={898}
             height={278}
-            priority
+            priority={priority}
             className={`${s.wordmark} w-auto dark:hidden`}
           />
           {/* dark mode wordmark */}
