@@ -220,7 +220,10 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        <Script id="google-tag-manager" strategy="beforeInteractive">
+        {/* Event helpers queue into dataLayer before this runs, so analytics can
+            wait for the load event and idle time without losing early clicks.
+            Clarity is configured through GTM and is delayed by the same move. */}
+        <Script id="google-tag-manager" strategy="lazyOnload">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
