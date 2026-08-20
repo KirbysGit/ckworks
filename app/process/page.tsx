@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, FileText, Pencil, Rocket, Settings2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
+import RelatedLinks from "@/components/services/shared/RelatedLinks";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import WhatsAppContactLink from "@/components/contact/WhatsAppContactLink";
 import FAQSection from "@/components/page/FAQSection";
@@ -234,7 +235,26 @@ export default function ProcessPage() {
         </div>
       </section>
 
-      
+      <section className="bg-ivory pb-12">
+        <div className="container-ck">
+          <RelatedLinks
+            heading="Where this leads"
+            links={[
+              {
+                label: "Browse the services this process covers",
+                href: "/services",
+                note: "Websites, SEO, analytics, systems, and ongoing support.",
+              },
+              {
+                label: "See the Tizirsso Racing website project",
+                href: "/tizirsso",
+                note: "A client site taken through these four phases end to end.",
+              },
+            ]}
+          />
+        </div>
+      </section>
+
       <ProcessFooterCta />
     </SiteLayout>
   );

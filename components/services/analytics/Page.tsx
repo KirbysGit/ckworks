@@ -66,6 +66,7 @@ import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import type { ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
+import RelatedLinks from "../shared/RelatedLinks";
 import ProjectWorkCard from "../shared/ProjectWorkCard";
 import {
   serviceCenterLabelClassName,
@@ -233,6 +234,25 @@ const analyticsHeroTiming = {
   leadStep: 80,
 } as const;
 
+function AnalyticsRelated() {
+  return (
+    <RelatedLinks
+      links={[
+        {
+          label: "See where the traffic comes from",
+          href: "/services/search-ai-visibility",
+          note: "SEO and AI visibility bring the visitors this reporting measures.",
+        },
+        {
+          label: "Connect lead tracking to your workflow",
+          href: "/services/digital-systems-integrations",
+          note: "Route a tracked inquiry into the tools your team already works in.",
+        },
+      ]}
+    />
+  );
+}
+
 export default function Page({ service }: { service: ServiceArea }) {
   const projects = analyticsProjectSlugs
     .map((projectSlug) => getCaseStudy(projectSlug))
@@ -247,6 +267,7 @@ export default function Page({ service }: { service: ServiceArea }) {
           <AnalyticsScope />
           <AnalyticsWork projects={projects} />
           <AnalyticsFaq />
+          <AnalyticsRelated />
           <AnalyticsBottomCta />
         </div>
       </section>
@@ -268,7 +289,7 @@ function AnalyticsHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
           className={`ck-rise ${serviceHeroTitleClassName}`}
           style={{ animationDelay: `${analyticsHeroTiming.title}ms` }}
         >
-          Analytics &amp;
+          Analytics &amp;{" "}
           <br />
           Lead Tracking
         </h1>
@@ -315,7 +336,14 @@ function MeasurementSnapshot() {
     <div
       className="ck-lift rounded-2xl border border-line bg-card p-4 shadow-[0_26px_54px_-34px_rgba(31,36,32,0.55)] sm:p-5"
       style={{ animationDelay: `${analyticsHeroTiming.panel}ms` }}
+      data-nosnippet
     >
+      <p
+        className="ck-fade mb-3 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted"
+        style={{ animationDelay: `${analyticsHeroTiming.panelHeader}ms` }}
+      >
+        Illustrative snapshot — sample data
+      </p>
       <div
         className="ck-fade flex items-center justify-between gap-3"
         style={{ animationDelay: `${analyticsHeroTiming.panelHeader}ms` }}
@@ -568,7 +596,9 @@ function AnalyticsReportingSection() {
       className="scroll-mt-28 border-b border-line py-14 lg:py-16"
     >
       <Reveal className="mx-auto max-w-5xl text-center">
-        <p className={serviceCenterLabelClassName}>Example client report</p>
+        <p className={serviceCenterLabelClassName}>
+          Illustrative report — sample data
+        </p>
         <h2 className={serviceCenterTitleClassName}>
           See what your site is actually producing.
         </h2>
@@ -587,8 +617,8 @@ function AnalyticsReportingSection() {
 
         <Reveal className="relative mx-auto block max-w-6xl">
           {/* Fictional client and fictional figures. `data-nosnippet` keeps the
-              invented growth numbers out of search snippets, and the caption
-              below keeps a reader from taking this as a real CK Works result. */}
+              invented growth numbers out of search snippets; the visible
+              labels above and below keep the example clear for readers. */}
           <div
             className="overflow-hidden rounded-2xl border border-line bg-card shadow-[0_28px_58px_-38px_rgba(31,36,32,0.42)]"
             data-nosnippet
@@ -807,7 +837,7 @@ function AnalyticsReportingSection() {
           </div>
 
           <p className="mt-4 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted">
-            Illustrative reporting example
+            Sample data shown for illustration
           </p>
         </Reveal>
       </div>

@@ -557,6 +557,7 @@ function EditorialWorkCardContent({
       {/* Image */}
       <Link
         href={`/${study.slug}`}
+        aria-label={`View the ${study.name} case study`}
         className={`group/image relative z-0 flex min-h-[16rem] overflow-hidden rounded-t-lg rounded-b-none border border-line shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift sm:min-h-[18rem] lg:h-full lg:min-h-[19rem] ${
           isEven ? "lg:col-start-1 lg:row-start-1" : ""
         }`}

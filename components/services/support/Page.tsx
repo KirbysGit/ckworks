@@ -35,6 +35,7 @@ import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import { supportTimeline, type ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
+import RelatedLinks from "../shared/RelatedLinks";
 import ProjectWorkCard from "../shared/ProjectWorkCard";
 import SupportCareView, { supportHeroTiming } from "./SupportCareView";
 import {
@@ -204,6 +205,25 @@ const supportFaqs = [
   },
 ] as const;
 
+function SupportRelated() {
+  return (
+    <RelatedLinks
+      links={[
+        {
+          label: "Review the analytics behind your site",
+          href: "/services/analytics-lead-tracking",
+          note: "Support decisions are easier when you can see what pages are doing.",
+        },
+        {
+          label: "See the systems running behind the scenes",
+          href: "/services/digital-systems-integrations",
+          note: "Dashboards, forms, and integrations that also need looking after.",
+        },
+      ]}
+    />
+  );
+}
+
 export default function Page({ service }: { service: ServiceArea }) {
   return (
     <ServiceFrame service={service}><section className="bg-ivory pb-10 pt-6 sm:pb-12 sm:pt-8 lg:pb-16 lg:pt-10">
@@ -216,6 +236,7 @@ export default function Page({ service }: { service: ServiceArea }) {
           <SupportProcess />
           <SupportFaq />
           <SupportRebuildNote />
+          <SupportRelated />
           <SupportBottomCta />
         </div>
       </section>

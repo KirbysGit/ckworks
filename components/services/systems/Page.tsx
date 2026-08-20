@@ -27,6 +27,7 @@ import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import type { ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
+import RelatedLinks from "../shared/RelatedLinks";
 import ProjectWorkCard from "../shared/ProjectWorkCard";
 import OperationsHub, { systemsHeroTiming } from "./OperationsHub";
 import {
@@ -247,7 +248,7 @@ const systemsWorkflows = [
   {
     step: "03",
     title: "Client onboarding",
-    audience: "Professional services",
+    audience: "professional-services business",
     steps: [
       { icon: UserRoundCheck, label: "Client confirmed" },
       { icon: Folder, label: "Record created" },
@@ -288,6 +289,25 @@ const systemsFaqs = [
 
 const systemsProjectSlugs = ["internal-automation-tool", "centi"] as const;
 
+function SystemsRelated() {
+  return (
+    <RelatedLinks
+      links={[
+        {
+          label: "Measure what your workflows produce",
+          href: "/services/analytics-lead-tracking",
+          note: "See which automated steps lead to real inquiries and where people drop off.",
+        },
+        {
+          label: "Explore ongoing website support",
+          href: "/services/ongoing-support",
+          note: "Systems need maintenance once they are running day to day.",
+        },
+      ]}
+    />
+  );
+}
+
 export default function Page({ service }: { service: ServiceArea }) {
   const projects = systemsProjectSlugs
     .map((projectSlug) => getCaseStudy(projectSlug))
@@ -302,6 +322,7 @@ export default function Page({ service }: { service: ServiceArea }) {
           <SystemsHowItWorks />
           <SystemsWork projects={projects} />
           <SystemsFaq />
+          <SystemsRelated />
           <SystemsBottomCta />
         </div>
       </section>
@@ -721,7 +742,9 @@ function SystemsHowItWorks() {
 
         {/* Divider belongs to the right column so it spans the full stack. */}
         <div className="min-w-0 lg:border-l lg:border-line lg:pl-12">
-
+          <p className="mb-2 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted">
+            Illustrative workflow examples
+          </p>
           <div className="divide-y divide-line">
             {systemsWorkflows.map((workflow, index) => (
               <Reveal

@@ -1,4 +1,4 @@
-/** Renders the bespoke Search and AI Visibility service experience. */
+/** Renders the bespoke SEO and AI Search Visibility service experience. */
 import { Fragment, type CSSProperties, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -62,6 +62,7 @@ import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import { searchVisibilityTimeline, type ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
+import RelatedLinks from "../shared/RelatedLinks";
 import ProjectWorkCard from "../shared/ProjectWorkCard";
 import {
   serviceCenterLabelClassName,
@@ -223,6 +224,25 @@ const searchVisibilityHeroTiming = {
   aiCheckStep: 80,
 } as const;
 
+function SearchVisibilityRelated() {
+  return (
+    <RelatedLinks
+      links={[
+        {
+          label: "See how website design and SEO work together",
+          href: "/services/web-design-development",
+          note: "Structure, hierarchy, and page copy are what search has to read in the first place.",
+        },
+        {
+          label: "Connect search visibility to lead tracking",
+          href: "/services/analytics-lead-tracking",
+          note: "Measure which searches actually turn into inquiries, not just impressions.",
+        },
+      ]}
+    />
+  );
+}
+
 export default function Page({ service }: { service: ServiceArea }) {
   return (
     <ServiceFrame service={service}><section className="bg-ivory py-10 sm:py-12 lg:py-16">
@@ -232,6 +252,7 @@ export default function Page({ service }: { service: ServiceArea }) {
           <SearchVisibilityScope />
           <SearchVisibilitySignals />
           <SearchVisibilityFaq />
+          <SearchVisibilityRelated />
           <SearchVisibilityCta />
         </div>
       </section>
@@ -253,16 +274,17 @@ function SearchVisibilityHero({ timeline }: { timeline: ServiceArea["timeline"] 
           className={`ck-rise ${serviceHeroTitleClassName}`}
           style={{ animationDelay: `${searchVisibilityHeroTiming.title}ms` }}
         >
-          Search &amp;
+          SEO &amp; AI{" "}
           <br />
-          AI Visibility
+          Search Visibility
         </h1>
         <p
           className="ck-rise mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]"
           style={{ animationDelay: `${searchVisibilityHeroTiming.leadCopy}ms` }}
         >
-          Search-friendly structure, indexing basics, and clearer content
-          signals so people and answer engines can understand your site.
+          CK Works improves technical SEO, local search structure, on-page
+          content, structured data, and AI-search visibility so customers and
+          answer engines can understand what your business does.
         </p>
         <ServiceTimeline
           timeline={timeline}
