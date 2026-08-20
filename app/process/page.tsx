@@ -65,17 +65,6 @@ const fromCkWorks: { icon: LucideIcon; label: string }[] = [
   { icon: Rocket, label: "Testing + launch" },
 ];
 
-/**
- * Hero entrance rhythm. Copy rises first; the stage chain picks the sequence up
- * at 340ms and carries it left to right (see `components/process/StageChain.tsx`).
- */
-const processHeroTiming = {
-  eyebrow: 0,
-  title: 80,
-  lead: 170,
-  actions: 250,
-} as const;
-
 export default function ProcessPage() {
   const tizirsso = getCaseStudy("tizirsso");
 
@@ -111,22 +100,13 @@ export default function ProcessPage() {
         <div className="container-ck">
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.5fr)] lg:gap-12">
             <div>
-              <p
-                className="ck-rise text-xs font-semibold uppercase tracking-[0.28em] text-forest"
-                style={{ animationDelay: `${processHeroTiming.eyebrow}ms` }}
-              >
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
                 The Approach
               </p>
-              <h1
-                className="ck-rise mt-5 max-w-3xl font-serif text-[2.75rem] font-medium leading-[1.03] text-ink sm:text-5xl lg:text-6xl"
-                style={{ animationDelay: `${processHeroTiming.title}ms` }}
-              >
+              <h1 className="mt-5 max-w-3xl font-serif text-[2.75rem] font-medium leading-[1.03] text-ink sm:text-5xl lg:text-6xl">
                 A calm way projects take shape.
               </h1>
-              <p
-                className="ck-rise mt-6 max-w-xl text-base leading-8 text-muted sm:text-lg"
-                style={{ animationDelay: `${processHeroTiming.lead}ms` }}
-              >
+              <p className="mt-6 max-w-xl text-base leading-8 text-muted sm:text-lg">
                 CK Works plans, designs, builds, and improves websites and
                 digital systems through a focused process that keeps decisions
                 clear and the work moving.

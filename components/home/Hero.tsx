@@ -26,20 +26,11 @@ const heroCopyLayout = {
 } as const;
 
 /**
- * Copy entrance (ms). CSS rather than Framer: these gate whether the hero is
- * visible at all, so they must not wait on hydration. The underline draw stays
- * on Framer -- it enhances text that is already on screen, which is what the
- * design system reserves Framer for.
- *
- * Values mirror the old stagger (0.05 delayChildren + 0.08 per child).
+ * Only secondary hero details still animate. The main copy and actions render
+ * at full opacity immediately so slow mobile visitors do not wait for LCP.
  */
 const heroTiming = {
-  eyebrow: 0,
-  title: 80,
-  lead: 170,
-  actions: 250,
-  mobilePreview: 300,
-  trust: 330,
+  trust: 80,
 } as const;
 
 const heroTrustItems = [
@@ -141,9 +132,8 @@ function MobileHeroPreview() {
   return (
     <>
     <div
-      className="ck-rise relative mx-auto mt-9 h-[22.75rem] w-full max-w-[23rem] overflow-visible md:hidden"
+      className="relative mx-auto mt-9 h-[22.75rem] w-full max-w-[23rem] overflow-visible md:hidden"
       aria-label="Layered preview of a calm website and mobile view"
-      style={{ animationDelay: `${heroTiming.mobilePreview}ms` }}
     >
       <div
         className="grid-texture pointer-events-none absolute -inset-x-6 -inset-y-5 opacity-35 [mask-image:radial-gradient(circle_at_center,black_26%,transparent_76%)]"
@@ -203,6 +193,7 @@ function MobileHeroPreview() {
               alt=""
               fill
               sizes="180px"
+              priority
               className="object-cover"
             />
           </div>
@@ -287,10 +278,7 @@ export default function Hero() {
           className="mx-auto max-w-2xl text-center md:mx-0 md:pt-[var(--hero-copy-y)] md:text-left"
           style={{ "--hero-copy-y": heroCopyLayout.offsetY } as CSSProperties}
         >
-          <span
-            className="ck-rise block text-xs font-semibold uppercase tracking-[0.18em] text-forest"
-            style={{ animationDelay: `${heroTiming.eyebrow}ms` }}
-          >
+          <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-forest">
             A Small Digital Studio Based in Orlando
           </span>
 
@@ -300,29 +288,23 @@ export default function Hero() {
             the city is a fact about the studio, not the subject of it, and
             local relevance comes from schema plus About/Contact regardless.
           */}
-          <h1
-            className="ck-rise mt-5 font-serif text-[2.6rem] font-medium leading-[1.12] tracking-normal text-ink md:text-[3rem] lg:text-[3.5rem]"
-            style={{ animationDelay: `${heroTiming.title}ms` }}
-          >
-            <span className="block">Make the website</span>
+          <h1 className="mt-5 font-serif text-[2.6rem] font-medium leading-[1.12] tracking-normal text-ink md:text-[3rem] lg:text-[3.5rem]">
+            {/* Both spans are block, so this space only matters to the text
+                content a crawler or screen reader reads — without it the
+                heading runs together as "websitematch". */}
+            <span className="block">Make the website</span>{" "}
             <span className="block">
               match <TheWorkMark />.
             </span>
           </h1>
 
-          <p
-            className="ck-rise mx-auto mt-5 max-w-[21rem] text-base leading-7 text-muted md:mx-0 md:mt-6 md:max-w-[85%] md:text-lg md:leading-relaxed"
-            style={{ animationDelay: `${heroTiming.lead}ms` }}
-          >
+          <p className="mx-auto mt-5 max-w-[21rem] text-base leading-7 text-muted md:mx-0 md:mt-6 md:max-w-[85%] md:text-lg md:leading-relaxed">
             {/* Carries the service words the headline deliberately leaves out. */}
             Websites and practical digital systems that make your business
             clearer online and easier to run behind the scenes.
           </p>
 
-          <div
-            className="ck-rise mx-auto mt-7 flex max-w-[22rem] flex-col items-stretch justify-center gap-3 md:mx-0 md:mt-8 md:flex-row md:flex-wrap md:items-center md:justify-start md:gap-4"
-            style={{ animationDelay: `${heroTiming.actions}ms` }}
-          >
+          <div className="mx-auto mt-7 flex max-w-[22rem] flex-col items-stretch justify-center gap-3 md:mx-0 md:mt-8 md:flex-row md:flex-wrap md:items-center md:justify-start md:gap-4">
             <ProjectInquiryTrigger
               source="home_hero"
               className="min-h-12 w-full rounded-xl px-4 py-3 font-semibold shadow-lift hover:bg-ink md:w-auto md:flex-none md:px-6"

@@ -26,7 +26,7 @@ import { createPageMetadata, absoluteUrl } from "@/lib/seo";
 import { serviceAreas, type ServiceArea, type ServiceSlug } from "@/lib/services";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Web Design & Digital System Services",
+  title: "Web Design, SEO & Digital Systems",
   description:
     "Websites, search visibility, analytics, digital systems, integrations, and ongoing support for businesses that need a clearer digital foundation.",
   path: "/services",
@@ -111,7 +111,7 @@ export default function ServicesPage() {
 
       <section className="bg-ivory py-10 sm:py-12 lg:py-16">
         <div className={servicesPageContainer}>
-          <Reveal className="max-w-5xl">
+          <div className="max-w-5xl">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest/85">
               Services
             </p>
@@ -131,7 +131,7 @@ export default function ServicesPage() {
               How I can help
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </a>
-          </Reveal>
+          </div>
 
           <div
             id="services-list"

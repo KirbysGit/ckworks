@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import ServiceViewed from "@/components/analytics/ServiceViewed";
 import SiteLayout from "@/components/layout/SiteLayout";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, organizationRef } from "@/lib/seo";
 import type { ServiceArea } from "@/lib/services";
 
 /** Wraps every bespoke service experience with stable layout, tracking, and schema. */
@@ -34,11 +34,7 @@ function ServiceSchema({ service }: { service: ServiceArea }) {
             name: service.title,
             url: absoluteUrl(service.href),
             description: service.description,
-            provider: {
-              "@type": "ProfessionalService",
-              name: "CK Works",
-              url: absoluteUrl("/"),
-            },
+            provider: organizationRef,
           },
           {
             "@type": "BreadcrumbList",

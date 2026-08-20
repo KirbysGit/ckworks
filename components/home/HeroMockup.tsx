@@ -244,10 +244,7 @@ export default function HeroMockup() {
 
             {/* ── Main browser: Windermere Wellness ─────────────────── */}
             <div className="relative z-10">
-            <motion.div
-              variants={floatIn}
-              initial="hidden"
-              animate="show"
+            <div
               style={{
                 width: `calc((100% + ${browser.expandX}px) / ${browser.scale})`,
                 marginLeft: -(browser.expandX / 2),
@@ -350,7 +347,7 @@ export default function HeroMockup() {
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
             {/* Below the browser, toward the right, still left of the phone.
                 Pops in after the mockup cards finish landing. */}
@@ -558,7 +555,12 @@ export default function HeroMockup() {
               </div>
             </motion.div>
 
-            {/* ── Monthly Overview — below the browser ───────────────── */}
+            {/* ── Monthly Overview — below the browser ─────────────────
+                Invented inquiry counts and growth percentages, so this card
+                carries `data-nosnippet`: the figures should never be lifted
+                into a search result as if CK Works reported them. The
+                "Illustrative example" caption below the mockup covers the
+                human side. */}
             <motion.div
               variants={floatIn}
               initial="hidden"
@@ -566,6 +568,7 @@ export default function HeroMockup() {
               transition={{ delay: cards.monthly.delay }}
               style={cardPlacementStyle(cards.monthly)}
               className="pointer-events-auto absolute z-10 hidden rounded-xl border border-line bg-card p-4 shadow-float lg:block"
+              data-nosnippet
             >
               <div className="flex items-baseline justify-between">
                 <p className="text-[13px] font-semibold text-ink">

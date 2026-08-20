@@ -200,6 +200,15 @@ export default function RootLayout({
       lang="en"
       className={`${serif.variable} ${sans.variable} ${display.variable} ${sourceSerifDisplay.variable}`}
     >
+      <head>
+        <link
+          rel="preload"
+          href="/images/brand/svg/wordmark-light.svg"
+          as="image"
+          type="image/svg+xml"
+          fetchPriority="high"
+        />
+      </head>
       <body>
         <noscript>
           <iframe

@@ -92,7 +92,6 @@ export default function Logo({
             alt="CK Works"
             width={512}
             height={145}
-            priority
             className={`hidden ${s.wordmark} w-auto dark:block`}
           />
         </>

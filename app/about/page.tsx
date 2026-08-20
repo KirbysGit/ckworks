@@ -11,7 +11,7 @@ import WhySection from "@/components/about/WhySection";
 import FAQSection from "@/components/page/FAQSection";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import Reveal from "@/components/ui/Reveal";
-import { absoluteUrl, createPageMetadata } from "@/lib/seo";
+import { absoluteUrl, createPageMetadata, organizationId } from "@/lib/seo";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 
 const aboutDescription =
@@ -70,14 +70,9 @@ export default function AboutPage() {
               description: aboutDescription,
             },
             {
-              "@type": "ProfessionalService",
-              name: "CK Works",
-              url: absoluteUrl("/"),
-              founder: {
-                "@type": "Person",
-                name: "Colin Kirby",
-                jobTitle: "Founder",
-              },
+              // Reference the organization declared in app/layout.tsx rather
+              // than describing it a second time with no @id.
+              "@id": organizationId,
               description: aboutDescription,
             },
             {

@@ -30,7 +30,7 @@ import SchemaMarkup from "@/components/page/SchemaMarkup";
 import Reveal from "@/components/ui/Reveal";
 import { caseStudies, getCaseStudy, type CaseStudy } from "@/lib/projects";
 import { serviceAreas } from "@/lib/services";
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, organizationRef } from "@/lib/seo";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -75,16 +75,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-/**
- * Hero entrance (ms). Above the fold, so CSS primitives rather than Reveal —
- * the copy must not wait on hydration. Body sections below use Reveal.
- */
 const caseStudyHeroTiming = {
-  eyebrow: 0,
-  title: 80,
-  lead: 170,
-  outcome: 240,
-  facts: 320,
+  facts: 80,
 } as const;
 
 /** Small forest circle + label used above each fact group and body section. */
@@ -223,11 +215,7 @@ export default async function CaseStudyPage({ params }: Props) {
               url: absoluteUrl(`/${study.slug}`),
               description: study.oneLiner,
               genre: study.category,
-              creator: {
-                "@type": "Organization",
-                name: "CK Works",
-                url: absoluteUrl("/"),
-              },
+              creator: organizationRef,
               ...(study.liveUrl
                 ? {
                     sameAs: study.liveUrl,
@@ -270,32 +258,20 @@ export default async function CaseStudyPage({ params }: Props) {
           </Link>
 
           <div className="mx-auto mt-10 max-w-3xl">
-            <p
-              className="ck-rise text-xs font-semibold uppercase tracking-[0.18em] text-forest"
-              style={{ animationDelay: `${caseStudyHeroTiming.eyebrow}ms` }}
-            >
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
               {study.category}
             </p>
-            <h1
-              className="ck-rise mt-4 font-serif text-5xl font-medium leading-tight text-ink sm:text-6xl"
-              style={{ animationDelay: `${caseStudyHeroTiming.title}ms` }}
-            >
+            <h1 className="mt-4 font-serif text-5xl font-medium leading-tight text-ink sm:text-6xl">
               {study.name}
             </h1>
-            <p
-              className="ck-rise mt-5 text-xl leading-relaxed text-muted"
-              style={{ animationDelay: `${caseStudyHeroTiming.lead}ms` }}
-            >
+            <p className="mt-5 text-xl leading-relaxed text-muted">
               {study.oneLiner}
             </p>
 
             {/* The proof line. Sits above the fold on purpose — a visitor
                 scanning the page should get what changed before they decide
                 whether to read the write-up underneath. */}
-            <p
-              className="ck-rise mt-6 border-l-2 border-forest pl-4 text-lg leading-relaxed text-ink"
-              style={{ animationDelay: `${caseStudyHeroTiming.outcome}ms` }}
-            >
+            <p className="mt-6 border-l-2 border-forest pl-4 text-lg leading-relaxed text-ink">
               {study.outcomeLine}
             </p>
 
