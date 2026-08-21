@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import {
   Bodoni_Moda,
   Cormorant_Garamond,
@@ -14,6 +13,7 @@ import {
   siteUrl,
 } from "@/lib/site";
 import { ProjectInquiryProvider } from "@/components/inquiry/ProjectInquiryProvider";
+import ThirdPartyAnalytics from "@/components/analytics/ThirdPartyAnalytics";
 import { gtmId } from "@/lib/analytics";
 import {
   contactEmail,
@@ -220,18 +220,7 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        {/* Event helpers queue into dataLayer before this runs, so analytics can
-            wait for the load event and idle time without losing early clicks.
-            Clarity is configured through GTM and is delayed by the same move. */}
-        <Script id="google-tag-manager" strategy="lazyOnload">
-          {`
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','${gtmId}');
-          `}
-        </Script>
+        <ThirdPartyAnalytics />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

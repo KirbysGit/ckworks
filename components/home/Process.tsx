@@ -289,7 +289,12 @@ export default function Process() {
   return (
     <section
       id="process"
-      className="container-ck bg-ivory py-14 text-ink [color-scheme:only_light] [forced-color-adjust:none] lg:py-20"
+      // `overflow-x-clip` contains the mobile chapter drawings, which bleed
+      // past the container on purpose via `min-width` and offset transforms.
+      // The bleed is the design; the page scrolling sideways was not. Using
+      // `clip` rather than `hidden` avoids creating a scroll container, so
+      // sticky descendants keep working.
+      className="container-ck overflow-x-clip bg-ivory py-14 text-ink [color-scheme:only_light] [forced-color-adjust:none] lg:py-20"
     >
       <motion.div
         variants={stagger}

@@ -111,6 +111,10 @@ When adding an event:
 Never send inquiry message content, email addresses, phone numbers, or other
 personally identifiable form data into analytics.
 
+GTM starts after the visitor's first pointer, keyboard, or scroll interaction,
+with a five-second fallback. Clarity should not use an All Pages trigger; its
+GTM tag should use the `ck_clarity_ready` custom event, queued after ten seconds.
+
 ## Inquiry And Contact
 
 There are two surfaces: the contact page form and the `Start a project` modal.

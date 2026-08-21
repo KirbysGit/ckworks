@@ -523,7 +523,10 @@ function EditorialWorkCardContent({
           {study.outcomeLine}
         </p>
 
-        <ul className="mt-5 flex items-center gap-2">
+        {/* `flex-wrap` is load-bearing: both pills are `whitespace-nowrap`, so
+            without it their combined min-content (~395px) becomes the grid
+            track width and the whole page scrolls sideways on a phone. */}
+        <ul className="mt-5 flex flex-wrap items-center gap-2">
           <li className="whitespace-nowrap rounded-full bg-forest-soft/70 px-3 py-1 text-[0.76rem] font-medium text-forest">
             {study.timeframe}
           </li>
