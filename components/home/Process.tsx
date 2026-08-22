@@ -35,7 +35,20 @@ type SectionDrawing = {
 
 type MobileChapterDrawing = {
   src: string;
+  /** Rendered width of the *ink*, not of the source canvas. */
   size: string;
+  /**
+   * Ink bounds inside the 1254x1254 source, measured with getBBox and padded.
+   * The artwork is a portrait composition centred in a square canvas, so about
+   * 46% of the width and 27% of the height is empty. Cropping to these numbers
+   * in CSS reclaims that space.
+   *
+   * The crop lives here rather than in the SVG because `sectionDrawings`
+   * (the desktop book spread) renders the same four files, positioned against
+   * the square canvas. Editing the viewBox would move every one of them.
+   */
+  inkW: number;
+  inkH: number;
   scale?: number;
   rotate: number;
   offsetX?: string;
@@ -72,24 +85,37 @@ const processChapters: Chapter[] = [
 const mobileChapterDrawings: MobileChapterDrawing[] = [
   {
     src: "/images/process/svg/section-1.svg",
-    size: "18rem",
+    size: "11rem",
+    inkW: 720,
+    inkH: 923,
     scale: 1,
     rotate: -3,
-    offsetX: "-2rem",
   },
   {
     src: "/images/process/svg/section-2.svg",
-    size: "22rem",
+    size: "11rem",
+    inkW: 706,
+    inkH: 975,
     scale: 1,
     rotate: 2,
-    offsetX: "-1.5rem",
   },
   {
     src: "/images/process/svg/section-3.svg",
-    size: "22rem",
+    size: "11rem",
+    inkW: 731,
+    inkH: 960,
     scale: 1,
     rotate: -1,
-    offsetX: "-1.5rem",
+  },
+  {
+    src: "/images/process/svg/section-4.svg",
+    // Narrow and tall, so this width is chosen to land near the other three
+    // in height rather than to match them in width.
+    size: "7rem",
+    inkW: 511,
+    inkH: 1071,
+    scale: 1,
+    rotate: 2,
   },
 ];
 
@@ -107,8 +133,19 @@ const mobileChapterDrawings: MobileChapterDrawing[] = [
  * Per-image size and x/y nudges live in mobileChapterDrawings above.
  */
 const mobileChapterDrawingLayout = {
-  gapFromText: "-0.25rem",
-  canvasWidth: "calc(100vw - 5.75rem)",
+  gapFromText: "0.5rem",
+  /**
+   * The drawing canvas spans the whole chapter row, not just the text column.
+   *
+   * A chapter is `grid-cols-[5.25rem_minmax(0,1fr)]` with `gap-2.5`, so the
+   * text column starts 5.875rem in. Centring inside that column put every
+   * drawing about half that distance right of the screen centre. Pulling the
+   * canvas back across the rail lets `justify-center` centre on the row.
+   *
+   * Keep `railOffset` equal to the grid's first column plus its gap.
+   */
+  railOffset: "4.5rem",
+  canvasWidth: "calc(100% + 5.875rem)",
   maxWidth: "none",
   opacity: 0.85,
 } as const;
@@ -294,7 +331,10 @@ export default function Process() {
       // The bleed is the design; the page scrolling sideways was not. Using
       // `clip` rather than `hidden` avoids creating a scroll container, so
       // sticky descendants keep working.
-      className="container-ck overflow-x-clip bg-ivory py-14 text-ink [color-scheme:only_light] [forced-color-adjust:none] lg:py-20"
+      // Asymmetric bottom padding on mobile: the next section brings its own
+      // top padding, so a full `py-14` here just doubled the gap. Desktop keeps
+      // the even `lg:py-20` because the book spread needs the breathing room.
+      className="container-ck overflow-x-clip bg-ivory pb-6 pt-14 text-ink [color-scheme:only_light] [forced-color-adjust:none] lg:py-20"
     >
       <motion.div
         variants={stagger}
@@ -330,7 +370,10 @@ function MobileProcessTimeline() {
           return (
             <li
               key={chapter.number}
-              className="grid grid-cols-[5.25rem_minmax(0,1fr)] gap-2.5 border-b border-line/80 py-8 first:pt-0 last:border-b-0"
+              // `py-8` separates one chapter from the next, so the last one
+              // does not need its bottom half — that padding was stacking on
+              // top of the section's own and the next section's.
+              className="grid grid-cols-[5.25rem_minmax(0,1fr)] gap-2.5 border-b border-line/80 py-8 first:pt-0 last:border-b-0 last:pb-0"
             >
               <div className="relative flex min-h-full flex-col items-center text-center">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-forest">
@@ -398,25 +441,22 @@ function MobileProcessTimeline() {
 
                 {drawing && (
                   <div
-                    className="flex justify-start overflow-visible"
+                    className="flex justify-center overflow-visible"
                     style={{
                       marginTop: mobileChapterDrawingLayout.gapFromText,
                       width: mobileChapterDrawingLayout.canvasWidth,
+                      marginLeft: `calc(-1 * ${mobileChapterDrawingLayout.railOffset})`,
                     }}
                   >
-                    <img
-                      src={drawing.src}
-                      alt=""
-                      aria-hidden
-                      width={1254}
-                      height={1254}
-                      loading="lazy"
-                      decoding="async"
-                      className="block select-none object-contain"
+                    {/* A window onto the ink. The square source is scaled so
+                        its ink spans `size`, then the empty margins are
+                        clipped away — the drawing stays the same resolution,
+                        the box around it stops being mostly nothing. */}
+                    <span
+                      className="block overflow-hidden"
                       style={{
                         width: drawing.size,
-                        minWidth: drawing.size,
-                        maxWidth: mobileChapterDrawingLayout.maxWidth,
+                        aspectRatio: `${drawing.inkW} / ${drawing.inkH}`,
                         opacity: mobileChapterDrawingLayout.opacity,
                         transformOrigin: "left top",
                         transform: `translate(${drawing.offsetX ?? "0px"}, ${
@@ -425,7 +465,25 @@ function MobileProcessTimeline() {
                           drawing.scale ?? 1
                         })`,
                       }}
-                    />
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={drawing.src}
+                        alt=""
+                        aria-hidden
+                        width={1254}
+                        height={1254}
+                        loading="lazy"
+                        decoding="async"
+                        className="block max-w-none select-none"
+                        style={{
+                          width: `${(1254 / drawing.inkW) * 100}%`,
+                          height: "auto",
+                          marginLeft: `${(-(1254 - drawing.inkW) / 2 / drawing.inkW) * 100}%`,
+                          marginTop: `${(-(1254 - drawing.inkH) / 2 / drawing.inkH) * 100}%`,
+                        }}
+                      />
+                    </span>
                   </div>
                 )}
               </div>

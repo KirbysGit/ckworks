@@ -31,11 +31,22 @@ export default function ServiceTimeline({
     >
       <Clock className="mt-0.5 h-4 w-4 shrink-0 text-forest" strokeWidth={1.8} />
       <span>
-        {/* Only the figure is emphasised — bolding the lead-in too made the
-            line read heavy against the hero copy above it. */}
-        {timeline.lead}{" "}
-        <span className="font-semibold text-ink">{timeline.value}</span> —{" "}
-        {timeline.note}.
+        {/*
+          Mobile shows the figure alone, prefixed with "~" so it still reads as
+          an estimate rather than a commitment. The lead-in and the caveat are
+          desktop-only: stacked on a phone they ran to three lines and were the
+          longest thing in the hero. Nothing is lost — every service page
+          repeats the full sentence, caveat included, in its FAQ.
+
+          Only the figure is emphasised; bolding the lead-in too made the line
+          read heavy against the hero copy above it.
+        */}
+        <span className="sm:hidden" aria-hidden>
+          ~{" "}
+        </span>
+        <span className="hidden sm:inline">{timeline.lead} </span>
+        <span className="font-semibold text-ink">{timeline.value}</span>
+        <span className="hidden sm:inline"> — {timeline.note}.</span>
       </span>
     </p>
   );

@@ -60,19 +60,19 @@ export type ServiceArea = {
  */
 export const webDesignTimeline: ServiceTimeline = {
   lead: "Most sites take",
-  value: "6–10 weeks",
+  value: "6 – 10 weeks",
   note: "calendar time from kickoff to launch, including your review rounds",
 };
 
 export const searchVisibilityTimeline: ServiceTimeline = {
   lead: "The first pass takes",
-  value: "3–4 weeks",
+  value: "3 – 4 weeks",
   note: "visibility keeps building in the months after, so this is a starting point rather than an end date",
 };
 
 export const analyticsTimeline: ServiceTimeline = {
   lead: "Setup takes about",
-  value: "2–3 weeks",
+  value: "2 – 3 weeks",
   note: "then roughly a month of traffic before the first report tells you anything useful",
 };
 

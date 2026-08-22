@@ -138,7 +138,15 @@ export default function Services() {
                     <span className="block font-serif text-[1.45rem] font-semibold leading-tight text-ink">
                       {service.title}
                     </span>
-                    <span className="mt-1.5 block text-sm leading-6 text-muted">
+                    {/* Clamped, not shortened. The full description still
+                        ships in the HTML — it also feeds each service page's
+                        meta description and the OfferCatalog schema — so the
+                        card can show two lines without costing anything. The
+                        whole card links onward, which is the "read more". */}
+                    {/* No `block` here: `line-clamp-2` needs
+                        `display: -webkit-box`, and a `block` utility on the
+                        same element wins the cascade and silently disables it. */}
+                    <span className="mt-1.5 line-clamp-2 text-sm leading-6 text-muted">
                       {service.description}
                     </span>
                   </span>

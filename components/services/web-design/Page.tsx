@@ -234,8 +234,11 @@ export default function Page({ service }: { service: ServiceArea }) {
 
 function WebDesignHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
   return (
-    <div className="grid items-start gap-10 border-b border-line pb-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
-      <div className="max-w-xl">
+    <div className="grid items-start gap-8 border-b border-line pb-6 sm:gap-10 sm:pb-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
+      {/* TRIAL: centred on mobile so the stacked hero reads as one block.
+          Revert by dropping `text-center sm:text-left` here and the
+          `mx-auto sm:mx-0` / `justify-center` pairs below. */}
+      <div className="max-w-xl text-center sm:text-left">
         <p
           className="ck-rise text-xs font-semibold uppercase tracking-[0.26em] text-forest"
           style={{ animationDelay: `${webDesignHeroTiming.eyebrow}ms` }}
@@ -249,14 +252,17 @@ function WebDesignHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
           Web Design & Development
         </h1>
         <p
-          className="ck-rise mt-6 max-w-md text-base leading-7 text-ink/78"
+          className="ck-rise mx-auto mt-6 max-w-md text-base leading-7 text-ink/78 sm:mx-0"
           style={{ animationDelay: `${webDesignHeroTiming.leadCopy}ms` }}
         >
           Websites built around what your business needs people to understand
           and do.
         </p>
+        {/* Desktop only. It restates the lead above it — both say CK Works
+            builds clear websites that make the next step easy — which costs
+            three lines on a phone for an idea already delivered. */}
         <p
-          className="ck-rise mt-5 max-w-lg text-base leading-7 text-ink/78"
+          className="ck-rise mt-5 hidden max-w-lg text-base leading-7 text-ink/78 sm:block"
           style={{ animationDelay: `${webDesignHeroTiming.supportCopy}ms` }}
         >
           CK Works plans, designs, and builds modern websites that look clear,
@@ -264,11 +270,14 @@ function WebDesignHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
         </p>
         <ServiceTimeline
           timeline={timeline}
-          className="ck-rise mt-7"
+          className="ck-rise mt-4 justify-center sm:mt-7 sm:justify-start"
           style={{ animationDelay: `${webDesignHeroTiming.actions}ms` }}
         />
+        {/* `w-fit` + `items-stretch` gives both actions one content-sized
+            width instead of spanning the column; `mx-auto` centres that block
+            on mobile. The row layout takes over at sm. */}
         <div
-          className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row"
+          className="ck-rise mx-auto mt-7 flex w-fit flex-row items-center gap-3 sm:mx-0 sm:w-auto"
           style={{ animationDelay: `${webDesignHeroTiming.actions}ms` }}
         >
           <ProjectInquiryTrigger
@@ -295,14 +304,20 @@ function WebDesignHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
 
 function WebDesignDevicePreview() {
   return (
-    <div className="relative min-h-[22rem] sm:min-h-[26rem] lg:min-h-[29rem]">
+    // Mobile reserves 22rem for ~18rem of content (laptop + caption), leaving
+    // ~64px of empty box under the caption. The phone that used to fill it is
+    // desktop-only now, so the floor comes down to match.
+    <div className="relative min-h-[19rem] sm:min-h-[26rem] lg:min-h-[29rem]">
       <div
         className="pointer-events-none absolute bottom-3 left-8 right-8 h-12 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(31,36,32,0.22),rgba(31,36,32,0.08)_42%,transparent_72%)] blur-xl"
         aria-hidden
       />
 
       <div
-        className="ck-lift absolute left-0 top-3 w-[79%] sm:w-[80%]"
+        // The laptop base sits at `mx-[-7%]`, so it renders ~14% wider than this
+        // box. 87% keeps that base inside the container instead of pushing the
+        // page 8px sideways, and `mx-auto` centres it now the phone is gone.
+        className="ck-lift absolute inset-x-0 top-3 mx-auto w-[87%] sm:inset-x-auto sm:left-0 sm:mx-0 sm:w-[80%]"
         style={{ animationDelay: `${webDesignHeroTiming.laptop}ms` }}
       >
         <div className="relative">
@@ -363,7 +378,7 @@ function WebDesignDevicePreview() {
       </div>
 
       <div
-        className="ck-lift absolute right-0 top-[5.65rem] z-20 w-[29%] min-w-[8.4rem] max-w-[10.5rem]"
+        className="ck-lift absolute right-0 top-[5.65rem] z-20 hidden w-[29%] min-w-[8.4rem] max-w-[10.5rem] sm:block"
         style={{ animationDelay: `${webDesignHeroTiming.phone}ms` }}
       >
         <div className="relative rounded-[2.3rem] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] p-[2px] shadow-[0_18px_38px_-18px_rgba(17,23,20,0.7),0_6px_14px_-8px_rgba(17,23,20,0.58)]">
@@ -524,7 +539,10 @@ function LaptopBrowserContent() {
 
         <div className="absolute left-7 top-[20%] z-20 max-w-[15rem] text-ivory">
           <p
-            className="ck-rise font-serif text-[2rem] leading-[1.02] tracking-[-0.02em]"
+            // 2rem against 9px nav and 10px body read as 3x the body size in a
+            // 289px-wide mock. Scaled down on mobile so the demo keeps a
+            // believable hierarchy; desktop has the room for the full size.
+            className="ck-rise font-serif text-[1.35rem] leading-[1.05] tracking-[-0.02em] sm:text-[2rem] sm:leading-[1.02]"
             style={{ animationDelay: `${webDesignHeroTiming.demoHeadline}ms` }}
           >
             Thoughtful spaces, built around you.
@@ -1010,15 +1028,27 @@ const processStickyLayout = {
   textPad: 6,
 } as const;
 
-function ProcessStickyNote() {
+/**
+ * `offsetX` and `className` are per-instance because the note renders twice:
+ * beside the steps in the narrow left column on desktop, and beneath them on
+ * mobile. The shared `x: 110` was tuned for that column and reads as centred
+ * once the column is full width, so the mobile copy sits closer to the left.
+ */
+function ProcessStickyNote({
+  offsetX,
+  className = "",
+}: {
+  offsetX?: number;
+  className?: string;
+}) {
   const { size, x, y, rotate, textScale, textPad } = processStickyLayout;
 
   return (
     <div
-      className="relative mt-10 aspect-square rounded-[3px] bg-[#efe6d3] shadow-[0_2px_4px_rgba(31,36,32,0.07),0_14px_18px_-17px_rgba(31,36,32,0.62)] sm:mt-12"
+      className={`relative aspect-square rounded-[3px] bg-[#efe6d3] shadow-[0_2px_4px_rgba(31,36,32,0.07),0_14px_18px_-17px_rgba(31,36,32,0.62)] ${className}`}
       style={{
         width: size,
-        transform: `translate(${x}px, ${y}px) rotate(${rotate}deg)`,
+        transform: `translate(${offsetX ?? x}px, ${y}px) rotate(${rotate}deg)`,
       }}
       aria-hidden
     >
@@ -1069,7 +1099,14 @@ function WebDesignProcess() {
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
 
-        <ProcessStickyNote />
+        {/* Desktop keeps the note beside the steps, in the left column.
+            On mobile the same note renders after the steps instead — see the
+            `lg:hidden` copy below. It is decorative (`aria-hidden`, and its
+            text is an SVG with empty alt), so rendering it twice duplicates no
+            content and adds nothing to the accessibility tree. */}
+        <div className="hidden lg:block">
+          <ProcessStickyNote className="mt-10 sm:mt-12" />
+        </div>
       </Reveal>
 
       <div>
@@ -1098,6 +1135,10 @@ function WebDesignProcess() {
             </div>
           </Reveal>
         ))}
+      </div>
+
+      <div className="lg:hidden">
+        <ProcessStickyNote offsetX={48} className="mt-2" />
       </div>
     </section>
   );
@@ -1293,20 +1334,20 @@ function WebDesignFaq() {
 
 function WebDesignBottomCta() {
   return (
-    <Reveal className="mt-0 flex flex-col gap-6 rounded-xl border border-line bg-card px-6 py-7 shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-      <div className="max-w-xl">
+    <Reveal className="mt-0 flex flex-col gap-5 rounded-xl border border-line bg-card px-6 py-6 text-center shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left">
+      <div className="mx-auto max-w-xl lg:mx-0">
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
           Web Design &amp; Development
         </p>
         <h2 className="mt-3 font-serif text-[1.85rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.15rem]">
           Ready to build a website that works for your business?
         </h2>
-        <p className="mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
+        <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem] lg:mx-0">
           Let&apos;s create something that looks great and gets results.
         </p>
       </div>
 
-      <div className="flex w-fit shrink-0 flex-col items-stretch gap-4">
+      <div className="mx-auto flex w-fit shrink-0 flex-col items-stretch gap-4 lg:mx-0">
         <ProjectInquiryTrigger
           source="web_design_service_bottom_cta"
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-forest px-6 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"

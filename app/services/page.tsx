@@ -115,18 +115,26 @@ export default function ServicesPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest/85">
               Services
             </p>
-            <h1 className="mt-4 max-w-5xl font-serif text-[2.15rem] font-medium leading-[1.12] text-ink sm:text-4xl lg:text-[2.75rem]">
+            <h1 className="mt-4 max-w-5xl font-serif text-[1.95rem] font-medium leading-[1.12] text-ink sm:text-4xl lg:text-[2.75rem]">
               Websites, visibility, and systems built around how your business
               actually works.
             </h1>
-            <p className="mt-5 max-w-3xl text-base leading-7 text-ink/78 sm:text-lg">
+            {/* Desktop only. The "through clearer websites, search
+                visibility, analytics..." clause enumerates the five services,
+                which on a phone sit a few hundred pixels below saying the same
+                thing. Kept for desktop, where the hero has room to introduce
+                them before they appear. */}
+            <p className="mt-5 hidden max-w-3xl text-base leading-7 text-ink/78 sm:block sm:text-lg">
               CK Works helps businesses get found, look professional, and run
               more smoothly through clearer websites, search visibility,
               analytics, smart systems, and ongoing support.
             </p>
+            {/* Desktop only. On a phone the first card sits ~190px below this
+                link, so it asks for a tap to travel less than a quarter screen
+                — the hero is short enough there that the jump earns nothing. */}
             <a
               href="#services-list"
-              className="group mt-6 inline-flex items-center gap-2 border-b border-forest pb-1 text-sm font-semibold text-ink transition-colors hover:text-forest"
+              className="group mt-6 hidden items-center gap-2 border-b border-forest pb-1 text-sm font-semibold text-ink transition-colors hover:text-forest sm:inline-flex"
             >
               How I can help
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
@@ -151,21 +159,28 @@ export default function ServicesPage() {
             ))}
           </div>
 
-          <Reveal className="mt-5 flex flex-col gap-6 rounded-xl border border-line bg-card px-6 py-7 shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-            <div className="max-w-xl">
+          {/* Centred on mobile, left-aligned once the copy and buttons sit
+              side by side at lg. The button column was `w-fit`, so it hugged
+              its content and left a wide gap down the right of the card. */}
+          <Reveal className="mt-5 flex flex-col gap-5 rounded-xl border border-line bg-card px-6 py-6 text-center shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left">
+            <div className="mx-auto max-w-xl lg:mx-0">
               <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
                 Not sure which service fits?
               </p>
               <h2 className="mt-3 font-serif text-[1.85rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.15rem]">
                 Tell me what you&apos;re working on.
               </h2>
-              <p className="mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
+              <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem] lg:mx-0">
                 Share a little about your business, what you&apos;re working
                 with now, and what you&apos;d like to improve.
               </p>
             </div>
 
-            <div className="flex w-fit shrink-0 flex-col items-stretch gap-4">
+            {/* `w-fit` sizes the column to its widest child and `items-stretch` pulls
+                the other up to match, so the two actions share one width and the
+                underline below lines up with the button above. `mx-auto` centres
+                that block on mobile; at lg the row layout positions it instead. */}
+            <div className="mx-auto flex w-fit shrink-0 flex-col items-stretch gap-4 lg:mx-0">
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 rounded-lg bg-forest px-6 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"
@@ -237,23 +252,37 @@ function ServiceOverviewCard({
 
   return (
     <article className="group/card grid h-full min-h-[19.25rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(13.25rem,0.58fr)_minmax(0,0.98fr)] xl:grid-cols-[minmax(14.25rem,0.56fr)_minmax(0,1.05fr)]">
-      <div className="flex min-w-0 flex-col px-5 py-5 sm:p-6 md:pr-3">
-        <span className="font-serif text-2xl font-medium leading-none tracking-[-0.02em] text-[#A8713B]">
-          {card.number}
-        </span>
-        <h2 className="mt-3 max-w-[17rem] font-serif text-[1.75rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-[1.95rem]">
+      <div className="flex min-w-0 flex-col px-5 pb-2 pt-5 sm:p-6 md:pr-3">
+        {/*
+          On mobile the number and the link share one row, which buys back the
+          height the link used to occupy on its own at the bottom.
+
+          `md:contents` dissolves this wrapper once there is a second column,
+          so both children become direct items of the flex column again — the
+          link then takes `md:order-last` and `md:mt-auto` to sit at the
+          bottom exactly as before. One link, not a hidden duplicate per card.
+        */}
+        <div className="flex items-start justify-between gap-4 md:contents">
+          <span className="font-serif text-2xl font-medium leading-none tracking-[-0.02em] text-[#A8713B]">
+            {card.number}
+          </span>
+          <Link
+            href={service.href}
+            className="group/link inline-flex w-fit shrink-0 items-center gap-2 border-b border-[#A8713B] pb-0.5 text-sm font-semibold text-ink transition-colors hover:text-forest md:order-last md:mt-auto"
+          >
+            View service
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
+          </Link>
+        </div>
+        {/* The max-widths shape the text against the visual beside it, so they
+            only apply once that column exists. Below md they were holding the
+            title to 272px of an available 303px and wrapping it early. */}
+        <h2 className="mt-5 font-serif text-[1.75rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-[1.95rem] md:mt-3 md:max-w-[17rem]">
           {service.title}
         </h2>
-        <p className="mt-3 max-w-[16rem] text-sm leading-7 text-ink/78">
+        <p className="mt-3 text-sm leading-7 text-ink/78 md:max-w-[16rem]">
           {card.description}
         </p>
-        <Link
-          href={service.href}
-          className="group/link mt-6 inline-flex w-fit items-center gap-2 border-b border-[#A8713B] pb-0.5 text-sm font-semibold text-ink transition-colors hover:text-forest md:mt-auto"
-        >
-          View service
-          <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
-        </Link>
       </div>
 
       {/* Every card visual is a fictional Riverstone Builders mock-up — a site,
@@ -264,7 +293,10 @@ function ServiceOverviewCard({
         className="flex min-h-[16rem] min-w-0 flex-col items-center justify-center px-5 pb-5 pt-1 sm:px-6 sm:pb-6 md:px-4 md:py-5 lg:px-5"
         data-nosnippet
       >
-        <div className="flex w-full max-w-[96%] origin-center scale-[0.925] items-center justify-center transform-gpu transition-transform duration-300 ease-out group-hover/card:scale-[0.95]">
+        <div // `origin-top` on mobile: scaling 0.925 from the centre left half the
+          // shrink (about 10px) as dead space between the description and the
+          // artwork. Anchoring to the top sends all of it below instead.
+          className="flex w-full max-w-[96%] origin-top scale-[0.925] items-center justify-center transform-gpu transition-transform duration-300 ease-out group-hover/card:scale-[0.95] md:origin-center">
           <ServiceVisual kind={card.visual} />
         </div>
         <p className="mt-2 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted">
@@ -869,8 +901,10 @@ function SupportVisual() {
         </svg>
       </div>
 
-      {/* Backups */}
-      <div className="relative flex min-h-[15.75rem] flex-col border-t border-line px-6 py-6 sm:px-8 md:min-h-[14.5rem] md:border-t-0 md:px-7 md:py-5">
+      {/* Backups — desktop only. Stacked on a phone the three panels ran to
+          ~900px, so mobile shows Site Health alone: it carries the uptime
+          figure and the status line, which is the point of the visual. */}
+      <div className="relative hidden min-h-[15.75rem] flex-col border-t border-line px-6 py-6 sm:px-8 md:flex md:min-h-[14.5rem] md:border-t-0 md:px-7 md:py-5">
         <span
           className="pointer-events-none absolute inset-y-3 right-0 hidden w-px bg-line md:block"
           aria-hidden
@@ -900,8 +934,8 @@ function SupportVisual() {
         </span>
       </div>
 
-      {/* Recent Activity */}
-      <div className="flex min-h-[15.75rem] flex-col border-t border-line px-6 py-6 sm:px-8 md:min-h-[14.5rem] md:border-t-0 md:px-7 md:py-5">
+      {/* Recent Activity — desktop only, same reason as Backups above. */}
+      <div className="hidden min-h-[15.75rem] flex-col border-t border-line px-6 py-6 sm:px-8 md:flex md:min-h-[14.5rem] md:border-t-0 md:px-7 md:py-5">
         <p className="font-sans text-[1rem] font-semibold text-ink">
           Recent Activity
         </p>

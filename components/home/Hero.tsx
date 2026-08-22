@@ -320,10 +320,11 @@ export default function Hero() {
             </Link>
           </div>
 
-          <MobileHeroPreview />
-
+          {/* Desktop only. Three columns of micro-copy under the CTAs pushed
+              the mockup most of a screen down on a phone, and the same three
+              points are spelled out properly in "What I do" just below. */}
           <ul
-            className="ck-rise mx-auto mt-7 grid max-w-[22rem] grid-cols-3 gap-0 border-t border-line/50 pt-5 md:mx-0 md:mt-8 md:max-w-2xl md:pt-8"
+            className="ck-rise mx-auto mt-7 hidden max-w-[22rem] grid-cols-3 gap-0 border-t border-line/50 pt-5 md:mx-0 md:mt-8 md:grid md:max-w-2xl md:pt-8"
             style={{ animationDelay: `${heroTiming.trust}ms` }}
           >
             {heroTrustItems.map(({ icon: Icon, title, body }, index) => (
@@ -347,6 +348,11 @@ export default function Hero() {
               </li>
             ))}
           </ul>
+
+          {/* Mobile only — `md:hidden`, so this sits after the trust row on a
+              phone and does not exist at all on desktop, where the mockup
+              lives in the right column instead. */}
+          <MobileHeroPreview />
         </div>
 
         {/* Right: layered mockup. min-w-0 lets this column shrink below its
