@@ -24,9 +24,11 @@ export type RelatedLink = {
 export default function RelatedLinks({
   heading = "Where this connects",
   links,
+  compactMobile = false,
 }: {
   heading?: string;
   links: RelatedLink[];
+  compactMobile?: boolean;
 }) {
   if (links.length === 0) return null;
 
@@ -35,18 +37,36 @@ export default function RelatedLinks({
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
         {heading}
       </p>
-      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+      <div
+        className={
+          compactMobile
+            ? "mt-4 max-sm:divide-y max-sm:divide-line sm:mt-5 sm:grid sm:grid-cols-2 sm:gap-3"
+            : "mt-5 grid gap-3 sm:grid-cols-2"
+        }
+      >
         {links.map((link) => (
           <Link
             key={link.href}
             href={link.href}
-            className="group flex flex-col rounded-xl border border-line bg-card px-5 py-4 shadow-soft transition-colors duration-200 hover:border-forest/40 hover:bg-forest-soft/30"
+            className={
+              compactMobile
+                ? "group flex flex-col py-3.5 transition-colors duration-200 hover:text-ink sm:rounded-xl sm:border sm:border-line sm:bg-card sm:px-5 sm:py-4 sm:shadow-soft sm:hover:border-forest/40 sm:hover:bg-forest-soft/30"
+                : "group flex flex-col rounded-xl border border-line bg-card px-5 py-4 shadow-soft transition-colors duration-200 hover:border-forest/40 hover:bg-forest-soft/30"
+            }
           >
-            <span className="inline-flex items-center gap-2 text-sm font-semibold text-forest">
+            <span
+              className={`inline-flex items-center gap-2 text-sm font-semibold text-forest ${
+                compactMobile ? "justify-between sm:justify-start" : ""
+              }`}
+            >
               {link.label}
               <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
             </span>
-            <span className="mt-1.5 text-[0.85rem] leading-6 text-muted">
+            <span
+              className={`mt-1.5 text-[0.85rem] leading-6 text-muted ${
+                compactMobile ? "hidden sm:block" : ""
+              }`}
+            >
               {link.note}
             </span>
           </Link>
