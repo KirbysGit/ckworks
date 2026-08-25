@@ -83,7 +83,7 @@ export const analyticsTimeline: ServiceTimeline = {
  */
 export const systemsTimeline: ServiceTimeline = {
   lead: "Most builds run",
-  value: "8–14 weeks",
+  value: "8 – 14 weeks",
   note: "scope is set during discovery, and a single integration lands far sooner than a full internal tool",
 };
 

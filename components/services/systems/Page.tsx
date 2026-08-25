@@ -3,6 +3,7 @@ import { Fragment, type CSSProperties, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
+  ArrowDown,
   ArrowRight,
   Bell,
   CalendarDays,
@@ -44,16 +45,19 @@ const systemsWhyItMatters = [
     icon: RefreshCw,
     title: "Less repeated work",
     body: "Information is entered once instead of copied between tools.",
+    mobileBody: "Enter information once, then let it move between tools.",
   },
   {
     icon: Bell,
     title: "Fewer missed steps",
     body: "Notifications and follow-ups happen when they should.",
+    mobileBody: "Automatic reminders keep important steps moving.",
   },
   {
     icon: Eye,
     title: "A clearer view",
     body: "Important records and statuses stay visible in one place.",
+    mobileBody: "Keep important records and statuses in one view.",
   },
 ] as const;
 
@@ -226,10 +230,15 @@ const systemsWorkflows = [
     title: "New inquiries",
     audience: "Service business",
     steps: [
-      { icon: LayoutTemplate, label: "Website form" },
-      { icon: IdCard, label: "Client record" },
-      { icon: Bell, label: "Team notification", alert: true },
-      { icon: CircleCheck, label: "Follow-up" },
+      { icon: LayoutTemplate, label: "Website form", mobileLabel: "Form" },
+      { icon: IdCard, label: "Client record", mobileLabel: "Record" },
+      {
+        icon: Bell,
+        label: "Team notification",
+        mobileLabel: "Team alert",
+        alert: true,
+      },
+      { icon: CircleCheck, label: "Follow-up", mobileLabel: "Follow-up" },
     ],
     removes: "manual lead entry and forgotten follow-ups.",
   },
@@ -238,10 +247,19 @@ const systemsWorkflows = [
     title: "Orders & updates",
     audience: "Retail / product business",
     steps: [
-      { icon: CreditCard, label: "Payment received" },
-      { icon: Package, label: "Order updated" },
-      { icon: Bell, label: "Team notified", alert: true },
-      { icon: MessageSquareText, label: "Customer update" },
+      { icon: CreditCard, label: "Payment received", mobileLabel: "Payment" },
+      { icon: Package, label: "Order updated", mobileLabel: "Order" },
+      {
+        icon: Bell,
+        label: "Team notified",
+        mobileLabel: "Team alert",
+        alert: true,
+      },
+      {
+        icon: MessageSquareText,
+        label: "Customer update",
+        mobileLabel: "Customer",
+      },
     ],
     removes: "checking multiple tools and manual status updates.",
   },
@@ -250,10 +268,10 @@ const systemsWorkflows = [
     title: "Client onboarding",
     audience: "professional-services business",
     steps: [
-      { icon: UserRoundCheck, label: "Client confirmed" },
-      { icon: Folder, label: "Record created" },
-      { icon: FileText, label: "Documents organized" },
-      { icon: CalendarDays, label: "Kickoff scheduled" },
+      { icon: UserRoundCheck, label: "Client confirmed", mobileLabel: "Confirm" },
+      { icon: Folder, label: "Record created", mobileLabel: "Record" },
+      { icon: FileText, label: "Documents organized", mobileLabel: "Documents" },
+      { icon: CalendarDays, label: "Kickoff scheduled", mobileLabel: "Kickoff" },
     ],
     removes: "repetitive setup every time a new client starts.",
   },
@@ -316,7 +334,7 @@ export default function Page({ service }: { service: ServiceArea }) {
   return (
     <ServiceFrame service={service}><section className="bg-ivory pb-10 pt-5 sm:pb-12 sm:pt-6 lg:pb-16 lg:pt-6">
         <div className={serviceContainer}>
-          <SystemsHero timeline={service.timeline} />
+          <SystemsHero title={service.title} timeline={service.timeline} />
           <SystemsWhyItMatters />
           <SystemsToolGrid />
           <SystemsHowItWorks />
@@ -330,31 +348,37 @@ export default function Page({ service }: { service: ServiceArea }) {
   );
 }
 
-function SystemsHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
+function SystemsHero({
+  title,
+  timeline,
+}: {
+  title: ServiceArea["title"];
+  timeline: ServiceArea["timeline"];
+}) {
   return (
-    <div className="grid items-center gap-10 border-b border-line pb-11 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-14 lg:pb-14">
-      <div className="max-w-xl">
+    <div className="grid items-start gap-8 border-b border-line pb-6 sm:gap-10 sm:pb-11 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:items-center lg:gap-14 lg:pb-14">
+      <div className="max-w-xl text-center sm:text-left">
         <p
           className="ck-rise text-xs font-semibold uppercase tracking-[0.26em] text-forest"
           style={{ animationDelay: `${systemsHeroTiming.eyebrow}ms` }}
         >
-          Flow
+          Systems
         </p>
         <h1
           className={`ck-rise ${serviceHeroTitleClassName}`}
           style={{ animationDelay: `${systemsHeroTiming.title}ms` }}
         >
-          Custom systems that keep the work moving.
+          {title}
         </h1>
         <p
-          className="ck-rise mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]"
+          className="ck-rise mx-auto mt-6 max-w-md text-base leading-7 text-ink/78 sm:mx-0 sm:text-[1.05rem]"
           style={{ animationDelay: `${systemsHeroTiming.leadCopy}ms` }}
         >
-          CK Works builds internal dashboards, connected forms, workflow automations,
-          and integrations that bring your tools and information together.
+          Custom dashboards, workflows, and integrations that keep your tools
+          connected and the work moving.
         </p>
         <p
-          className="ck-rise mt-4 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]"
+          className="ck-rise mt-4 hidden max-w-md text-base leading-7 text-ink/78 sm:block sm:text-[1.05rem]"
           style={{ animationDelay: `${systemsHeroTiming.supportCopy}ms` }}
         >
           The goal is simple: less copying, fewer missed steps, and a clearer
@@ -362,23 +386,23 @@ function SystemsHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
         </p>
         <ServiceTimeline
           timeline={timeline}
-          className="ck-rise mt-7"
+          className="ck-rise mt-4 justify-center sm:mt-7 sm:justify-start"
           style={{ animationDelay: `${systemsHeroTiming.actions}ms` }}
         />
         <div
-          className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
+          className="ck-rise mx-auto mt-7 flex w-fit flex-row items-center gap-3 sm:mx-0 sm:w-auto"
           style={{ animationDelay: `${systemsHeroTiming.actions}ms` }}
         >
           <ProjectInquiryTrigger
             source="systems_service_hero"
-            className="rounded-md px-5"
+            className="shrink-0 whitespace-nowrap rounded-md px-4 sm:px-5"
           >
             Start a project
             <ArrowRight className="h-4 w-4" />
           </ProjectInquiryTrigger>
           <a
             href="#how-it-works"
-            className="group inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-card px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-forest/40 hover:text-forest"
+            className="group inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md px-2 py-3 text-sm font-semibold text-forest transition-colors hover:text-ink sm:px-3"
           >
             See how it works
             <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -393,7 +417,7 @@ function SystemsHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
 
 function SystemsWhyItMatters() {
   return (
-    <section className="grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.9fr)_1px_minmax(0,1.1fr)] lg:gap-12 lg:py-16">
+    <section className="grid gap-8 border-b border-line py-14 sm:gap-10 lg:grid-cols-[minmax(0,0.9fr)_1px_minmax(0,1.1fr)] lg:gap-12 lg:py-16">
       <Reveal className="max-w-md">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
           Why it matters
@@ -401,11 +425,15 @@ function SystemsWhyItMatters() {
         <h2 className={serviceSectionTitleClassName}>
           Keep information moving without the manual handoffs.
         </h2>
-        <p className={serviceSectionBodyClassName}>
+        <p className={`${serviceSectionBodyClassName} sm:hidden`}>
+          When forms, spreadsheets, and inboxes stop working together, CK Works
+          connects them so fewer updates are handled by hand.
+        </p>
+        <p className={`${serviceSectionBodyClassName} hidden sm:block`}>
           As businesses grow, information spreads across forms, spreadsheets,
           inboxes, and disconnected tools.
         </p>
-        <p className="mt-3 text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
+        <p className="mt-3 hidden text-sm leading-7 text-ink/75 sm:block sm:text-[0.95rem]">
           CK Works connects the pieces so information moves without the extra handoffs.
         </p>
       </Reveal>
@@ -413,12 +441,17 @@ function SystemsWhyItMatters() {
       <span className="hidden w-px bg-line lg:block" aria-hidden />
 
       <div className="divide-y divide-line lg:self-center">
-        {systemsWhyItMatters.map(({ icon: Icon, title, body }, index) => (
+        {systemsWhyItMatters.map(({
+          icon: Icon,
+          title,
+          body,
+          mobileBody,
+        }, index) => (
           <Reveal
             as="article"
             key={title}
             delay={index * 110}
-            className="grid min-h-[8.75rem] grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-4 py-6 first:pt-0 last:pb-0 sm:py-7"
+            className="grid min-h-0 grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-4 py-5 first:pt-0 last:pb-0 sm:min-h-[8.75rem] sm:py-7"
           >
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-forest-soft/60 text-forest sm:h-11 sm:w-11">
               <Icon className="h-5 w-5" strokeWidth={1.5} />
@@ -427,8 +460,9 @@ function SystemsWhyItMatters() {
               <h3 className="font-serif text-[1.55rem] font-semibold leading-[1.12] tracking-[-0.02em] text-ink sm:text-[1.85rem]">
                 {title}
               </h3>
-              <p className="mt-3 text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
-                {body}
+              <p className="mt-2 max-w-[15rem] text-sm leading-6 text-ink/75 sm:mt-3 sm:max-w-none sm:text-[0.95rem] sm:leading-7">
+                <span className="sm:hidden">{mobileBody}</span>
+                <span className="hidden sm:inline">{body}</span>
               </p>
             </div>
           </Reveal>
@@ -477,16 +511,17 @@ function SystemsToolGrid() {
           />
 
           <SystemsFlowConnectors direction="in" />
+          <SystemsMobileFlowArrow />
 
           {/* The connector bands supply this spacing at lg; mobile needs its own. */}
           <div
-            className="relative z-30 my-6 flex justify-center lg:my-0"
+            className="relative z-30 my-0 flex justify-center sm:my-6 lg:my-0"
             style={{ transform: `translateY(${systemsFlowLayout.hubNudgeY})` }}
           >
             {/* ck-step goes on the pill, not the parent — the parent carries
                 the hubNudgeY transform this animation would overwrite. */}
             <div
-              className="ck-step relative z-30 flex items-center gap-3.5 rounded-xl bg-forest px-6 py-4 shadow-[0_18px_38px_-18px_rgba(47,91,63,0.6)]"
+              className="ck-step relative z-30 flex w-full items-center justify-center gap-3.5 rounded-xl bg-forest px-6 py-4 shadow-[0_18px_38px_-18px_rgba(47,91,63,0.6)] sm:w-auto sm:justify-start"
               style={
                 { "--ck-anim-delay": `${systemsFlowTiming.hub}ms` } as CSSProperties
               }
@@ -505,18 +540,32 @@ function SystemsToolGrid() {
               </span>
             </div>
           </div>
+          <SystemsMobileFlowArrow />
 
           <SystemsFlowConnectors direction="out" />
 
+          <SystemsFlowLabel className="mb-4 sm:hidden">
+            Connected tools
+          </SystemsFlowLabel>
           <SystemsToolRow
             tools={systemsConnected}
             baseDelay={systemsFlowTiming.outputCards}
           />
           {/* Label sits outside the row (below) so the hub has matching gaps above/below. */}
-          <SystemsFlowLabel className="mb-0 mt-4">Connected tools</SystemsFlowLabel>
+          <SystemsFlowLabel className="mb-0 mt-4 hidden sm:flex">
+            Connected tools
+          </SystemsFlowLabel>
         </Reveal>
       </div>
     </section>
+  );
+}
+
+function SystemsMobileFlowArrow() {
+  return (
+    <div className="flex justify-center py-4 text-forest sm:hidden" aria-hidden>
+      <ArrowDown className="h-5 w-5" strokeWidth={1.8} />
+    </div>
   );
 }
 
@@ -693,11 +742,11 @@ function SystemsToolRow({
   baseDelay: number;
 }) {
   return (
-    <div className="relative z-20 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+    <div className="relative z-20 grid grid-cols-3 divide-x divide-line overflow-hidden rounded-xl border border-line bg-card shadow-soft sm:gap-4 sm:divide-x-0 sm:overflow-visible sm:rounded-none sm:border-0 sm:bg-transparent sm:shadow-none">
       {tools.map((tool, index) => (
         <article
           key={tool.name}
-          className="ck-step flex flex-col items-center gap-1.5 rounded-xl border border-line bg-card px-3 py-5 text-center shadow-soft"
+          className="ck-step flex min-w-0 flex-col items-center gap-1.5 px-1.5 py-3.5 text-center sm:rounded-xl sm:border sm:border-line sm:bg-card sm:px-3 sm:py-5 sm:shadow-soft"
           style={
             {
               "--ck-anim-delay": `${
@@ -709,8 +758,12 @@ function SystemsToolRow({
           <span className="flex h-9 items-center justify-center">
             {tool.logo}
           </span>
-          <h3 className="text-sm font-semibold text-ink">{tool.name}</h3>
-          <p className="text-xs leading-4 text-muted">{tool.use}</p>
+          <h3 className="text-[0.68rem] font-semibold leading-4 text-ink sm:text-sm">
+            {tool.name}
+          </h3>
+          <p className="hidden text-xs leading-4 text-muted sm:block">
+            {tool.use}
+          </p>
         </article>
       ))}
     </div>
@@ -723,7 +776,7 @@ function SystemsHowItWorks() {
       id="how-it-works"
       className="scroll-mt-24 border-b border-line py-14 lg:py-16"
     >
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-0">
+      <div className="grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-0">
         <Reveal className="max-w-md lg:pr-14">
           <p className={serviceSectionLabelClassName}>
             Where a system earns its place
@@ -731,8 +784,12 @@ function SystemsHowItWorks() {
           <h2 className={serviceSectionTitleClassName}>
             Small systems for the work that keeps repeating.
           </h2>
-          <span className="mt-7 block h-px w-10 bg-forest" aria-hidden />
-          <p className={`${serviceSectionBodyClassName} max-w-sm`}>
+          <span className="mt-5 block h-px w-10 bg-forest sm:mt-7" aria-hidden />
+          <p className={`${serviceSectionBodyClassName} max-w-sm sm:hidden`}>
+            Repeated handoffs and follow-ups are usually where a small system
+            helps most.
+          </p>
+          <p className={`${serviceSectionBodyClassName} hidden max-w-sm sm:block`}>
             The best opportunities are usually the repeated handoffs, updates,
             and follow-ups that happen every day. A useful system connects the
             work already happening and removes the steps your team keeps doing
@@ -751,7 +808,7 @@ function SystemsHowItWorks() {
                 as="article"
                 key={workflow.step}
                 delay={index * 110}
-                className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-4 py-6 first:pt-0 last:pb-0 sm:gap-x-5"
+                className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 py-5 first:pt-0 last:pb-0 sm:items-baseline sm:gap-x-5 sm:py-6"
               >
                 {/* The number is its own column, so the title, chain, and
                     "Removes" line all share one left edge automatically. */}
@@ -762,16 +819,20 @@ function SystemsHowItWorks() {
                   {workflow.step}
                 </span>
                 <div className="min-w-0">
-                  <h3 className="font-serif text-[1.6rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[1.85rem]">
-                    {workflow.title}{" "}
-                    <span className="font-sans text-[0.85rem] font-medium tracking-normal text-ink/55 sm:text-[0.9rem]">
+                  <h3 className="font-serif text-[1.45rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[1.85rem]">
+                    {workflow.title}
+                    <span className="hidden sm:inline">{" "}</span>
+                    <span className="hidden font-sans text-[0.85rem] font-medium tracking-normal text-ink/55 sm:inline sm:text-[0.9rem]">
                       for a
                     </span>{" "}
-                    <span className="font-sans text-[0.9rem] font-semibold tracking-normal text-forest sm:text-[0.95rem]">
+                    <span className="hidden font-sans text-[0.9rem] font-semibold tracking-normal text-forest sm:inline sm:text-[0.95rem]">
                       {workflow.audience}
                     </span>
                   </h3>
-                  <p className="mt-1 text-[0.85rem] leading-6 text-ink/80">
+                  <span className="mt-2 inline-flex rounded-full bg-forest-soft/70 px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-forest sm:hidden">
+                    {workflow.audience}
+                  </span>
+                  <p className="mt-2 text-[0.8rem] leading-5 text-ink/80 sm:mt-1 sm:text-[0.85rem] sm:leading-6">
                     <span className="font-semibold text-ink">Removes:</span>{" "}
                     {workflow.removes}
                   </p>
@@ -791,9 +852,8 @@ function SystemsHowItWorks() {
 }
 
 /**
- * Icon chain for one workflow. Arrows live in their own auto-width columns so
- * the four steps stay evenly spaced, and they drop out below `sm` where the
- * chain reflows to a two-column grid.
+ * Icon chain for one workflow. Mobile keeps all four steps on one compact line;
+ * desktop arrows live in their own auto-width columns for a roomier sequence.
  */
 function SystemsWorkflowChain({
   steps,
@@ -803,7 +863,7 @@ function SystemsWorkflowChain({
   rowDelay: number;
 }) {
   return (
-    <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-[repeat(4,minmax(0,1fr))] sm:gap-x-0 lg:grid-cols-[repeat(3,minmax(0,1fr)_auto)_minmax(0,1fr)]">
+    <div className="mt-4 grid grid-cols-4 gap-x-0 sm:grid-cols-[repeat(4,minmax(0,1fr))] lg:grid-cols-[repeat(3,minmax(0,1fr)_auto)_minmax(0,1fr)]">
       {steps.map(({ icon: Icon, ...rest }, index) => {
         const iconAt = rowDelay + index * systemsWorkflowTiming.iconStep;
         // The arrow into this step leaves just after the previous icon lands.
@@ -844,11 +904,19 @@ function SystemsWorkflowChain({
               </span>
             )}
             <div
-              className="ck-step flex min-w-0 flex-col items-center gap-2.5 text-center"
+              className="ck-step relative flex min-w-0 flex-col items-center gap-1.5 text-center sm:gap-2.5"
               style={{ "--ck-anim-delay": `${iconAt}ms` } as CSSProperties}
             >
-              <span className="relative flex h-11 w-11 items-center justify-center">
-                <Icon className="h-8 w-8 text-ink/75" strokeWidth={1.15} />
+              {index < steps.length - 1 ? (
+                <span
+                  className="absolute left-[calc(50%+1.25rem)] right-[calc(-50%+1.25rem)] top-5 h-px bg-ink/25 sm:hidden"
+                  aria-hidden
+                >
+                  <span className="absolute -right-px -top-[3px] block h-[7px] w-[7px] rotate-45 border-r border-t border-ink/30" />
+                </span>
+              ) : null}
+              <span className="relative z-[1] flex h-10 w-10 items-center justify-center bg-ivory sm:h-11 sm:w-11">
+                <Icon className="h-7 w-7 text-ink/75 sm:h-8 sm:w-8" strokeWidth={1.15} />
                 {"alert" in rest && rest.alert ? (
                   <span
                     className="absolute right-1 top-0.5 h-2 w-2 rounded-full bg-forest ring-2 ring-ivory"
@@ -856,8 +924,9 @@ function SystemsWorkflowChain({
                   />
                 ) : null}
               </span>
-              <span className="text-[0.8rem] leading-4 text-ink/80">
-                {rest.label}
+              <span className="text-[0.64rem] leading-3 text-ink/80 sm:text-[0.8rem] sm:leading-4">
+                <span className="sm:hidden">{rest.mobileLabel}</span>
+                <span className="hidden sm:inline">{rest.label}</span>
               </span>
             </div>
           </Fragment>

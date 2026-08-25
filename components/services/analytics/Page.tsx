@@ -237,6 +237,7 @@ const analyticsHeroTiming = {
 function AnalyticsRelated() {
   return (
     <RelatedLinks
+      compactMobile
       links={[
         {
           label: "See where the traffic comes from",
@@ -278,7 +279,7 @@ export default function Page({ service }: { service: ServiceArea }) {
 function AnalyticsHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
   return (
     <div className="grid items-start gap-10 border-b border-line pb-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-14">
-      <div className="max-w-xl">
+      <div className="max-w-xl text-center sm:text-left">
         <p
           className="ck-rise text-xs font-semibold uppercase tracking-[0.26em] text-forest"
           style={{ animationDelay: `${analyticsHeroTiming.eyebrow}ms` }}
@@ -294,7 +295,7 @@ function AnalyticsHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
           Lead Tracking
         </h1>
         <p
-          className="ck-rise mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]"
+          className="ck-rise mx-auto mt-6 max-w-md text-base leading-7 text-ink/78 sm:mx-0 sm:text-[1.05rem]"
           style={{ animationDelay: `${analyticsHeroTiming.leadCopy}ms` }}
         >
           Clean measurement that shows you what&apos;s working. CK Works tracks
@@ -303,11 +304,11 @@ function AnalyticsHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
         </p>
         <ServiceTimeline
           timeline={timeline}
-          className="ck-rise mt-7"
+          className="ck-rise mt-4 justify-center sm:mt-7 sm:justify-start"
           style={{ animationDelay: `${analyticsHeroTiming.actions}ms` }}
         />
         <div
-          className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
+          className="ck-rise mx-auto mt-7 flex w-fit flex-row items-center gap-3 sm:mx-0 sm:w-auto"
           style={{ animationDelay: `${analyticsHeroTiming.actions}ms` }}
         >
           <ProjectInquiryTrigger
@@ -382,7 +383,7 @@ function MeasurementSnapshot() {
           </div>
           <div className="mt-2.5 grid gap-2.5 sm:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
             <div className="h-[7.75rem] rounded-xl border border-line bg-sand/50" />
-            <div className="h-[7.75rem] rounded-xl border border-line bg-sand/50" />
+            <div className="hidden h-[7.75rem] rounded-xl border border-line bg-sand/50 lg:block" />
           </div>
         </div>
 
@@ -398,18 +399,18 @@ function MeasurementSnapshot() {
         {analyticsSnapshotStats.map((stat, index) => (
           <div
             key={stat.label}
-            className="rounded-xl border border-line bg-card p-3"
+            className="rounded-xl border border-line bg-card p-2.5 lg:p-3"
           >
             <p className="text-[0.64rem] font-medium text-muted">
               {stat.label}
             </p>
-            <p className="mt-1.5 font-sans text-[1.05rem] font-semibold leading-none tracking-[-0.01em] text-ink">
+            <p className="mt-1 font-sans text-[1.05rem] font-semibold leading-none tracking-[-0.01em] text-ink lg:mt-1.5">
               {stat.value}
             </p>
             {"delta" in stat ? (
               /* The change lands a beat after its figure, so it reads as a result. */
               <p
-                className="ck-pop mt-1.5 inline-flex items-center gap-0.5 text-[0.64rem] font-semibold text-forest"
+                className="ck-pop mt-1 inline-flex items-center gap-0.5 text-[0.64rem] font-semibold text-forest lg:mt-1.5"
                 style={{
                   animationDelay: `${
                     analyticsHeroTiming.deltas +
@@ -471,7 +472,12 @@ function MeasurementSnapshot() {
           </div>
         </div>
 
-        <div className="flex flex-col rounded-xl border border-line p-3.5">
+        {/* Desktop only. Stacked on a phone the snapshot ran three bordered
+            panels deep and read as three unrelated cards rather than one
+            dashboard. The stat grid carries the headline figures and Source
+            mix carries the insight; a list of fictional company names is the
+            one that can go. */}
+        <div className="hidden flex-col rounded-xl border border-line p-3.5 lg:flex">
           <p className="text-[0.68rem] font-semibold text-ink">Recent leads</p>
           <ul className="mt-2.5 divide-y divide-line/70">
             {analyticsSnapshotLeads.map((lead, index) => (
@@ -561,9 +567,11 @@ function AnalyticsWhyMeasurement() {
           Measurement should lead to clearer decisions.
         </h2>
         <p className={serviceSectionBodyClassName}>
-          Good data removes guesswork. With the right setup, you&apos;ll
-          understand what drives results, how visitors engage, and where
-          opportunities exist.
+          Good data removes guesswork.{" "}
+          <span className="hidden sm:inline">
+            With the right setup, you&apos;ll understand what drives results,
+            how visitors engage, and where opportunities exist.
+          </span>
         </p>
       </Reveal>
 
@@ -573,9 +581,9 @@ function AnalyticsWhyMeasurement() {
             as="article"
             key={title}
             delay={index * 110}
-            className="grid gap-x-3.5 gap-y-2 py-5 first:pt-0 last:pb-0 sm:grid-cols-[auto_minmax(0,15rem)_minmax(0,1fr)] sm:items-center"
+            className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3.5 gap-y-1.5 py-5 first:pt-0 last:pb-0 sm:grid-cols-[auto_minmax(0,15rem)_minmax(0,1fr)] sm:items-center sm:gap-y-2"
           >
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-soft/60 text-forest">
+            <span className="row-span-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-soft/60 text-forest sm:row-span-1">
               <Icon className="h-5 w-5" strokeWidth={1.6} />
             </span>
             <h3 className="font-serif text-[1.3rem] font-semibold leading-[1.12] tracking-[-0.02em] text-ink sm:text-[1.5rem]">
@@ -623,18 +631,18 @@ function AnalyticsReportingSection() {
             className="overflow-hidden rounded-2xl border border-line bg-card shadow-[0_28px_58px_-38px_rgba(31,36,32,0.42)]"
             data-nosnippet
           >
-            <header className="flex flex-col gap-4 px-5 pb-4 pt-5 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-7 lg:pb-5 lg:pt-7">
-              <div className="min-w-0">
+            <header className="flex flex-row flex-wrap items-end justify-between gap-3 px-5 pb-4 pt-5 sm:flex-col sm:items-stretch sm:gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-7 lg:pb-5 lg:pt-7">
+              <div className="sm:min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
                   Monthly lead report
                 </p>
-                <p className="mt-1.5 font-serif text-[2.35rem] font-semibold leading-none tracking-[-0.025em] text-ink sm:text-[2.85rem]">
+                <p className="mt-1.5 font-serif text-[1.75rem] font-semibold leading-none tracking-[-0.025em] text-ink sm:text-[2.85rem]">
                   Riverstone Builders
                 </p>
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 lg:ml-auto">
-                <div className="flex items-stretch gap-1 rounded-lg border border-line bg-ivory/55 p-1">
+                <div className="hidden items-stretch gap-1 rounded-lg border border-line bg-ivory/55 p-1 sm:flex">
                   {[
                     { label: "1Y", change: "+124%", active: false },
                     { label: "3M", change: "+38%", active: false },
@@ -662,14 +670,15 @@ function AnalyticsReportingSection() {
                   ))}
                 </div>
 
-                <div className="inline-flex items-center gap-2 rounded-lg border border-line bg-ivory/55 px-3.5 py-2.5">
-                  <Calendar className="h-4 w-4 shrink-0 text-forest" strokeWidth={1.8} />
+                <div className="inline-flex w-fit shrink-0 items-center gap-2 rounded-lg border border-line bg-ivory/55 px-2 py-1 sm:w-auto sm:px-3.5 sm:py-2.5">
+                  <Calendar className="hidden h-4 w-4 shrink-0 text-forest sm:block" strokeWidth={1.8} />
                   <div>
-                    <p className="text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-muted">
+                    <p className="hidden text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-muted sm:block">
                       Reporting period
                     </p>
-                    <p className="mt-0.5 text-sm font-semibold leading-none text-ink">
-                      May 1 &ndash; May 31
+                    <p className="text-[0.8rem] font-semibold leading-none text-ink sm:mt-0.5 sm:text-sm sm:leading-none">
+                      May 1 <span className="sm:hidden">&ndash; 31</span>
+                      <span className="hidden sm:inline">&ndash; May 31</span>
                     </p>
                   </div>
                 </div>
@@ -699,11 +708,11 @@ function AnalyticsReportingSection() {
             </div>
 
             <div className={`grid ${analyticsReportLayout.detailColumns}`}>
-              <section className="px-5 py-5 sm:px-6 sm:py-6 lg:border-r lg:border-line">
+              <section className="px-5 py-4 sm:px-6 sm:py-6 lg:border-r lg:border-line">
                 <h3 className="font-sans text-[1.05rem] font-semibold leading-none text-ink sm:text-[1.12rem]">
                   Lead sources
                 </h3>
-                <ul className="mt-5 space-y-3.5">
+                <ul className="mt-4 space-y-2.5 sm:mt-5 sm:space-y-3.5">
                   {analyticsReportSources.map((source) => (
                     <li
                       key={source.label}
@@ -726,11 +735,11 @@ function AnalyticsReportingSection() {
                 </ul>
               </section>
 
-              <section className="border-t border-line px-5 py-5 sm:px-6 sm:py-6 lg:border-t-0 lg:border-r">
+              <section className="border-t border-line px-5 py-4 sm:px-6 sm:py-6 lg:border-t-0 lg:border-r">
                 <h3 className="font-sans text-[1.05rem] font-semibold leading-none text-ink sm:text-[1.12rem]">
                   Lead journey
                 </h3>
-                <ol className="relative mt-5 space-y-3.5">
+                <ol className="relative mt-4 space-y-2.5 sm:mt-5 sm:space-y-3.5">
                   <span
                     className="absolute bottom-3.5 left-3.5 top-3.5 border-l border-dashed border-ink/35"
                     aria-hidden
@@ -767,11 +776,11 @@ function AnalyticsReportingSection() {
                 </ol>
               </section>
 
-              <section className="border-t border-line px-5 py-5 sm:px-6 sm:py-6 lg:border-t-0">
+              <section className="border-t border-line px-5 py-4 sm:px-6 sm:py-6 lg:border-t-0">
                 <h3 className="font-sans text-[1.05rem] font-semibold leading-none text-ink sm:text-[1.12rem]">
                   What stood out
                 </h3>
-                <div className="mt-4 rounded-xl border border-line bg-forest-soft/35 px-5 py-4">
+                <div className="mt-3 rounded-xl border border-line bg-forest-soft/35 px-4 py-3.5 sm:mt-4 sm:px-5 sm:py-4">
                   <p className="font-sans text-[1.15rem] font-semibold leading-snug text-forest sm:text-[1.28rem]">
                     Kitchen Remodeling generated the most inquiries.
                   </p>
@@ -785,12 +794,12 @@ function AnalyticsReportingSection() {
             </div>
 
             <section className="flex flex-col gap-2 border-t border-line bg-ivory/35 px-5 py-5 sm:px-6 sm:py-6 lg:flex-row lg:items-center lg:gap-2.5">
-              <div className="flex shrink-0 flex-col items-start">
+              <div className="flex shrink-0 flex-row items-center gap-1.5">
                 <h3 className="font-sans text-[1.05rem] font-semibold leading-snug text-ink sm:text-[1.12rem] lg:whitespace-nowrap">
                   Insights for Riverstone
                 </h3>
                 <ChevronDown
-                  className="mt-1 h-4 w-4 text-forest/55 lg:hidden"
+                  className="h-4 w-4 text-forest/55 lg:hidden"
                   strokeWidth={2.25}
                   aria-hidden
                 />
@@ -859,7 +868,7 @@ function ReportMetric({
 }) {
   return (
     <div
-      className={`flex min-w-0 items-center gap-3 px-5 py-5 sm:px-6 sm:py-6 ${className}`}
+      className={`flex min-w-0 items-center gap-3 px-5 py-3.5 sm:px-6 sm:py-6 ${className}`}
     >
       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-soft/65 text-forest">
         <Icon className="h-5 w-5" strokeWidth={1.65} />
@@ -878,7 +887,7 @@ function ReportMetric({
 
 function AnalyticsScope() {
   return (
-    <section className="grid gap-8 border-b border-line py-14 lg:grid-cols-[minmax(0,0.62fr)_minmax(0,1.38fr)] lg:gap-16 lg:py-16">
+    <section className="grid gap-8 border-b border-line py-14 pb-8 sm:pb-14 lg:grid-cols-[minmax(0,0.62fr)_minmax(0,1.38fr)] lg:gap-16 lg:py-16">
       <Reveal className="max-w-sm">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
           Practical scope
@@ -898,7 +907,7 @@ function AnalyticsScope() {
             as="article"
             key={title}
             delay={index * 100}
-            className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-3 gap-y-1.5 border-b border-line py-6 sm:gap-x-6 sm:py-7 lg:grid-cols-[auto_auto_minmax(0,1fr)] lg:gap-y-0"
+            className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-3 gap-y-1.5 border-b border-line py-6 last:border-b-0 sm:gap-x-6 sm:py-7 lg:grid-cols-[auto_auto_minmax(0,1fr)] lg:gap-y-0 lg:last:border-b"
           >
             <span
               className="font-source-serif-display text-[1.1rem] font-semibold leading-none tabular-nums text-forest/55"
@@ -924,6 +933,7 @@ const analyticsWorkContent = [
   {
     slug: "centi",
     label: "Featured project",
+    labelIcon: LayoutDashboard,
     description:
       "Connected accounts, transaction data, and spending activity organized into one clear reporting view.",
     tags: [
@@ -935,6 +945,7 @@ const analyticsWorkContent = [
   {
     slug: "internal-automation-tool",
     label: "Project",
+    labelIcon: LineChart,
     description:
       "Run results, usage, and operational data tracked so the team could see adoption and guide decisions.",
     tags: [
@@ -950,12 +961,15 @@ function AnalyticsWork({ projects }: { projects: CaseStudy[] }) {
 
   return (
     <section className="border-b border-line py-14 lg:py-16">
-      <Reveal>
-        <h2 className="font-serif text-[2rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.3rem]">
-          Relevant work
-        </h2>
+      <Reveal className="mx-auto max-w-5xl text-center">
+        <p className={serviceCenterLabelClassName}>Selected work</p>
+        <h2 className={serviceCenterTitleClassName}>Measurement in practice.</h2>
+        <p className={`mx-auto max-w-xl ${serviceSectionBodyClassName}`}>
+          Projects where scattered data became something a team could actually
+          read and act on.
+        </p>
       </Reveal>
-      <div className="mt-7 grid gap-5 lg:grid-cols-2 lg:gap-6">
+      <div className="mt-8 grid gap-5 sm:mt-12 lg:grid-cols-2 lg:gap-6">
         {analyticsWorkContent.map((content, index) => {
           const project = bySlug.get(content.slug);
           return project ? (
@@ -969,6 +983,16 @@ function AnalyticsWork({ projects }: { projects: CaseStudy[] }) {
           ) : null;
         })}
       </div>
+
+      <Reveal className="mt-8 text-center">
+        <Link
+          href="/work"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-forest underline decoration-forest/35 underline-offset-4 transition-colors hover:decoration-forest"
+        >
+          See all work
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </Reveal>
     </section>
   );
 }
@@ -980,13 +1004,15 @@ function AnalyticsProjectCard({
   project: CaseStudy;
   content: (typeof analyticsWorkContent)[number];
 }) {
+  const LabelIcon = content.labelIcon;
+
   return (
     <Link
       href={`/${project.slug}`}
-      className="group grid grid-cols-[7rem_minmax(0,1fr)] gap-5 rounded-2xl border border-line bg-card p-4 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/30 hover:shadow-lift sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:p-5"
+      className="group grid grid-cols-1 gap-5 rounded-2xl border border-line bg-card p-4 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/30 hover:shadow-lift sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:p-5"
     >
       {content.tile === "cover" && project.coverImage ? (
-        <span className="relative min-h-[7rem] overflow-hidden rounded-xl bg-sand">
+        <span className="relative hidden min-h-[7rem] overflow-hidden rounded-xl bg-sand sm:block">
           <Image
             src={project.coverImage.src}
             alt={project.coverImage.alt}
@@ -996,13 +1022,14 @@ function AnalyticsProjectCard({
           />
         </span>
       ) : (
-        <span className="flex min-h-[7rem] items-center justify-center rounded-xl border border-line bg-sand text-forest">
+        <span className="hidden min-h-[7rem] items-center justify-center rounded-xl border border-line bg-sand text-forest sm:flex">
           <LineChart className="h-8 w-8" strokeWidth={1.4} />
         </span>
       )}
 
       <span className="flex min-w-0 flex-col">
-        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-forest">
+        <span className="flex items-center gap-1.5 text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-forest">
+          <LabelIcon className="h-3.5 w-3.5 shrink-0 sm:hidden" strokeWidth={1.8} aria-hidden />
           {content.label}
         </span>
         <span className="mt-1.5 font-serif text-[1.35rem] font-medium leading-tight text-ink">
@@ -1046,20 +1073,24 @@ function AnalyticsFaq() {
 
 function AnalyticsBottomCta() {
   return (
-    <Reveal className="mt-10 block rounded-2xl border border-line bg-sand px-6 py-8 shadow-soft sm:px-8 sm:py-9 lg:px-10">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-        <div className="max-w-2xl">
-          <h2 className="font-serif text-[1.85rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2.15rem]">
-            Want a clearer view of what your site is doing?
-          </h2>
-          <p className="mt-3 text-sm leading-7 text-muted sm:text-base">
-            Let&apos;s set up clean tracking and simple reporting so you can make
-            confident, informed decisions.
-          </p>
-        </div>
+    <Reveal className="mt-10 flex flex-col gap-5 rounded-xl border border-line bg-card px-6 py-7 text-center shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left">
+      <div className="mx-auto max-w-xl lg:mx-0">
+        <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
+          Analytics &amp; Lead Tracking
+        </p>
+        <h2 className="mt-3 font-serif text-[1.85rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.15rem]">
+          Want a clearer view of what your site is doing?
+        </h2>
+        <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem] lg:mx-0">
+          Let&apos;s set up clean tracking and simple reporting so you can make
+          confident, informed decisions.
+        </p>
+      </div>
+
+      <div className="mx-auto flex w-fit shrink-0 flex-col items-stretch gap-4 lg:mx-0">
         <ProjectInquiryTrigger
           source="analytics_service_bottom_cta"
-          className="shrink-0 rounded-md px-6"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-forest px-6 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"
         >
           Start a project
           <ArrowRight className="h-4 w-4" />

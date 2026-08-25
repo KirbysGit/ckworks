@@ -1082,7 +1082,7 @@ function ProcessStickyNote({
 
 function WebDesignProcess() {
   return (
-    <section className="grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)] lg:gap-16 lg:py-16">
+    <section className="grid gap-4 border-b border-line py-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)] lg:gap-16 lg:py-16">
       <Reveal className="max-w-md">
         <p className={serviceSectionLabelClassName}>How I work</p>
         <h2 className={serviceSectionTitleClassName}>
@@ -1109,14 +1109,14 @@ function WebDesignProcess() {
         </div>
       </Reveal>
 
-      <div>
+      <div className="pl-3 lg:pl-0">
         {webDesignProcess.map((step, index) => (
           <Reveal
             as="article"
             key={step.title}
             delay={index * 110}
-            className={`grid min-h-[8.75rem] grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-4 py-6 sm:py-7 ${
-              index > 0 ? "border-t border-line" : ""
+            className={`grid grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-4 py-5 lg:min-h-[8.75rem] lg:py-7 ${
+              index > 0 ? "border-t border-line" : "pt-3 lg:pt-7"
             }`}
           >
             <span
@@ -1138,7 +1138,7 @@ function WebDesignProcess() {
       </div>
 
       <div className="lg:hidden">
-        <ProcessStickyNote offsetX={48} className="mt-2" />
+        <ProcessStickyNote offsetX={70} className="mt-[1rem]" />
       </div>
     </section>
   );
@@ -1187,7 +1187,7 @@ function WebDesignWork({ projects }: { projects: CaseStudy[] }) {
         </h2>
       </Reveal>
 
-      <div className="mt-12 grid items-stretch gap-4 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-4">
+      <div className="mt-8 grid items-stretch gap-4 sm:mt-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-4">
         <Reveal className="h-full min-h-0">
           <FeaturedWorkCard
             project={featured}
@@ -1246,11 +1246,11 @@ function FeaturedWorkCard({
         <h3 className="mt-1.5 font-serif text-[1.45rem] font-semibold leading-tight sm:text-[1.6rem]">
           {project.name}
         </h3>
-        <p className="mt-2 line-clamp-3 text-[0.8rem] leading-5 text-muted">
+        <p className="mt-2 line-clamp-2 text-[0.8rem] leading-5 text-muted sm:line-clamp-3">
           {content.description}
         </p>
 
-        <div className="mt-3 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 border-t border-line pt-3 text-[0.68rem] font-medium text-ink/75">
+        <div className="mt-3 hidden flex-wrap items-center gap-x-2.5 gap-y-1.5 border-t border-line pt-3 text-[0.68rem] font-medium text-ink/75 sm:flex">
           {content.highlights.map((highlight, index) => (
             <span key={highlight} className="flex items-center gap-2.5">
               {index > 0 && <span className="h-3 w-px bg-line" aria-hidden />}
@@ -1265,7 +1265,7 @@ function FeaturedWorkCard({
           ))}
         </div>
 
-        <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-forest">
+        <span className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-forest sm:mt-4">
           View project
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
         </span>

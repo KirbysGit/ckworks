@@ -122,12 +122,12 @@ function HeroPreview() {
       />
       <div className="absolute inset-y-0 left-0 flex w-[58%] flex-col justify-center px-5 py-4 sm:px-8 lg:px-9">
         <p className="text-[0.48rem] font-semibold uppercase tracking-[0.18em] text-ink/85 sm:text-[0.56rem]">
-          Custom homes. Lasting value.
+          Custom homes.<span className="hidden sm:inline"> Lasting value.</span>
         </p>
         <h3 className="mt-2 max-w-[12ch] font-serif text-[1.45rem] font-medium leading-[0.98] text-ink sm:text-[1.9rem] lg:text-[2.12rem]">
           Thoughtful design. Built to last.
         </h3>
-        <p className="mt-2.5 max-w-[17rem] text-[0.66rem] leading-4 text-ink/82 sm:text-[0.72rem] sm:leading-[1.15rem]">
+        <p className="mt-2.5 hidden max-w-[17rem] text-[0.66rem] leading-4 text-ink/82 sm:block sm:text-[0.72rem] sm:leading-[1.15rem]">
           Quality craftsmanship and an honest process from concept to
           completion.
         </p>
@@ -142,7 +142,7 @@ function HeroPreview() {
 function SiteDetailRow() {
   return (
     <section
-      className="ck-step grid gap-4 px-5 py-4 sm:grid-cols-[0.82fr_0.96fr_1.05fr] sm:px-7 sm:py-5"
+      className="ck-step hidden gap-4 px-5 py-4 sm:grid sm:grid-cols-[0.82fr_0.96fr_1.05fr] sm:px-7 sm:py-5"
       style={
         {
           "--ck-anim-delay": `${supportHeroTiming.detailRow}ms`,
@@ -230,7 +230,7 @@ function CareStatusRail() {
       </section>
 
       <section
-        className="ck-step rounded-xl border border-line bg-card/95 p-4 shadow-[0_18px_42px_-32px_rgba(31,36,32,0.45)] sm:p-5"
+        className="ck-step hidden rounded-xl border border-line bg-card/95 p-4 shadow-[0_18px_42px_-32px_rgba(31,36,32,0.45)] sm:block sm:p-5"
         style={
           {
             "--ck-anim-delay": `${supportHeroTiming.contextCard}ms`,

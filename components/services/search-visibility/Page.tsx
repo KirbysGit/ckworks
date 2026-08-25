@@ -97,7 +97,7 @@ const visibilityScope = [
     title: "Technical foundations",
     body: "Clear hierarchy and indexing basics help search systems read your site correctly.",
     icon: Settings2,
-    helpsWith: ["Indexing", "page hierarchy", "performance"],
+    helpsWith: ["Indexing", "structure", "performance"],
     demo: "technical",
   },
   {
@@ -141,31 +141,49 @@ const visibilitySignals = [
   {
     title: "Clear service name",
     body: "Helps systems know what you do.",
+    mobileTitle: "Clear service",
+    mobileBody: "Says what the business offers.",
+    showOnMobile: true,
     icon: Tag,
   },
   {
     title: "Orlando location",
     body: "Signals your service area and relevance.",
+    mobileTitle: "Local relevance",
+    mobileBody: "Connects the page to its service area.",
+    showOnMobile: true,
     icon: MapPin,
   },
   {
     title: "Clear from the first glance",
     body: "The subtitle shows what they stand for.",
+    mobileTitle: "Clear purpose",
+    mobileBody: "Explains the business at a glance.",
+    showOnMobile: false,
     icon: Eye,
   },
   {
     title: "Project examples",
     body: "Real proof builds trust and context.",
+    mobileTitle: "Useful proof",
+    mobileBody: "Shows the work behind the claim.",
+    showOnMobile: false,
     icon: LayoutTemplate,
   },
   {
     title: "Helpful answers",
     body: "Direct answers help AI tools quote you.",
+    mobileTitle: "Helpful answers",
+    mobileBody: "Gives search tools useful context.",
+    showOnMobile: true,
     icon: MessageSquareText,
   },
   {
     title: "Contact pathway",
     body: "Makes it easy to take the next step.",
+    mobileTitle: "Easy next step",
+    mobileBody: "Keeps the contact path clear.",
+    showOnMobile: true,
     icon: PhoneCall,
   },
 ] as const;
@@ -227,6 +245,7 @@ const searchVisibilityHeroTiming = {
 function SearchVisibilityRelated() {
   return (
     <RelatedLinks
+      compactMobile
       links={[
         {
           label: "See how website design and SEO work together",
@@ -262,8 +281,8 @@ export default function Page({ service }: { service: ServiceArea }) {
 
 function SearchVisibilityHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
   return (
-    <section className="grid items-start gap-10 border-b border-line pb-10 lg:grid-cols-[minmax(0,0.74fr)_minmax(0,1.26fr)] lg:gap-14">
-      <div className="max-w-xl">
+    <section className="grid items-start gap-8 border-b border-line pb-6 sm:gap-10 sm:pb-10 lg:grid-cols-[minmax(0,0.74fr)_minmax(0,1.26fr)] lg:gap-14">
+      <div className="max-w-xl text-center sm:text-left">
         <p
           className="ck-rise text-xs font-semibold uppercase tracking-[0.26em] text-forest"
           style={{ animationDelay: `${searchVisibilityHeroTiming.eyebrow}ms` }}
@@ -279,34 +298,33 @@ function SearchVisibilityHero({ timeline }: { timeline: ServiceArea["timeline"] 
           Search Visibility
         </h1>
         <p
-          className="ck-rise mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]"
+          className="ck-rise mx-auto mt-6 max-w-md text-base leading-7 text-ink/78 sm:mx-0 sm:text-[1.05rem]"
           style={{ animationDelay: `${searchVisibilityHeroTiming.leadCopy}ms` }}
         >
-          CK Works improves technical SEO, local search structure, on-page
-          content, structured data, and AI-search visibility so customers and
-          answer engines can understand what your business does.
+          Technical SEO and clearer content signals that help customers and
+          answer engines find and understand your business.
         </p>
         <ServiceTimeline
           timeline={timeline}
-          className="ck-rise mt-7"
+          className="ck-rise mt-4 justify-center sm:mt-7 sm:justify-start"
           style={{ animationDelay: `${searchVisibilityHeroTiming.actions}ms` }}
         />
         <div
-          className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
+          className="ck-rise mx-auto mt-7 flex w-fit flex-row items-center gap-3 sm:mx-0 sm:w-auto"
           style={{ animationDelay: `${searchVisibilityHeroTiming.actions}ms` }}
         >
           <ProjectInquiryTrigger
             source="search_visibility_service_hero"
-            className="rounded-md px-5"
+            className="shrink-0 whitespace-nowrap rounded-md px-4 sm:px-5"
           >
             Start a project
             <ArrowRight className="h-4 w-4" />
           </ProjectInquiryTrigger>
           <a
             href="#visibility-explained"
-            className="group inline-flex items-center justify-center gap-2 rounded-md px-3 py-3 text-sm font-semibold text-forest transition-colors hover:text-ink"
+            className="group inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md px-2 py-3 text-sm font-semibold text-forest transition-colors hover:text-ink sm:px-3"
           >
-            See how visibility works
+            How visibility works
             <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </a>
         </div>
@@ -403,7 +421,7 @@ function SearchVisibilityHeroVisual() {
       </div>
       {/* Lands after the result: an answer engine can only summarise a page it has read. */}
       <div
-        className={`ck-lift relative z-20 ml-auto mt-4 w-full max-w-[18rem] sm:w-[min(100%,18rem)] lg:absolute lg:mt-0 lg:max-w-none ${searchHeroVisualLayout.aiCardWidth} ${searchHeroVisualLayout.aiCardTop} ${searchHeroVisualLayout.aiCardRight}`}
+        className={`ck-lift relative z-20 ml-auto mt-4 hidden w-full max-w-[18rem] sm:block sm:w-[min(100%,18rem)] lg:absolute lg:mt-0 lg:max-w-none ${searchHeroVisualLayout.aiCardWidth} ${searchHeroVisualLayout.aiCardTop} ${searchHeroVisualLayout.aiCardRight}`}
         style={{ animationDelay: `${searchVisibilityHeroTiming.aiCard}ms` }}
       >
         <AiOverviewCard />
@@ -617,7 +635,7 @@ function SearchVisibilityBenefits() {
   return (
     <section
       id="visibility-explained"
-      className="scroll-mt-28 grid gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-x-8 lg:gap-y-16 lg:py-16"
+      className="scroll-mt-28 grid gap-4 border-b border-line pb-8 pt-14 sm:gap-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-x-8 lg:gap-y-16 lg:py-16"
     >
       <div className="min-w-0">
         <Reveal className="max-w-lg">
@@ -630,7 +648,7 @@ function SearchVisibilityBenefits() {
             understand, and more confident about what to improve next.
           </p>
         </Reveal>
-        <Reveal className="mt-10 max-w-md border-t border-line pt-7 lg:mt-12">
+        <Reveal className="mt-10 hidden max-w-md border-t border-line pt-7 lg:mt-12 lg:block">
           <p className={serviceSectionLabelClassName}>A quick test</p>
           <ul className="mt-5 space-y-4" aria-label="Visibility quick test">
             {[
@@ -1243,10 +1261,17 @@ function SearchVisibilitySignals() {
         </p>
       </Reveal>
 
-      <div className="mt-9 grid items-center gap-7 xl:grid-cols-[minmax(13rem,0.74fr)_minmax(22rem,1.2fr)_minmax(13rem,0.76fr)] xl:gap-8">
+      <div className="mt-8 grid items-center gap-0 sm:mt-9 sm:gap-7 xl:grid-cols-[minmax(13rem,0.74fr)_minmax(22rem,1.2fr)_minmax(13rem,0.76fr)] xl:gap-8">
         {/* z-20 keeps connector dots above the site preview they overlap */}
-        <div className="relative z-20 space-y-3">
-          {visibilitySignals.map(({ title, body, icon: Icon }, index) => {
+        <div className="relative z-20 order-2 mt-4 divide-y divide-line/70 sm:order-none sm:mt-0 sm:space-y-3 sm:divide-y-0">
+          {visibilitySignals.map(({
+            title,
+            body,
+            mobileTitle,
+            mobileBody,
+            showOnMobile,
+            icon: Icon,
+          }, index) => {
             const connector =
               signalConnector.rows[index] ?? signalConnector.rows[0];
 
@@ -1256,17 +1281,31 @@ function SearchVisibilitySignals() {
                * translateY for alignment, and an entrance animating transform
                * would settle at `none` and wipe that offset out.
                */
-              <Reveal key={title} delay={index * 90}>
-              <div
-                className="group relative z-20 flex items-center gap-3"
-                style={{ transform: `translateY(${connector.offsetY})` }}
+              <Reveal
+                key={title}
+                delay={index * 90}
+                className={showOnMobile ? undefined : "hidden sm:block"}
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-forest-soft text-forest">
+              <div
+                className="group relative z-20 flex transform-none items-center gap-3 py-3 sm:py-0 sm:[transform:translateY(var(--signal-offset))]"
+                style={
+                  {
+                    "--signal-offset": connector.offsetY,
+                  } as CSSProperties
+                }
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest-soft text-forest sm:h-10 sm:w-10">
                   <Icon className="h-4.5 w-4.5" strokeWidth={1.7} />
                 </span>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold text-ink">{title}</p>
-                  <p className="mt-0.5 text-[0.68rem] leading-4 text-muted">{body}</p>
+                  <p className="text-xs font-semibold text-ink">
+                    <span className="sm:hidden">{mobileTitle}</span>
+                    <span className="hidden sm:inline">{title}</span>
+                  </p>
+                  <p className="mt-0.5 text-[0.68rem] leading-4 text-muted">
+                    <span className="sm:hidden">{mobileBody}</span>
+                    <span className="hidden sm:inline">{body}</span>
+                  </p>
                 </div>
                 <span
                   className="relative z-30 ml-auto hidden min-w-0 flex-1 items-center xl:flex"
@@ -1307,17 +1346,19 @@ function SearchVisibilitySignals() {
           })}
         </div>
 
-        <Reveal delay={200}>
+        <Reveal delay={200} className="order-1 sm:order-none">
           <SearchReadySitePreview />
         </Reveal>
 
         {/* The results land last: signals feed the page, the page feeds search. */}
-        <div className="relative z-20 space-y-4">
+        <div className="relative z-20 order-3 mt-1 space-y-3 sm:order-none sm:mt-0 sm:space-y-4">
+          <MobileSignalArrow />
           <Reveal delay={520}>
             <OutboundSignalCard>
               <SearchResultSnapshot />
             </OutboundSignalCard>
           </Reveal>
+          <MobileSignalArrow />
           <Reveal delay={640}>
             <div>
               <OutboundSignalCard offsetY={signalOutboundArrow.cards[1].offsetY}>
@@ -1331,6 +1372,14 @@ function SearchVisibilitySignals() {
         </div>
       </div>
     </section>
+  );
+}
+
+function MobileSignalArrow() {
+  return (
+    <div className="flex justify-center py-0.5 text-forest sm:hidden" aria-hidden>
+      <ArrowDown className="h-5 w-5" strokeWidth={1.8} />
+    </div>
   );
 }
 

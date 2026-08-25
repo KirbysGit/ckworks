@@ -248,7 +248,7 @@ function SupportHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
   return (
     <div className="border-b border-line pb-11 lg:pb-14">
       <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-14">
-        <div className="max-w-xl">
+        <div className="max-w-xl text-center sm:text-left">
           <p
             className="ck-rise text-xs font-semibold uppercase tracking-[0.26em] text-forest"
             style={{ animationDelay: `${supportHeroTiming.eyebrow}ms` }}
@@ -262,7 +262,7 @@ function SupportHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
             Ongoing Support
           </h1>
           <p
-            className="ck-rise mt-6 max-w-md text-base leading-7 text-ink/78 sm:text-[1.05rem]"
+            className="ck-rise mx-auto mt-6 max-w-md text-base leading-7 text-ink/78 sm:mx-0 sm:text-[1.05rem]"
             style={{ animationDelay: `${supportHeroTiming.leadCopy}ms` }}
           >
             Updates, fixes, technical cleanup, and continued improvements that
@@ -270,11 +270,11 @@ function SupportHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
           </p>
           <ServiceTimeline
             timeline={timeline}
-            className="ck-rise mt-7"
+            className="ck-rise mt-4 justify-center sm:mt-7 sm:justify-start"
             style={{ animationDelay: `${supportHeroTiming.actions}ms` }}
           />
           <div
-            className="ck-rise mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
+            className="ck-rise mx-auto mt-7 flex w-fit flex-row flex-wrap items-center justify-center gap-3 sm:mx-0 sm:w-auto sm:flex-nowrap sm:justify-start"
             style={{ animationDelay: `${supportHeroTiming.actions}ms` }}
           >
             <ProjectInquiryTrigger
@@ -286,10 +286,12 @@ function SupportHero({ timeline }: { timeline: ServiceArea["timeline"] }) {
             </ProjectInquiryTrigger>
             <a
               href="#support-includes"
-              className="group inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-card px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-forest/40 hover:text-forest"
+              className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-3 text-sm font-semibold text-forest underline decoration-forest/35 underline-offset-4 transition-colors hover:decoration-forest"
             >
-              See what support can include
-              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+              <span className="sm:hidden">What&apos;s included</span>
+              <span className="hidden sm:inline">
+                See what support can include
+              </span>
             </a>
           </div>
         </div>
@@ -311,9 +313,15 @@ function SupportWhyItMatters() {
           Keep what you built working well.
         </h2>
         <p className={serviceSectionBodyClassName}>
-          Support is useful when the site needs to stay current, small issues
-          need attention, or improvements make more sense over time than
-          through another full rebuild.
+          <span className="sm:hidden">
+            Support is useful when steady improvement makes more sense than
+            another rebuild.
+          </span>
+          <span className="hidden sm:inline">
+            Support is useful when the site needs to stay current, small
+            issues need attention, or improvements make more sense over time
+            than through another full rebuild.
+          </span>
         </p>
       </Reveal>
 
@@ -498,22 +506,39 @@ function SupportIncludeCard({
   return (
     <article className="flex h-full flex-col rounded-2xl border border-line bg-card p-5 pb-0 shadow-soft">
       <div className="flex items-start justify-between gap-3">
-        <div className={wide ? "flex min-w-0 items-start gap-3.5" : "min-w-0"}>
+        <div
+          className={
+            wide
+              ? "flex min-w-0 flex-1 flex-wrap items-start gap-x-3.5"
+              : "min-w-0"
+          }
+        >
           <SupportStepBadge index={index} />
           {wide ? (
-            <div className="min-w-0">
-              <h3 className="font-serif text-[1.35rem] font-bold leading-snug tracking-[-0.01em] text-ink sm:text-[1.45rem]">
-                {title}
-              </h3>
-              <p className="mt-2 text-[0.95rem] leading-7 text-muted">{body}</p>
-            </div>
+            <>
+              <Icon
+                className="order-1 ml-auto h-6 w-6 shrink-0 text-ink/45 sm:order-3"
+                strokeWidth={1.35}
+                aria-hidden
+              />
+              <div className="order-2 mt-4 w-full min-w-0 sm:mt-0 sm:w-auto sm:flex-1">
+                <h3 className="font-serif text-[1.35rem] font-bold leading-snug tracking-[-0.01em] text-ink sm:text-[1.45rem]">
+                  {title}
+                </h3>
+                <p className="mt-2 text-[0.95rem] leading-7 text-muted">
+                  {body}
+                </p>
+              </div>
+            </>
           ) : null}
         </div>
-        <Icon
-          className="h-6 w-6 shrink-0 text-ink/45"
-          strokeWidth={1.35}
-          aria-hidden
-        />
+        {wide ? null : (
+          <Icon
+            className="h-6 w-6 shrink-0 text-ink/45"
+            strokeWidth={1.35}
+            aria-hidden
+          />
+        )}
       </div>
 
       {wide ? null : (
@@ -544,13 +569,20 @@ function SupportIncludeBanner({
     <article className="flex flex-col gap-4 rounded-2xl border border-line bg-card px-5 py-5 shadow-soft lg:flex-row lg:items-center lg:gap-8 lg:px-6">
       <div className="flex min-w-0 flex-1 items-start gap-3.5 lg:gap-5">
         {/* Inline with the title on mobile; its own column once there is room. */}
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-line bg-card text-forest">
+        <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-full border border-line bg-card text-forest lg:flex">
           <Icon className="h-6 w-6" strokeWidth={1.4} aria-hidden />
         </span>
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-3">
+          {/* `w-full` drops the title to its own line below lg, which is what
+              puts the badge and the small icon on a row of their own. */}
+          <div className="flex flex-wrap items-center gap-x-3">
             <SupportStepBadge index={index} muted />
-            <h3 className="font-serif text-[1.35rem] font-bold leading-snug tracking-[-0.01em] text-ink sm:text-[1.45rem]">
+            <Icon
+              className="ml-auto h-6 w-6 shrink-0 text-ink/45 lg:hidden"
+              strokeWidth={1.35}
+              aria-hidden
+            />
+            <h3 className="mt-4 w-full font-serif text-[1.35rem] font-bold leading-snug tracking-[-0.01em] text-ink sm:text-[1.45rem] lg:mt-0 lg:w-auto">
               {title}
             </h3>
           </div>
@@ -597,7 +629,7 @@ function SupportTagRow({
 }) {
   return (
     <div
-      className={`flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 ${
+      className={`flex flex-wrap items-center justify-start gap-x-2.5 gap-y-1 sm:justify-center ${
         showLine
           ? "-mx-5 mt-auto border-t border-line px-5 py-3.5"
           : "pt-0"

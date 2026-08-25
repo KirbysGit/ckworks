@@ -8,7 +8,6 @@ import {
   Eye,
   FolderKanban,
   UserRound,
-  Zap,
   type LucideIcon,
 } from "lucide-react";
 
@@ -100,6 +99,12 @@ const outcomes: { icon: LucideIcon; title: string; body: string }[] = [
   },
 ];
 
+const mobileOutcomeSummary = [
+  "Client saved",
+  "Team notified",
+  "Follow-up set",
+] as const;
+
 export default function OperationsHub() {
   return (
     <div className="relative" data-nosnippet>
@@ -109,11 +114,11 @@ export default function OperationsHub() {
       >
         Illustrative workflow — fictional client
       </p>
-      <AutomationBanner />
-      <div className={`mt-7 grid gap-6 ${operationsHubLayout.columns} lg:gap-x-16 lg:gap-y-10`}>
+      <div className={`grid gap-4 sm:gap-6 ${operationsHubLayout.columns} lg:gap-x-16 lg:gap-y-10`}>
         <HubWindow />
+        <MobileOutcomeSummary />
 
-        <div className="self-start lg:self-center">
+        <div className="hidden self-start sm:block lg:self-center">
           <p
             className="ck-fade mb-3 text-left text-[0.58rem] font-semibold uppercase tracking-[0.15em] text-muted lg:text-right"
             style={{ animationDelay: `${systemsHeroTiming.outcomeLabel}ms` }}
@@ -136,7 +141,9 @@ export default function OperationsHub() {
           </div>
         </div>
 
-        <ReportingNode />
+        <div className="hidden sm:contents">
+          <ReportingNode />
+        </div>
       </div>
 
       <Image
@@ -152,15 +159,33 @@ export default function OperationsHub() {
   );
 }
 
-function AutomationBanner() {
+function MobileOutcomeSummary() {
   return (
-    <p
-      className="ck-rise mx-auto flex max-w-[44rem] items-center justify-center gap-3 rounded-2xl border border-line bg-card/75 px-5 py-3 text-center text-[0.64rem] font-semibold uppercase tracking-[0.15em] text-ink shadow-[0_14px_30px_-28px_rgba(31,36,32,0.58)] sm:text-[0.68rem]"
-      style={{ animationDelay: `${systemsHeroTiming.banner}ms` }}
+    <article
+      className="ck-step rounded-xl border border-line bg-card px-3 py-3 shadow-soft sm:hidden"
+      style={
+        {
+          "--ck-anim-delay": `${systemsHeroTiming.outcomes}ms`,
+        } as CSSProperties
+      }
     >
-      <Zap className="h-5 w-5 shrink-0 text-forest" strokeWidth={1.7} aria-hidden />
-      <span>One inquiry - the next steps happen automatically</span>
-    </p>
+      <p className="text-center text-[0.58rem] font-semibold uppercase tracking-[0.15em] text-muted">
+        Automatically updated
+      </p>
+      <ul className="mt-3 grid grid-cols-3 divide-x divide-line">
+        {mobileOutcomeSummary.map((item) => (
+          <li
+            key={item}
+            className="flex min-w-0 flex-col items-center gap-1.5 px-1 text-center text-[0.65rem] font-semibold leading-4 text-ink"
+          >
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-forest-soft text-forest">
+              <Check className="h-3.5 w-3.5" strokeWidth={2.2} aria-hidden />
+            </span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </article>
   );
 }
 
@@ -205,7 +230,7 @@ function HubWindow() {
             </span>
           </div>
 
-          <ol className="relative mt-5 space-y-4 before:absolute before:bottom-5 before:left-[0.93rem] before:top-5 before:border-l before:border-dashed before:border-forest/50">
+          <ol className="relative mt-4 space-y-3 before:absolute before:bottom-4 before:left-[0.93rem] before:top-4 before:border-l before:border-dashed before:border-forest/50">
             {inquirySteps.map(({ label, detail, time, icon: Icon }, index) => (
               <li
                 key={label}
