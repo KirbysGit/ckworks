@@ -90,7 +90,7 @@ export const systemsTimeline: ServiceTimeline = {
 /** Support is a retainer, so the honest commitment is response time. */
 export const supportTimeline: ServiceTimeline = {
   lead: "Most requests turn around in",
-  value: "1–3 business days",
+  value: "1 – 3 business days",
   note: "larger changes get scheduled with a date up front, and urgent breakage jumps the queue",
 };
 

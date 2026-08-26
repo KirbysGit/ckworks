@@ -7,7 +7,6 @@ import {
   BarChart3,
   Calendar,
   Check,
-  ChevronRight,
   CircleCheck,
   Clock,
   FileText,
@@ -87,18 +86,18 @@ const supportIncludes = [
     title: "Content and small improvements",
     body: "Update content and make useful changes to keep things clear and effective.",
     icon: Pencil,
-    tags: ["Text & images", "Page tweaks", "Small enhancements"],
+    tags: ["Text & images", "Page tweaks", "Refinements"],
   },
   {
     title: "Performance and measurement checks",
     body: "Check speed, tracking, and metrics to ensure things are performing well.",
     icon: Gauge,
-    tags: ["Speed tests", "Uptime", "Core Web Vitals", "Reporting"],
+    tags: ["Speed tests", "Uptime", "Core Web Vitals"],
   },
 ] as const;
 
 /**
- * Status strip under the demo site preview — the at-a-glance read a client
+ * Status strip under the demo site preview: the at-a-glance read a client
  * gets when someone is actually looking after the thing.
  */
 const supportSiteStatus = [
@@ -109,14 +108,26 @@ const supportSiteStatus = [
 ] as const;
 
 /**
- * The three shapes support can take. Ordered by commitment — a one-off fix,
- * occasional attention, then a standing arrangement — so the row reads as a
+ * The three shapes support can take, ordered by commitment (a one-off fix,
+ * occasional attention, then a standing arrangement) so the row reads as a
  * range rather than a menu of tiers.
  */
 const supportModes = [
-  { icon: Clock, label: "One-time fixes" },
-  { icon: Calendar, label: "Occasional updates" },
-  { icon: ShieldCheck, label: "Ongoing care" },
+  {
+    icon: Clock,
+    label: "One-time fixes",
+    body: "A single request, scoped and completed.",
+  },
+  {
+    icon: Calendar,
+    label: "Occasional updates",
+    body: "Work picked up as it comes up, with no set schedule.",
+  },
+  {
+    icon: ShieldCheck,
+    label: "Ongoing care",
+    body: "Regular attention when the site needs it consistently.",
+  },
 ] as const;
 
 const supportRequests = [
@@ -143,12 +154,12 @@ const supportRequests = [
   {
     icon: BarChart3,
     label: "Investigate a tracking problem",
-    body: "Check events, conversions, and dashboards so your data is accurate and useful.",
+    body: "Check events, conversions, and dashboards so your data stays accurate.",
   },
   {
     icon: Gauge,
-    label: "Improve a slow or confusing section",
-    body: "Simplify navigation, improve performance, and make the content easier to follow.",
+    label: "Improve a slow or unclear section",
+    body: "Simplify navigation, improve speed, and make content easier to follow.",
   },
 ] as const;
 
@@ -186,7 +197,7 @@ const supportFaqs = [
   {
     question: "Can support include new pages or features?",
     answer:
-      "Yes. Small additions — a new page, a form field, a section — fit naturally into support. Larger feature work is scoped as its own focused piece so it stays clear and predictable.",
+      "Yes. Small additions like a new page, a form field, or a section fit naturally into support. Larger feature work is scoped as its own focused piece so it stays clear and predictable.",
   },
   {
     question: "Is support monthly or request-based?",
@@ -208,6 +219,7 @@ const supportFaqs = [
 function SupportRelated() {
   return (
     <RelatedLinks
+      compactMobile
       links={[
         {
           label: "Review the analytics behind your site",
@@ -453,7 +465,7 @@ function SupportSitePreview() {
                 <br />
                 designed for living.
               </p>
-              <p className="mt-2 text-[0.7rem] leading-5 text-ivory/85 sm:text-[0.78rem]">
+              <p className="mt-2 hidden text-[0.7rem] leading-5 text-ivory/85 sm:block sm:text-[0.78rem]">
                 Timeless design. Considered details.
               </p>
               <span className="mt-3 inline-flex w-fit rounded bg-forest px-3 py-2 text-[0.7rem] font-semibold text-ivory sm:text-[0.75rem]">
@@ -525,7 +537,7 @@ function SupportIncludeCard({
                 <h3 className="font-serif text-[1.35rem] font-bold leading-snug tracking-[-0.01em] text-ink sm:text-[1.45rem]">
                   {title}
                 </h3>
-                <p className="mt-2 text-[0.95rem] leading-7 text-muted">
+                <p className="mb-5 mt-2 text-[0.95rem] leading-7 text-muted">
                   {body}
                 </p>
               </div>
@@ -546,7 +558,9 @@ function SupportIncludeCard({
           <h3 className="mt-4 font-serif text-[1.35rem] font-bold leading-snug tracking-[-0.01em] text-ink sm:text-[1.45rem]">
             {title}
           </h3>
-          <p className="mt-2 text-[0.95rem] leading-7 text-muted">{body}</p>
+          <p className="mb-5 mt-2 text-[0.95rem] leading-7 text-muted">
+            {body}
+          </p>
         </>
       )}
 
@@ -566,7 +580,7 @@ function SupportIncludeBanner({
   const { title, body, icon: Icon, tags } = item;
 
   return (
-    <article className="flex flex-col gap-4 rounded-2xl border border-line bg-card px-5 py-5 shadow-soft lg:flex-row lg:items-center lg:gap-8 lg:px-6">
+    <article className="flex flex-col gap-5 rounded-2xl border border-line bg-card px-5 pb-0 pt-5 shadow-soft lg:flex-row lg:items-center lg:gap-8 lg:px-6 lg:py-5">
       <div className="flex min-w-0 flex-1 items-start gap-3.5 lg:gap-5">
         {/* Inline with the title on mobile; its own column once there is room. */}
         <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-full border border-line bg-card text-forest lg:flex">
@@ -591,8 +605,7 @@ function SupportIncludeBanner({
       </div>
       <SupportTagRow
         tags={tags}
-        showLine={false}
-        className="lg:min-w-[18rem] lg:flex-1"
+        className="lg:mx-0 lg:mt-0 lg:min-w-[18rem] lg:flex-1 lg:border-t-0 lg:px-0 lg:py-0"
       />
     </article>
   );
@@ -629,7 +642,7 @@ function SupportTagRow({
 }) {
   return (
     <div
-      className={`flex flex-wrap items-center justify-start gap-x-2.5 gap-y-1 sm:justify-center ${
+      className={`flex flex-wrap items-center justify-start gap-x-2 gap-y-1 sm:justify-center sm:gap-x-2.5 ${
         showLine
           ? "-mx-5 mt-auto border-t border-line px-5 py-3.5"
           : "pt-0"
@@ -656,9 +669,10 @@ function SupportRequests() {
   return (
     <section className="border-b border-line py-14 lg:py-16">
       <Reveal className="mx-auto max-w-3xl text-center">
-        <p className={serviceCenterLabelClassName}>
-          Examples of common requests
-        </p>
+        <p className={serviceCenterLabelClassName}>Common requests</p>
+        <h2 className={serviceCenterTitleClassName}>
+          What people actually ask for.
+        </h2>
       </Reveal>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {supportRequests.map(({ icon: Icon, label, body }, index) => (
@@ -671,19 +685,12 @@ function SupportRequests() {
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-forest-soft/55 text-forest">
               <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden />
             </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-[0.92rem] font-semibold leading-snug text-ink">
+            <div className="min-w-0 flex-1">
+              <h3 className="text-[0.92rem] font-semibold leading-snug text-ink">
                 {label}
-              </span>
-              <span className="mt-1 block text-[0.82rem] leading-5 text-muted">
-                {body}
-              </span>
-            </span>
-            <ChevronRight
-              className="mt-1 h-4 w-4 shrink-0 text-ink/30"
-              strokeWidth={1.8}
-              aria-hidden
-            />
+              </h3>
+              <p className="mt-1 text-[0.82rem] leading-5 text-muted">{body}</p>
+            </div>
           </Reveal>
         ))}
       </div>
@@ -705,22 +712,29 @@ function SupportPrinciple() {
             Support should remove uncertainty.
           </h2>
           <p className="mt-4 max-w-xl text-sm leading-7 text-muted sm:text-[0.95rem]">
-            The goal is not to create unnecessary monthly work. Support can be
-            scoped around a specific need or organized into ongoing care when
-            regular attention would genuinely help.
+            The goal is not to create unnecessary monthly work. Support is
+            scoped to what the site actually needs.
           </p>
         </div>
 
         <span className="hidden self-stretch bg-line lg:block" aria-hidden />
 
         <ul className="min-w-0 divide-y divide-line">
-          {supportModes.map(({ icon: Icon, label }) => (
-            <li key={label} className="flex items-center gap-4 py-4 first:pt-0 last:pb-0">
+          {supportModes.map(({ icon: Icon, label, body }) => (
+            <li
+              key={label}
+              className="flex items-start gap-4 py-4 first:pt-0 last:pb-0"
+            >
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-forest-soft/50 text-forest">
                 <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden />
               </span>
-              <span className="min-w-0 text-[0.98rem] font-semibold text-ink">
-                {label}
+              <span className="min-w-0">
+                <span className="block text-[0.98rem] font-semibold leading-snug text-ink">
+                  {label}
+                </span>
+                <span className="mt-1 block text-[0.82rem] leading-5 text-muted">
+                  {body}
+                </span>
               </span>
             </li>
           ))}
@@ -749,7 +763,7 @@ function SupportProcess() {
               as="article"
               key={title}
               delay={index * 100}
-              className="flex gap-4 py-4 first:pt-0 last:pb-0"
+              className="flex gap-4 py-5 first:pt-0 last:pb-0 lg:py-4"
             >
               <span
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest-soft/70 font-source-serif-display text-[0.85rem] font-semibold tabular-nums text-forest"
@@ -766,7 +780,7 @@ function SupportProcess() {
             </Reveal>
           ))}
         </div>
-        <p className="mt-6 text-sm leading-6 text-muted">
+        <p className="mt-8 rounded-xl border border-line bg-forest-soft/25 px-4 py-3.5 text-sm leading-6 text-ink/80">
           You receive a clear understanding of what is being changed, what it
           will require, and what happens next.
         </p>
@@ -781,7 +795,7 @@ function SupportProcess() {
   );
 }
 
-/** "Support request" tracker — how-requests-are-handled visual. */
+/** "Support request" tracker: the how-requests-are-handled visual. */
 function SupportRequestTracker() {
   return (
     <div className="rounded-2xl border border-line bg-card p-4 shadow-[0_26px_54px_-34px_rgba(31,36,32,0.5)] sm:p-5">
@@ -879,23 +893,29 @@ function SupportRebuildNote() {
 
 function SupportBottomCta() {
   return (
-    <Reveal className="mt-10 flex flex-col gap-6 rounded-2xl border border-line bg-sand px-6 py-7 shadow-soft sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:px-10">
-      <div>
-        <h2 className="font-serif text-[1.7rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2rem]">
+    <Reveal className="mt-10 flex flex-col gap-5 rounded-xl border border-line bg-card px-6 py-7 text-center shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left">
+      <div className="mx-auto max-w-xl lg:mx-0">
+        <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
+          Ongoing Support
+        </p>
+        <h2 className="mt-3 font-serif text-[1.85rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.15rem]">
           Need help keeping something current?
         </h2>
-        <p className="mt-2 max-w-xl text-sm leading-6 text-muted">
+        <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem] lg:mx-0">
           Share the website, system, or issue you&apos;re working with, and
           I&apos;ll help determine the most practical next step.
         </p>
       </div>
-      <ProjectInquiryTrigger
-        source="support_service_bottom_cta"
-        className="shrink-0 rounded-md px-6"
-      >
-        Request support
-        <ArrowRight className="h-4 w-4" />
-      </ProjectInquiryTrigger>
+
+      <div className="mx-auto flex w-fit shrink-0 flex-col items-stretch gap-4 lg:mx-0">
+        <ProjectInquiryTrigger
+          source="support_service_bottom_cta"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-forest px-6 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"
+        >
+          Request support
+          <ArrowRight className="h-4 w-4" />
+        </ProjectInquiryTrigger>
+      </div>
     </Reveal>
   );
 }

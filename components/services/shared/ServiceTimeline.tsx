@@ -4,7 +4,7 @@ import type { ServiceTimeline as ServiceTimelineData } from "@/lib/services";
 
 /**
  * One-line timeline answer for a service hero. Sits between the hero copy and
- * the CTA row — after the page has explained the service, before it asks for
+ * the CTA row, after the page has explained the service and before it asks for
  * the click, which is where "how long will this take?" actually gets asked.
  *
  * Deliberately not a card: the hero already carries a device preview, and
@@ -35,7 +35,7 @@ export default function ServiceTimeline({
           Mobile shows the figure alone, prefixed with "~" so it still reads as
           an estimate rather than a commitment. The lead-in and the caveat are
           desktop-only: stacked on a phone they ran to three lines and were the
-          longest thing in the hero. Nothing is lost — every service page
+          longest thing in the hero. Nothing is lost, because every service page
           repeats the full sentence, caveat included, in its FAQ.
 
           Only the figure is emphasised; bolding the lead-in too made the line
@@ -46,7 +46,7 @@ export default function ServiceTimeline({
         </span>
         <span className="hidden sm:inline">{timeline.lead} </span>
         <span className="font-semibold text-ink">{timeline.value}</span>
-        <span className="hidden sm:inline"> — {timeline.note}.</span>
+        <span className="hidden sm:inline">: {timeline.note}.</span>
       </span>
     </p>
   );

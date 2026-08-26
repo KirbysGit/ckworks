@@ -11,7 +11,6 @@ import { animDelay } from "@/lib/motion";
 
 const beforeLaunch = ["Mobile", "Forms", "Content", "Tracking"] as const;
 
-const refineLoop = ["Launch", "Learn", "Refine"] as const;
 
 const liveDemoImage = "/images/services/png/01-hearth-home-demo.png";
 const liveDemoLogo = "/images/services/svg/01-hearth-logo-demo.svg";
@@ -34,15 +33,13 @@ const trustPills = ["Warm spaces", "Refined detail", "Easy inquiry"] as const;
 const launchTiming = {
   confirmation: 240,
   refineIntro: 620,
-  refineStep: 700,
-  refineGap: 70,
 } as const;
 
 export default function LaunchImprovePhase() {
   return (
     <Reveal
       as="article"
-      className="overflow-hidden rounded-xl border border-line/75 bg-card/35 shadow-[0_10px_24px_-24px_rgba(31,36,32,0.5)]"
+      className="overflow-hidden rounded-xl border border-line bg-card/35 shadow-[0_4px_12px_-10px_rgba(31,36,32,0.3)]"
     >
       <div className="grid min-h-[21rem] grid-cols-1 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
         <LaunchArtefact />
@@ -169,16 +166,16 @@ function LiveSiteWindow() {
 
 function LaunchCopy() {
   return (
-    <div className="order-1 flex min-w-0 flex-col justify-center px-7 py-10 sm:px-10 lg:order-2 lg:px-8 lg:py-8 lg:pl-16">
-      <div className="flex items-start gap-5 lg:block">
-        <span className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-forest text-[0.74rem] font-semibold text-ivory shadow-[0_4px_12px_-7px_rgba(31,36,32,0.65)] lg:hidden">
+    <div className="order-1 flex min-w-0 flex-col justify-center px-5 py-8 sm:px-7 sm:py-10 lg:order-2 lg:px-8 lg:py-8 lg:pl-16">
+      <div className="flex items-center gap-3.5 lg:block">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest text-[0.8rem] font-semibold text-ivory shadow-[0_4px_12px_-7px_rgba(31,36,32,0.65)] lg:hidden">
           04
         </span>
         <div className="min-w-0">
-          <h2 className="font-source-serif-display text-[3.25rem] font-semibold leading-[0.96] text-forest sm:text-6xl lg:text-[4.25rem]">
+          <h2 className="font-source-serif-display text-[2.2rem] font-semibold leading-[0.96] text-forest sm:text-[2.9rem] lg:text-[4.25rem]">
             Launch it
           </h2>
-          <span className="mt-5 block h-px w-10 bg-forest/70" aria-hidden />
+          <span className="mt-5 hidden h-px w-10 bg-forest/70 lg:block" aria-hidden />
         </div>
       </div>
 
@@ -191,16 +188,15 @@ function LaunchCopy() {
         <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-forest">
           Before launch:
         </p>
-        <div className="mt-2.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.92rem] font-medium leading-6 text-ink/80 sm:text-[0.98rem]">
+        <div className="mt-2.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.92rem] font-medium leading-6 text-ink/80 sm:text-[0.98rem]">
           {beforeLaunch.map((item, index) => (
-            <span key={item} className="flex items-center gap-x-2.5">
-              {index > 0 && (
-                <span
-                  className="h-1 w-1 shrink-0 rounded-full bg-forest/45"
-                  aria-hidden
-                />
-              )}
+            <span key={item} className="whitespace-nowrap">
               {item}
+              {index < beforeLaunch.length - 1 && (
+                <span className="ml-2 text-forest/45" aria-hidden>
+                  •
+                </span>
+              )}
             </span>
           ))}
         </div>
@@ -212,7 +208,7 @@ function LaunchCopy() {
 /** Compact loop band — improve lives here so the main card stays in band. */
 function RefineStrip() {
   return (
-    <div className="flex flex-col gap-3 border-t border-line/75 bg-sand/45 px-6 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-10 sm:py-3.5 lg:px-10">
+    <div className="border-t border-line/75 bg-sand/45 px-5 py-4 sm:px-10 sm:py-3.5 lg:px-10">
       <div
         className="ck-step flex min-w-0 items-center gap-3"
         style={animDelay(launchTiming.refineIntro)}
@@ -228,27 +224,6 @@ function RefineStrip() {
             Keep refining from real use, feedback, and what the data shows.
           </p>
         </div>
-      </div>
-
-      <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
-        {refineLoop.map((step, index) => (
-          <span
-            key={step}
-            className="ck-step flex items-center gap-2"
-            style={animDelay(
-              launchTiming.refineStep + index * launchTiming.refineGap,
-            )}
-          >
-            {index > 0 && (
-              <span className="text-forest/40" aria-hidden>
-                →
-              </span>
-            )}
-            <span className="rounded-full bg-card px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-forest">
-              {step}
-            </span>
-          </span>
-        ))}
       </div>
     </div>
   );

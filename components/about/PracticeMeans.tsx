@@ -49,7 +49,7 @@ export default function PracticeMeans() {
     <section className="border-b border-line/70 bg-ivory py-12 lg:py-14">
       <div className="container-ck">
         <Reveal>
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.28em] text-forest sm:text-left">
             In practice, this usually means
           </p>
 
@@ -57,23 +57,25 @@ export default function PracticeMeans() {
             {practiceAreas.map(({ title, body, linkLabel, href, icon: Icon }, index) => (
               <article
                 key={title}
-                className="ck-step flex min-h-[17rem] flex-col px-0 py-8 first:pt-0 last:pb-0 sm:min-h-[18rem] sm:px-9 sm:py-0 first:sm:pl-0 last:sm:pr-0"
+                className="ck-step flex flex-col items-center px-2 py-7 text-center sm:min-h-[18rem] sm:items-start sm:px-9 sm:py-0 sm:text-left first:sm:pl-0 last:sm:pr-0"
                 style={animDelay(120 + index * 110)}
               >
-                <Icon
-                  className="h-11 w-11 text-forest"
-                  strokeWidth={1.35}
-                  aria-hidden
-                />
-                <h2 className="mt-5 font-serif text-3xl font-medium leading-tight text-ink lg:text-[2.1rem]">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-forest-soft text-forest sm:h-11 sm:w-11 sm:rounded-none sm:bg-transparent">
+                  <Icon
+                    className="h-5 w-5 sm:h-11 sm:w-11"
+                    strokeWidth={1.35}
+                    aria-hidden
+                  />
+                </span>
+                <h2 className="mt-4 font-serif text-[1.75rem] font-medium leading-tight text-ink sm:mt-5 sm:text-3xl lg:text-[2.1rem]">
                   {title}
                 </h2>
-                <p className="mt-3 max-w-[18rem] text-[0.95rem] leading-7 text-ink/80">
+                <p className="mx-auto mt-3 max-w-[17rem] text-[0.9rem] leading-6 text-ink/80 sm:mx-0 sm:max-w-[18rem] sm:text-[0.95rem] sm:leading-7">
                   {body}
                 </p>
                 <Link
                   href={href}
-                  className="mt-1 inline-flex w-fit items-center gap-3 pt-7 text-sm font-semibold text-forest transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-4"
+                  className="mt-5 inline-flex w-fit items-center gap-3 text-sm font-semibold text-forest transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-4 sm:mt-1 sm:pt-7"
                 >
                   {linkLabel}
                   <ArrowRight className="h-4 w-4" strokeWidth={1.8} />

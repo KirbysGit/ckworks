@@ -1,22 +1,40 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, type LucideIcon } from "lucide-react";
 import type { CaseStudy } from "@/lib/projects";
 
-/** Compact project card shared by the Analytics and Systems service pages. */
-export default function ProjectWorkCard({ project }: { project: CaseStudy }) {
+/** Compact project card shared by service pages, with optional mobile media. */
+export default function ProjectWorkCard({
+  project,
+  hideMediaOnMobile = false,
+  mobileIcon: MobileIcon,
+}: {
+  project: CaseStudy;
+  hideMediaOnMobile?: boolean;
+  mobileIcon?: LucideIcon;
+}) {
   return (
     <Link
       href={`/${project.slug}`}
       className="group flex overflow-hidden rounded-2xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/30 hover:shadow-lift"
     >
-      <div className="relative min-h-[10.5rem] w-[38%] shrink-0 overflow-hidden bg-sand">
+      <div
+        className={`relative shrink-0 overflow-hidden bg-sand ${
+          hideMediaOnMobile
+            ? "hidden min-h-[10.5rem] w-[38%] sm:block"
+            : "min-h-[10.5rem] w-[38%]"
+        }`}
+      >
         {project.coverImage ? (
           <Image
             src={project.coverImage.src}
             alt={project.coverImage.alt}
             fill
-            sizes="(min-width: 640px) 22vw, 40vw"
+            sizes={
+              hideMediaOnMobile
+                ? "(min-width: 640px) 22vw, 1px"
+                : "(min-width: 640px) 22vw, 40vw"
+            }
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
@@ -24,12 +42,24 @@ export default function ProjectWorkCard({ project }: { project: CaseStudy }) {
         )}
       </div>
       <div className="flex min-w-0 flex-col justify-center p-5 sm:p-6">
-        <h3 className="font-serif text-[1.4rem] font-medium leading-tight text-ink">
-          {project.name}
-        </h3>
-        <p className="mt-1 text-[0.72rem] font-medium text-muted">
-          {project.category}
-        </p>
+        <div className={MobileIcon ? "flex items-center gap-3 sm:block" : ""}>
+          {MobileIcon ? (
+            <span
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-soft/70 text-forest sm:hidden"
+              aria-hidden
+            >
+              <MobileIcon className="h-5 w-5" strokeWidth={1.5} />
+            </span>
+          ) : null}
+          <div className="min-w-0">
+            <h3 className="font-serif text-[1.4rem] font-medium leading-tight text-ink">
+              {project.name}
+            </h3>
+            <p className="mt-1 text-[0.72rem] font-medium text-muted">
+              {project.category}
+            </p>
+          </div>
+        </div>
         <p className="mt-2.5 line-clamp-3 text-sm leading-6 text-muted">
           {project.teaser}
         </p>

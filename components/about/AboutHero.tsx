@@ -6,8 +6,8 @@ import { animDelay } from "@/lib/motion";
 
 /**
  * Owns the About page opening: studio introduction plus an illustrative
- * storefront and mobile commerce composition. The device uses the shared
- * phone shell so its physical treatment stays consistent with service pages.
+ * storefront and mobile commerce composition. Mobile keeps the storefront as
+ * one calm visual; desktop adds the shared phone shell and connector story.
  *
  * The visual plays as one sequence: the storefront lands, the dashed elbow
  * draws out of its top-right and turns down, the phone arrives where the line
@@ -39,6 +39,13 @@ const aboutHeroTiming = {
 
 const aboutHeroLayout = {
   // Direct values keep image and device placement easy to tune, including negatives.
+  mobile: {
+    storefrontWidth: "76%",
+    storefrontAspectRatio: "562 / 685",
+    phoneRight: "-0.1rem",
+    phoneBottom: "1.25rem",
+    phoneScale: 0.78,
+  },
   storefront: {
     left: "0%",
     top: "0%",
@@ -67,7 +74,6 @@ const aboutHeroLayout = {
     // Drops the copy onto the connector's horizontal bar.
     textOffsetY: "2.1rem",
   },
-  visualHeight: "min-h-[25rem] sm:min-h-[34rem] lg:min-h-[40rem]",
   // Centered clover + progress ring on the white boot splash.
   boot: {
     size: "38cqw",
@@ -96,8 +102,8 @@ const aboutHeroLayout = {
 export default function AboutHero() {
   return (
     <section className="bg-ivory pb-6 pt-4 sm:pb-8 sm:pt-5 lg:pb-10 lg:pt-6">
-      <div className="container-ck grid items-center gap-10 pb-8 pt-2 sm:pb-12 sm:pt-3 lg:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)] lg:gap-14 lg:pb-14 lg:pt-4">
-        <div>
+      <div className="container-ck grid items-center gap-0 pb-8 pt-2 sm:pb-12 sm:pt-3 lg:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)] lg:gap-14 lg:pb-14 lg:pt-4">
+        <div className="text-center lg:text-left">
           <p
             className="ck-rise text-xs font-semibold uppercase tracking-[0.28em] text-forest"
             style={{ animationDelay: `${aboutHeroTiming.eyebrow}ms` }}
@@ -105,19 +111,17 @@ export default function AboutHero() {
             About CK Works
           </p>
           <h1
-            className="ck-rise mt-5 max-w-4xl font-serif text-[2.5rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[4rem]"
+            className="ck-rise mx-auto mt-5 max-w-4xl font-serif text-[2.5rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-5xl lg:mx-0 lg:text-[4rem]"
             style={{ animationDelay: `${aboutHeroTiming.title}ms` }}
           >
             A small studio for thoughtful digital work.
           </h1>
           <p
-            className="ck-rise mt-6 max-w-2xl text-base leading-7 text-ink/76 sm:text-lg"
+            className="ck-rise mx-auto mt-6 max-w-2xl text-base leading-7 text-ink/76 sm:text-lg lg:mx-0"
             style={{ animationDelay: `${aboutHeroTiming.lead}ms` }}
           >
-            CK Works is an Orlando, Florida studio led by Colin Kirby, working
-            with businesses across the U.S. It combines design, software
-            development, and systems thinking to build clearer websites and
-            practical digital tools for growing businesses.
+            CK Works is an Orlando studio led by Colin Kirby. I build clear
+            websites and practical digital systems for growing businesses.
           </p>
         </div>
 
@@ -130,21 +134,30 @@ export default function AboutHero() {
 function StorefrontVisual() {
   return (
     <div
-      className={`relative mx-auto mt-12 w-full max-w-[42rem] lg:mt-0 ${aboutHeroLayout.visualHeight}`}
+      className="relative mx-auto mt-8 w-full max-w-[42rem] lg:mt-0 lg:min-h-[40rem]"
     >
       <div
-        className="ck-lift absolute overflow-hidden rounded-xl border border-line/80 bg-sand shadow-[0_22px_48px_-32px_rgba(31,36,32,0.44)]"
-        style={{
-          ...aboutHeroLayout.storefront,
-          animationDelay: `${aboutHeroTiming.storefront}ms`,
-        }}
+        className="ck-lift relative w-[var(--about-storefront-mobile-width)] overflow-hidden rounded-xl border border-line/80 bg-sand shadow-[0_22px_48px_-32px_rgba(31,36,32,0.44)] [aspect-ratio:var(--about-storefront-mobile-aspect)] lg:absolute lg:left-[var(--about-storefront-left)] lg:top-[var(--about-storefront-top)] lg:w-[var(--about-storefront-width)] lg:[aspect-ratio:var(--about-storefront-aspect)]"
+        style={
+          {
+            "--about-storefront-mobile-width":
+              aboutHeroLayout.mobile.storefrontWidth,
+            "--about-storefront-mobile-aspect":
+              aboutHeroLayout.mobile.storefrontAspectRatio,
+            "--about-storefront-left": aboutHeroLayout.storefront.left,
+            "--about-storefront-top": aboutHeroLayout.storefront.top,
+            "--about-storefront-width": aboutHeroLayout.storefront.width,
+            "--about-storefront-aspect": aboutHeroLayout.storefront.aspectRatio,
+            animationDelay: `${aboutHeroTiming.storefront}ms`,
+          } as CSSProperties
+        }
       >
         <Image
           src="/images/about/png/about-hero-demo.png"
           alt="Illustrative Field and Forge storefront"
           fill
           priority
-          sizes="(min-width: 1024px) 35rem, (min-width: 640px) 60vw, 82vw"
+          sizes="(min-width: 1024px) 35rem, 76vw"
           className="object-cover object-center"
         />
         <p
@@ -159,21 +172,27 @@ function StorefrontVisual() {
           a primitive ends at `transform: none` so sharing an element would
           flatten the phone to its unscaled size. */}
       <div
-        className="ck-pop absolute z-20"
-        style={{
-          right: aboutHeroLayout.phone.right,
-          bottom: aboutHeroLayout.phone.bottom,
-          width: `calc(${aboutHeroLayout.phone.width} * ${aboutHeroLayout.phone.scale})`,
-          animationDelay: `${aboutHeroTiming.phone}ms`,
-        }}
+        className="ck-pop absolute bottom-[var(--about-phone-mobile-bottom)] right-[var(--about-phone-mobile-right)] z-20 w-[var(--about-phone-width)] lg:bottom-[var(--about-phone-bottom)] lg:right-[var(--about-phone-right)]"
+        style={
+          {
+            "--about-phone-mobile-right": aboutHeroLayout.mobile.phoneRight,
+            "--about-phone-mobile-bottom": aboutHeroLayout.mobile.phoneBottom,
+            "--about-phone-right": aboutHeroLayout.phone.right,
+            "--about-phone-bottom": aboutHeroLayout.phone.bottom,
+            "--about-phone-width": aboutHeroLayout.phone.width,
+            animationDelay: `${aboutHeroTiming.phone}ms`,
+          } as CSSProperties
+        }
       >
         <div
-          className="ml-auto"
-          style={{
-            width: aboutHeroLayout.phone.width,
-            transform: `scale(${aboutHeroLayout.phone.scale})`,
-            transformOrigin: "bottom right",
-          }}
+          className="ml-auto origin-bottom-right [transform:scale(var(--about-phone-mobile-scale))] lg:[transform:scale(var(--about-phone-scale))]"
+          style={
+            {
+              width: aboutHeroLayout.phone.width,
+              "--about-phone-mobile-scale": aboutHeroLayout.mobile.phoneScale,
+              "--about-phone-scale": aboutHeroLayout.phone.scale,
+            } as CSSProperties
+          }
         >
           <PhoneFrame size="lg">
             <FieldAndForgePhone />

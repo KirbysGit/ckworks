@@ -5,7 +5,7 @@ import { CalendarDays, Check, CheckCircle2, Clock3 } from "lucide-react";
 
 /**
  * Hero entrance choreography (ms), shared with the copy column in `Page.tsx`.
- * The site arrives first and the evidence of care accumulates around it —
+ * The site arrives first and the evidence of care accumulates around it,
  * it is live, then the recent updates tick in, then the context checks. That
  * order is the pitch: the work continues after launch.
  *

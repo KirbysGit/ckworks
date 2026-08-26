@@ -31,9 +31,9 @@ import { animDelay } from "@/lib/motion";
  */
 const processPhoneLayout = {
   laptopRightInset: "pr-[11%]",
-  position: "bottom-0 right-0 z-30",
-  footprint: "h-[14rem] w-[6.5rem] sm:h-[15.6rem] sm:w-[7.4rem]",
-  transform: "scale-[0.62] sm:scale-[0.7]",
+  position: "-bottom-2 -right-1 z-30 sm:bottom-0 sm:right-0",
+  footprint: "h-[15rem] w-[7rem] sm:h-[15.6rem] sm:w-[7.4rem]",
+  transform: "scale-[0.7]",
   imageHeight: "h-[7rem]",
 } as const;
 
@@ -69,16 +69,21 @@ export default function BuildPhase() {
   return (
     <Reveal
       as="article"
-      className="relative overflow-hidden rounded-xl border border-line/75 bg-card/35 shadow-[0_10px_24px_-24px_rgba(31,36,32,0.5)]"
+      className="relative overflow-hidden rounded-xl border border-line bg-card/35 shadow-[0_4px_12px_-10px_rgba(31,36,32,0.3)]"
     >
       {/* Same min-height band as phases 01 / 02 — left copy sets the row
           height on lg; the device panel fills that band instead of growing it. */}
       <div className="grid min-h-[21rem] grid-cols-1 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-        <div className="flex flex-col justify-center px-7 py-12 pl-[6rem] sm:pl-[7.25rem] lg:px-12 lg:py-14 lg:pl-[7.4rem]">
-          <h2 className="font-source-serif-display text-[3.25rem] font-semibold leading-[0.96] text-forest sm:text-6xl lg:text-[4.25rem]">
-            Build it out
-          </h2>
-          <span className="mt-5 block h-px w-12 bg-forest/65" aria-hidden />
+        <div className="flex flex-col justify-center px-5 pb-3 pt-8 sm:px-7 sm:py-10 lg:px-12 lg:py-14 lg:pl-[7.4rem]">
+          <div className="flex items-center gap-3.5 lg:block">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest text-[0.8rem] font-semibold text-ivory shadow-[0_4px_12px_-7px_rgba(31,36,32,0.65)] lg:hidden">
+              03
+            </span>
+            <h2 className="font-source-serif-display text-[2.2rem] font-semibold leading-[0.96] text-forest sm:text-[2.9rem] lg:text-[4.25rem]">
+              Build it out
+            </h2>
+          </div>
+          <span className="mt-5 hidden h-px w-12 bg-forest/65 lg:block" aria-hidden />
           <p className="mt-6 max-w-[28rem] text-base font-medium leading-7 text-ink/84 sm:text-lg sm:leading-8">
             Once the direction is clear, I turn it into the real thing:
             pages, content, and the pieces the site needs to work.
@@ -87,15 +92,15 @@ export default function BuildPhase() {
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-forest">
               I build:
             </p>
-            <p className="mt-2.5 text-[0.92rem] font-medium leading-6 text-ink/80 sm:text-[0.98rem]">
+            <p className="mt-2.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.92rem] font-medium leading-6 text-ink/80 sm:text-[0.98rem]">
               {buildItems.map((item, index) => (
-                <span key={item}>
-                  {index > 0 && (
-                    <span className="mx-2 text-forest/45" aria-hidden>
+                <span key={item} className="whitespace-nowrap">
+                  {item}
+                  {index < buildItems.length - 1 && (
+                    <span className="ml-2 text-forest/45" aria-hidden>
                       •
                     </span>
                   )}
-                  {item}
                 </span>
               ))}
             </p>
@@ -106,12 +111,12 @@ export default function BuildPhase() {
             column collapses into the copy-driven row and the panel is laid out
             absolutely so the laptop / phone cannot stretch the card. */}
         <div
-          className="relative min-h-[20rem] pl-[3.75rem] pr-5 sm:pl-[5.5rem] sm:pr-6 lg:min-h-0 lg:pl-2 lg:pr-9"
+          className="relative min-h-0 px-5 sm:min-h-[20rem] sm:px-7 lg:min-h-0 lg:pl-2 lg:pr-9"
           aria-hidden
         >
-          <div className="flex h-full items-center py-8 lg:absolute lg:inset-0 lg:py-6 lg:pl-2 lg:pr-9">
+          <div className="flex h-full items-center pb-11 pt-2 sm:py-8 lg:absolute lg:inset-0 lg:py-6 lg:pl-2 lg:pr-9">
             <div className="w-full origin-center lg:scale-[0.9]">
-              <div className="w-full rounded-2xl bg-sand px-4 py-4 sm:px-5 sm:py-5">
+              <div className="w-full rounded-none bg-transparent px-0 py-0 sm:rounded-2xl sm:bg-sand sm:px-5 sm:py-5">
                 {/* The phone overlaps the laptop's bottom-right rather than taking
                     its own column. Side by side, a ~230px panel at phone widths
                     left the phone about 50px wide; overlapping lets the laptop use
@@ -131,7 +136,7 @@ export default function BuildPhase() {
                     className={`ck-step absolute ${processPhoneLayout.position} ${processPhoneLayout.footprint}`}
                     style={animDelay(buildTiming.mobile)}
                   >
-                    <div className="absolute inset-x-0 bottom-full mb-2.5">
+                    <div className="absolute inset-x-0 top-[12%] z-40 hidden sm:bottom-full sm:top-auto sm:mb-2.5 sm:block">
                       <PanelLabel>Mobile</PanelLabel>
                     </div>
                     <div
@@ -142,21 +147,21 @@ export default function BuildPhase() {
                   </div>
                 </div>
 
-                <div className="mt-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 sm:mt-6 sm:gap-x-3">
+                <div className="mx-auto mt-5 hidden max-w-[13rem] flex-wrap items-center justify-center gap-x-2 gap-y-1.5 sm:mt-6 sm:flex sm:max-w-none sm:gap-x-3">
                   {buildFlow.map((step, index) => (
                     <span
                       key={step}
-                      className="ck-step flex items-center gap-2 sm:gap-3"
+                      className="ck-step flex items-center gap-2 whitespace-nowrap sm:gap-3"
                       style={animDelay(
                         buildTiming.flow + index * buildTiming.flowGap,
                       )}
                     >
-                      {index > 0 && (
-                        <ArrowRight className="h-3 w-3 shrink-0 text-forest/55" />
-                      )}
                       <span className="text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-forest sm:text-[0.66rem]">
                         {step}
                       </span>
+                      {index < buildFlow.length - 1 && (
+                        <ArrowRight className="h-3 w-3 shrink-0 text-forest/55" />
+                      )}
                     </span>
                   ))}
                 </div>
@@ -168,10 +173,10 @@ export default function BuildPhase() {
 
       {/* Same left-edge rail as phase one — the process reads down one line. */}
       <span
-        className="pointer-events-none absolute bottom-0 left-8 top-0 w-px bg-line/80 sm:left-12 lg:left-[3.5rem]"
+        className="pointer-events-none absolute bottom-0 left-8 top-0 hidden w-px bg-line/80 sm:left-12 lg:left-[3.5rem] lg:block"
         aria-hidden
       />
-      <span className="pointer-events-none absolute left-8 top-[30%] z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-forest text-[0.74rem] font-semibold text-ivory shadow-[0_4px_12px_-7px_rgba(31,36,32,0.65)] sm:left-12 lg:left-[3.5rem] lg:h-11 lg:w-11 lg:text-sm">
+      <span className="pointer-events-none absolute left-8 top-[30%] z-10 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-forest text-[0.74rem] font-semibold text-ivory shadow-[0_4px_12px_-7px_rgba(31,36,32,0.65)] sm:left-12 lg:left-[3.5rem] lg:flex lg:h-11 lg:w-11 lg:text-sm">
         03
       </span>
     </Reveal>
@@ -180,7 +185,7 @@ export default function BuildPhase() {
 
 function PanelLabel({ children }: { children: string }) {
   return (
-    <p className="mx-auto w-fit rounded-full bg-card/90 px-2.5 py-1 text-center text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-forest sm:px-3 sm:text-[0.62rem]">
+    <p className="mx-auto w-fit rounded-full bg-card/90 px-3 py-1 text-center text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-forest sm:text-[0.68rem]">
       {children}
     </p>
   );

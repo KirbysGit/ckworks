@@ -19,6 +19,8 @@ import {
   RefreshCw,
   Store,
   UserRoundCheck,
+  WalletCards,
+  Workflow,
 } from "lucide-react";
 import { SiAirtable, SiGooglecalendar, SiStripe } from "react-icons/si";
 import FAQSection from "@/components/page/FAQSection";
@@ -229,6 +231,7 @@ const systemsWorkflows = [
     step: "01",
     title: "New inquiries",
     audience: "Service business",
+    mobileAudience: "Service business",
     steps: [
       { icon: LayoutTemplate, label: "Website form", mobileLabel: "Form" },
       { icon: IdCard, label: "Client record", mobileLabel: "Record" },
@@ -246,6 +249,7 @@ const systemsWorkflows = [
     step: "02",
     title: "Orders & updates",
     audience: "Retail / product business",
+    mobileAudience: "Retail / product",
     steps: [
       { icon: CreditCard, label: "Payment received", mobileLabel: "Payment" },
       { icon: Package, label: "Order updated", mobileLabel: "Order" },
@@ -267,6 +271,7 @@ const systemsWorkflows = [
     step: "03",
     title: "Client onboarding",
     audience: "professional-services business",
+    mobileAudience: "Professional services",
     steps: [
       { icon: UserRoundCheck, label: "Client confirmed", mobileLabel: "Confirm" },
       { icon: Folder, label: "Record created", mobileLabel: "Record" },
@@ -310,6 +315,7 @@ const systemsProjectSlugs = ["internal-automation-tool", "centi"] as const;
 function SystemsRelated() {
   return (
     <RelatedLinks
+      compactMobile
       links={[
         {
           label: "Measure what your workflows produce",
@@ -799,7 +805,7 @@ function SystemsHowItWorks() {
 
         {/* Divider belongs to the right column so it spans the full stack. */}
         <div className="min-w-0 lg:border-l lg:border-line lg:pl-12">
-          <p className="mb-2 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted">
+          <p className="mb-2 hidden text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted sm:block">
             Illustrative workflow examples
           </p>
           <div className="divide-y divide-line">
@@ -808,30 +814,38 @@ function SystemsHowItWorks() {
                 as="article"
                 key={workflow.step}
                 delay={index * 110}
-                className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 py-5 first:pt-0 last:pb-0 sm:items-baseline sm:gap-x-5 sm:py-6"
+                className="py-5 first:pt-0 last:pb-0 sm:grid sm:grid-cols-[auto_minmax(0,1fr)] sm:items-baseline sm:gap-x-5 sm:py-6"
               >
                 {/* The number is its own column, so the title, chain, and
                     "Removes" line all share one left edge automatically. */}
                 <span
-                  className="font-source-serif-display text-[1.35rem] font-semibold leading-none tabular-nums text-forest/60"
+                  className="hidden font-source-serif-display text-[1.35rem] font-semibold leading-none tabular-nums text-forest/60 sm:block"
                   style={{ fontVariationSettings: '"opsz" 20' }}
                 >
                   {workflow.step}
                 </span>
                 <div className="min-w-0">
-                  <h3 className="font-serif text-[1.45rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[1.85rem]">
-                    {workflow.title}
-                    <span className="hidden sm:inline">{" "}</span>
-                    <span className="hidden font-sans text-[0.85rem] font-medium tracking-normal text-ink/55 sm:inline sm:text-[0.9rem]">
-                      for a
-                    </span>{" "}
-                    <span className="hidden font-sans text-[0.9rem] font-semibold tracking-normal text-forest sm:inline sm:text-[0.95rem]">
-                      {workflow.audience}
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1 sm:block">
+                    <span
+                      className="font-source-serif-display text-[1.3rem] font-semibold leading-none tabular-nums text-forest/60 sm:hidden"
+                      style={{ fontVariationSettings: '"opsz" 20' }}
+                    >
+                      {workflow.step}
                     </span>
-                  </h3>
-                  <span className="mt-2 inline-flex rounded-full bg-forest-soft/70 px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-forest sm:hidden">
-                    {workflow.audience}
-                  </span>
+                    <h3 className="font-serif text-[1.35rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[1.85rem]">
+                      {workflow.title}
+                      <span className="hidden sm:inline">{" "}</span>
+                      <span className="hidden font-sans text-[0.85rem] font-medium tracking-normal text-ink/55 sm:inline sm:text-[0.9rem]">
+                        for a
+                      </span>{" "}
+                      <span className="hidden font-sans text-[0.9rem] font-semibold tracking-normal text-forest sm:inline sm:text-[0.95rem]">
+                        {workflow.audience}
+                      </span>
+                    </h3>
+                    <span className="inline-flex rounded-full bg-forest-soft/70 px-2 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.07em] text-forest sm:hidden">
+                      {workflow.mobileAudience}
+                    </span>
+                  </div>
                   <p className="mt-2 text-[0.8rem] leading-5 text-ink/80 sm:mt-1 sm:text-[0.85rem] sm:leading-6">
                     <span className="font-semibold text-ink">Removes:</span>{" "}
                     {workflow.removes}
@@ -863,7 +877,7 @@ function SystemsWorkflowChain({
   rowDelay: number;
 }) {
   return (
-    <div className="mt-4 grid grid-cols-4 gap-x-0 sm:grid-cols-[repeat(4,minmax(0,1fr))] lg:grid-cols-[repeat(3,minmax(0,1fr)_auto)_minmax(0,1fr)]">
+    <div className="mt-4 grid -translate-x-1.5 grid-cols-4 gap-x-0 sm:translate-x-0 sm:grid-cols-[repeat(4,minmax(0,1fr))] lg:grid-cols-[repeat(3,minmax(0,1fr)_auto)_minmax(0,1fr)]">
       {steps.map(({ icon: Icon, ...rest }, index) => {
         const iconAt = rowDelay + index * systemsWorkflowTiming.iconStep;
         // The arrow into this step leaves just after the previous icon lands.
@@ -909,7 +923,7 @@ function SystemsWorkflowChain({
             >
               {index < steps.length - 1 ? (
                 <span
-                  className="absolute left-[calc(50%+1.25rem)] right-[calc(-50%+1.25rem)] top-5 h-px bg-ink/25 sm:hidden"
+                  className="absolute left-[calc(50%+1.35rem)] right-[calc(-50%+1.65rem)] top-5 h-px bg-ink/25 sm:hidden"
                   aria-hidden
                 >
                   <span className="absolute -right-px -top-[3px] block h-[7px] w-[7px] rotate-45 border-r border-t border-ink/30" />
@@ -940,20 +954,31 @@ function SystemsWork({ projects }: { projects: CaseStudy[] }) {
   if (projects.length === 0) return null;
 
   return (
-    <section className="border-b border-line py-12 lg:py-14">
-      <Reveal>
-        <h2 className="font-serif text-[2rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.3rem]">
-          Relevant work
-        </h2>
+    <section className="border-b border-line py-14 lg:py-16">
+      <Reveal className="mx-auto max-w-5xl text-center">
+        <p className={serviceCenterLabelClassName}>Selected work</p>
+        <h2 className={serviceCenterTitleClassName}>Systems in practice.</h2>
+        <p className={`mx-auto max-w-xl ${serviceSectionBodyClassName}`}>
+          Projects where connected tools and structured data replaced scattered
+          manual work.
+        </p>
       </Reveal>
-      <div className="mt-7 grid gap-5 sm:grid-cols-2 sm:gap-6">
+      <div className="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6">
         {projects.map((project, index) => (
           <Reveal
             key={project.slug}
             delay={index * 120}
             className="h-full min-h-0"
           >
-            <ProjectWorkCard project={project} />
+            <ProjectWorkCard
+              project={project}
+              hideMediaOnMobile
+              mobileIcon={
+                project.slug === "internal-automation-tool"
+                  ? Workflow
+                  : WalletCards
+              }
+            />
           </Reveal>
         ))}
       </div>
@@ -976,20 +1001,24 @@ function SystemsFaq() {
 
 function SystemsBottomCta() {
   return (
-    <Reveal className="mt-10 block rounded-2xl border border-line bg-sand px-6 py-8 shadow-soft sm:px-8 sm:py-9 lg:px-10">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-        <div className="max-w-2xl">
-          <h2 className="font-serif text-[1.85rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2.15rem]">
-            Have a workflow that should run itself?
-          </h2>
-          <p className="mt-3 text-sm leading-7 text-muted sm:text-base">
-            Tell me where the manual work is, and I&apos;ll help you find the
-            simplest system that removes it.
-          </p>
-        </div>
+    <Reveal className="mt-10 flex flex-col gap-5 rounded-xl border border-line bg-card px-6 py-7 text-center shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left">
+      <div className="mx-auto max-w-xl lg:mx-0">
+        <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
+          Digital Systems &amp; Integrations
+        </p>
+        <h2 className="mt-3 font-serif text-[1.85rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.15rem]">
+          Have a workflow that should run itself?
+        </h2>
+        <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem] lg:mx-0">
+          Tell me where the manual work is, and I&apos;ll help you find the
+          simplest system that removes it.
+        </p>
+      </div>
+
+      <div className="mx-auto flex w-fit shrink-0 flex-col items-stretch gap-4 lg:mx-0">
         <ProjectInquiryTrigger
           source="systems_service_bottom_cta"
-          className="shrink-0 rounded-md px-6"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-forest px-6 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"
         >
           Start a project
           <ArrowRight className="h-4 w-4" />

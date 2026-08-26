@@ -115,33 +115,38 @@ function SelectedWorkSection() {
   return (
     <section className="border-b border-line/70 bg-ivory py-12 lg:py-14">
       <div className="container-ck">
-        <Reveal className="flex items-end justify-between gap-6">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-              Selected Work
-            </p>
-            <h2 className="mt-4 font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl">
-              A few projects connected to the studio&apos;s way of working.
-            </h2>
-          </div>
-          <Link
-            href="/work"
-            className="hidden items-center gap-2 border-b border-forest pb-1 text-sm font-semibold text-forest transition-colors hover:text-ink sm:inline-flex"
-          >
-            View all work
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+            Selected Work
+          </p>
+          <h2 className="mt-4 font-serif text-4xl font-medium leading-tight text-ink sm:text-5xl">
+            A few projects connected to the studio&apos;s way of working.
+          </h2>
         </Reveal>
 
         {/* Independent grid items with no sibling selectors between them, so a
             Reveal per card is right here rather than one around the grid. */}
         <div className="mt-8 grid gap-5 lg:grid-cols-3">
           {selectedWork.map((study, index) => (
-            <Reveal key={study.slug} delay={index * 90} className="min-w-0">
+            <Reveal
+              key={study.slug}
+              delay={index * 90}
+              className="h-full min-w-0"
+            >
               <AboutWorkCard study={study} />
             </Reveal>
           ))}
         </div>
+
+        <Reveal className="mt-8 text-center">
+          <Link
+            href="/work"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-forest underline decoration-forest/35 underline-offset-4 transition-colors hover:decoration-forest"
+          >
+            View all work
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </Reveal>
       </div>
     </section>
   );
@@ -149,32 +154,37 @@ function SelectedWorkSection() {
 
 function AboutWorkCard({ study }: { study: CaseStudy }) {
   return (
-    <article className="group grid overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift sm:grid-cols-[minmax(9rem,0.75fr)_1fr] lg:grid-cols-[minmax(9rem,0.9fr)_1fr]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/30 hover:shadow-lift sm:grid sm:grid-cols-[minmax(9rem,0.75fr)_1fr] lg:flex lg:flex-col">
       <Link
         href={`/${study.slug}`}
         aria-label={`View the ${study.name} case study`}
-        className={`relative min-h-40 bg-gradient-to-br ${study.accent}`}
+        className={`relative aspect-[16/9] w-full shrink-0 bg-gradient-to-br sm:aspect-auto sm:min-h-40 lg:aspect-[16/9] lg:min-h-0 ${study.accent}`}
       >
         {study.coverImage && (
           <Image
             src={study.coverImage.src}
             alt={study.coverImage.alt}
             fill
-            sizes="(min-width: 1024px) 18vw, (min-width: 640px) 38vw, 100vw"
+            sizes="(min-width: 1024px) 30vw, (min-width: 640px) 38vw, calc(100vw - 2rem)"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
             style={{ objectPosition: study.coverImage.position ?? "center" }}
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-ink/20 via-transparent to-transparent" />
       </Link>
-      <div className="flex flex-col p-5">
-        <h3 className="font-serif text-2xl font-medium leading-tight text-ink">
+      <div className="flex flex-1 flex-col p-5 sm:p-6 lg:p-5">
+        <h3 className="font-serif text-[1.65rem] font-medium leading-tight text-ink">
           {study.name}
         </h3>
-        <p className="mt-1 text-sm font-medium text-forest">{study.badge}</p>
+        <p className="mt-1 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-forest">
+          {study.badge}
+        </p>
+        <p className="mt-3 text-sm leading-6 text-muted">
+          {study.outcomeLine}
+        </p>
         <Link
           href={`/${study.slug}`}
-          className="group/link mt-auto inline-flex w-fit items-center gap-2 pt-6 text-sm font-medium text-forest transition-colors hover:text-ink"
+          className="group/link mt-auto inline-flex w-fit items-center gap-2 pt-6 text-sm font-semibold text-forest transition-colors hover:text-ink"
         >
           View project
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
@@ -205,21 +215,21 @@ function AboutClosingCTA() {
   return (
     <section className="bg-ivory py-10 sm:py-12 lg:py-14">
       <div className="container-ck">
-        <Reveal className="flex flex-col gap-6 rounded-xl border border-line bg-card px-6 py-7 shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-          <div className="max-w-xl">
+        <Reveal className="flex flex-col gap-5 rounded-xl border border-line bg-card px-6 py-6 text-center shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left">
+          <div className="mx-auto max-w-xl lg:mx-0">
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
               About CK Works
             </p>
             <h2 className="mt-3 font-serif text-[1.85rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.15rem]">
               Have something that needs to work better?
             </h2>
-            <p className="mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
+            <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem] lg:mx-0">
               Tell me a little about your business and what you&apos;d like to
               improve.
             </p>
           </div>
 
-          <div className="flex w-fit shrink-0 flex-col items-stretch gap-4">
+          <div className="mx-auto flex w-fit shrink-0 flex-col items-stretch gap-4 lg:mx-0">
             <ProjectInquiryTrigger
               source="about_footer_cta"
               className="rounded-lg px-6 py-3.5 text-sm font-semibold hover:bg-ink"

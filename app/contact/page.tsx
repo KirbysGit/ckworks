@@ -42,28 +42,31 @@ export default function ContactPage() {
 
       <section className="bg-ivory pb-12 pt-6 sm:pt-7 lg:pb-16 lg:pt-8">
         <div className="container-ck">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-            Contact
-          </p>
-          <h1 className="mt-3 max-w-3xl font-serif text-[2.4rem] font-medium leading-[1.04] tracking-[-0.02em] text-ink sm:text-[2.9rem] lg:text-[2.95rem]">
-            Tell me what you&apos;re working on.
-          </h1>
-          <p className="mt-3.5 max-w-xl text-base leading-7 text-ink/76 sm:text-[1.05rem]">
-            No perfect brief needed. Share where things stand, what feels
-            unclear, and what you&apos;d like the site or system to help with.
-          </p>
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
+              Contact
+            </p>
+            <h1 className="mt-3 font-serif text-[2.4rem] font-medium leading-[1.04] tracking-[-0.02em] text-ink sm:text-[2.9rem] lg:text-[2.95rem]">
+              Tell me what you&apos;re working on.
+            </h1>
+            <p className="mx-auto mt-3.5 max-w-xl text-base leading-7 text-ink/76 sm:text-[1.05rem]">
+              No perfect brief needed. Share where things stand, what feels
+              unclear, and what you&apos;d like the site or system to help with.
+            </p>
 
-          {/*
-            Location and response time are facts, not prose. Folding them into
-            the paragraph above turned an invitation into a run-on; as a
-            separated row they stay scannable and still carry the Orlando
-            signal. Dots are CSS content, so they stay out of the a11y tree.
-          */}
-          <ul className="mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm text-muted [&>li:not(:first-child)]:before:mr-2.5 [&>li:not(:first-child)]:before:text-line [&>li:not(:first-child)]:before:content-['·']">
-            <li>Orlando, Florida</li>
-            <li>Working nationwide</li>
-            <li>Replies within one business day</li>
-          </ul>
+            {/* Keep the service area and response time as two compact facts so
+                the location line never wraps into an accidental third item. */}
+            <ul className="mt-4 flex flex-col items-center gap-1 text-sm text-muted">
+              <li className="flex items-center justify-center gap-2.5">
+                <span>Orlando, Florida</span>
+                <span className="text-line" aria-hidden>
+                  ·
+                </span>
+                <span>Working nationwide</span>
+              </li>
+              <li>Replies within one business day</li>
+            </ul>
+          </div>
 
           <div className="mt-5 rounded-2xl border border-line bg-card shadow-soft lg:mt-6">
             <div className="grid lg:grid-cols-[minmax(0,1fr)_20rem]">

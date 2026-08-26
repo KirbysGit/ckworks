@@ -118,7 +118,7 @@ function WorkHero() {
     <section className="overflow-hidden border-b border-line/70 bg-ivory py-12 sm:py-14 lg:py-16">
       <div className={workPageContainer}>
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.94fr)_minmax(28rem,1.06fr)] lg:items-center">
-          <div>
+          <div className="text-center sm:text-left">
             <p
               className="ck-rise text-xs font-semibold uppercase tracking-[0.28em] text-forest"
               style={{ animationDelay: `${workHeroTiming.eyebrow}ms` }}
@@ -126,14 +126,14 @@ function WorkHero() {
               Selected Work
             </p>
             <h1
-              className="ck-rise mt-5 max-w-4xl font-serif text-[2.5rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[4rem]"
+              className="ck-rise mx-auto mt-5 max-w-4xl font-serif text-[2.5rem] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:mx-0 sm:text-5xl lg:text-[4rem]"
               style={{ animationDelay: `${workHeroTiming.title}ms` }}
             >
               A few things I&apos;ve built, designed, or helped bring into
               shape.
             </h1>
             <p
-              className="ck-rise mt-6 max-w-2xl text-base leading-7 text-ink/76 sm:text-lg"
+              className="ck-rise mx-auto mt-6 max-w-2xl text-base leading-7 text-ink/76 sm:mx-0 sm:text-lg"
               style={{ animationDelay: `${workHeroTiming.lead}ms` }}
             >
               Websites, products, systems, and the experiments in between.
@@ -154,34 +154,38 @@ function WorkHero() {
 const cardPositions = {
   tizirsso: {
     left: "6%",
+    right: "auto",
     top: "0%",
+    bottom: "auto",
     zIndex: 20,
     width: "53%",
-    mobileWidth: "55%",
     rotation: "-2.2deg",
   },
   taylor: {
+    left: "auto",
     right: "7%",
     top: "12%",
+    bottom: "auto",
     zIndex: 30,
     width: "34%",
-    mobileWidth: "43%",
     rotation: "3.5deg",
   },
   setlst: {
     left: "12%",
+    right: "auto",
+    top: "auto",
     bottom: "-8%",
     zIndex: 10,
     width: "42%",
-    mobileWidth: "48%",
     rotation: "2.4deg",
   },
   centi: {
+    left: "auto",
     right: "6%",
+    top: "auto",
     bottom: "3%",
     zIndex: 20,
     width: "38%",
-    mobileWidth: "45%",
     rotation: "-1.2deg",
   },
 } as const;
@@ -190,12 +194,11 @@ type CardPosition = typeof cardPositions[keyof typeof cardPositions];
 
 const buildCardStyle = (pos: CardPosition) => {
   return {
-    left: "left" in pos ? pos.left : undefined,
-    right: "right" in pos ? pos.right : undefined,
-    top: "top" in pos ? pos.top : undefined,
-    bottom: "bottom" in pos ? pos.bottom : undefined,
     zIndex: pos.zIndex,
-    "--work-card-mobile-width": pos.mobileWidth,
+    "--work-card-left": pos.left,
+    "--work-card-right": pos.right,
+    "--work-card-top": pos.top,
+    "--work-card-bottom": pos.bottom,
     "--work-card-width": pos.width,
     "--work-card-rotation": pos.rotation,
   } as CSSProperties;
@@ -255,9 +258,9 @@ const workHeroLogoCards = [
 
 function WorkLogoStack() {
   return (
-    <div className="relative mx-auto h-[26rem] w-full max-w-[46rem] lg:mx-0 lg:ml-auto lg:h-[31rem]">
+    <div className="relative mx-auto grid w-full max-w-[46rem] grid-cols-2 gap-1.5 sm:block sm:h-[26rem] lg:mx-0 lg:ml-auto lg:h-[31rem]">
       <span
-        className="pointer-events-none absolute bottom-[11%] right-[5%] text-4xl text-muted/35"
+        className="pointer-events-none absolute bottom-[11%] right-[5%] hidden text-4xl text-muted/35 sm:block"
         aria-hidden
       >
         *
@@ -272,10 +275,10 @@ function WorkLogoStack() {
         <Link
           key={card.slug}
           href={`/${card.slug}`}
-          className="ck-lift group absolute block w-[var(--work-card-mobile-width)] sm:w-[var(--work-card-width)]"
+          className="ck-lift group relative block w-full sm:absolute sm:bottom-[var(--work-card-bottom)] sm:left-[var(--work-card-left)] sm:right-[var(--work-card-right)] sm:top-[var(--work-card-top)] sm:w-[var(--work-card-width)]"
           style={{ ...card.style, animationDelay: `${card.delay}ms` }}
         >
-          <div className="flex rotate-[var(--work-card-rotation)] flex-col transition-transform duration-300 group-hover:-translate-y-1">
+          <div className="flex flex-col transition-transform duration-300 group-hover:-translate-y-1 sm:rotate-[var(--work-card-rotation)]">
             {/* Folder tab. Sits above the card, borders on three sides only,
                 and the -mb-px lets its fill cover the card's top border. */}
             <span className="relative z-10 -mb-px ml-3 flex items-center gap-1.5 self-start whitespace-nowrap rounded-t-[0.3rem] border-x border-t border-line bg-card px-2 pb-1.5 pt-1 text-[0.5rem] font-semibold uppercase tracking-[0.1em] text-ink/70 sm:ml-4 sm:px-3 sm:text-[0.55rem] sm:tracking-[0.14em]">
@@ -290,7 +293,7 @@ function WorkLogoStack() {
                 aria-hidden
               />
 
-              <div className="relative z-10 flex h-full flex-col p-4 sm:p-5">
+              <div className="relative z-10 flex h-full flex-col p-3 sm:p-5">
                 <div
                   className="relative min-h-0 flex-1 overflow-hidden rounded-[0.25rem]"
                   style={{ background: card.background }}
@@ -304,9 +307,9 @@ function WorkLogoStack() {
                   />
                 </div>
 
-                <div className="mt-3 border-t border-line/70" aria-hidden />
+                <div className="mt-3 hidden border-t border-line/70 sm:block" aria-hidden />
 
-                <div className="flex items-center justify-center gap-1.5 whitespace-nowrap pt-2.5 text-[0.55rem] font-medium uppercase tracking-[0.08em] text-ink/70 sm:text-[0.62rem]">
+                <div className="hidden items-center justify-center gap-1.5 whitespace-nowrap pt-2.5 text-[0.62rem] font-medium uppercase tracking-[0.08em] text-ink/70 sm:flex">
                   {card.meta.map((item, index) => (
                     <span
                       key={item}
@@ -375,7 +378,10 @@ function MoreWorkSection() {
           />
         </Reveal>
 
-        <Reveal className="mt-10 space-y-3 sm:mt-12" delay={90}>
+        <Reveal
+          className="mt-10 space-y-0 sm:mt-12 sm:space-y-3 [&>article:last-child]:border-b"
+          delay={90}
+        >
           {secondaryCaseStudies.map((study, index) => (
             <TechnicalWorkRow
               key={study.slug}
@@ -423,16 +429,17 @@ function FileDrawerWorkCard({
   total: number;
 }) {
   const tabLabel = `${String(index).padStart(2, "0")} Featured`;
+  const mobileTabLabel = `${String(index).padStart(2, "0")} · ${groupLabels[study.group]}`;
   const stackLevel = total - index;
   const isFrontFile = index === total;
 
   return (
     <article
-      className="group relative -mt-5 pt-7 first:mt-0 sm:-mt-6 lg:-mt-7"
+      className="group relative -mt-6 pt-7 first:mt-0 sm:first:mt-0 lg:-mt-7"
       style={{ zIndex: index }}
     >
       <div
-        className="absolute left-5 top-[0px] z-20 flex h-8 w-[15rem] items-center justify-center sm:left-7"
+        className="absolute -top-1 left-5 z-20 flex h-8 w-[15rem] items-center justify-center drop-shadow-[0_-3px_5px_rgba(31,36,32,0.09)] sm:left-7 sm:top-0 sm:drop-shadow-none"
         aria-hidden
       >
         <svg
@@ -451,8 +458,9 @@ function FileDrawerWorkCard({
             strokeLinejoin="round"
           />
         </svg>
-        <span className="relative z-10 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-forest">
-          {tabLabel}
+        <span className="relative z-10 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-forest sm:text-[0.7rem] sm:tracking-[0.2em]">
+          <span className="sm:hidden">{mobileTabLabel}</span>
+          <span className="hidden sm:inline">{tabLabel}</span>
         </span>
       </div>
       <span
@@ -461,8 +469,10 @@ function FileDrawerWorkCard({
       />
 
       <div
-        className={`relative z-10 overflow-visible rounded-t-xl border border-line bg-card px-5 pb-9 pt-6 shadow-[0_1px_0_rgba(255,255,255,0.75)_inset,0_18px_42px_-38px_rgba(31,36,32,0.45)] sm:px-7 sm:pb-10 sm:pt-7 lg:px-9 lg:pb-10 lg:pt-8 ${
-          isFrontFile ? "rounded-b-xl" : "rounded-b-none"
+        className={`relative z-10 overflow-visible rounded-t-xl border border-line bg-card px-5 pt-6 shadow-[0_1px_0_rgba(255,255,255,0.75)_inset,0_18px_42px_-38px_rgba(31,36,32,0.45)] sm:px-7 sm:pb-10 sm:pt-7 lg:px-9 lg:pb-10 lg:pt-8 ${
+          isFrontFile
+            ? "rounded-b-xl pb-9"
+            : "rounded-b-xl pb-14 sm:rounded-b-none"
         }`}
         style={{
           transform: `translateY(${stackLevel * 1}px)`,
@@ -473,7 +483,7 @@ function FileDrawerWorkCard({
       >
         {!isFrontFile && (
           <span
-            className="pointer-events-none absolute inset-x-[-1px] bottom-[-1.35rem] h-6 border-x border-line bg-card"
+            className="pointer-events-none absolute inset-x-[-1px] bottom-[-1.35rem] hidden h-6 border-x border-line bg-card sm:block"
             aria-hidden
           />
         )}
@@ -494,23 +504,27 @@ function EditorialWorkCardContent({
 
   return (
     <div
-      className={`grid items-stretch gap-7 lg:gap-10 ${
+      className={`grid items-stretch gap-5 sm:gap-7 lg:gap-10 ${
         isEven
           ? "lg:grid-cols-[minmax(0,0.58fr)_minmax(20rem,0.42fr)]"
           : "lg:grid-cols-[minmax(20rem,0.42fr)_minmax(0,0.58fr)]"
       }`}
     >
       {/* Text Content */}
-      <div className={`pt-2 lg:pt-1 ${isEven ? "lg:col-start-2" : ""}`}>
-        <p className="font-sans text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-forest/75">
+      <div
+        className={`order-last pt-0 sm:order-none sm:pt-2 lg:pt-1 ${
+          isEven ? "lg:col-start-2" : ""
+        }`}
+      >
+        <p className="hidden font-sans text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-forest/75 sm:block">
           {String(index).padStart(2, "0")}
         </p>
-        <p className="mt-6 font-sans text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-forest">
+        <p className="mt-6 hidden font-sans text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-forest sm:block">
           {groupLabels[study.group]} / {cleanText(study.category)}
         </p>
 
-        <div className="mt-5">
-          <h3 className="font-serif text-[2rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2.35rem]">
+        <div className="sm:mt-5">
+          <h3 className="font-serif text-[1.85rem] font-medium leading-tight tracking-[-0.02em] text-ink sm:text-[2.35rem]">
             {study.name}
           </h3>
         </div>
@@ -519,14 +533,22 @@ function EditorialWorkCardContent({
             nearly the same thing twenty pixels apart. The name and category
             already say what the project is, so the index keeps the outcome —
             the line that actually differentiates one card from the next. */}
-        <p className="mt-6 max-w-sm border-l-2 border-forest/60 pl-3.5 text-[0.98rem] leading-7 text-ink">
+        <p className="mt-3 max-w-sm text-[0.92rem] leading-6 text-ink sm:mt-6 sm:border-l-2 sm:border-forest/60 sm:pl-3.5 sm:text-[0.98rem] sm:leading-7">
           {study.outcomeLine}
         </p>
+
+        <ul
+          aria-label={`${study.name} project details`}
+          className="mt-4 flex flex-wrap gap-x-2 text-[0.72rem] font-medium text-muted sm:hidden [&>li:not(:first-child)]:before:mr-2 [&>li:not(:first-child)]:before:text-line [&>li:not(:first-child)]:before:content-['·']"
+        >
+          <li>{study.timeframe}</li>
+          <li>{serviceTitle(study.serviceSlug)}</li>
+        </ul>
 
         {/* `flex-wrap` is load-bearing: both pills are `whitespace-nowrap`, so
             without it their combined min-content (~395px) becomes the grid
             track width and the whole page scrolls sideways on a phone. */}
-        <ul className="mt-5 flex flex-wrap items-center gap-2">
+        <ul className="mt-5 hidden flex-wrap items-center gap-2 sm:flex">
           <li className="whitespace-nowrap rounded-full bg-forest-soft/70 px-3 py-1 text-[0.76rem] font-medium text-forest">
             {study.timeframe}
           </li>
@@ -535,7 +557,7 @@ function EditorialWorkCardContent({
           </li>
         </ul>
 
-        <div className="mt-6 mb-4 flex flex-wrap items-center gap-x-8 gap-y-3">
+        <div className="mb-1 mt-5 flex flex-wrap items-center gap-x-8 gap-y-3 sm:mb-4 sm:mt-6">
           <Link
             href={`/${study.slug}`}
             className="group/link inline-flex items-center gap-2 border-b border-forest/45 pb-1 font-sans text-sm font-semibold text-forest transition-colors duration-200 hover:border-forest hover:text-ink"
@@ -561,12 +583,12 @@ function EditorialWorkCardContent({
       <Link
         href={`/${study.slug}`}
         aria-label={`View the ${study.name} case study`}
-        className={`group/image relative z-0 flex min-h-[16rem] overflow-hidden rounded-t-lg rounded-b-none border border-line shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift sm:min-h-[18rem] lg:h-full lg:min-h-[19rem] ${
+        className={`group/image relative z-0 order-first flex aspect-[16/9] min-h-0 overflow-hidden rounded-lg border border-line shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift sm:order-none sm:aspect-auto sm:min-h-[18rem] sm:rounded-b-none lg:h-full lg:min-h-[19rem] ${
           isEven ? "lg:col-start-1 lg:row-start-1" : ""
         }`}
       >
         {study.coverImage ? (
-          <div className="absolute -bottom-4 left-0 right-0 top-0 transition-transform duration-500 group-hover/image:scale-[1.025] sm:-bottom-5">
+          <div className="absolute bottom-0 left-0 right-0 top-0 transition-transform duration-500 group-hover/image:scale-[1.025] sm:-bottom-5">
             <Image
               src={study.coverImage.src}
               alt={study.coverImage.alt}
@@ -636,25 +658,25 @@ function TechnicalWorkRow({
   const summary = technicalWorkSummaries[study.slug];
 
   return (
-    <article className="overflow-hidden rounded-xl border border-line/80 bg-card/70 shadow-[0_12px_30px_-28px_rgba(31,36,32,0.45)]">
+    <article className="border-t border-line/80 sm:overflow-hidden sm:rounded-xl sm:border sm:bg-card/70 sm:shadow-[0_12px_30px_-28px_rgba(31,36,32,0.45)]">
       <Link
         href={`/${study.slug}`}
         aria-label={`View ${study.name} project`}
-        className="group grid grid-cols-[1fr_auto] gap-4 px-4 py-5 transition-colors duration-200 hover:bg-forest-soft/18 sm:grid-cols-[3.75rem_12.5rem_minmax(0,1fr)_2rem] sm:items-center sm:px-6 lg:grid-cols-[5rem_19rem_minmax(0,1fr)_2.5rem] lg:gap-7 lg:px-7 lg:py-6"
+        className="group grid grid-cols-[6.75rem_minmax(0,1fr)] items-start gap-3 py-5 transition-colors duration-200 hover:bg-forest-soft/18 sm:grid-cols-[3.75rem_12.5rem_minmax(0,1fr)_2rem] sm:items-center sm:gap-4 sm:px-6 lg:grid-cols-[5rem_19rem_minmax(0,1fr)_2.5rem] lg:gap-7 lg:px-7 lg:py-6"
       >
-        <div className="col-start-1 row-start-1 flex items-center sm:h-full sm:justify-center sm:border-r sm:border-line/80 sm:pr-4 lg:pr-6">
+        <div className="hidden items-center sm:flex sm:h-full sm:justify-center sm:border-r sm:border-line/80 sm:pr-4 lg:pr-6">
           <span className="font-source-serif-display text-xl font-medium tabular-nums text-forest lg:text-[1.8rem]">
             {String(index).padStart(2, "0")}
           </span>
         </div>
 
-        <div className="relative col-span-2 aspect-[1.9/1] overflow-hidden rounded-lg border border-line bg-forest-soft shadow-[0_10px_24px_-20px_rgba(31,36,32,0.6)] sm:col-span-1 sm:col-start-2 sm:row-start-1">
+        <div className="relative col-start-1 row-start-1 aspect-[1.35/1] overflow-hidden rounded-md border border-line bg-forest-soft shadow-[0_8px_20px_-18px_rgba(31,36,32,0.55)] sm:col-start-2 sm:aspect-[1.9/1] sm:rounded-lg sm:shadow-[0_10px_24px_-20px_rgba(31,36,32,0.6)]">
           {summary?.image ? (
             <Image
               src={summary.image}
               alt=""
               fill
-              sizes="(min-width: 1024px) 304px, 200px"
+              sizes="(min-width: 1024px) 304px, (min-width: 640px) 200px, 108px"
               className="object-cover"
             />
           ) : study.slug === "internal-automation-tool" ? (
@@ -666,19 +688,39 @@ function TechnicalWorkRow({
           )}
         </div>
 
-        <div className="col-span-2 min-w-0 sm:col-span-1 sm:col-start-3 sm:row-start-1 sm:py-1">
-          <h3 className="font-serif text-[1.65rem] font-medium leading-tight tracking-[-0.015em] text-ink sm:text-[1.85rem] lg:text-[2.15rem]">
-            {study.name}
-          </h3>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted sm:text-[0.98rem]">
+        <div className="col-start-2 row-start-1 min-w-0 sm:col-start-3 sm:py-1">
+          <div className="flex items-start justify-between gap-2 sm:block">
+            <h3 className="font-serif text-[1.35rem] font-medium leading-tight tracking-[-0.015em] text-ink sm:text-[1.85rem] lg:text-[2.15rem]">
+              <span className="mr-1 align-middle font-sans text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-forest sm:hidden">
+                {String(index).padStart(2, "0")} ·
+              </span>
+              {study.name}
+            </h3>
+            <ArrowRight
+              className="mt-1 h-4 w-4 shrink-0 text-forest transition-transform duration-200 group-hover:translate-x-1 sm:hidden"
+              strokeWidth={1.55}
+              aria-hidden
+            />
+          </div>
+          <p className="mt-1.5 max-w-2xl text-[0.78rem] leading-5 text-muted sm:mt-2 sm:text-[0.98rem] sm:leading-6">
             {summary?.description ?? study.teaser}
           </p>
+
+          <ul
+            aria-label={`${study.name} project summary`}
+            className="mt-2.5 flex flex-wrap gap-x-1.5 text-[0.65rem] font-medium leading-4 text-muted sm:hidden [&>li:not(:first-child)]:before:mr-1.5 [&>li:not(:first-child)]:before:text-line [&>li:not(:first-child)]:before:content-['·']"
+          >
+            <li>{summary?.status ?? groupLabels[study.group]}</li>
+            {(summary?.skills ?? [cleanText(study.category)])
+              .slice(0, 1)
+              .map((skill) => <li key={skill}>{skill}</li>)}
+          </ul>
 
           {/* Keep useful context visible without turning the row into a
               second case study. The detail page owns the full outcome. */}
           <ul
             aria-label={`${study.name} project details`}
-            className="mt-4 flex flex-wrap gap-x-2 gap-y-1 text-[0.75rem] leading-5 text-muted sm:mt-5 sm:text-[0.8rem] [&>li:not(:first-child)]:before:mr-2 [&>li:not(:first-child)]:before:text-line [&>li:not(:first-child)]:before:content-['·']"
+            className="mt-5 hidden flex-wrap gap-x-2 gap-y-1 text-[0.8rem] leading-5 text-muted sm:flex [&>li:not(:first-child)]:before:mr-2 [&>li:not(:first-child)]:before:text-line [&>li:not(:first-child)]:before:content-['·']"
           >
             <li>{summary?.status ?? groupLabels[study.group]}</li>
             <li>{study.timeframe}</li>
@@ -688,7 +730,7 @@ function TechnicalWorkRow({
           </ul>
         </div>
 
-        <span className="col-start-2 row-start-1 inline-flex items-center gap-2 justify-self-end text-sm font-semibold text-forest sm:col-start-4 sm:justify-self-end">
+        <span className="hidden items-center gap-2 justify-self-end text-sm font-semibold text-forest sm:col-start-4 sm:row-start-1 sm:inline-flex">
           <span className="sr-only">View {study.name}</span>
           <ArrowRight
             className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1 lg:h-6 lg:w-6"
@@ -736,7 +778,7 @@ function WorkFooterCta() {
   return (
     <section className="border-t border-line/70 bg-ivory py-12 sm:py-14 lg:py-16">
       <div className={workPageContainer}>
-        <Reveal className="relative overflow-hidden rounded-[2rem] border border-line bg-card px-5 py-8 text-center shadow-soft sm:px-8 lg:px-10 lg:py-12">
+        <Reveal className="relative overflow-hidden rounded-[2rem] border border-line bg-card px-5 py-5 text-center shadow-soft sm:px-8 sm:py-8 lg:px-10 lg:py-12">
           <Image
             src="/images/projects/svg/work-cta-left.svg"
             alt=""
@@ -764,7 +806,7 @@ function WorkFooterCta() {
               through. I&apos;ll help you shape the next step.
             </p>
 
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:mt-8 sm:flex-row">
               <ProjectInquiryTrigger
                 source="work_footer_cta"
                 className="rounded-md px-7 py-3.5 text-sm font-semibold hover:bg-ink sm:min-w-[13rem]"

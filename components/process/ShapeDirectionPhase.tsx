@@ -5,25 +5,17 @@ import { animDelay } from "@/lib/motion";
  * Renders phase two as one direction worksheet and one decision panel.
  * Its desktop split is purpose-built: the worksheet owns 60% of the card and
  * the stage marker sits on that divider before the compact copy panel.
+ *
+ * The worksheet is two columns plus the palette. A numbered content plan and a
+ * separate priorities list used to sit here too, but both restated each other
+ * and the "We decide" tags in the copy panel, so the card said one thing three
+ * times.
  */
 
 const keyQuestions = [
   "Who are we speaking to?",
   "What should they know?",
   "What action matters?",
-] as const;
-
-const priorities = [
-  "What matters first",
-  "What supports it",
-  "What proves it",
-  "What comes next",
-] as const;
-
-const contentPlan = [
-  ["01", "Primary message"],
-  ["02", "Supporting proof"],
-  ["03", "Clear next step"],
 ] as const;
 
 const colorSwatches = ["bg-forest", "bg-muted/55", "bg-[#DCC7A7]", "bg-card"] as const;
@@ -36,9 +28,9 @@ const decisions = [
 ] as const;
 
 /**
- * Delays measured from the moment this band scrolls in. The worksheet fills in
- * left to right — questions, then the direction they resolve into, then the
- * priority order, then the palette.
+ * Delays measured from the moment this band scrolls in. The worksheet fills
+ * in left to right: the questions, then the direction they resolve into, then
+ * the palette.
  *
  * No `delay` on the Reveal itself: the four bands sit 390-460px of scroll
  * apart, so they never enter together and a stagger between them reads as lag
@@ -48,8 +40,6 @@ const worksheetTiming = {
   question: 110,
   questionGap: 55,
   typeSpecimen: 260,
-  priority: 330,
-  priorityGap: 55,
   swatch: 560,
   swatchGap: 45,
 } as const;
@@ -58,7 +48,7 @@ export default function ShapeDirectionPhase() {
   return (
     <Reveal
       as="article"
-      className="overflow-hidden rounded-xl border border-line/75 bg-card/35 shadow-[0_10px_24px_-24px_rgba(31,36,32,0.5)]"
+      className="overflow-hidden rounded-xl border border-line bg-card/35 shadow-[0_4px_12px_-10px_rgba(31,36,32,0.3)]"
     >
       <div className="grid grid-cols-1 lg:min-h-[21rem] lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <DirectionWorksheet />
@@ -71,8 +61,8 @@ export default function ShapeDirectionPhase() {
 function DirectionWorksheet() {
   return (
     <div className="relative order-2 grid min-w-0 grid-rows-[minmax(0,1fr)_auto] border-t border-line/75 lg:order-1 lg:border-r lg:border-t-0">
-      <div className="grid grid-cols-1 divide-y divide-line/75 px-6 py-8 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-10 sm:py-12 lg:px-10 lg:py-7">
-        <section className="py-6 sm:py-0 sm:pr-7" aria-label="Key questions">
+      <div className="grid grid-cols-1 divide-y divide-line/75 px-5 py-6 sm:grid-cols-2 sm:divide-x sm:divide-y-0 sm:px-10 sm:py-12 lg:px-10 lg:py-7">
+        <section className="py-6 first:pt-0 last:pb-0 sm:py-0 sm:pr-7" aria-label="Key questions">
           <WorksheetLabel>Key Questions</WorksheetLabel>
           <div className="mt-6 space-y-4 lg:space-y-3.5">
             {keyQuestions.map((question, index) => (
@@ -90,7 +80,7 @@ function DirectionWorksheet() {
           </div>
         </section>
 
-        <section className="py-6 sm:px-7 sm:py-0" aria-label="Visual direction">
+        <section className="py-6 first:pt-0 last:pb-0 sm:py-0 sm:pl-7" aria-label="Visual direction">
           <WorksheetLabel>Direction</WorksheetLabel>
           <div
             className="ck-step mt-5 flex items-end gap-3 text-ink"
@@ -104,46 +94,8 @@ function DirectionWorksheet() {
               Aa
             </span>
           </div>
-          <div className="mt-2 flex justify-between gap-3 text-xs font-medium text-ink/78 sm:text-sm">
-            <span>Serif for headings</span>
-            <span>Sans for body</span>
-          </div>
-          <span className="mt-5 block h-px bg-line" aria-hidden />
-          <div className="mt-3 space-y-1.5">
-            {contentPlan.map(([number, label]) => (
-              <div
-                key={number}
-                className="flex items-center gap-2.5 text-[0.72rem] font-medium text-ink/78"
-              >
-                <span className="font-source-serif-display text-sm font-semibold text-forest/85">
-                  {number}
-                </span>
-                <span>{label}</span>
-                <span className="h-px min-w-0 flex-1 bg-line/80" aria-hidden />
-              </div>
-            ))}
-          </div>
         </section>
 
-        <section className="py-6 sm:py-0 sm:pl-7" aria-label="Content priorities">
-          <WorksheetLabel>Priorities</WorksheetLabel>
-          <ol className="mt-6 space-y-3.5">
-            {priorities.map((priority, index) => (
-              <li
-                key={priority}
-                className="ck-step flex items-center gap-4 text-sm font-medium text-ink sm:text-[0.97rem]"
-                style={animDelay(
-                  worksheetTiming.priority + index * worksheetTiming.priorityGap,
-                )}
-              >
-                <span className="font-source-serif-display text-xl font-semibold tabular-nums text-forest/85">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                {priority}
-              </li>
-            ))}
-          </ol>
-        </section>
       </div>
 
       <div className="border-t border-line/75 px-6 py-7 sm:px-10 lg:px-10 lg:py-5">
@@ -172,16 +124,16 @@ function DirectionWorksheet() {
 
 function DirectionCopy() {
   return (
-    <div className="order-1 flex min-w-0 flex-col justify-center px-7 py-10 sm:px-10 lg:order-2 lg:px-8 lg:py-8 lg:pl-16">
-      <div className="flex items-start gap-5 lg:block">
-        <span className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-forest text-[0.74rem] font-semibold text-ivory shadow-[0_4px_12px_-7px_rgba(31,36,32,0.65)] lg:hidden">
+    <div className="order-1 flex min-w-0 flex-col justify-center px-5 py-8 sm:px-7 sm:py-10 lg:order-2 lg:px-8 lg:py-8 lg:pl-16">
+      <div className="flex items-center gap-3.5 lg:block">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest text-[0.8rem] font-semibold text-ivory shadow-[0_4px_12px_-7px_rgba(31,36,32,0.65)] lg:hidden">
           02
         </span>
         <div className="min-w-0">
-          <h2 className="font-source-serif-display text-[3.25rem] font-semibold leading-[0.96] text-forest sm:text-6xl lg:text-[4.25rem]">
+          <h2 className="font-source-serif-display text-[2.2rem] font-semibold leading-[0.96] text-forest sm:text-[2.9rem] lg:text-[4.25rem]">
             Set the direction
           </h2>
-          <span className="mt-5 block h-px w-10 bg-forest/70" aria-hidden />
+          <span className="mt-5 hidden h-px w-10 bg-forest/70 lg:block" aria-hidden />
         </div>
       </div>
 

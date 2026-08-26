@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, FileText, Pencil, Rocket, Settings2 } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronDown,
+  FileText,
+  Pencil,
+  Rocket,
+  Settings2,
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
 import RelatedLinks from "@/components/services/shared/RelatedLinks";
@@ -99,14 +106,14 @@ export default function ProcessPage() {
       <section className="bg-ivory pb-12 pt-16 sm:pb-14 sm:pt-18 lg:pb-20 lg:pt-24">
         <div className="container-ck">
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.5fr)] lg:gap-12">
-            <div>
+            <div className="text-center sm:text-left">
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
                 The Approach
               </p>
               <h1 className="mt-5 max-w-3xl font-serif text-[2.75rem] font-medium leading-[1.03] text-ink sm:text-5xl lg:text-6xl">
                 A calm way projects take shape.
               </h1>
-              <p className="mt-6 max-w-xl text-base leading-8 text-muted sm:text-lg">
+              <p className="mx-auto mt-6 max-w-xl text-base leading-8 text-muted sm:mx-0 sm:text-lg">
                 CK Works plans, designs, builds, and improves websites and
                 digital systems through a focused process that keeps decisions
                 clear and the work moving.
@@ -129,10 +136,16 @@ export default function ProcessPage() {
             </div>
           </Reveal>
 
-          <div className="mt-7 space-y-3.5 lg:mt-8 lg:space-y-4">
+          {/* Arrows carry the sequence on a phone, where the four phases
+              stack and nothing else says they run in order. Desktop keeps its
+              tighter rhythm and reads as a sequence already. */}
+          <div className="mt-7 flex flex-col gap-5 lg:mt-8 lg:gap-4">
             <GetClearPhase />
+            <PhaseArrow />
             <ShapeDirectionPhase />
+            <PhaseArrow />
             <BuildPhase />
+            <PhaseArrow />
             <LaunchImprovePhase />
           </div>
         </div>
@@ -141,7 +154,7 @@ export default function ProcessPage() {
       <section className="bg-ivory py-14 lg:py-20">
         <div className="container-ck">
           <Reveal>
-            <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)_minmax(0,0.85fr)] lg:gap-x-14 lg:gap-y-0">
+            <div className="grid gap-9 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)_minmax(0,0.85fr)] lg:gap-12 lg:gap-x-14 lg:gap-y-0">
               <div className="max-w-xl">
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
                   Working together
@@ -161,18 +174,16 @@ export default function ProcessPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
                   From you
                 </p>
-                <ul className="mt-6 divide-y divide-line/80">
+                <ul className="mt-4 grid auto-rows-fr grid-cols-2 gap-2.5 sm:mt-6 lg:block lg:divide-y lg:divide-line/80">
                   {fromYou.map((item, index) => (
                     <li
                       key={item}
-                      className="flex items-center gap-4 py-4 first:pt-0 last:pb-0"
+                      className="flex h-full flex-col items-start justify-start gap-2 rounded-[0.3rem] border border-line bg-card px-3.5 pb-3.5 pt-3 lg:h-auto lg:flex-row lg:items-center lg:gap-4 lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0 lg:py-4 lg:first:pt-0 lg:last:pb-0"
                     >
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-[0.78rem] font-semibold tabular-nums text-forest">
+                      <span className="font-source-serif-display text-[1.55rem] font-semibold leading-none tabular-nums text-forest/40 lg:flex lg:h-8 lg:w-8 lg:items-center lg:justify-center lg:rounded-full lg:border lg:border-line lg:text-[0.78rem] lg:text-forest">
                         {index + 1}
                       </span>
-                      <span className="text-[0.98rem] font-medium text-ink">
-                        {item}
-                      </span>
+                      <TileLabel text={item} />
                     </li>
                   ))}
                 </ul>
@@ -182,18 +193,16 @@ export default function ProcessPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-forest">
                   From CK Works
                 </p>
-                <ul className="mt-6 divide-y divide-line/80">
+                <ul className="mt-4 grid auto-rows-fr grid-cols-2 gap-2.5 sm:mt-6 lg:block lg:divide-y lg:divide-line/80">
                   {fromCkWorks.map(({ icon: Icon, label }) => (
                     <li
                       key={label}
-                      className="flex items-center gap-4 py-4 first:pt-0 last:pb-0"
+                      className="flex h-full flex-col items-start justify-start gap-2 rounded-[0.3rem] border border-line bg-sand/60 px-3.5 pb-3.5 pt-3 lg:h-auto lg:flex-row lg:items-center lg:gap-4 lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0 lg:py-4 lg:first:pt-0 lg:last:pb-0"
                     >
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center text-forest">
+                      <span className="flex h-[1.55rem] shrink-0 items-center justify-start text-forest/65 lg:h-8 lg:w-8 lg:justify-center lg:text-forest">
                         <Icon className="h-[1.15rem] w-[1.15rem]" strokeWidth={1.5} />
                       </span>
-                      <span className="text-[0.98rem] font-medium text-ink">
-                        {label}
-                      </span>
+                      <TileLabel text={label} />
                     </li>
                   ))}
                 </ul>
@@ -218,6 +227,7 @@ export default function ProcessPage() {
       <section className="bg-ivory pb-12">
         <div className="container-ck">
           <RelatedLinks
+            compactMobile
             heading="Where this leads"
             links={[
               {
@@ -263,6 +273,49 @@ const processFooterAsides = {
     opacity: 0.9,
   },
 } as const;
+
+/**
+ * Tile label, always two lines on a phone.
+ *
+ * The squares are equal height, so the longest label sets the size for all
+ * eight. Left to wrap naturally, three of them took three lines and the
+ * short ones were left sitting in a lot of air. Breaking every label into
+ * two lines — keeping a "+" or "/" on the first line where there is one,
+ * otherwise splitting at the last space — makes the natural height and the
+ * enforced height the same. The full string renders unbroken from lg, where
+ * these are list rows again.
+ */
+function TileLabel({ text }: { text: string }) {
+  const separated = text.match(/^(.*\s[+/])\s(.*)$/);
+  const lastSpace = text.lastIndexOf(" ");
+  const lines = separated
+    ? [separated[1], separated[2]]
+    : lastSpace === -1
+      ? [text]
+      : [text.slice(0, lastSpace), text.slice(lastSpace + 1)];
+
+  return (
+    <span className="text-[0.92rem] font-medium leading-snug text-ink lg:text-[0.98rem]">
+      <span className="lg:hidden">
+        {lines.map((line, index) => (
+          <span key={`${line}-${index}`} className="block">
+            {line}
+          </span>
+        ))}
+      </span>
+      <span className="hidden lg:inline">{text}</span>
+    </span>
+  );
+}
+
+/** Sequence marker between stacked phase cards on mobile. */
+function PhaseArrow() {
+  return (
+    <span className="flex justify-center lg:hidden" aria-hidden>
+      <ChevronDown className="h-5 w-5 text-forest/45" strokeWidth={1.8} />
+    </span>
+  );
+}
 
 function ProcessFooterCta() {
   const { left, right } = processFooterAsides;
@@ -324,7 +377,7 @@ function ProcessFooterCta() {
               I&apos;ll help map the next practical step.
             </p>
 
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <div className="mx-auto mt-8 flex w-fit flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
               <ProjectInquiryTrigger
                 source="process_footer_cta"
                 className="rounded-md px-7 py-3.5 text-sm font-semibold hover:bg-ink sm:min-w-[13rem]"

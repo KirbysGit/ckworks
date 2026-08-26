@@ -9,7 +9,8 @@ import { animDelay } from "@/lib/motion";
  * Desktop is three parts: an outer Creative column, the Venn, an outer
  * Technical column. The circles only hold the side questions plus the
  * overlap copy; titles and trait lists sit outside so the lens can stay
- * quiet. Mobile stacks the same content.
+ * quiet. Mobile uses two compact discipline cards that converge into a shared
+ * result panel instead of trying to compress the circles.
  *
  * The diagram is one SVG behind a three-column grid, both driven by the same
  * geometry below, so the tinted lens and the middle text column can never
@@ -54,6 +55,7 @@ type Side = {
   icon: LucideIcon;
   title: string;
   traits: readonly string[];
+  mobileTraits: readonly string[];
   questions: readonly string[];
 };
 
@@ -63,6 +65,7 @@ const sides: readonly [Side, Side] = [
     icon: PenLine,
     title: "Creative",
     traits: ["Message", "Tone", "Clarity", "Hierarchy"],
+    mobileTraits: ["Message", "Tone", "Hierarchy"],
     questions: [
       "How should this feel?",
       "What matters first?",
@@ -74,6 +77,7 @@ const sides: readonly [Side, Side] = [
     icon: Share2,
     title: "Technical",
     traits: ["Structure", "Function", "Integrations", "Reliability"],
+    mobileTraits: ["Structure", "Function", "Reliability"],
     questions: [
       "How should this work?",
       "What needs to connect?",
@@ -112,32 +116,42 @@ export default function CreativeTechnicalSplit() {
             </h2>
           </div>
 
-          {/* Phone and tablet get the same content stacked. The outer columns
-              plus two overlapping circles need horizontal room; below lg
-              there is none, and shrinking the diagram makes the text
-              illegible. */}
-          <div className="mt-10 space-y-3 lg:hidden">
-            <div
-              className="ck-step rounded-2xl border border-line bg-card px-6 py-7 text-center"
-              style={animDelay(stackDelay(0))}
-            >
-              <OuterColumn side={sides[0]} />
-              <CircleQuestions questions={sides[0].questions} className="mt-5" />
+          {/* The Venn needs horizontal room. On phones, show the same idea as
+              two disciplines deliberately converging into one useful result. */}
+          <div className="mt-8 lg:hidden">
+            <div className="grid grid-cols-2 gap-3">
+              {sides.map((side, index) => (
+                <MobileSideCard
+                  key={side.key}
+                  side={side}
+                  delay={stackDelay(index)}
+                />
+              ))}
             </div>
 
-            <div
-              className="ck-step rounded-2xl border border-line bg-[#F0EBE1] px-6 py-7 text-center"
-              style={animDelay(stackDelay(1))}
-            >
-              <MeetingContent />
-            </div>
+            <ConvergenceConnector delay={stackDelay(2)} />
 
             <div
-              className="ck-step rounded-2xl border border-line bg-card px-6 py-7 text-center"
-              style={animDelay(stackDelay(2))}
+              className="ck-step rounded-2xl border border-forest/20 bg-forest-soft/55 px-5 py-5 text-center shadow-[0_14px_30px_-28px_rgba(31,36,32,0.45)]"
+              style={animDelay(stackDelay(3))}
             >
-              <OuterColumn side={sides[1]} />
-              <CircleQuestions questions={sides[1].questions} className="mt-5" />
+              <VennMark />
+              <p className="mt-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-forest">
+                Where they meet
+              </p>
+              <p className="mt-2 font-serif text-[1.65rem] font-medium leading-tight text-ink">
+                Clear, useful work.
+              </p>
+              <ul className="mt-4 flex flex-wrap justify-center gap-2 text-[0.7rem] font-medium text-ink/75">
+                {["Clear", "Useful", "Easier to act on"].map((result) => (
+                  <li
+                    key={result}
+                    className="rounded-full border border-line bg-card/80 px-2.5 py-1"
+                  >
+                    {result}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
@@ -236,12 +250,56 @@ export default function CreativeTechnicalSplit() {
             </div>
           </div>
 
-          <p className="mt-10 text-center text-lg font-semibold text-ink sm:mt-12 sm:text-lg">
+          <p className="mt-10 hidden text-center text-lg font-semibold text-ink sm:mt-12 sm:text-lg lg:block">
             Most projects need some of both.
           </p>
         </Reveal>
       </div>
     </section>
+  );
+}
+
+function MobileSideCard({ side, delay }: { side: Side; delay: number }) {
+  const Icon = side.icon;
+
+  return (
+    <div
+      className="ck-step rounded-2xl border border-line bg-card px-3 py-4 text-center shadow-[0_12px_28px_-28px_rgba(31,36,32,0.5)]"
+      style={animDelay(delay)}
+    >
+      <span className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-forest-soft text-forest">
+        <Icon className="h-4 w-4" strokeWidth={1.6} aria-hidden />
+      </span>
+      <h3 className="mt-2.5 font-serif text-[1.35rem] font-semibold leading-none text-forest">
+        {side.title}
+      </h3>
+      <ul className="mt-4 space-y-2 text-[0.75rem] font-medium text-ink/80">
+        {side.mobileTraits.map((trait) => (
+          <li key={trait}>{trait}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ConvergenceConnector({ delay }: { delay: number }) {
+  return (
+    <div
+      className="ck-step mx-auto h-14 w-full max-w-[17rem] text-forest/65"
+      style={animDelay(delay)}
+      aria-hidden
+    >
+      <svg viewBox="0 0 272 56" className="h-full w-full" fill="none">
+        <path
+          d="M42 2L136 38L230 2M136 38V51M130 45L136 51L142 45"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+    </div>
   );
 }
 
