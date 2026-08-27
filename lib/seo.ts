@@ -6,16 +6,29 @@ type PageMetadataInput = {
   description: string;
   path: string;
   type?: "website" | "article";
+  /** Override the shared social card. Case studies pass their cover image. */
+  image?: { url: string; alt: string };
 };
+
+/** Matches the `size` export in `app/opengraph-image.tsx`. */
+const socialCardSize = { width: 1200, height: 630 } as const;
 
 export function createPageMetadata({
   title,
   description,
   path,
   type = "website",
+  image,
 }: PageMetadataInput): Metadata {
   const canonicalPath = path.startsWith("/") ? path : `/${path}`;
   const url = `${siteUrl}${canonicalPath === "/" ? "" : canonicalPath}`;
+  const socialImage = image
+    ? { url: image.url, alt: image.alt }
+    : {
+        url: "/opengraph-image",
+        alt: `${title} | ${siteName}`,
+        ...socialCardSize,
+      };
 
   return {
     title,
@@ -29,11 +42,13 @@ export function createPageMetadata({
       url,
       type,
       siteName,
+      images: [socialImage],
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} | ${siteName}`,
       description,
+      images: [socialImage.url],
     },
   };
 }

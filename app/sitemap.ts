@@ -18,23 +18,23 @@ import { siteUrl } from "@/lib/site";
  * do not count — this should track what a returning crawler would find new.
  */
 const routeUpdated = {
-  "": "2026-08-20",
-  "/services": "2026-08-20",
-  "/work": "2026-08-20",
-  "/process": "2026-08-20",
-  "/about": "2026-08-20",
-  "/contact": "2026-08-18",
+  "": "2026-08-21",
+  "/services": "2026-08-21",
+  "/work": "2026-08-25",
+  "/process": "2026-08-25",
+  "/about": "2026-08-25",
+  "/contact": "2026-08-26",
   "/privacy-policy": "2026-08-17",
   "/terms": "2026-08-17",
 } as const;
 
 /** Keyed by service slug. Bump when that service's page copy changes. */
 const serviceUpdated: Record<string, string> = {
-  "web-design-development": "2026-08-18",
-  "search-ai-visibility": "2026-08-20",
-  "analytics-lead-tracking": "2026-08-20",
-  "digital-systems-integrations": "2026-08-20",
-  "ongoing-support": "2026-08-20",
+  "web-design-development": "2026-08-25",
+  "search-ai-visibility": "2026-08-25",
+  "analytics-lead-tracking": "2026-08-25",
+  "digital-systems-integrations": "2026-08-25",
+  "ongoing-support": "2026-08-25",
 };
 
 /** Case studies are all driven by `lib/projects.ts`, so they share its date. */

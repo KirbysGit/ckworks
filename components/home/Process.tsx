@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Sparkle } from "lucide-react";
 import SectionHeader from "../ui/SectionHeader";
 import { fadeUp, stagger, inView } from "@/lib/motion";
 

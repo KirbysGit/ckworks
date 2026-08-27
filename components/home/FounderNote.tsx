@@ -195,7 +195,7 @@ export default function FounderNote() {
                   height={119}
                   className="h-12 w-auto sm:h-14"
                 />
-                <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-ink/55">
+                <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">
                   Founder, CK Works
                 </p>
                 <span className="mt-3 block h-px w-7 bg-forest" aria-hidden />

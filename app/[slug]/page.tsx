@@ -25,7 +25,6 @@ import Footer from "@/components/layout/Footer";
 import CaseStudyViewed from "@/components/projects/CaseStudyViewed";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import WhatsAppContactLink from "@/components/contact/WhatsAppContactLink";
-import Button from "@/components/ui/Button";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
 import Reveal from "@/components/ui/Reveal";
 import { caseStudies, getCaseStudy, type CaseStudy } from "@/lib/projects";
@@ -119,9 +118,12 @@ function ProjectFacts({ study }: { study: CaseStudy }) {
       className="ck-lift mt-8 overflow-hidden rounded-2xl border border-line bg-card shadow-soft"
       style={{ animationDelay: `${caseStudyHeroTiming.facts}ms` }}
     >
-      <div className="grid gap-6 p-6 sm:grid-cols-3">
-        {facts.map(({ label, value, icon: Icon }) => (
-          <div key={label} className="flex gap-3">
+      <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-x-4 gap-y-5 p-5 sm:grid-cols-3 sm:gap-6 sm:p-6">
+        {facts.map(({ label, value, icon: Icon }, index) => (
+          <div
+            key={label}
+            className={`flex gap-3 ${index === 0 ? "col-span-2 sm:col-span-1" : ""}`}
+          >
             <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-forest-soft text-forest">
               <Icon className="h-4 w-4" strokeWidth={1.8} />
             </span>
@@ -183,15 +185,48 @@ function Section({
   if (paragraphs.length === 0) return null;
 
   return (
-    <Reveal as="section" className="border-t border-line/70 py-10">
+    <Reveal as="section" className="border-t border-line/70 py-9 sm:py-10">
       <SectionLabel icon={icon}>{label}</SectionLabel>
-      <div className="mt-5 space-y-4 sm:pl-[2.4rem]">
+      <div className="mt-5 divide-y divide-line/60 sm:pl-[2.4rem]">
         {paragraphs.map((p, i) => (
-          <p key={i} className="text-base leading-relaxed text-ink/85 sm:text-lg">
+          <p
+            key={i}
+            className="py-4 text-[0.95rem] leading-7 text-ink/82 first:pt-0 last:pb-0 sm:text-[1.05rem] sm:leading-8"
+          >
             {p}
           </p>
         ))}
       </div>
+    </Reveal>
+  );
+}
+
+/** Turns the opening summary into a short sequence rather than another prose wall. */
+function ShortVersionSection({ paragraphs }: { paragraphs: string[] }) {
+  if (paragraphs.length === 0) return null;
+
+  return (
+    <Reveal as="section" className="border-t border-line/70 py-9 sm:py-10">
+      <SectionLabel icon={FileText}>The short version</SectionLabel>
+      <ol className="mt-5 divide-y divide-line/60 sm:ml-[2.4rem]">
+        {paragraphs.map((paragraph, index) => (
+          <li
+            key={paragraph}
+            className="grid grid-cols-[1.6rem_minmax(0,1fr)] gap-3 py-5 first:pt-0 last:pb-0 sm:grid-cols-[1.9rem_minmax(0,1fr)] sm:gap-4"
+          >
+            <span className="pt-0.5 font-serif text-lg font-medium leading-none text-forest/70 sm:text-xl">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <p
+              className={`text-[0.95rem] leading-7 sm:text-[1.05rem] sm:leading-8 ${
+                index === 0 ? "font-medium text-ink" : "text-ink/82"
+              }`}
+            >
+              {paragraph}
+            </p>
+          </li>
+        ))}
+      </ol>
     </Reveal>
   );
 }
@@ -249,33 +284,58 @@ export default async function CaseStudyPage({ params }: Props) {
       />
       <CaseStudyViewed name={study.name} slug={study.slug} />
       <main>
-        <section className="container-ck pb-12 pt-10 lg:pt-14">
-          <Link
-            href="/work"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-forest"
-          >
-            <ArrowLeft className="h-4 w-4" /> Selected work
-          </Link>
+        <section className="container-ck pb-12 pt-8 lg:pt-12">
+          <div className="mx-auto max-w-3xl">
+            <div className="flex items-center justify-between gap-4">
+              <Link
+                href="/work"
+                className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-forest"
+              >
+                <ArrowLeft className="h-4 w-4" /> Work
+              </Link>
+              <p className="max-w-[65%] text-right text-[0.65rem] font-semibold uppercase leading-4 tracking-[0.16em] text-forest sm:max-w-none sm:text-xs sm:tracking-[0.18em]">
+                {study.category}
+              </p>
+            </div>
 
-          <div className="mx-auto mt-10 max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest">
-              {study.category}
-            </p>
-            <h1 className="mt-4 font-serif text-5xl font-medium leading-tight text-ink sm:text-6xl">
+            <h1 className="mt-8 font-serif text-5xl font-medium leading-tight text-ink sm:text-6xl">
               {study.name}
             </h1>
-            <p className="mt-5 text-xl leading-relaxed text-muted">
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-muted sm:mt-5 sm:text-xl sm:leading-relaxed">
               {study.oneLiner}
             </p>
 
             {/* The proof line. Sits above the fold on purpose — a visitor
                 scanning the page should get what changed before they decide
                 whether to read the write-up underneath. */}
-            <p className="mt-6 border-l-2 border-forest pl-4 text-lg leading-relaxed text-ink">
-              {study.outcomeLine}
-            </p>
+            <div className="mt-6 rounded-xl border border-forest/15 bg-forest-soft/45 px-4 py-4 sm:px-5">
+              <p className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-forest">
+                Result
+              </p>
+              <p className="mt-2 text-base font-medium leading-7 text-ink sm:text-lg sm:leading-8">
+                {study.outcomeLine}
+              </p>
+            </div>
 
             <ProjectFacts study={study} />
+
+            {study.disclaimer && (
+              <aside className="mt-4 flex items-start gap-3 rounded-xl border border-forest/20 bg-forest-soft/30 px-4 py-3 text-sm leading-6 text-muted">
+                <CircleHelp
+                  className="mt-1 h-4 w-4 shrink-0 text-forest"
+                  strokeWidth={1.8}
+                />
+                <p>
+                  {study.disclaimer}{" "}
+                  <Link
+                    href="/terms#financial-projects"
+                    className="font-medium text-forest underline decoration-forest/30 underline-offset-4 transition-colors hover:text-ink"
+                  >
+                    Read the financial-project notice.
+                  </Link>
+                </p>
+              </aside>
+            )}
 
             {study.liveUrl && (
               <a
@@ -312,12 +372,19 @@ export default async function CaseStudyPage({ params }: Props) {
 
         <article className="container-ck pb-16">
           <div className="mx-auto max-w-3xl">
-            <Section label="The short version" paragraphs={study.shortVersion} icon={FileText} />
+            <ShortVersionSection paragraphs={study.shortVersion} />
             <Section label="The problem" paragraphs={study.problem} icon={CircleHelp} />
 
             {study.built.length > 0 && (
               <Reveal as="section" className="border-t border-line/70 py-10">
-                <SectionLabel icon={Hammer}>What I built</SectionLabel>
+                <SectionLabel icon={Hammer}>
+                  {study.builtLabel ?? "What I built"}
+                </SectionLabel>
+                {study.builtIntro && (
+                  <p className="mt-5 text-[0.95rem] font-medium leading-7 text-ink sm:pl-[2.4rem] sm:text-[1.05rem] sm:leading-8">
+                    {study.builtIntro}
+                  </p>
+                )}
                 <ul className="mt-5 space-y-3 sm:pl-[2.4rem]">
                   {study.built.map((item) => (
                     <li
@@ -414,7 +481,7 @@ function ProjectPageCta() {
   return (
     <section className="mx-auto mt-8 max-w-3xl rounded-[2rem] border border-line bg-card px-6 py-8 shadow-soft sm:px-8 lg:px-10 lg:py-10">
       <div className="grid items-center gap-6 sm:grid-cols-[9rem_1fr] sm:gap-8">
-        <div className="flex justify-center sm:justify-start">
+        <div className="hidden justify-center sm:flex sm:justify-start">
           <Image
             src="/images/cta/svg/sticky-note-cta.svg"
             alt=""

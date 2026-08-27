@@ -133,6 +133,7 @@ function MobileHeroPreview() {
     <>
     <div
       className="relative mx-auto mt-9 h-[22.75rem] w-full max-w-[23rem] overflow-visible md:hidden"
+      role="img"
       aria-label="Layered preview of a calm website and mobile view"
     >
       <div
@@ -176,10 +177,10 @@ function MobileHeroPreview() {
 
         <div className="grid min-h-[154px] grid-cols-[1.04fr_0.96fr] gap-3 px-4 pb-4 pt-1">
           <div>
-            <h3 className="font-serif text-[1.38rem] font-medium leading-[1.03] text-ink">
+            <p className="font-serif text-[1.38rem] font-medium leading-[1.03] text-ink">
               Care that fits{" "}
               <em className="italic">your life</em>.
-            </h3>
+            </p>
             <p className="mt-2 max-w-[8.5rem] text-[7px] leading-relaxed text-muted/75">
               Support for individuals and couples nearby. In person or online.
             </p>
@@ -338,9 +339,9 @@ export default function Hero() {
               >
                 <Icon className="mx-auto h-5 w-5 shrink-0 text-forest md:mx-0" strokeWidth={1.8} />
                 <div>
-                  <h3 className="mt-2 text-[11px] font-semibold leading-tight text-ink md:mt-3 md:text-sm">
+                  <p className="mt-2 text-[11px] font-semibold leading-tight text-ink md:mt-3 md:text-sm">
                     {title}
-                  </h3>
+                  </p>
                   <p className="mt-1 hidden max-w-none text-xs leading-5 text-muted min-[390px]:block md:mt-1.5 md:max-w-[11rem] md:text-sm md:leading-6">
                     {body}
                   </p>

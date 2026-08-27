@@ -1,64 +1,28 @@
 /** Renders the bespoke Analytics and Lead Tracking service experience. */
-import { Fragment, type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowDown,
   ArrowRight,
   ArrowUp,
   BarChart3,
-  Bell,
   Calendar,
-  Box,
-  Check,
   ChevronDown,
   ChevronRight,
   CircleCheck,
-  Clock,
   Database,
-  Eye,
-  FileCode2,
   FileText,
-  Flag,
   Gauge,
-  Globe,
-  Headphones,
-  Home,
   LayoutDashboard,
   LayoutTemplate,
   LineChart,
   Mail,
   MapPin,
-  Megaphone,
-  MessageSquareText,
-  MonitorSmartphone,
-  Navigation,
-  Paintbrush,
-  Pencil,
-  PhoneCall,
-  Plus,
-  RefreshCw,
-  Rocket,
   Search,
   Send,
-  Settings2,
-  ShieldCheck,
-  Smartphone,
-  Sparkle,
   Star,
-  Store,
-  Tag,
   TrendingUp,
-  UserRound,
-  Wrench,
 } from "lucide-react";
-import { FaLinkedin } from "react-icons/fa";
-import {
-  SiAirtable,
-  SiGooglecalendar,
-  SiGooglesheets,
-  SiStripe,
-} from "react-icons/si";
 import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
@@ -67,14 +31,12 @@ import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import type { ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
 import RelatedLinks from "../shared/RelatedLinks";
-import ProjectWorkCard from "../shared/ProjectWorkCard";
 import {
   serviceCenterLabelClassName,
   serviceCenterTitleClassName,
   serviceContainer,
   serviceHeroTitleClassName,
   serviceSectionBodyClassName,
-  serviceSectionLabelClassName,
   serviceSectionTitleClassName,
 } from "../shared/styles";
 const analyticsSnapshotStats = [

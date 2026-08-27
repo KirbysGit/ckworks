@@ -6,6 +6,7 @@ import {
   Source_Serif_4,
 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
   siteDescription,
   siteName,
@@ -227,6 +228,7 @@ export default function RootLayout({
         />
         <ProjectInquiryProvider>{children}</ProjectInquiryProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

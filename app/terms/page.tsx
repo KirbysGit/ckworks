@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import SiteLayout from "@/components/layout/SiteLayout";
 import PageHero from "@/components/page/PageHero";
@@ -24,7 +25,7 @@ import { createPageMetadata } from "@/lib/seo";
  * `lastUpdated` should change whenever the substance does.
  */
 
-const lastUpdated = "August 17, 2026";
+const lastUpdated = "August 26, 2026";
 
 /** Kept in step with the brands listed in `docs/demo-registry.md`. */
 const demoBrands = [
@@ -48,6 +49,7 @@ export default function TermsPage() {
         label="Terms"
         title="Using this site."
         description="Short, because there is not much to it. This is a studio website: there are no accounts, no payments, and nothing to sign up for. Real project work is governed by a separate written agreement."
+        align="center"
       />
 
       <LegalUpdatedBar date={lastUpdated} />
@@ -111,6 +113,7 @@ export default function TermsPage() {
       </LegalSection>
 
       <LegalSection
+        id="financial-projects"
         number="04"
         label="No guarantees"
         title="What the information here does and does not promise."
@@ -126,6 +129,11 @@ export default function TermsPage() {
           and inquiries depend on competition, demand, budget, and many things
           outside any one website.
         </p>
+        <LegalCallout>
+          Finance-related projects shown on this site are personal tools or
+          research demonstrations. Nothing here is financial advice, a trading
+          recommendation, or an offer to buy or sell a financial product.
+        </LegalCallout>
         <p>
           Links to other sites are there for convenience. I do not control them
           and I am not responsible for what they contain.
@@ -163,12 +171,12 @@ export default function TermsPage() {
           If this page changes in any meaningful way, the date at the top
           changes with it. Questions are welcome at <LegalEmail />, and there is
           a fuller explanation of what the site collects in the{" "}
-          <a
+          <Link
             className="font-medium text-forest underline decoration-forest/35 underline-offset-4 transition-colors hover:text-ink hover:decoration-ink/40"
             href="/privacy-policy"
           >
             privacy policy
-          </a>
+          </Link>
           .
         </p>
       </LegalSection>

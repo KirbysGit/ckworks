@@ -42,6 +42,8 @@ export type CaseStudy = {
    * capability or a decision, and that is fine.
    */
   outcomeLine: string;
+  /** Optional project-specific limitation shown near the case-study facts. */
+  disclaimer?: string;
   /** The CK Works service this proves. Drives the contextual link. */
   serviceSlug: ServiceSlug;
   /** Placeholder gradient until real screenshots exist. */
@@ -55,6 +57,10 @@ export type CaseStudy = {
   hidden?: boolean;
   shortVersion: string[];
   problem: string[];
+  /** Optional heading override when the build belongs to a team. */
+  builtLabel?: string;
+  /** Clarifies the individual's contribution before a shared build list. */
+  builtIntro?: string;
   built: string[];
   designDecisions: string[];
   technicalDecisions: string[];
@@ -124,13 +130,13 @@ const allCaseStudies: CaseStudy[] = [
       "The site needed to feel like motorsport without looking like a generic racing template covered in speed lines, oversized statistics, and effects that competed with the actual content.",
     ],
     built: [
-      "logo and visual direction",
-      "responsive website design and development",
-      "driver story and racing history structure",
-      "achievements and results sections",
-      "photo and media presentation",
-      "sponsor-facing partnership content",
-      "contact flow, deployment, and continued hosting",
+      "Logo and visual direction",
+      "Responsive website design and development",
+      "Driver story and racing history structure",
+      "Achievements and results sections",
+      "Photo and media presentation",
+      "Sponsor-facing partnership content",
+      "Contact flow, deployment, and continued hosting",
     ],
     designDecisions: [
       "I let the racing photography create most of the energy and kept the surrounding interface controlled. The site still feels bold, but the layout gives the driver's story room to breathe.",
@@ -202,13 +208,13 @@ const allCaseStudies: CaseStudy[] = [
     ],
     built: [
       "PDF and DOCX resume upload and extraction",
-      "structured resumeData profile model",
-      "job-description and role analysis",
-      "role-specific resume tailoring pipeline",
-      "section-based editor with live preview",
-      "saved profiles, authentication, and user data",
+      "Structured resumeData profile model",
+      "Job-description and role analysis",
+      "Role-specific resume tailoring pipeline",
+      "Section-based editor with live preview",
+      "Saved profiles, authentication, and user data",
       "PDF and DOCX generation",
-      "review explanations showing what changed and why",
+      "Review explanations showing what changed and why",
     ],
     designDecisions: [
       "I wanted the product to feel guided instead of opening on an empty document. Users should be able to see the story they already have, understand what the system is emphasizing, and make smaller decisions instead of rewriting the entire resume in one large text box.",
@@ -267,6 +273,8 @@ const allCaseStudies: CaseStudy[] = [
     timeframe: "June 2025 – August 2025",
     outcomeLine:
       "Took Centi from a dashboard idea to a working product connected to real financial accounts.",
+    disclaimer:
+      "Personal finance project—not financial advice or a regulated financial service.",
     serviceSlug: "digital-systems-integrations",
     accent: "from-[#2F5B3F] to-[#6d7d5f]",
     coverImage: {
@@ -286,13 +294,13 @@ const allCaseStudies: CaseStudy[] = [
     built: [
       "Plaid account linking and financial data import",
       "CSV upload flow for unsupported or historical data",
-      "manual cash transaction entries",
-      "transaction cleanup and categorization",
-      "spending summaries, trends, and monthly comparisons",
+      "Manual cash transaction entries",
+      "Transaction cleanup and categorization",
+      "Spending summaries, trends, and monthly comparisons",
       "Centi Score concept for a simpler financial snapshot",
       "Google OAuth and account authentication",
-      "email verification and password reset flows",
-      "separate frontend, API, and database deployments",
+      "Email verification and password reset flows",
+      "Separate frontend, API, and database deployments",
     ],
     designDecisions: [
       "I treated the dashboard like an explanation layer instead of trying to fit every possible number onto the first screen. The overview should answer where the money is going and what changed before the user has to inspect individual transactions.",
@@ -356,14 +364,14 @@ const allCaseStudies: CaseStudy[] = [
       "The opportunity was to make the gym feel a little more connected while still respecting that most people are there to train, not spend their workout managing another social feed.",
     ],
     built: [
-      "product direction and first-version feature planning",
+      "Product direction and first-version feature planning",
       "SETLST name, logo, and visual identity exploration",
-      "onboarding, profile, and gym-presence concepts",
-      "now-playing and live gym activity feed",
-      "friend requests and controlled messaging ideas",
-      "public or private workout streaks",
-      "forum and motivation feature concepts",
-      "early mobile dashboard and interaction prototypes",
+      "Onboarding, profile, and gym-presence concepts",
+      "Now-playing and live gym activity feed",
+      "Friend requests and controlled messaging ideas",
+      "Public or private workout streaks",
+      "Forum and motivation feature concepts",
+      "Early mobile dashboard and interaction prototypes",
     ],
     designDecisions: [
       "The brand mixes a dark gym interface with teal, blue, and purple accents. We wanted it to feel sleek and energetic without becoming a loud neon gaming interface.",
@@ -430,11 +438,11 @@ const allCaseStudies: CaseStudy[] = [
       "A normal template portfolio would have been faster, but it would not have taught me as much or reflected how exploratory my work felt at the time.",
     ],
     built: [
-      "custom portfolio layout",
-      "multiple visual themes and transitions",
-      "project showcase sections",
-      "animated interface experiments",
-      "responsive frontend styling",
+      "Custom portfolio layout",
+      "Multiple visual themes and transitions",
+      "Project showcase sections",
+      "Animated interface experiments",
+      "Responsive frontend styling",
     ],
     designDecisions: [
       "Instead of hiding my indecisiveness around one theme, I turned the movement between different styles into part of the experience.",
@@ -487,6 +495,8 @@ const allCaseStudies: CaseStudy[] = [
     timeframe: "January 2025 – May 2025, resumed December 2025",
     outcomeLine:
       "Creates a growing historical dataset for testing how online investor sentiment relates to market activity.",
+    disclaimer:
+      "Research project—not financial advice, a trading recommendation, or a validated prediction system.",
     serviceSlug: "analytics-lead-tracking",
     accent: "from-[#1f342a] to-[#58715f]",
     coverImage: {
@@ -505,13 +515,13 @@ const allCaseStudies: CaseStudy[] = [
     ],
     built: [
       "Reddit post and comment collection through PRAW",
-      "text cleaning and ticker/company mention extraction",
-      "false-positive filtering for ambiguous ticker symbols",
-      "financial and social-media sentiment analysis",
-      "engagement-weighted daily sentiment aggregation",
+      "Text cleaning and ticker/company mention extraction",
+      "False-positive filtering for ambiguous ticker symbols",
+      "Financial and social-media sentiment analysis",
+      "Engagement-weighted daily sentiment aggregation",
       "Google Trends data collection through pytrends",
-      "historical stock price and volume collection through yfinance",
-      "ticker-and-date aligned feature dataset for future modeling",
+      "Historical stock price and volume collection through yfinance",
+      "Ticker-and-date aligned feature dataset for future modeling",
     ],
     designDecisions: [
       "I treated the historical dataset as the primary product instead of presenting the first version as a stock-prediction system.",
@@ -561,10 +571,10 @@ const allCaseStudies: CaseStudy[] = [
     ],
     role: "Full-Stack Development, Internal Systems",
     stack: ["Python", "Django", "React", "PostgreSQL", "AWS EC2"],
-    status: "Software engineering internship / Client unnamed",
+    status: "Internship Work / Company Unnamed",
     timeframe: "May 2024 – June 2025",
     outcomeLine:
-      "Automated 15-plus manual IT workflows into one-click operations, saving roughly 150 staff hours a year.",
+      "Automated recurring manual IT workflows into one-click operations, saving roughly 150 staff hours a year.",
     serviceSlug: "digital-systems-integrations",
     accent: "from-[#43524a] to-[#5F665F]",
     shortVersion: [
@@ -578,9 +588,9 @@ const allCaseStudies: CaseStudy[] = [
     built: [
       "Django APIs for internal automation workflows",
       "React portal for running and monitoring jobs",
-      "scheduling and background task support",
-      "real-time execution status and logs",
-      "role-based access and OAuth sign-in",
+      "Scheduling and background task support",
+      "Real-time execution status and logs",
+      "Role-based access and OAuth sign-in",
       "PostgreSQL-backed workflow and result data",
       "AWS EC2 deployment with Gunicorn and Nginx",
     ],
@@ -649,23 +659,26 @@ const allCaseStudies: CaseStudy[] = [
       "Traditional security systems are usually tied to a building and a permanent installation. We wanted to explore whether a smaller, portable setup could provide useful monitoring in spaces where installing a full system would not make sense.",
       "The prototype had to prove the complete loop: detect something, communicate across devices, alert the user quickly, and provide controls that actually worked.",
     ],
+    builtLabel: "What the team built",
+    builtIntro:
+      "My work focused on the Flutter app, Python communication layer, backend development, and system integration.",
     built: [
       "ESP32-CAM security nodes",
-      "lightweight TensorFlow Lite detection model",
+      "Lightweight TensorFlow Lite detection model",
       "Flutter mobile controls for alarms, lighting, photos, and recordings",
       "Python backend and device communication layer",
       "React monitoring dashboard",
-      "near real-time alert flow",
-      "working end-to-end demonstration",
+      "Near real-time alert flow",
+      "Working end-to-end demonstration",
     ],
     designDecisions: [
       "We kept the user controls direct because the prototype was testing the system, not trying to redesign the entire home security market.",
       "The live demonstration was treated as the main success criterion, so reliability of the core detection and alert flow mattered more than adding a long list of unfinished features.",
     ],
     technicalDecisions: [
-      "The detection model was kept under 1 MB so it could run within the limits of the embedded hardware while still reaching roughly 80 percent or better accuracy in our tests.",
+      "The detection model was kept small enough to run within the limits of the embedded hardware while still reaching useful accuracy in our team testing.",
       "The Python communication layer coordinated the device and application behavior, while the Flutter app gave the user portable access to the main controls.",
-      "The full detection-to-alert path reached approximately 3.5 seconds in the working prototype.",
+      "The working prototype completed the full detection-to-alert path within a few seconds.",
     ],
     challenges: [
       "Hardware failures are rarely as clean as software errors. Connectivity, power, camera behavior, timing, and the physical environment could all affect a demo that looked stable in code.",

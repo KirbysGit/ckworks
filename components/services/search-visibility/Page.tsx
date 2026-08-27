@@ -1,46 +1,24 @@
 /** Renders the bespoke SEO and AI Search Visibility service experience. */
-import { Fragment, type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowDown,
   ArrowRight,
-  ArrowUp,
-  BarChart3,
-  Bell,
-  Box,
-  Calendar,
-  ChevronDown,
-  ChevronRight,
   CircleCheck,
-  Clock,
-  Database,
   Eye,
   FileCode2,
   FileText,
   Flag,
-  Gauge,
   Globe,
-  Headphones,
-  LayoutDashboard,
   LayoutTemplate,
-  LineChart,
-  Mail,
   MapPin,
-  Megaphone,
   MessageSquareText,
-  MonitorSmartphone,
   Navigation,
-  Paintbrush,
-  Pencil,
   PhoneCall,
   Plus,
-  RefreshCw,
-  Rocket,
   Search,
   Settings2,
-  ShieldCheck,
-  Smartphone,
   Sparkle,
   Store,
   Tag,
@@ -48,22 +26,14 @@ import {
   UserRound,
   Wrench,
 } from "lucide-react";
-import { FaLinkedin } from "react-icons/fa";
-import {
-  SiAirtable,
-  SiGooglecalendar,
-  SiGooglesheets,
-  SiStripe,
-} from "react-icons/si";
 import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
-import { getCaseStudy, type CaseStudy } from "@/lib/projects";
+import { getCaseStudy } from "@/lib/projects";
 import { searchVisibilityTimeline, type ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
 import RelatedLinks from "../shared/RelatedLinks";
-import ProjectWorkCard from "../shared/ProjectWorkCard";
 import {
   serviceCenterLabelClassName,
   serviceCenterTitleClassName,
@@ -1661,21 +1631,21 @@ function SearchVisibilityFaq() {
 function SearchVisibilityCta() {
   return (
     <section className="py-10 lg:py-12">
-      <Reveal className="mt-0 flex flex-col gap-6 rounded-xl border border-line bg-card px-6 py-7 shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-        <div className="max-w-2xl">
+      <Reveal className="mt-0 flex flex-col gap-5 rounded-xl border border-line bg-card px-6 py-7 text-center shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left">
+        <div className="mx-auto max-w-xl lg:mx-0">
           <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
             Search &amp; AI Visibility
           </p>
           <h2 className="mt-3 font-serif text-[1.85rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.15rem]">
             Let&apos;s make your site easier to find and understand.
           </h2>
-          <p className="mt-3 max-w-xl text-sm leading-7 text-ink/75 sm:text-[0.95rem]">
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-ink/75 sm:text-[0.95rem] lg:mx-0">
             Send over your site and a little context about what you want to
             improve.
           </p>
         </div>
 
-        <div className="flex w-fit shrink-0 flex-col items-stretch gap-4">
+        <div className="mx-auto flex w-fit shrink-0 flex-col items-stretch gap-4 lg:mx-0">
           <ProjectInquiryTrigger
             source="search_visibility_service_cta"
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-forest px-6 py-3.5 text-sm font-semibold text-ivory shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-lift"

@@ -65,6 +65,21 @@ export default function Footer() {
               </WhatsAppContactLink>
             </div>
           </div>
+          <nav
+            aria-label="Legal"
+            className="mt-5 flex items-center gap-3 border-t border-forest/15 pt-4 text-xs font-medium text-ink/65"
+          >
+            <Link
+              href="/privacy-policy"
+              className="transition-colors hover:text-forest"
+            >
+              Privacy
+            </Link>
+            <span aria-hidden className="h-1 w-1 rounded-full bg-forest/35" />
+            <Link href="/terms" className="transition-colors hover:text-forest">
+              Terms
+            </Link>
+          </nav>
           <Image
             src="/images/brand/svg/signature-full.svg"
             alt=""

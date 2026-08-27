@@ -81,6 +81,7 @@ export default function PrivacyPolicyPage() {
         label="Privacy Policy"
         title="What this site collects, and why."
         description="CK Works is a one-person studio. The site collects very little: what you choose to send through the inquiry form, and analytics about how pages are used."
+        align="center"
       />
 
       <LegalUpdatedBar date={lastUpdated} />
@@ -215,4 +216,3 @@ export default function PrivacyPolicyPage() {
     </SiteLayout>
   );
 }
-

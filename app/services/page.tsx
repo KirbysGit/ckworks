@@ -14,7 +14,6 @@ import {
   Link as LinkIcon,
   Mail,
   Search,
-  ShieldCheck,
   Sparkle,
   UserRound,
   Waypoints,
@@ -347,36 +346,36 @@ function WebsiteVisual() {
   return (
     <BrowserShell>
       <div className="grid min-h-[14.5rem] grid-rows-[auto_1fr_auto] overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-2.5">
+        <div className="flex items-center justify-between px-3 py-2.5 sm:px-4">
           <div>
-            <p className="font-sans text-[9px] font-bold uppercase leading-tight tracking-[0.16em] text-ink">
+            <p className="font-sans text-[7px] font-bold uppercase leading-tight tracking-[0.14em] text-ink sm:text-[9px] sm:tracking-[0.16em]">
               Riverstone
               <br />
               Builders
             </p>
           </div>
-          <div className="flex gap-3 text-[7px] font-semibold uppercase tracking-[0.08em] text-ink/70">
+          <div className="flex gap-1.5 text-[5.5px] font-semibold uppercase tracking-[0.06em] text-ink/70 sm:gap-3 sm:text-[7px] sm:tracking-[0.08em]">
             <span>About</span>
             <span>Services</span>
             <span>Contact</span>
           </div>
         </div>
-        <div className="grid grid-cols-[minmax(11.15rem,0.94fr)_minmax(9.45rem,0.9fr)] gap-3">
-          <div className="min-w-0 px-4 py-3 pr-0">
-            <p className="font-sans text-[1.16rem] font-medium leading-[1.06] tracking-[-0.005em] text-ink">
+        <div className="grid grid-cols-[minmax(0,1.18fr)_minmax(0,0.82fr)] gap-1.5 sm:gap-3">
+          <div className="min-w-0 px-3 py-3 pr-0 sm:px-4">
+            <p className="font-sans text-[0.85rem] font-medium leading-[1.06] tracking-[-0.005em] text-ink sm:text-[1.16rem]">
               <span className="block whitespace-nowrap">Built with care.</span>
               <span className="block whitespace-nowrap">
                 Designed to last.
               </span>
             </p>
-            <p className="mt-2.5 max-w-[10.5rem] text-[9px] font-medium leading-[1.45] text-ink/78">
+            <p className="mt-2 max-w-[10.5rem] text-[7px] font-medium leading-[1.45] text-ink/78 sm:mt-2.5 sm:text-[9px]">
               Custom homes and renovations crafted around you.
             </p>
-            <span className="mt-2.5 inline-flex rounded bg-ink px-3 py-1.5 text-[8px] font-bold uppercase tracking-[0.08em] text-ivory">
+            <span className="mt-2 inline-flex rounded bg-ink px-2 py-1 text-[6px] font-bold uppercase tracking-[0.07em] text-ivory sm:mt-2.5 sm:px-3 sm:py-1.5 sm:text-[8px] sm:tracking-[0.08em]">
               View our work
             </span>
           </div>
-          <div className="relative my-3 mr-3 overflow-hidden rounded-md border border-line/70 bg-sand">
+          <div className="relative my-2 mr-2 overflow-hidden rounded-md border border-line/70 bg-sand sm:my-3 sm:mr-3">
             <Image
               src="/images/services/png/01-demo.png"
               alt="Modern Riverstone Builders home preview"

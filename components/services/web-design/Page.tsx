@@ -3,60 +3,22 @@ import { Fragment, type CSSProperties, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowDown,
   ArrowRight,
-  ArrowUp,
-  BarChart3,
-  Bell,
-  Box,
-  Calendar,
-  Check,
-  ChevronDown,
-  ChevronRight,
   CircleCheck,
-  Clock,
-  Database,
-  Eye,
-  FileCode2,
-  FileText,
   Flag,
   Gauge,
-  Globe,
-  Headphones,
   Home,
-  LayoutDashboard,
   LayoutTemplate,
-  LineChart,
   Mail,
-  MapPin,
-  Megaphone,
   MessageSquareText,
   MonitorSmartphone,
-  Navigation,
   Paintbrush,
-  Pencil,
-  PhoneCall,
-  Plus,
-  RefreshCw,
   Rocket,
   Search,
   Settings2,
-  ShieldCheck,
-  Smartphone,
   Sparkle,
-  Store,
-  Tag,
   TrendingUp,
-  UserRound,
-  Wrench,
 } from "lucide-react";
-import { FaLinkedin } from "react-icons/fa";
-import {
-  SiAirtable,
-  SiGooglecalendar,
-  SiGooglesheets,
-  SiStripe,
-} from "react-icons/si";
 import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
 import { PhoneStatusBar } from "@/components/ui/DeviceFrame";
@@ -65,7 +27,6 @@ import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import { webDesignTimeline, type ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
-import ProjectWorkCard from "../shared/ProjectWorkCard";
 import {
   serviceCenterLabelClassName,
   serviceCenterTitleClassName,

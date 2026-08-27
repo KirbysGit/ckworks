@@ -20,22 +20,13 @@ import {
   TrendingUp,
   Wrench,
 } from "lucide-react";
-import { FaLinkedin } from "react-icons/fa";
-import {
-  SiAirtable,
-  SiGooglecalendar,
-  SiGooglesheets,
-  SiStripe,
-} from "react-icons/si";
 import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
-import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import { supportTimeline, type ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
 import RelatedLinks from "../shared/RelatedLinks";
-import ProjectWorkCard from "../shared/ProjectWorkCard";
 import SupportCareView, { supportHeroTiming } from "./SupportCareView";
 import {
   serviceCenterLabelClassName,
@@ -43,7 +34,6 @@ import {
   serviceContainer,
   serviceHeroTitleClassName,
   serviceSectionBodyClassName,
-  serviceSectionLabelClassName,
   serviceSectionTitleClassName,
 } from "../shared/styles";
 const supportWhyItMatters = [

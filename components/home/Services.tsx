@@ -357,7 +357,11 @@ const mountainShape = buildTwinHillsPath(websiteVisual.mountains);
 function ServiceVisual({ kind }: { kind: VisualKind }) {
   if (kind === "website") {
     return (
-      <div className={`relative mt-5 flex ${homepageVisual.height} shrink-0 flex-col overflow-hidden rounded-lg border border-line bg-ivory/75`}>
+      <div
+        className={`relative mt-5 flex ${homepageVisual.height} shrink-0 flex-col overflow-hidden rounded-lg border border-line bg-ivory/75`}
+        aria-hidden
+        data-nosnippet
+      >
         <motion.span
           className="pointer-events-none absolute inset-y-0 z-20 w-16 bg-gradient-to-r from-transparent via-white/70 to-transparent"
           initial={{ x: "-140%" }}
@@ -453,7 +457,11 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
     const analyticsNav = [ChartNoAxesColumn, UserRound, Filter, Target];
 
     return (
-      <div className={`mt-5 flex ${homepageVisual.height} shrink-0 flex-col overflow-hidden rounded-lg border border-line bg-ivory/75`}>
+      <div
+        className={`mt-5 flex ${homepageVisual.height} shrink-0 flex-col overflow-hidden rounded-lg border border-line bg-ivory/75`}
+        aria-hidden
+        data-nosnippet
+      >
         <div className="grid h-full grid-cols-[2.25rem_1fr]">
           <div className="flex flex-col items-center gap-3 border-r border-line bg-sand/55 pt-3 text-forest">
             {analyticsNav.map((NavIcon, index) => (

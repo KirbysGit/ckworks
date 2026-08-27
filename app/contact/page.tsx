@@ -82,10 +82,10 @@ export default function ContactPage() {
 
 function ContactAside() {
   return (
-    <aside className="rounded-b-2xl border-t border-line bg-card px-6 py-7 text-center sm:px-7 lg:rounded-b-none lg:rounded-r-2xl lg:border-l lg:border-t-0 lg:px-7 lg:py-8 lg:text-left">
+    <aside className="rounded-b-2xl border-t border-line bg-card px-6 py-7 text-center sm:px-7 lg:rounded-b-none lg:rounded-r-2xl lg:border-l lg:border-t-0 lg:px-7 lg:py-8">
       <AsideHeading>Other ways to reach me</AsideHeading>
 
-      <div className="mt-5 flex flex-col items-center gap-3.5 lg:items-start">
+      <div className="mt-5 flex flex-col items-center gap-3.5">
         <a
           href={`mailto:${contactEmail}`}
           className="group flex items-center gap-3 text-sm font-medium text-ink transition-colors hover:text-forest"
@@ -112,7 +112,7 @@ function ContactAside() {
 
       <div className="mt-8 border-t border-line pt-7">
         <AsideHeading>What happens next</AsideHeading>
-        <p className="mx-auto mt-4 max-w-sm text-sm leading-7 text-muted lg:mx-0 lg:max-w-none">
+        <p className="mx-auto mt-4 max-w-sm text-sm leading-7 text-muted">
           I&apos;ll read through what you send and reply with any questions, a
           recommended next step, or a better path if one makes more sense.
         </p>
@@ -128,7 +128,7 @@ function AsideHeading({ children }: { children: string }) {
         {children}
       </p>
       <span
-        className="mx-auto mt-2.5 block h-px w-8 bg-forest/50 lg:mx-0"
+        className="mx-auto mt-2.5 block h-px w-8 bg-forest/50"
         aria-hidden
       />
     </>

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import {
   ArrowRight,
   ChevronDown,
@@ -23,7 +22,6 @@ import GetClearPhase from "@/components/process/GetClearPhase";
 import LaunchImprovePhase from "@/components/process/LaunchImprovePhase";
 import ShapeDirectionPhase from "@/components/process/ShapeDirectionPhase";
 import StageChain from "@/components/process/StageChain";
-import { getCaseStudy } from "@/lib/projects";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
 
 const processDescription =
@@ -73,8 +71,6 @@ const fromCkWorks: { icon: LucideIcon; label: string }[] = [
 ];
 
 export default function ProcessPage() {
-  const tizirsso = getCaseStudy("tizirsso");
-
   return (
     <SiteLayout>
       <SchemaMarkup

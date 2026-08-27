@@ -1,7 +1,6 @@
 import {
   BarChart3,
   LifeBuoy,
-  LineChart,
   MonitorSmartphone,
   Search,
   Workflow,

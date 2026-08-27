@@ -207,7 +207,11 @@ export default function HeroMockup() {
   const chartMonths = getRecentMonthLabels();
 
   return (
-    <div className="relative mx-auto w-full max-w-2xl lg:max-w-none">
+    <div
+      className="relative mx-auto w-full max-w-2xl lg:max-w-none"
+      aria-hidden
+      data-nosnippet
+    >
       {/* Whole composition scales to fit the column. The cards are fixed-px,
           so without this they ride up into the browser at narrower widths /
           browser zoom. --m shrinks everything together per breakpoint; the

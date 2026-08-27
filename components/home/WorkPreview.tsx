@@ -185,7 +185,7 @@ function MobileFeaturedCarousel() {
         </div>
       </div>
 
-      <div className="mt-2 flex items-center justify-center gap-8">
+      <div className="mt-2 flex items-center justify-center gap-2 sm:gap-8">
         <button
           type="button"
           onClick={() => scrollToProject(activeIndex - 1)}
@@ -196,17 +196,23 @@ function MobileFeaturedCarousel() {
           <ArrowLeft className="h-5 w-5" />
         </button>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center">
           {featuredCaseStudies.map((study, index) => (
             <button
               key={study.slug}
               type="button"
               onClick={() => scrollToProject(index)}
               aria-label={`Show ${study.name}`}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                activeIndex === index ? "w-5 bg-forest" : "w-2 bg-line"
-              }`}
-            />
+              aria-current={activeIndex === index ? "true" : undefined}
+              className="flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:ring-offset-ivory"
+            >
+              <span
+                aria-hidden
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  activeIndex === index ? "w-5 bg-forest" : "w-2 bg-line"
+                }`}
+              />
+            </button>
           ))}
         </div>
 

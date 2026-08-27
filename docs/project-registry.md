@@ -51,7 +51,7 @@ Status strings come from `lib/projects.ts` and carry real meaning:
 | Personal Product / Early Release | Colin's own product, live, early and imperfect |
 | Personal Product / Working Build | Colin's own product, functional, not a commercial launch |
 | Collaborative Product Concept / In Progress | Built with someone else, still in development |
-| Professional Work / Generalized | Internship work, described generically |
+| Internship Work / Company Unnamed | Former-employer work, described generically |
 | Personal Project / Data Collection in Progress | Ongoing personal research build |
 | Personal Portfolio / Archived | Earlier work, no longer maintained |
 | Senior Design Prototype | University capstone, demo-grade |
@@ -131,7 +131,7 @@ Status strings come from `lib/projects.ts` and carry real meaning:
 
 ### Internal Automation Tool (`internal-automation-tool`)
 
-- **Status**: Professional Work / Generalized
+- **Status**: Internship Work / Company Unnamed
 - **Supports**: Digital Systems & Integrations, Analytics & Lead Tracking
 - **Demonstrates**: backend APIs, automation, dashboards, monitoring, and
   deployment on an internal platform giving recurring scripts and their results
@@ -181,8 +181,12 @@ Status strings come from `lib/projects.ts` and carry real meaning:
   integration across embedded camera nodes, on-device detection, a mobile app,
   and near real-time alerts
 - **Allowed claims**: a UCF senior design capstone; hardware and software
-  integrated into one working live demonstration
+  integrated into one working live demonstration; Colin's work focused on the
+  Flutter app, Python communication layer, backend development, and system
+  integration
 - **Limitations**: demo-grade prototype, not a product
+- **Authorship note**: describe the full system as what the team built, then
+  distinguish Colin's individual contribution
 - **Never imply**: a security product, commercial availability, reliability
   guarantees, or suitability for real security use
 - **Source**: `lib/projects.ts`

@@ -16,6 +16,10 @@ const interactionEvents = ["pointerdown", "keydown", "scroll"] as const;
 export default function ThirdPartyAnalytics() {
   useEffect(() => {
     let gtmStarted = Boolean(document.getElementById("google-tag-manager"));
+    // prefer-const sees one assignment and suggests const, but `startGtm`
+    // above closes over this to clear the timeout, so the declaration has to
+    // precede the assignment on line 58.
+    // eslint-disable-next-line prefer-const
     let gtmTimer: number | undefined;
 
     const removeInteractionListeners = () => {

@@ -1,7 +1,6 @@
 /** Renders the bespoke Digital Systems and Integrations service experience. */
 import { Fragment, type CSSProperties, type ReactNode } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import {
   ArrowDown,
   ArrowRight,

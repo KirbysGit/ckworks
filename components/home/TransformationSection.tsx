@@ -389,9 +389,9 @@ function CleanBrowserCard() {
           aria-hidden
         />
         <div className="relative z-10 flex h-full max-w-[61%] flex-col justify-center px-4">
-          <h4 className="font-serif text-[1.05rem] font-medium leading-tight text-ink">
+          <p className="font-serif text-[1.05rem] font-medium leading-tight text-ink">
             Calm. Clarity. Real change.
-          </h4>
+          </p>
           <p className="mt-2 text-[10px] leading-4 text-ink/75">
             Whole-person care for stress, sleep, and everyday balance.
           </p>
@@ -422,11 +422,11 @@ function MiniPhone() {
               <Menu className="h-3.5 w-3.5 shrink-0 text-muted" />
             </div>
             <div className="relative z-10 px-3 pb-2.5 pt-4">
-              <h5 className="font-serif text-[1.02rem] font-medium leading-[1.03] text-ink">
+              <p className="font-serif text-[1.02rem] font-medium leading-[1.03] text-ink">
                 Calm. Clarity.
                 <br />
                 Real change.
-              </h5>
+              </p>
               <span className="mt-2.5 inline-flex rounded bg-forest px-3 py-1.5 text-center text-[6.5px] font-medium text-ivory shadow-[0_4px_10px_-6px_rgba(47,91,63,0.8)]">
                 Book a call
               </span>
@@ -506,7 +506,11 @@ function IdeaOutputSwipe() {
           >
             {activeSlide.id === "input" ? (
               <SwipeSlide label={activeSlide.label} dot={activeSlide.dot}>
-                <div className="relative h-[19.25rem] w-full overflow-hidden rounded-2xl border border-line/80 bg-card shadow-soft">
+                <div
+                  className="relative h-[19.25rem] w-full overflow-hidden rounded-2xl border border-line/80 bg-card shadow-soft"
+                  aria-hidden
+                  data-nosnippet
+                >
                   <div
                     className="grid-texture pointer-events-none absolute inset-0 opacity-30"
                     aria-hidden
@@ -535,7 +539,11 @@ function IdeaOutputSwipe() {
               </SwipeSlide>
             ) : (
               <SwipeSlide label={activeSlide.label} dot={activeSlide.dot}>
-                <div className="relative h-[19.25rem] pb-10 pt-1">
+                <div
+                  className="relative h-[19.25rem] pb-10 pt-1"
+                  aria-hidden
+                  data-nosnippet
+                >
                   <CleanBrowserCard />
                   <p className="pointer-events-none absolute bottom-9 left-0 z-10 max-w-[9.5rem] text-left text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted">
                     Illustrative example
@@ -551,17 +559,23 @@ function IdeaOutputSwipe() {
       </div>
 
       {/* pager dots + caption */}
-      <div className="mt-4 flex items-center justify-center gap-2">
+      <div className="mt-1 flex items-center justify-center">
         {swipeSlides.map((slide, index) => (
           <button
             key={slide.id}
             type="button"
             onClick={() => goTo(index)}
             aria-label={`Show ${slide.label}`}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              active === index ? "w-5 bg-forest" : "w-2 bg-line"
-            }`}
-          />
+            aria-current={active === index ? "true" : undefined}
+            className="flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:ring-offset-ivory"
+          >
+            <span
+              aria-hidden
+              className={`h-2 rounded-full transition-all duration-300 ${
+                active === index ? "w-5 bg-forest" : "w-2 bg-line"
+              }`}
+            />
+          </button>
         ))}
       </div>
       <p className="mt-2 text-center text-xs text-muted">
@@ -618,7 +632,11 @@ export default function TransformationSection() {
           </motion.div>
 
           {/* Tablet + desktop: full side-by-side composition */}
-          <div className="mt-8 hidden gap-8 sm:grid xl:grid-cols-[minmax(0,0.95fr)_3.5rem_minmax(0,1.05fr)] xl:items-start">
+          <div
+            className="mt-8 hidden gap-8 sm:grid xl:grid-cols-[minmax(0,0.95fr)_3.5rem_minmax(0,1.05fr)] xl:items-start"
+            aria-hidden
+            data-nosnippet
+          >
             <motion.div variants={fadeUp}>
               <BeforeBoard />
             </motion.div>
@@ -737,6 +755,7 @@ function PostIt({
             }
       }
       aria-label={note.label}
+      role="img"
     >
       <span
         className="pointer-events-none absolute inset-0 rounded-[3px] bg-[linear-gradient(140deg,rgba(255,255,255,0.22),transparent_38%,rgba(31,36,32,0.055)_100%)]"
@@ -936,9 +955,9 @@ function BrowserPreview() {
         />
 
         <div className="relative z-10 flex min-h-[15rem] max-w-[18.5rem] flex-col justify-center px-5 py-5">
-          <h4 className="font-serif text-2xl font-medium leading-tight text-ink sm:text-[2.3rem]">
+          <p className="font-serif text-2xl font-medium leading-tight text-ink sm:text-[2.3rem]">
             Calm. Clarity. Real change.
-          </h4>
+          </p>
           <p className="mt-4 max-w-[15rem] text-xs leading-5 text-ink/75 sm:text-sm sm:leading-6">
             Whole-person care for stress, sleep, and everyday balance.
           </p>
@@ -1219,9 +1238,9 @@ function PhonePreview() {
               </div>
 
               <div className="px-3.5 pb-3.5 pt-9">
-                <h5 className="font-serif text-[1.4rem] font-medium leading-[0.98] text-ink">
+                <p className="font-serif text-[1.4rem] font-medium leading-[0.98] text-ink">
                   Calm. Clarity. Real change.
-                </h5>
+                </p>
                 <p className="mt-3 text-[7.5px] leading-snug text-ink/75">
                   Whole-person care for stress, sleep, and everyday balance.
                 </p>
