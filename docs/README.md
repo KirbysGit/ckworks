@@ -17,6 +17,9 @@ shared working system for coding agents and future contributors.
 7. Use [agent-workflow.md](agent-workflow.md) for task execution and review.
 8. Check [decisions.md](decisions.md) for choices that should not be
    rediscovered or silently reversed.
+9. Read [web-accessibility-service.md](web-accessibility-service.md) before
+   planning or implementing the Web Accessibility service or its future Title
+   II child page.
 
 ## Reference Files
 
@@ -24,6 +27,8 @@ shared working system for coding agents and future contributors.
 - [backlog.md](backlog.md) - verified issues, investigations, and next work
 - [demo-registry.md](demo-registry.md) - fictional brands, people, and demo data
 - [project-registry.md](project-registry.md) - real builds and allowed claims
+- [web-accessibility-service.md](web-accessibility-service.md) - approved
+  service model, V1 page skeleton, future Title II split, and integration map
 
 Before writing about a project, check `project-registry.md`. Before adding a
 fictional business to a mockup, check `demo-registry.md` and reuse what is

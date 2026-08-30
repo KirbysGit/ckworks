@@ -1,4 +1,5 @@
 import {
+  Accessibility,
   BarChart3,
   LifeBuoy,
   MonitorSmartphone,
@@ -10,6 +11,7 @@ import {
 export type ServiceSlug =
   | "web-design-development"
   | "search-ai-visibility"
+  | "web-accessibility"
   | "analytics-lead-tracking"
   | "digital-systems-integrations"
   | "ongoing-support";
@@ -219,6 +221,63 @@ export const serviceAreas: ServiceArea[] = [
     ],
     relevantProjectSlugs: ["tizirsso", "ck-dev"],
     icon: Search,
+  },
+  {
+    slug: "web-accessibility",
+    title: "Web Accessibility",
+    shortTitle: "Accessibility",
+    href: "/services/web-accessibility",
+    eyebrow: "Accessibility",
+    description:
+      "Accessibility reviews and practical improvements that make websites easier to navigate, understand, and use.",
+    timeline: null,
+    whoFor: [
+      "Organizations concerned about barriers on an existing website.",
+      "Teams planning a website or redesign with accessibility built in.",
+      "Public entities preparing websites and digital services for accessibility requirements.",
+    ],
+    sections: [
+      {
+        title: "Navigation and structure",
+        body: "Review keyboard access, focus order, headings, landmarks, and the paths people use to find information.",
+      },
+      {
+        title: "Forms and interactions",
+        body: "Identify unclear labels, instructions, errors, controls, and barriers in important user journeys.",
+      },
+      {
+        title: "Content and presentation",
+        body: "Check contrast, zoom and reflow, alternative text, captions, and motion where they affect use.",
+      },
+      {
+        title: "Documents and third-party tools",
+        body: "Define which downloads, embeds, portals, and vendor-managed systems need closer review.",
+      },
+    ],
+    faqs: [
+      {
+        question: "What is included in an accessibility review?",
+        answer:
+          "The scope is defined around representative pages, templates, and important user journeys. It may combine automated checks with manual review of navigation, structure, forms, content, and interactive controls.",
+      },
+      {
+        question: "Can automated tools find every accessibility issue?",
+        answer:
+          "No. Automated tools can flag some patterns, but many accessibility questions require human judgment and testing of the actual experience.",
+      },
+      {
+        question: "Does CK Works certify legal compliance?",
+        answer:
+          "No. CK Works provides technical accessibility reviews and improvements, not legal advice or compliance certification.",
+      },
+    ],
+    relatedServiceSlugs: [
+      "web-design-development",
+      "ongoing-support",
+      "digital-systems-integrations",
+    ],
+    relevantProjectSlugs: [],
+    icon: Accessibility,
   },
   {
     slug: "analytics-lead-tracking",

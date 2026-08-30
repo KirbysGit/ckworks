@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+  Accessibility,
   Menu,
   X,
   ArrowRight,
@@ -57,19 +58,24 @@ const serviceDropdownItems: Record<ServiceSlug, ServiceDropdownItem> = {
     description: "Get found in search and AI results.",
     icon: Search,
   },
-  "analytics-lead-tracking": {
+  "web-accessibility": {
     number: "03",
+    description: "Make websites easier for more people to use.",
+    icon: Accessibility,
+  },
+  "analytics-lead-tracking": {
+    number: "04",
     description: "Measure what matters. Improve results.",
     icon: ChartColumnIncreasing,
   },
   "digital-systems-integrations": {
-    number: "04",
+    number: "05",
     description: "Connect tools. Automate workflows.",
     icon: Puzzle,
     blockyIcon: true,
   },
   "ongoing-support": {
-    number: "05",
+    number: "06",
     description: "Reliable care for long-term growth.",
     icon: Headphones,
   },

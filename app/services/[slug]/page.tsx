@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import AccessibilityPage from "@/components/services/accessibility/Page";
 import AnalyticsPage from "@/components/services/analytics/Page";
 import SearchVisibilityPage from "@/components/services/search-visibility/Page";
 import OngoingSupportPage from "@/components/services/support/Page";
@@ -24,6 +25,7 @@ type ServiceExperience = ComponentType<{ service: ServiceArea }>;
 const bespokePages: Partial<Record<ServiceSlug, ServiceExperience>> = {
   "web-design-development": WebDesignPage,
   "search-ai-visibility": SearchVisibilityPage,
+  "web-accessibility": AccessibilityPage,
   "analytics-lead-tracking": AnalyticsPage,
   "digital-systems-integrations": SystemsPage,
   "ongoing-support": OngoingSupportPage,

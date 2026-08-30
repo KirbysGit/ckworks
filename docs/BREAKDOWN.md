@@ -5,15 +5,17 @@ Current state of the CK Works site and what is actively in progress.
 Keep this short and dated. Durable rules belong in [`decisions.md`](decisions.md);
 verified problems belong in [`backlog.md`](backlog.md).
 
-**Last verified: 2026-08-19**
+**Last verified: 2026-08-29**
 
 ## What This Is
 
 A marketing and portfolio site for CK Works, Colin Kirby's independent digital
-studio. It sells web design and development, search and AI visibility, analytics
-and lead tracking, digital systems and integrations, and ongoing support. The
-site is also the studio's own proof of capability, so its quality is part of
-the pitch.
+studio. It currently sells web design and development, search and AI visibility,
+analytics and lead tracking, digital systems and integrations, and ongoing
+support. Web Accessibility is now present as the sixth service across the main
+discovery surfaces, while its bespoke long-form page remains planned. The site
+is also the studio's own proof of capability, so its quality is part of the
+pitch.
 
 ## Stack
 
@@ -124,6 +126,14 @@ closing CTA.
 
 ## In Progress
 
+- **Web Accessibility service planning.** The broad parent-service model, V1
+  page skeleton, future ADA Title II child-page boundary, integration map, and
+  launch gate are documented in
+  [`web-accessibility-service.md`](web-accessibility-service.md). The central
+  service entry, homepage card, and full-width services-index showcase now
+  exist, and the generic service route, navigation, footer, inquiry options,
+  metadata, schema, and sitemap inherit that entry. The bespoke service
+  experience and accessibility-specific CTA analytics remain planned.
 - **Service section extraction.** Each bespoke service now has its own
   `components/services/<service>/Page.tsx`. The next pass is splitting the
   largest local visual groups into section and `visuals/` files without mixing

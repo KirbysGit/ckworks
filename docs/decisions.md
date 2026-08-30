@@ -157,3 +157,27 @@ work.
 - Every case study links to the service it proves and to the next project.
   Before this they reached their service only through the footer and then
   dead-ended, so each was a leaf node.
+
+## 2026-08-29: Web Accessibility Is A Broad Sixth Service
+
+- The permanent service is **Web Accessibility** at
+  `/services/web-accessibility`. ADA Title II is the first focused outreach
+  angle, not the parent service name or the whole offer.
+- V1 is one parent page with a prominent public-entity band. A dedicated
+  `/services/web-accessibility/ada-title-ii` child page remains unpublished
+  until municipal outreach demonstrates distinct audience and content needs.
+- Accessibility receives a full sixth homepage card and normal navigation,
+  footer, services-index, inquiry, metadata, schema, sitemap, and analytics
+  treatment. It must not look like an experimental legal landing page.
+- The default offer is an **accessibility review**, followed by prioritization,
+  improvement, and maintenance. Do not call it a formal audit, publish fixed
+  packages, or offer a free audit until the methodology and deliverable are
+  defined.
+- CK Works provides technical accessibility services, not legal advice or
+  compliance certification. Copy must not promise legal compliance, protection
+  from claims, complete automated coverage, or universal document remediation.
+- Regulatory facts belong in a contained Title II section and must be
+  reverified against official sources immediately before publication.
+- The durable content, visual, route, and launch plan lives in
+  `docs/web-accessibility-service.md`; it replaces the earlier Title II-first
+  concept.

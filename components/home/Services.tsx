@@ -8,10 +8,12 @@ import {
   useInView as useMotionInView,
 } from "framer-motion";
 import {
+  Accessibility,
   ArrowRight,
   ArrowUp,
   ChartNoAxesColumn,
   Filter,
+  ListChecks,
   Search,
   Sparkle,
   Target,
@@ -29,23 +31,16 @@ import { serviceAreas, type ServiceSlug } from "@/lib/services";
 type VisualKind =
   | "website"
   | "search"
+  | "accessibility"
   | "systems"
   | "integrations"
   | "support";
-
-/**
- * `tall` cards stack icon over copy and sit three across. `wide` cards put the
- * icon beside the copy and take half the row, which gives their multi-panel
- * visuals room to breathe.
- */
-type CardLayout = "tall" | "wide";
 
 type HomeServiceConfig = {
   slug: ServiceSlug;
   description?: string;
   tags: string[];
   visual: VisualKind;
-  layout: CardLayout;
 };
 
 // Homepage cards stay deliberately brief; each leads to the fuller service page.
@@ -53,34 +48,40 @@ const homeServiceCards: HomeServiceConfig[] = [
   {
     slug: "web-design-development",
     description:
-      "Clear, responsive websites that explain what your business does, build confidence quickly, and make the next step easy to take.",
+      "Clear, responsive websites that explain what your business does and make the next step easy.",
     tags: ["Websites", "Mobile-ready", "Messaging"],
     visual: "website",
-    layout: "tall",
   },
   {
     slug: "search-ai-visibility",
+    description:
+      "Clear structure and content signals that help customers and answer engines understand the site.",
     tags: ["SEO", "Local search", "AI visibility"],
     visual: "search",
-    layout: "tall",
+  },
+  {
+    slug: "web-accessibility",
+    tags: ["Reviews", "Improvements", "WCAG"],
+    visual: "accessibility",
   },
   {
     slug: "analytics-lead-tracking",
+    description:
+      "Clean measurement for traffic, forms, CTAs, and lead sources without turning reporting into a maze.",
     tags: ["Analytics", "Tracking", "Reporting"],
     visual: "systems",
-    layout: "tall",
   },
   {
     slug: "digital-systems-integrations",
+    description:
+      "Dashboards, workflows, and integrations that organize the work happening behind the scenes.",
     tags: ["Dashboards", "Automation", "APIs"],
     visual: "integrations",
-    layout: "wide",
   },
   {
     slug: "ongoing-support",
     tags: ["Updates", "Fixes", "Improvements"],
     visual: "support",
-    layout: "wide",
   },
 ];
 
@@ -101,7 +102,7 @@ export default function Services() {
         <SectionHeader
           label="What I Do"
           title="A few ways I can help your business."
-          subtitle="From websites and search visibility to reporting, systems, and ongoing support, I help make the digital side of your business easier to run."
+          subtitle="From the website people use to the systems behind it, I help make your business clearer, more accessible, and easier to run."
           className="text-center md:text-left [&_h2]:mx-auto [&_p]:mx-auto md:[&_h2]:mx-0 md:[&_p]:mx-0"
         />
 
@@ -163,55 +164,45 @@ export default function Services() {
           initial="hidden"
           whileInView="show"
           viewport={inView}
-          className="mt-12 hidden gap-4 md:grid md:grid-cols-2 xl:grid-cols-6"
+          className="mt-12 hidden gap-4 md:grid md:grid-cols-2 xl:grid-cols-3"
         >
-          {homeServices.map((service, index) => {
+          {homeServices.map((service) => {
             const Icon = service.icon;
-            const isWide = service.layout === "wide";
-            // The two wide cards take half the row each; index 4 still centers
-            // itself at `md`, where it is the odd card on its own line.
-            const cardPlacement =
-              index === 3
-                ? "xl:col-span-3"
-                : index === 4
-                  ? "md:col-span-2 md:mx-auto md:w-[calc(50%-0.5rem)] xl:col-span-3 xl:mx-0 xl:w-auto"
-                  : "xl:col-span-2";
 
             return (
               <motion.div
                 key={service.slug}
                 variants={fadeUp}
-                className={`h-full ${cardPlacement}`}
+                className="h-full"
               >
                 <article
-                  className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-card p-5 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:border-forest/30 hover:shadow-lift ${
-                    isWide ? "" : "min-h-[26rem]"
-                  }`}
+                  className="group relative flex h-full min-h-[26rem] flex-col overflow-hidden rounded-2xl border border-line bg-card p-5 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:border-forest/30 hover:shadow-lift"
                 >
-                  <div className={isWide ? "flex items-start gap-4" : "flex flex-col"}>
+                  <div className="flex items-center gap-3">
                     <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-forest-soft">
                       <Icon className="h-5 w-5 text-forest" />
                     </span>
 
-                    <div className={isWide ? "min-w-0 flex-1" : "mt-5"}>
-                      <h3 className="font-serif text-[1.7rem] font-semibold leading-tight text-ink">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-serif text-[1.55rem] font-semibold leading-tight text-ink">
                         {service.title}
                       </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-muted">
-                        {service.description}
-                      </p>
-
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {service.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-md bg-forest-soft/75 px-2.5 py-1 text-[11px] font-medium text-forest"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
                     </div>
+                  </div>
+
+                  <p className="mt-3 min-h-[3.25rem] text-sm leading-relaxed text-muted">
+                    {service.description}
+                  </p>
+
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {service.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-md bg-forest-soft/75 px-2.5 py-1 text-[11px] font-medium text-forest"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
 
                   <ServiceVisual kind={service.visual} />
@@ -448,6 +439,10 @@ function ServiceVisual({ kind }: { kind: VisualKind }) {
     return <SearchServiceVisual />;
   }
 
+  if (kind === "accessibility") {
+    return <AccessibilityServiceVisual />;
+  }
+
   if (kind === "systems") {
     const metrics = [
       { label: "Visitors", value: 2356, change: "12%" },
@@ -580,6 +575,107 @@ const searchVisual = {
     bullets: ["78%", "56%"],
   },
 } as const;
+
+/** Shows accessibility as practical interface review, not a legal scorecard. */
+function AccessibilityServiceVisual() {
+  const checks = ["Keyboard", "Labels", "Contrast"] as const;
+
+  return (
+    <div
+      className={`mt-5 grid ${homepageVisual.height} shrink-0 grid-cols-[minmax(0,1.55fr)_minmax(6.5rem,0.8fr)] overflow-hidden rounded-lg border border-line bg-ivory/75`}
+      aria-hidden
+      data-nosnippet
+    >
+      <div className="flex min-w-0 flex-col border-r border-line bg-sand/10 pb-2.5">
+        <div className="flex h-9 shrink-0 items-center gap-2 border-b border-line px-3">
+          <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-forest-soft text-forest">
+            <ListChecks className="h-2.5 w-2.5" />
+          </span>
+          <p className="shrink-0 text-[10px] font-semibold text-ink">
+            Contact form
+          </p>
+          <span className="h-px min-w-2 flex-1 bg-line" />
+          <span className="shrink-0 rounded-sm bg-forest-soft/75 px-1.5 py-0.5 text-[7px] font-semibold leading-none text-forest">
+            3 fields
+          </span>
+        </div>
+
+        <div className="relative mx-3 flex min-h-0 flex-1 items-center">
+          <div className="absolute left-0 top-1/2 flex h-[5.75rem] w-4 -translate-y-1/2 flex-col items-center justify-between">
+            <span className="absolute bottom-2 top-2 left-1/2 w-px -translate-x-1/2 border-l border-dashed border-forest/60" />
+            {[1, 2, 3].map((step) => (
+              <span
+                key={step}
+                className={`relative z-10 h-4 w-4 ${
+                  step === 1
+                    ? "-translate-y-1"
+                    : step === 2
+                      ? "-translate-y-0.5"
+                      : ""
+                }`}
+              >
+                <motion.span
+                  className="flex h-4 w-4 items-center justify-center rounded-full border border-forest/75 bg-card text-[7px] font-semibold text-forest"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={inView}
+                  transition={{
+                    duration: 0.35,
+                    delay: 0.18 + step * 0.1,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  <span className="leading-none">{step}</span>
+                </motion.span>
+              </span>
+            ))}
+          </div>
+
+          <div className="ml-7 min-w-0 flex-1 space-y-2 pr-2">
+            <div>
+              <span className="block text-[8px] font-medium text-ink">Name</span>
+              <span className="mt-1.5 block h-2.5 w-[88%] rounded-full bg-line/85" />
+            </div>
+            <div>
+              <span className="block text-[8px] font-medium text-ink">Email</span>
+              <motion.span
+                className="mt-1 block h-4 rounded-md border border-[#4F8FEA] bg-line/65 ring-2 ring-[#4F8FEA]/15 ring-offset-1 ring-offset-sand"
+                initial={{ boxShadow: "0 0 0 0 rgba(79, 143, 234, 0)" }}
+                whileInView={{ boxShadow: "0 0 0 2px rgba(79, 143, 234, 0.16)" }}
+                viewport={inView}
+                transition={{ duration: 0.45, delay: 0.42 }}
+              />
+            </div>
+            <div>
+              <span className="block text-[8px] font-medium text-ink">Message</span>
+              <span className="mt-1 block h-5 rounded-md bg-line/75" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex min-w-0 flex-col bg-sand/15">
+        <div className="flex h-9 items-center gap-2 border-b border-line px-3">
+          <Accessibility className="h-3.5 w-3.5 shrink-0 text-forest" />
+          <span className="truncate text-[9px] font-semibold text-ink">
+            Site review
+          </span>
+        </div>
+        <div className="flex flex-1 flex-col divide-y divide-line">
+          {checks.map((check) => (
+            <span
+              key={check}
+              className="flex flex-1 items-center justify-between gap-2 px-3 text-[9px] font-medium text-ink"
+            >
+              {check}
+              <ArrowRight className="h-3 w-3 shrink-0 text-forest" />
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function SearchServiceVisual() {
   return (

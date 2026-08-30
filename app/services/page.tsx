@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import SiteLayout from "@/components/layout/SiteLayout";
 import SchemaMarkup from "@/components/page/SchemaMarkup";
+import AccessibilityOverviewCard from "@/components/services/accessibility/OverviewCard";
 import Reveal from "@/components/ui/Reveal";
 import { createPageMetadata, absoluteUrl } from "@/lib/seo";
 import { serviceAreas, type ServiceArea, type ServiceSlug } from "@/lib/services";
@@ -35,7 +36,13 @@ type ServiceCardConfig = {
   slug: ServiceSlug;
   number: string;
   className?: string;
-  visual: "website" | "search" | "analytics" | "systems" | "support";
+  visual:
+    | "website"
+    | "search"
+    | "analytics"
+    | "systems"
+    | "accessibility"
+    | "support";
   description: string;
 };
 
@@ -72,8 +79,16 @@ const serviceCards: ServiceCardConfig[] = [
       "Connect forms, CRM, email, payments, and workflows so your tools work together cleanly.",
   },
   {
-    slug: "ongoing-support",
+    slug: "web-accessibility",
     number: "05",
+    visual: "accessibility",
+    className: "lg:col-span-2",
+    description:
+      "Accessibility reviews and practical improvements that make websites easier for more people to navigate, understand, and use.",
+  },
+  {
+    slug: "ongoing-support",
+    number: "06",
     visual: "support",
     className: "lg:col-span-2",
     description:
@@ -209,11 +224,21 @@ function ServiceOverviewCard({
   card: ServiceCardConfig;
   service: ServiceArea;
 }) {
+  if (card.visual === "accessibility") {
+    return (
+      <AccessibilityOverviewCard
+        service={service}
+        number={card.number}
+        description={card.description}
+      />
+    );
+  }
+
   const isSupport = card.visual === "support";
 
   if (isSupport) {
     return (
-      <article className="group/card grid h-full min-h-[18rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(18rem,0.86fr)_minmax(0,2.44fr)]">
+      <article className="group/card grid h-full min-h-[21.25rem] overflow-hidden rounded-xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/35 hover:shadow-lift md:grid-cols-[minmax(18rem,0.86fr)_minmax(0,2.44fr)]">
         <div className="relative flex min-w-0 flex-col border-b border-line px-6 py-7 sm:px-8 sm:py-8 md:border-b-0">
           <span
             className="pointer-events-none absolute inset-y-8 right-0 hidden w-px bg-line md:block"
@@ -230,7 +255,7 @@ function ServiceOverviewCard({
           </p>
           <Link
             href={service.href}
-            className="group/link mt-9 inline-flex w-fit items-center gap-2 border-b border-[#A8713B] pb-0.5 text-base font-semibold text-forest transition-colors hover:text-ink md:mt-auto"
+            className="group/link mt-9 inline-flex w-fit items-center gap-2 border-b border-[#A8713B] pb-0.5 text-base font-semibold text-ink transition-colors hover:text-forest md:mt-auto"
           >
             View service
             <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
