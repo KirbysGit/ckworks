@@ -30,9 +30,13 @@ const reviewItems = [
 ] as const;
 
 const structureItems = [
-  { type: "H1", label: "Welcome", bars: ["72%"] },
-  { type: "H2", label: "Contact Us", bars: ["72%"] },
-  { type: "Form", label: "Name, email, message", bars: ["72%", "42%"] },
+  { type: "H1", label: "Welcome", bars: ["86%", "78%"] },
+  { type: "H2", label: "Contact Us", bars: ["86%", "78%"] },
+  {
+    type: "Form",
+    label: "Name, email, message",
+    bars: ["86%", "78%", "62%"],
+  },
 ] as const;
 
 export default function AccessibilityOverviewCard({
@@ -71,9 +75,17 @@ export default function AccessibilityOverviewCard({
       </div>
 
       <div
-        className="flex min-h-0 min-w-0 flex-col justify-center"
+        className="relative flex min-h-0 min-w-0 flex-col justify-center"
         data-nosnippet
       >
+        <span
+          className="pointer-events-none absolute inset-y-8 left-[25%] z-10 hidden w-px bg-line xl:block"
+          aria-hidden
+        />
+        <span
+          className="pointer-events-none absolute inset-y-8 left-[54.762%] z-10 hidden w-px bg-line md:block xl:left-[67.073%]"
+          aria-hidden
+        />
         <div
           className="grid h-full min-w-0 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.95fr)] md:items-center xl:grid-cols-[minmax(10rem,0.82fr)_minmax(18rem,1.38fr)_minmax(14rem,1.08fr)]"
           aria-hidden
@@ -93,15 +105,15 @@ export default function AccessibilityOverviewCard({
 
 function PageStructurePanel() {
   return (
-    <div className="relative hidden min-h-[14.5rem] min-w-0 flex-col px-5 py-5 xl:flex">
-      <span
-        className="pointer-events-none absolute inset-y-3 right-0 w-px bg-line"
-        aria-hidden
-      />
-      <p className="text-sm font-semibold text-ink">Page structure</p>
-      <div className="mt-2 flex min-h-0 flex-1 flex-col justify-evenly">
-        {structureItems.map((item) => (
-          <div key={item.type} className="grid grid-cols-[1.75rem_1fr] gap-2">
+    <div className="relative hidden min-h-[18.25rem] min-w-0 flex-col justify-center px-5 py-5 xl:flex">
+      <div className="w-full">
+        <p className="text-[1rem] font-semibold text-ink">Page Structure</p>
+        <div className="mt-5 space-y-4">
+          {structureItems.map((item) => (
+            <div
+              key={item.type}
+              className="grid grid-cols-[2.75rem_minmax(0,1fr)] gap-2"
+            >
             <span className="pt-0.5 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-forest/80">
               {item.type}
             </span>
@@ -119,8 +131,9 @@ function PageStructurePanel() {
                 ))}
               </div>
             </div>
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -144,17 +157,18 @@ function ContactFormPanel() {
   ] as const;
 
   return (
-    <div className="relative flex min-h-[14.5rem] min-w-0 flex-col px-5 py-2.5">
-      <span
-        className="pointer-events-none absolute inset-y-3 right-0 hidden w-px bg-line md:block"
-        aria-hidden
-      />
-      <p className="ml-10 text-xl font-semibold tracking-[-0.02em] text-ink">
-        Contact Us
-      </p>
-      <p className="ml-10 mt-1 text-sm text-muted">
-        We&apos;d love to hear from you.
-      </p>
+    <div className="relative flex min-h-[18.25rem] min-w-0 flex-col px-5 pb-2.5 pt-8">
+      <div className="ml-10 flex items-center justify-between gap-3 pr-2">
+        <div>
+          <p className="text-[1rem] font-semibold text-ink">Contact Us</p>
+          <p className="mt-1 text-xs text-muted">
+            We&apos;d love to hear from you.
+          </p>
+        </div>
+        <span className="inline-flex shrink-0 rounded-md bg-ink/80 px-2.5 py-1 text-[0.68rem] font-semibold text-card">
+          Send message
+        </span>
+      </div>
 
       <div className="mt-2 grid grid-cols-[1.75rem_minmax(0,1fr)] gap-3">
         <div className="relative flex flex-col items-center justify-between py-3">
@@ -169,7 +183,7 @@ function ContactFormPanel() {
           ))}
         </div>
 
-        <div className="min-w-0 space-y-1.5">
+        <div className="min-w-0 space-y-2.5 pr-2">
           {fields.map((field) => (
             <div key={field.label}>
               <p className="text-xs font-medium leading-none text-ink">
@@ -191,35 +205,36 @@ function ContactFormPanel() {
         </div>
       </div>
 
-      <span className="ml-10 mt-2 inline-flex self-start rounded-md bg-ink px-3 py-1.5 text-sm font-semibold text-card">
-        Send message
-      </span>
     </div>
   );
 }
 
 function ReviewPanel() {
   return (
-    <div className="hidden min-h-[14.5rem] min-w-0 flex-col overflow-hidden px-5 py-5 md:flex">
-      <p className="text-sm font-semibold text-ink">Accessibility review</p>
-      <div className="mt-2 flex min-h-0 flex-1 flex-col divide-y divide-line">
-        {reviewItems.map(({ title, detail, icon: Icon }) => (
-          <div
-            key={title}
-            className="flex flex-1 items-center gap-3 px-2.5 py-1.5"
-          >
-            <Icon
-              className="h-6 w-6 shrink-0 text-forest"
-              strokeWidth={1.8}
-            />
-            <div className="min-w-0">
-              <p className="text-sm font-semibold leading-5 text-ink">
-                {title}
-              </p>
-              <p className="text-xs leading-5 text-muted">{detail}</p>
+    <div className="hidden min-h-[18.25rem] min-w-0 flex-col justify-center overflow-hidden px-5 py-5 md:flex">
+      <div className="w-full translate-y-1">
+        <p className="text-[1rem] font-semibold text-ink">
+          Accessibility Review
+        </p>
+        <div className="mt-3 divide-y divide-line">
+          {reviewItems.map(({ title, detail, icon: Icon }) => (
+            <div
+              key={title}
+              className="flex items-center gap-3 px-2.5 py-3"
+            >
+              <Icon
+                className="h-6 w-6 shrink-0 text-forest"
+                strokeWidth={1.8}
+              />
+              <div className="min-w-0">
+                <p className="text-sm font-semibold leading-5 text-ink">
+                  {title}
+                </p>
+                <p className="text-xs leading-5 text-muted">{detail}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

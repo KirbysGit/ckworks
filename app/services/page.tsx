@@ -264,10 +264,23 @@ function ServiceOverviewCard({
 
         {/* Support gets its own full-bleed layout, so it needs the same
             labelling the shared card path applies to the other four. */}
-        <div className="flex min-w-0 flex-col justify-center" data-nosnippet>
+        <div
+          className="relative flex min-w-0 flex-col justify-center"
+          data-nosnippet
+        >
+          <span
+            className="pointer-events-none absolute inset-y-8 left-[30.678%] z-10 hidden w-px bg-line md:block"
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute inset-y-8 left-[60.177%] z-10 hidden w-px bg-line md:block"
+            aria-hidden
+          />
           <SupportVisual />
-          <p className="px-5 pb-5 pt-3 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted">
-            Illustrative website concept
+          <p className="grid pb-5 pt-3 text-center text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-muted md:grid-cols-[minmax(0,1.04fr)_minmax(0,1fr)_minmax(0,1.35fr)]">
+            <span className="px-5 md:col-start-2 md:px-2">
+              Illustrative website concept
+            </span>
           </p>
         </div>
       </article>
@@ -839,10 +852,6 @@ function SupportVisual() {
     <div className="grid h-full w-full md:grid-cols-[minmax(0,1.04fr)_minmax(0,1fr)_minmax(0,1.35fr)] md:items-center">
       {/* Site Health */}
       <div className="relative flex min-h-[15.75rem] flex-col px-6 py-6 sm:px-8 md:min-h-[14.5rem] md:px-7 md:py-5">
-        <span
-          className="pointer-events-none absolute inset-y-3 right-0 hidden w-px bg-line md:block"
-          aria-hidden
-        />
         <p className="font-sans text-[1rem] font-semibold text-ink">
           Site Health
         </p>
@@ -929,10 +938,6 @@ function SupportVisual() {
           ~900px, so mobile shows Site Health alone: it carries the uptime
           figure and the status line, which is the point of the visual. */}
       <div className="relative hidden min-h-[15.75rem] flex-col border-t border-line px-6 py-6 sm:px-8 md:flex md:min-h-[14.5rem] md:border-t-0 md:px-7 md:py-5">
-        <span
-          className="pointer-events-none absolute inset-y-3 right-0 hidden w-px bg-line md:block"
-          aria-hidden
-        />
         <p className="font-sans text-[1rem] font-semibold text-ink">Backups</p>
         <div className="mt-5 divide-y divide-line">
           {backupDetails.map(([label, value]) => (

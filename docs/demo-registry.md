@@ -100,6 +100,17 @@ Verified against the repository on 2026-08-19.
 - **Never imply**: a real retail client, an ecommerce build CK Works shipped, or
   that the free-delivery and pricing details describe a real offer.
 
+### City of Greenridge
+
+- **Represents**: a fictional local government and public-service website
+- **Used in**: `components/services/accessibility/Hero.tsx`
+- **Purpose**: demonstrating an accessibility review of an important public
+  journey through visible labels, keyboard focus, and a recoverable form error
+- **Labeling**: the browser visual is captioned "Illustrative accessibility
+  review"
+- **Never imply**: a real municipality, a completed client audit, a compliance
+  determination, or a relationship with a government entity.
+
 ## People And Companies In Demo Data
 
 Invented names used inside dashboards, inquiry cards, and activity feeds. Keep
