@@ -13,7 +13,7 @@ A marketing and portfolio site for CK Works, Colin Kirby's independent digital
 studio. It currently sells web design and development, search and AI visibility,
 analytics and lead tracking, digital systems and integrations, and ongoing
 support. Web Accessibility is now present as the sixth service across the main
-discovery surfaces, while its bespoke long-form page remains planned. The site
+discovery surfaces, and its bespoke long-form page is now built. The site
 is also the studio's own proof of capability, so its quality is part of the
 pitch.
 

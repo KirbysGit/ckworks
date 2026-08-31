@@ -32,7 +32,7 @@ const routeUpdated = {
 const serviceUpdated: Record<string, string> = {
   "web-design-development": "2026-08-25",
   "search-ai-visibility": "2026-08-25",
-  "web-accessibility": "2026-08-29",
+  "web-accessibility": "2026-08-31",
   "analytics-lead-tracking": "2026-08-25",
   "digital-systems-integrations": "2026-08-25",
   "ongoing-support": "2026-08-25",

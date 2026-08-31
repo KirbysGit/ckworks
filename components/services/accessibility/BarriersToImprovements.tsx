@@ -14,9 +14,11 @@
  *     Works can consistently provide is still an open delivery decision.
  *   - Maintain is an offer, not a guarantee.
  */
+import type { CSSProperties } from "react";
 import { List, RefreshCw, Search, Wrench } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 import { serviceSectionTitleClassName } from "../shared/styles";
+import AccessibilityReviewScanGraphic from "./ReviewScanGraphic";
 
 const stages = [
   {
@@ -48,7 +50,7 @@ export default function AccessibilityBarriersToImprovements() {
       className="scroll-mt-24 border-b border-line py-14 lg:py-16"
     >
       <div className="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-12">
-        <Reveal className="max-w-md lg:self-center">
+        <Reveal className="max-w-md lg:self-start">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
             How the work happens
           </p>
@@ -60,6 +62,13 @@ export default function AccessibilityBarriersToImprovements() {
             improve the experience. Knowing what to fix first is usually more
             useful than knowing everything at once.
           </p>
+
+          <div
+            className="ck-step mt-6 lg:mt-8"
+            style={{ "--ck-anim-delay": "180ms" } as CSSProperties}
+          >
+            <AccessibilityReviewScanGraphic />
+          </div>
         </Reveal>
 
         <ol className="grid sm:grid-cols-2 sm:border-l sm:border-line">

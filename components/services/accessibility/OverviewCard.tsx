@@ -1,7 +1,18 @@
 /**
  * Renders the full-width Web Accessibility showcase on the services index.
  * The desktop review diagram deliberately collapses to one focused journey on mobile.
+ *
+ * The interior animates with `ck-step`, which holds at opacity 0 inside a
+ * `.ck-reveal` and fires when the parent gains `.is-in`. That matters here: the
+ * card sits well below the fold, and a plain mount animation (`ck-pop` and
+ * friends are not reveal-aware) would play to an empty screen and be over
+ * before anyone scrolled to it.
+ *
+ * Beats read left to right, the way the diagram is meant to be read: structure,
+ * then the form being walked through, then what the review found. Each journey
+ * dot shares its delay with the field beside it so they arrive as a pair.
  */
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import {
   AlignLeft,
@@ -28,6 +39,9 @@ const reviewItems = [
     icon: AlignLeft,
   },
 ] as const;
+
+/** Beats in ms, keyed to the diagram's left-to-right reading order. */
+const beat = (ms: number) => ({ "--ck-anim-delay": `${ms}ms` }) as CSSProperties;
 
 const structureItems = [
   { type: "H1", label: "Welcome", bars: ["86%", "78%"] },
@@ -109,10 +123,11 @@ function PageStructurePanel() {
       <div className="w-full">
         <p className="text-[1rem] font-semibold text-ink">Page Structure</p>
         <div className="mt-5 space-y-4">
-          {structureItems.map((item) => (
+          {structureItems.map((item, index) => (
             <div
               key={item.type}
-              className="grid grid-cols-[2.75rem_minmax(0,1fr)] gap-2"
+              className="ck-step grid grid-cols-[2.75rem_minmax(0,1fr)] gap-2"
+              style={beat(index * 70)}
             >
             <span className="pt-0.5 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-forest/80">
               {item.type}
@@ -158,7 +173,7 @@ function ContactFormPanel() {
 
   return (
     <div className="relative flex min-h-[18.25rem] min-w-0 flex-col px-5 pb-2.5 pt-8">
-      <div className="ml-10 flex items-center justify-between gap-3 pr-2">
+      <div className="ck-step ml-10 flex items-center justify-between gap-3 pr-2" style={beat(190)}>
         <div>
           <p className="text-[1rem] font-semibold text-ink">Contact Us</p>
           <p className="mt-1 text-xs text-muted">
@@ -176,7 +191,8 @@ function ContactFormPanel() {
           {[1, 2, 3].map((step) => (
             <span
               key={step}
-              className="relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-forest text-xs font-semibold text-card shadow-soft"
+              className="ck-step relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-forest text-xs font-semibold text-card shadow-soft"
+              style={beat(250 + (step - 1) * 80)}
             >
               <span className="translate-y-px leading-none">{step}</span>
             </span>
@@ -184,8 +200,12 @@ function ContactFormPanel() {
         </div>
 
         <div className="min-w-0 space-y-2.5 pr-2">
-          {fields.map((field) => (
-            <div key={field.label}>
+          {fields.map((field, index) => (
+            <div
+              key={field.label}
+              className="ck-step"
+              style={beat(250 + index * 80)}
+            >
               <p className="text-xs font-medium leading-none text-ink">
                 {field.label}
               </p>
@@ -217,10 +237,11 @@ function ReviewPanel() {
           Accessibility Review
         </p>
         <div className="mt-3 divide-y divide-line">
-          {reviewItems.map(({ title, detail, icon: Icon }) => (
+          {reviewItems.map(({ title, detail, icon: Icon }, index) => (
             <div
               key={title}
-              className="flex items-center gap-3 px-2.5 py-3"
+              className="ck-step flex items-center gap-3 px-2.5 py-3"
+              style={beat(500 + index * 80)}
             >
               <Icon
                 className="h-6 w-6 shrink-0 text-forest"

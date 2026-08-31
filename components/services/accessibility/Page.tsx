@@ -2,9 +2,9 @@
  * Bespoke Web Accessibility service experience.
  *
  * Built band by band against the skeleton in `docs/web-accessibility-service.md`.
- * TODO(Colin): remaining bands - the contained Title II band and the new-versus-
- * existing-websites band, both of which belong above the FAQ. Do not publish
- * until the launch gate in `docs/accessibility-audit.md` is addressed.
+ * TODO(Colin): remaining band - the new-versus-existing-websites section,
+ * which belongs above the FAQ. Do not publish until the launch gate in
+ * `docs/accessibility-audit.md` is addressed.
  */
 import ServiceFrame from "../shared/ServiceFrame";
 import { serviceContainer } from "../shared/styles";
@@ -13,6 +13,7 @@ import AccessibilityBarriersToImprovements from "./BarriersToImprovements";
 import AccessibilityBottomCta from "./BottomCta";
 import AccessibilityFaq from "./Faq";
 import AccessibilityHero from "./Hero";
+import AccessibilityPublicEntities from "./PublicEntities";
 import AccessibilityRelated from "./Related";
 import AccessibilityToolsAndLimits from "./ToolsAndLimits";
 import AccessibilityWaysOfUsing from "./WaysOfUsing";
@@ -28,6 +29,7 @@ export default function Page({ service }: { service: ServiceArea }) {
           <AccessibilityWhatGetsReviewed />
           <AccessibilityBarriersToImprovements />
           <AccessibilityToolsAndLimits />
+          <AccessibilityPublicEntities />
           <AccessibilityFaq />
           <AccessibilityRelated />
           <AccessibilityBottomCta />

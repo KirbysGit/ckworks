@@ -85,7 +85,7 @@ export default function AccessibilityWhatGetsReviewed() {
             as="article"
             key={title}
             delay={index * 80}
-            className={`flex h-full flex-col items-start border-line px-5 py-8 text-left first:pt-0 last:pb-0 sm:px-7 sm:py-2 lg:px-8 ${
+            className={`flex h-full flex-col items-start border-line px-5 py-8 text-left first:pt-0 last:pb-0 sm:px-7 sm:py-2 sm:first:pt-2 sm:last:pb-2 lg:px-8 ${
               index > 0 ? "border-t sm:border-t-0" : ""
             } ${index >= 2 ? "sm:border-t sm:pt-8 lg:border-t-0 lg:pt-2" : ""} ${
               index % 2 === 1 ? "sm:border-l" : ""
@@ -94,10 +94,10 @@ export default function AccessibilityWhatGetsReviewed() {
             <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-forest-soft/60 text-forest">
               <Icon className="h-6 w-6" strokeWidth={1.6} aria-hidden />
             </span>
-            <h3 className="mt-5 max-w-[16rem] font-serif text-[1.35rem] font-semibold leading-[1.08] tracking-[-0.015em] text-ink sm:min-h-[3.25rem] sm:text-[1.5rem]">
+            <h3 className="mt-5 max-w-[16rem] font-serif text-[1.35rem] font-semibold leading-[1.08] tracking-[-0.015em] text-ink sm:h-14 sm:text-[1.5rem]">
               {title}
             </h3>
-            <p className="mt-3 flex w-full max-w-[16rem] items-center border-y border-line/80 py-3 text-sm font-medium leading-6 text-ink/80 sm:min-h-[6.5rem]">
+            <p className="mt-3 flex w-full max-w-[16rem] items-center border-y border-line/80 py-3 text-sm font-medium leading-6 text-ink/80 sm:h-[6.75rem]">
               {body}
             </p>
             <ul className="mt-5 w-full max-w-[16rem] space-y-2 text-left text-[0.82rem] leading-5 text-ink/75">
