@@ -300,7 +300,7 @@ export default function HeroMockup() {
                     Care that feels personal. Support that fits{" "}
                     <em className="italic">your life</em>.
                   </p>
-                  <p className="mt-3 max-w-[13.5rem] text-[10px] leading-relaxed text-muted/75">
+                  <p className="mt-3 max-w-[13.5rem] text-[10px] leading-relaxed text-muted">
                     Support for individuals and couples in Windermere. In person
                     or online, at a pace that fits.
                   </p>

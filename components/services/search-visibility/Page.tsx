@@ -1,7 +1,6 @@
 /** Renders the bespoke SEO and AI Search Visibility service experience. */
 import { type CSSProperties, type ReactNode } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import {
   ArrowDown,
   ArrowRight,
@@ -30,7 +29,6 @@ import FAQSection from "@/components/page/FAQSection";
 import Reveal from "@/components/ui/Reveal";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
-import { getCaseStudy } from "@/lib/projects";
 import { searchVisibilityTimeline, type ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
 import RelatedLinks from "../shared/RelatedLinks";
@@ -1566,52 +1564,6 @@ function AiOverviewSnapshot() {
         )}
       </div>
     </div>
-  );
-}
-
-function SearchVisibilityWork() {
-  const project = getCaseStudy("tizirsso");
-  if (!project) return null;
-
-  return (
-    <section className="border-b border-line py-12 lg:py-14">
-      <h2 className="font-serif text-[2rem] font-medium leading-tight tracking-[-0.025em] text-ink sm:text-[2.3rem]">
-        Relevant work
-      </h2>
-      <Link
-        href={`/${project.slug}`}
-        className="group mt-6 grid overflow-hidden rounded-2xl border border-line bg-card shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-forest/30 hover:shadow-lift sm:grid-cols-[minmax(0,0.42fr)_minmax(0,1fr)] sm:items-center"
-      >
-        <div className="relative min-h-[9rem] overflow-hidden bg-sand sm:min-h-[8.5rem]">
-          {project.coverImage ? (
-            <Image
-              src={project.coverImage.src}
-              alt={project.coverImage.alt}
-              fill
-              sizes="(min-width: 640px) 30vw, 90vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-            />
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-6 sm:pr-8">
-          <div className="min-w-0">
-            <h3 className="font-serif text-[1.4rem] font-medium leading-tight text-ink">
-              {project.name}
-            </h3>
-            <p className="mt-1 text-[0.72rem] font-medium text-muted">
-              {project.badge} · {project.category}
-            </p>
-            <p className="mt-2 max-w-md text-sm leading-6 text-muted">
-              {project.teaser}
-            </p>
-          </div>
-          <span className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-forest">
-            View project
-            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-          </span>
-        </div>
-      </Link>
-    </section>
   );
 }
 

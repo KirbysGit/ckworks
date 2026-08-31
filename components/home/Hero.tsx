@@ -181,7 +181,7 @@ function MobileHeroPreview() {
               Care that fits{" "}
               <em className="italic">your life</em>.
             </p>
-            <p className="mt-2 max-w-[8.5rem] text-[7px] leading-relaxed text-muted/75">
+            <p className="mt-2 max-w-[8.5rem] text-[7px] leading-relaxed text-muted">
               Support for individuals and couples nearby. In person or online.
             </p>
             <span className="mt-3 inline-flex rounded-md bg-forest px-3 py-1.5 text-[7px] font-medium text-ivory shadow-[0_8px_18px_-14px_rgba(47,91,63,0.85)]">

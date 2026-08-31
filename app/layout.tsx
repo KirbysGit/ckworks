@@ -14,6 +14,7 @@ import {
   siteUrl,
 } from "@/lib/site";
 import { ProjectInquiryProvider } from "@/components/inquiry/ProjectInquiryProvider";
+import MotionProvider from "@/components/ui/MotionProvider";
 import ThirdPartyAnalytics from "@/components/analytics/ThirdPartyAnalytics";
 import { gtmId } from "@/lib/analytics";
 import {
@@ -216,6 +217,17 @@ export default function RootLayout({
         />
       </head>
       <body>
+        {/*
+          First focusable thing on the page, so a keyboard user can jump the
+          sticky header's nav plus its six-item services dropdown instead of
+          tabbing through them on every route.
+        */}
+        <a
+          href="#main"
+          className="sr-only rounded-md focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-forest focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-ivory focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2 focus:ring-offset-ivory"
+        >
+          Skip to main content
+        </a>
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
@@ -229,7 +241,9 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <ProjectInquiryProvider>{children}</ProjectInquiryProvider>
+        <MotionProvider>
+          <ProjectInquiryProvider>{children}</ProjectInquiryProvider>
+        </MotionProvider>
         <Analytics />
         <SpeedInsights />
       </body>

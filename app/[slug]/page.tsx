@@ -283,7 +283,7 @@ export default async function CaseStudyPage({ params }: Props) {
         }}
       />
       <CaseStudyViewed name={study.name} slug={study.slug} />
-      <main>
+      <main id="main">
         <section className="container-ck pb-12 pt-8 lg:pt-12">
           <div className="mx-auto max-w-3xl">
             <div className="flex items-center justify-between gap-4">

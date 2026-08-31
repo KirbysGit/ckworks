@@ -872,7 +872,7 @@ function AnalyticsScope() {
             className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-3 gap-y-1.5 border-b border-line py-6 last:border-b-0 sm:gap-x-6 sm:py-7 lg:grid-cols-[auto_auto_minmax(0,1fr)] lg:gap-y-0 lg:last:border-b"
           >
             <span
-              className="font-source-serif-display text-[1.1rem] font-semibold leading-none tabular-nums text-forest/55"
+              className="font-source-serif-display text-[1.1rem] font-semibold leading-none tabular-nums text-forest"
               style={{ fontVariationSettings: '"opsz" 18' }}
             >
               {String(index + 1).padStart(2, "0")}

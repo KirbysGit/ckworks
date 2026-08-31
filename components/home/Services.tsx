@@ -595,9 +595,15 @@ function AccessibilityServiceVisual() {
             Contact form
           </p>
           <span className="h-px min-w-2 flex-1 bg-line" />
-          <span className="shrink-0 rounded-sm bg-forest-soft/75 px-1.5 py-0.5 text-[7px] font-semibold leading-none text-forest">
+          <motion.span
+            className="shrink-0 rounded-sm bg-forest-soft/75 px-1.5 py-0.5 text-[7px] font-semibold leading-none text-forest"
+            initial={{ opacity: 0, scale: 0.82 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={inView}
+            transition={{ duration: 0.32, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+          >
             3 fields
-          </span>
+          </motion.span>
         </div>
 
         <div className="relative mx-3 flex min-h-0 flex-1 items-center">
@@ -634,21 +640,32 @@ function AccessibilityServiceVisual() {
           <div className="ml-7 min-w-0 flex-1 space-y-2 pr-2">
             <div>
               <span className="block text-[8px] font-medium text-ink">Name</span>
-              <span className="mt-1.5 block h-2.5 w-[88%] rounded-full bg-line/85" />
+              <AnimatedBar
+                className="mt-1.5 h-2.5 rounded-full bg-line/85"
+                width="88%"
+                delay={0.2}
+              />
             </div>
             <div>
               <span className="block text-[8px] font-medium text-ink">Email</span>
               <motion.span
                 className="mt-1 block h-4 rounded-md border border-[#4F8FEA] bg-line/65 ring-2 ring-[#4F8FEA]/15 ring-offset-1 ring-offset-sand"
-                initial={{ boxShadow: "0 0 0 0 rgba(79, 143, 234, 0)" }}
-                whileInView={{ boxShadow: "0 0 0 2px rgba(79, 143, 234, 0.16)" }}
+                initial={{ opacity: 0, boxShadow: "0 0 0 0 rgba(79, 143, 234, 0)" }}
+                whileInView={{
+                  opacity: 1,
+                  boxShadow: "0 0 0 2px rgba(79, 143, 234, 0.16)",
+                }}
                 viewport={inView}
-                transition={{ duration: 0.45, delay: 0.42 }}
+                transition={{ duration: 0.45, delay: 0.32 }}
               />
             </div>
             <div>
               <span className="block text-[8px] font-medium text-ink">Message</span>
-              <span className="mt-1 block h-5 rounded-md bg-line/75" />
+              <AnimatedBar
+                className="mt-1 h-5 rounded-md bg-line/75"
+                width="100%"
+                delay={0.44}
+              />
             </div>
           </div>
         </div>
@@ -662,14 +679,22 @@ function AccessibilityServiceVisual() {
           </span>
         </div>
         <div className="flex flex-1 flex-col divide-y divide-line">
-          {checks.map((check) => (
-            <span
+          {checks.map((check, index) => (
+            <motion.span
               key={check}
               className="flex flex-1 items-center justify-between gap-2 px-3 text-[9px] font-medium text-ink"
+              initial={{ opacity: 0, x: 8 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={inView}
+              transition={{
+                duration: 0.38,
+                delay: 0.56 + index * 0.09,
+                ease: [0.22, 1, 0.36, 1],
+              }}
             >
               {check}
               <ArrowRight className="h-3 w-3 shrink-0 text-forest" />
-            </span>
+            </motion.span>
           ))}
         </div>
       </div>

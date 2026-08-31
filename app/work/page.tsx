@@ -516,7 +516,7 @@ function EditorialWorkCardContent({
           isEven ? "lg:col-start-2" : ""
         }`}
       >
-        <p className="hidden font-sans text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-forest/75 sm:block">
+        <p className="hidden font-sans text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-forest sm:block">
           {String(index).padStart(2, "0")}
         </p>
         <p className="mt-6 hidden font-sans text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-forest sm:block">

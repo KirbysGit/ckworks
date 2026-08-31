@@ -17,6 +17,13 @@ const config: Config = {
         forest: "#2F5B3F",
         "forest-soft": "#DDE8D8",
         line: "#DDD6C8",
+        /*
+         * Form field borders only. `line` is 1.35:1 against the page, which is
+         * fine for a decorative rule but fails SC 1.4.11 when the border is the
+         * only thing identifying an input's boundary. This clears 3:1 against
+         * card, ivory, and the modal's field fill.
+         */
+        field: "#8A8375",
         panel: "#111714",
       },
       fontFamily: {

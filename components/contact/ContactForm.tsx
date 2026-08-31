@@ -1,12 +1,17 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, ChevronDown, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import {
+  inquiryIntentParam,
+  inquiryMessageForIntent,
+  inquiryServiceParam,
   referralOptions,
+  serviceOptionForSlug,
   serviceOptions,
   timingOptions,
 } from "@/lib/inquiry";
+import SelectField from "@/components/ui/SelectField";
 import { trackEvent } from "@/lib/analytics";
 import { animDelay } from "@/lib/motion";
 import { readAttribution } from "@/lib/attribution";
@@ -36,10 +41,36 @@ const initialForm: ContactFormState = {
 };
 
 const fieldClass =
-  "mt-1.5 w-full rounded-xl border-2 border-line bg-ivory/70 px-4 py-2.5 text-sm text-ink outline-none transition-[border-color,background-color] duration-500 ease-out placeholder:text-muted/55 hover:border-forest/40 hover:bg-card focus:border-forest focus:bg-card";
+  "mt-1.5 w-full rounded-xl border-2 border-field bg-ivory/70 px-4 py-2.5 text-sm text-ink outline-none transition-[border-color,background-color] duration-500 ease-out placeholder:text-muted hover:border-forest/40 hover:bg-card focus:border-forest focus:bg-card focus:outline-none focus:ring-2 focus:ring-forest focus:ring-offset-2 focus:ring-offset-ivory";
 
 export default function ContactForm() {
   const [form, setForm] = useState<ContactFormState>(initialForm);
+
+  /*
+   * Preselect the service when arriving from a service-page CTA. Read from
+   * `window.location` rather than `useSearchParams` so this page stays
+   * statically rendered; a preselection is an enhancement and does not need to
+   * exist server-side.
+   */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const preselected = serviceOptionForSlug(params.get(inquiryServiceParam));
+    const prefilledMessage = inquiryMessageForIntent(
+      params.get(inquiryIntentParam),
+    );
+    if (!preselected && !prefilledMessage) return;
+    setForm((current) => ({
+      ...current,
+      serviceNeeded:
+        preselected && !current.serviceNeeded
+          ? preselected
+          : current.serviceNeeded,
+      projectDescription:
+        prefilledMessage && !current.projectDescription
+          ? prefilledMessage
+          : current.projectDescription,
+    }));
+  }, []);
   const [formStartedAt, setFormStartedAt] = useState<number | null>(null);
   const [hasTrackedStart, setHasTrackedStart] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">(
@@ -173,13 +204,13 @@ export default function ContactForm() {
           placeholder="https://"
           onChange={(value) => updateField("currentWebsite", value)}
         />
-        <SelectField
+        <ContactSelect
           label="What can I help with?"
           value={form.serviceNeeded}
           onChange={(value) => updateField("serviceNeeded", value)}
           options={serviceOptions}
         />
-        <SelectField
+        <ContactSelect
           label="Estimated timing"
           value={form.estimatedTiming}
           onChange={(value) => updateField("estimatedTiming", value)}
@@ -205,7 +236,7 @@ export default function ContactForm() {
       </label>
 
       <div className="mt-3">
-        <SelectField
+        <ContactSelect
           label="How did you hear about CK Works?"
           value={form.heardAbout}
           onChange={(value) => updateField("heardAbout", value)}
@@ -345,7 +376,8 @@ function TextField({
   );
 }
 
-function SelectField({
+/** The contact page's styling for the shared listbox select. */
+function ContactSelect({
   label,
   value,
   onChange,
@@ -355,100 +387,35 @@ function SelectField({
   label: string;
   value: string;
   onChange: (value: string) => void;
-  options: string[];
+  options: readonly string[];
   optional?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  function chooseOption(option: string) {
-    onChange(option);
-    setOpen(false);
-  }
-
   return (
-    <div
-      ref={wrapperRef}
-      className="relative block"
-      onBlur={(event) => {
-        const next = event.relatedTarget;
-        if (!next || !event.currentTarget.contains(next as Node)) {
-          setOpen(false);
-        }
-      }}
-    >
-      <span className="text-sm font-semibold text-ink">
-        {label}
-        {optional && (
+    <SelectField
+      label={label}
+      value={value}
+      onChange={onChange}
+      options={options}
+      placeholder="Select an option"
+      labelSuffix={
+        optional ? (
           <span className="ml-1.5 font-normal text-muted">(optional)</span>
-        )}
-      </span>
-      <button
-        type="button"
-        aria-label={label}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        onClick={() => setOpen((current) => !current)}
-        onKeyDown={(event) => {
-          if (event.key === "Escape") setOpen(false);
-          if (event.key === "ArrowDown") {
-            event.preventDefault();
-            setOpen(true);
-            wrapperRef.current
-              ?.querySelector<HTMLButtonElement>("[data-select-option]")
-              ?.focus();
-          }
-        }}
-        className={`${fieldClass} flex items-center justify-between gap-3 text-left ${
-          open ? "border-forest bg-card" : ""
-        }`}
-      >
-        <span className={`min-w-0 truncate ${value ? "text-ink" : "text-muted/55"}`}>
-          {value || "Select an option"}
-        </span>
-        <ChevronDown
-          className={`h-4 w-4 shrink-0 text-forest/75 transition-transform duration-200 ${
-            open ? "rotate-180" : ""
-          }`}
-          strokeWidth={1.8}
-        />
-      </button>
-
-      {open && (
-        <div
-          role="listbox"
-          className="absolute left-0 right-0 top-full z-50 mt-1.5 overflow-hidden rounded-xl border-2 border-line bg-card py-1 shadow-soft"
-        >
-          {options.map((option) => {
-            const selected = value === option;
-            return (
-              <button
-                key={option}
-                type="button"
-                role="option"
-                aria-selected={selected}
-                data-select-option
-                onClick={() => chooseOption(option)}
-                onKeyDown={(event) => {
-                  if (event.key === "Escape") {
-                    setOpen(false);
-                    wrapperRef.current
-                      ?.querySelector<HTMLButtonElement>("[aria-haspopup]")
-                      ?.focus();
-                  }
-                }}
-                className={`block w-full px-4 py-2.5 text-left text-sm transition-colors focus:outline-none ${
-                  selected
-                    ? "bg-forest-soft/80 font-medium text-forest"
-                    : "text-ink hover:bg-forest-soft/55 hover:text-forest focus:bg-forest-soft/55 focus:text-forest"
-                }`}
-              >
-                {option}
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
+        ) : null
+      }
+      labelClassName="text-sm font-semibold text-ink"
+      triggerClassName={`${fieldClass} flex items-center justify-between gap-3 text-left`}
+      valueClassName={`min-w-0 truncate ${value ? "text-ink" : "text-muted"}`}
+      listboxClassName="absolute left-0 right-0 top-full z-50 mt-1.5 max-h-60 overflow-auto rounded-xl border-2 border-line bg-card py-1 shadow-soft"
+      chevronClassName="h-4 w-4 shrink-0 text-forest/75 transition-transform duration-200"
+      optionClassName={({ selected, active }) =>
+        `cursor-pointer px-4 py-2.5 text-left text-sm transition-colors ${
+          active
+            ? "bg-forest-soft/55 text-forest"
+            : selected
+              ? "bg-forest-soft/80 font-medium text-forest"
+              : "text-ink"
+        }`
+      }
+    />
   );
 }

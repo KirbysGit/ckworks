@@ -96,7 +96,7 @@ const systemsInputs: SystemsTool[] = [
   {
     name: "Stripe",
     use: "Payment sync",
-    logo: <SiStripe className="h-7 w-7" color="#635BFF" />,
+    logo: <SiStripe className="h-7 w-7" color="#635BFF" aria-hidden />,
   },
 ];
 
@@ -104,7 +104,7 @@ const systemsConnected: SystemsTool[] = [
   {
     name: "Airtable",
     use: "Project management",
-    logo: <SiAirtable className="h-7 w-7" color="#18BFFF" />,
+    logo: <SiAirtable className="h-7 w-7" color="#18BFFF" aria-hidden />,
   },
   {
     name: "Slack",
@@ -122,7 +122,7 @@ const systemsConnected: SystemsTool[] = [
   {
     name: "Google Calendar",
     use: "Scheduling",
-    logo: <SiGooglecalendar className="h-7 w-7" color="#4285F4" />,
+    logo: <SiGooglecalendar className="h-7 w-7" color="#4285F4" aria-hidden />,
   },
 ];
 
@@ -818,7 +818,7 @@ function SystemsHowItWorks() {
                 {/* The number is its own column, so the title, chain, and
                     "Removes" line all share one left edge automatically. */}
                 <span
-                  className="hidden font-source-serif-display text-[1.35rem] font-semibold leading-none tabular-nums text-forest/60 sm:block"
+                  className="hidden font-source-serif-display text-[1.35rem] font-semibold leading-none tabular-nums text-forest sm:block"
                   style={{ fontVariationSettings: '"opsz" 20' }}
                 >
                   {workflow.step}
@@ -834,7 +834,7 @@ function SystemsHowItWorks() {
                     <h3 className="font-serif text-[1.35rem] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[1.85rem]">
                       {workflow.title}
                       <span className="hidden sm:inline">{" "}</span>
-                      <span className="hidden font-sans text-[0.85rem] font-medium tracking-normal text-ink/55 sm:inline sm:text-[0.9rem]">
+                      <span className="hidden font-sans text-[0.85rem] font-medium tracking-normal text-ink/75 sm:inline sm:text-[0.9rem]">
                         for a
                       </span>{" "}
                       <span className="hidden font-sans text-[0.9rem] font-semibold tracking-normal text-forest sm:inline sm:text-[0.95rem]">

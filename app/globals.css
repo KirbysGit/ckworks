@@ -14,7 +14,21 @@
 
   html {
     color-scheme: only light;
-    scroll-behavior: smooth;
+  }
+
+  /*
+   * Smooth scrolling is motion, and an unconditional `scroll-behavior: smooth`
+   * animates every in-page jump for people who asked the OS for less of it.
+   * Scoped rather than overridden in the reduce block, so the default is the
+   * conservative one.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  html {
     scroll-padding-top: var(--anchor-scroll-offset);
     scrollbar-color: #9bb8a0 #faf7f0;
   }
@@ -279,6 +293,141 @@
   }
 }
 
+/*
+ * Review scanner tracking over the accessibility graphic.
+ *
+ * The magnifier follows a smooth arc down and across the page rather than
+ * sweeping in a straight line, so it reads as looking for particular things.
+ *
+ * The stops are sampled from `y = 18 + 52t + 8 sin(2π · 2.25t)` at 22 even
+ * intervals. Densely sampling a curve is what keeps it reading as a continuous
+ * arc: a handful of waypoints would interpolate as straight segments with
+ * visible corners at every turn. Regenerate the whole set if the curve changes,
+ * rather than hand-editing individual stops.
+ *
+ * The wrapper is the full size of the graphic, so translate percentages resolve
+ * against the graphic's own width and height. That keeps the path proportional
+ * at every breakpoint instead of needing pixel values per size.
+ *
+ * The path runs for roughly the first two thirds of the cycle and the rest is
+ * spent invisible and idle. Looping keeps it from being missed by anyone who
+ * scrolls down late, while the rest stops it reading as constant motion beside
+ * text people are trying to read.
+ */
+/*
+ * Hero review beats on the accessibility page: a field takes focus, then an
+ * error resolves underneath another.
+ *
+ * Each of these declares only a `from` state and runs `backwards`. That means
+ * the element's own resting style is the finished state, so anyone whose
+ * animation never runs (reduced motion, or a paint before the delay elapses)
+ * sees a completed review rather than a form frozen mid-sequence. Do not add
+ * `to` blocks here; that is what would strand it.
+ */
+@keyframes ck-focus-ring {
+  from {
+    border-color: #ddd6c8;
+    box-shadow: 0 0 0 0 rgba(22, 119, 255, 0);
+  }
+}
+
+@keyframes ck-error-border {
+  from {
+    border-color: #ddd6c8;
+    border-bottom-left-radius: 0.28rem;
+    border-bottom-right-radius: 0.28rem;
+  }
+}
+
+@keyframes ck-error-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes ck-scan {
+  0.0% {
+    opacity: 0;
+    transform: translate(8.0%, 18.0%);
+  }
+  3.09% {
+    opacity: 1;
+    transform: translate(11.6%, 25.2%);
+  }
+  6.18% {
+    transform: translate(15.3%, 30.4%);
+  }
+  9.27% {
+    transform: translate(18.9%, 32.6%);
+  }
+  12.36% {
+    transform: translate(22.5%, 31.8%);
+  }
+  15.45% {
+    transform: translate(26.2%, 29.2%);
+  }
+  18.55% {
+    transform: translate(29.8%, 26.9%);
+  }
+  21.64% {
+    transform: translate(33.5%, 26.7%);
+  }
+  24.73% {
+    transform: translate(37.1%, 29.6%);
+  }
+  27.82% {
+    transform: translate(40.7%, 35.4%);
+  }
+  30.91% {
+    transform: translate(44.4%, 42.8%);
+  }
+  34.0% {
+    transform: translate(48.0%, 49.7%);
+  }
+  37.09% {
+    transform: translate(51.6%, 54.3%);
+  }
+  40.18% {
+    transform: translate(55.3%, 55.7%);
+  }
+  43.27% {
+    transform: translate(58.9%, 54.4%);
+  }
+  46.36% {
+    transform: translate(62.5%, 51.8%);
+  }
+  49.45% {
+    transform: translate(66.2%, 49.8%);
+  }
+  52.55% {
+    transform: translate(69.8%, 50.2%);
+  }
+  55.64% {
+    transform: translate(73.5%, 53.8%);
+  }
+  58.73% {
+    transform: translate(77.1%, 60.1%);
+  }
+  61.82% {
+    transform: translate(80.7%, 67.5%);
+  }
+  64.91% {
+    transform: translate(84.4%, 74.0%);
+  }
+  68.0% {
+    transform: translate(88.0%, 78.0%);
+  }
+  73.0% {
+    opacity: 0;
+    transform: translate(88.0%, 78.0%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(8.0%, 18.0%);
+  }
+}
+
 @layer components {
   .container-ck {
     @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
@@ -300,6 +449,10 @@
     animation: ck-fade 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
+  .ck-scan {
+    animation: ck-scan 13s linear infinite;
+  }
+
   .ck-lift {
     animation: ck-lift 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
@@ -313,6 +466,24 @@
 
   .ck-pop {
     animation: ck-pop 460ms cubic-bezier(0.34, 1.36, 0.64, 1) both;
+  }
+
+  .ck-focus-ring {
+    --ck-anim-delay: 0ms;
+    animation: ck-focus-ring 460ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation-delay: var(--ck-anim-delay);
+  }
+
+  .ck-error-border {
+    --ck-anim-delay: 0ms;
+    animation: ck-error-border 360ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation-delay: var(--ck-anim-delay);
+  }
+
+  .ck-error-in {
+    --ck-anim-delay: 0ms;
+    animation: ck-error-in 380ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation-delay: var(--ck-anim-delay);
   }
 
   /* Starts invisible so it stays hidden if the animation never runs. */
@@ -486,6 +657,10 @@
   .ck-lift,
   .ck-resolve,
   .ck-pop,
+  .ck-focus-ring,
+  .ck-error-border,
+  .ck-error-in,
+  .ck-scan,
   .ck-loadbar,
   .ck-loadbar::after,
   .ck-boot-screen,

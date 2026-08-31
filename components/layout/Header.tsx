@@ -21,10 +21,9 @@ import Logo from "../ui/Logo";
 import DrawUnderline from "../ui/DrawUnderline";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import { primaryNav } from "@/lib/navigation";
-import type { ServiceArea, ServiceSlug } from "@/lib/services";
+import { serviceNumber, type ServiceArea, type ServiceSlug } from "@/lib/services";
 
 type ServiceDropdownItem = {
-  number: string;
   description: string;
   icon: LucideIcon;
   blockyIcon?: boolean;
@@ -49,33 +48,27 @@ const servicesDropdownLayout = {
 
 const serviceDropdownItems: Record<ServiceSlug, ServiceDropdownItem> = {
   "web-design-development": {
-    number: "01",
     description: "Fast, modern sites built to convert.",
     icon: Monitor,
   },
   "search-ai-visibility": {
-    number: "02",
     description: "Get found in search and AI results.",
     icon: Search,
   },
   "web-accessibility": {
-    number: "03",
     description: "Make websites easier for more people to use.",
     icon: Accessibility,
   },
   "analytics-lead-tracking": {
-    number: "04",
     description: "Measure what matters. Improve results.",
     icon: ChartColumnIncreasing,
   },
   "digital-systems-integrations": {
-    number: "05",
     description: "Connect tools. Automate workflows.",
     icon: Puzzle,
     blockyIcon: true,
   },
   "ongoing-support": {
-    number: "06",
     description: "Reliable care for long-term growth.",
     icon: Headphones,
   },
@@ -146,6 +139,14 @@ export default function Header() {
                     aria-hidden
                   />
                 )}
+                {/*
+                  Focus and blur mirror the mouse handlers so the dropdown is
+                  reachable by keyboard: the chevron promises a menu, and for a
+                  keyboard user it used to be a promise that never opened.
+                  `relatedTarget` is what keeps it open while focus moves
+                  between the trigger and the links inside it, and Escape
+                  dismisses it, which SC 1.4.13 requires of hover content.
+                */}
                 <div
                   className="relative"
                   onMouseEnter={() => {
@@ -156,10 +157,34 @@ export default function Header() {
                     setHoveredHref(null);
                     if (hasChildren) scheduleServicesClose();
                   }}
+                  onFocus={() => {
+                    setHoveredHref(item.href);
+                    if (hasChildren) {
+                      clearMenuTimers();
+                      setServicesOpen(true);
+                    }
+                  }}
+                  onBlur={(event) => {
+                    if (event.currentTarget.contains(event.relatedTarget)) {
+                      return;
+                    }
+                    setHoveredHref(null);
+                    if (hasChildren) {
+                      clearMenuTimers();
+                      setServicesOpen(false);
+                    }
+                  }}
+                  onKeyDown={(event) => {
+                    if (!hasChildren || event.key !== "Escape") return;
+                    clearMenuTimers();
+                    setServicesOpen(false);
+                  }}
                 >
                   <Link
                     href={item.href}
-                    className={`flex items-center gap-1.5 px-5 py-1 font-sans text-sm font-medium tracking-wide transition-colors duration-200 ${
+                    aria-haspopup={hasChildren ? "true" : undefined}
+                    aria-expanded={hasChildren ? servicesOpen : undefined}
+                    className={`flex items-center gap-1.5 rounded-sm px-5 py-1 font-sans text-sm font-medium tracking-wide transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:ring-offset-ivory ${
                       active ? "text-ink" : "text-ink/70 hover:text-ink"
                     }`}
                   >
@@ -378,7 +403,7 @@ function ServicesDropdown({ services }: { services: ServiceArea[] }) {
                 className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-sand font-source-serif-display text-[0.95rem] font-semibold tabular-nums leading-none tracking-tight text-forest shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]"
                 style={{ fontVariationSettings: '"opsz" 14' }}
               >
-                {config.number}
+                {serviceNumber(service.slug)}
               </span>
               <Icon
                 className="h-5 w-5 text-forest transition-transform duration-200 group-hover:-translate-y-0.5"

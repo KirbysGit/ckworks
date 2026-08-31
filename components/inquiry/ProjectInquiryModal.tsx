@@ -3,22 +3,31 @@
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ChevronDown, Loader2, X } from "lucide-react";
+import { ArrowRight, Loader2, X } from "lucide-react";
 import Logo from "../ui/Logo";
+import SelectField from "../ui/SelectField";
 import WhatsAppContactLink from "../contact/WhatsAppContactLink";
 import { trackEvent } from "@/lib/analytics";
 import { contactEmail } from "@/lib/data";
 import { readAttribution } from "@/lib/attribution";
 import {
+  inquiryMessageForIntent,
   readinessOptions,
+  serviceOptionForSlug,
   serviceOptions,
   timingOptions,
+  type InquiryIntent,
 } from "@/lib/inquiry";
+import type { ServiceSlug } from "@/lib/services";
 
 type ProjectInquiryModalProps = {
   isOpen: boolean;
   onClose: () => void;
   source?: string;
+  /** Preselects the service select; comes from the page the CTA was on. */
+  service?: ServiceSlug;
+  /** Named starting context; prefills the message field. */
+  intent?: InquiryIntent;
   /** Dev-only: open straight to the success screen (no email send). */
   debugSuccess?: boolean;
 };
@@ -51,14 +60,16 @@ const focusableSelector =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 const inputClasses =
-  "mt-1 h-9 min-w-0 w-full rounded-[0.35rem] border bg-[#fbf6eb]/78 px-2.5 text-[12px] text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-forest focus:ring-2 focus:ring-forest/15 sm:mt-1.5 sm:h-10 sm:rounded-none sm:bg-[#fbf6eb]/70 sm:px-3 sm:text-[13px]";
+  "mt-1 h-9 min-w-0 w-full rounded-[0.35rem] border bg-[#fbf6eb]/78 px-2.5 text-[12px] text-ink outline-none transition-colors placeholder:text-muted focus:border-forest focus:ring-2 focus:ring-forest focus:ring-offset-2 focus:ring-offset-ivory sm:mt-1.5 sm:h-10 sm:rounded-none sm:bg-[#fbf6eb]/70 sm:px-3 sm:text-[13px]";
 
-const fieldBorder = "border-[#cfc5b5]";
+const fieldBorder = "border-field";
 
 export default function ProjectInquiryModal({
   isOpen,
   onClose,
   source,
+  service,
+  intent,
   debugSuccess = false,
 }: ProjectInquiryModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -95,6 +106,27 @@ export default function ProjectInquiryModal({
       window.clearTimeout(focusTimer);
     };
   }, [isOpen]);
+
+  /*
+   * Seeded on open rather than as initial state: the modal is mounted once for
+   * the whole app, so it outlives any single CTA and would otherwise keep the
+   * first service anyone clicked. Only the untouched default is replaced, so a
+   * visitor who picks a different service does not have it overwritten if the
+   * effect runs again.
+   */
+  useEffect(() => {
+    if (!isOpen) return;
+    const preselected = serviceOptionForSlug(service);
+    const prefilledMessage = inquiryMessageForIntent(intent);
+    if (!preselected && !prefilledMessage) return;
+    setForm((current) => ({
+      ...current,
+      projectType:
+        preselected && !current.projectType ? preselected : current.projectType,
+      message:
+        prefilledMessage && !current.message ? prefilledMessage : current.message,
+    }));
+  }, [isOpen, service, intent]);
 
   useEffect(() => {
     if (isOpen) return;
@@ -368,7 +400,7 @@ export default function ProjectInquiryModal({
                             updateField("businessName", value)
                           }
                         />
-                        <SelectField
+                        <ModalSelect
                           label="What can I help with?"
                           value={form.projectType}
                           options={serviceOptions}
@@ -378,14 +410,14 @@ export default function ProjectInquiryModal({
                       </div>
 
                       <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3">
-                        <SelectField
+                        <ModalSelect
                           label="Estimated timing"
                           value={form.timeline}
                           options={timingOptions}
                           placeholder="Choose a timeline"
                           onChange={(value) => updateField("timeline", value)}
                         />
-                        <SelectField
+                        <ModalSelect
                           label="Budget"
                           value={form.budget}
                           options={readinessOptions}
@@ -405,7 +437,7 @@ export default function ProjectInquiryModal({
                           }
                           placeholder="Tell me about the site, system, idea, or update you have in mind."
                           rows={2}
-                          className={`mt-1 h-[4.4rem] w-full resize-none rounded-[0.35rem] border bg-[#fbf6eb]/78 px-2.5 py-2 text-[12px] leading-5 text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-forest focus:ring-2 focus:ring-forest/15 sm:mt-1.5 sm:h-auto sm:rounded-none sm:bg-[#fbf6eb]/70 sm:px-3 sm:text-[13px] ${
+                          className={`mt-1 h-[4.4rem] w-full resize-none rounded-[0.35rem] border bg-[#fbf6eb]/78 px-2.5 py-2 text-[12px] leading-5 text-ink outline-none transition-colors placeholder:text-muted focus:border-forest focus:ring-2 focus:ring-forest focus:ring-offset-2 focus:ring-offset-ivory sm:mt-1.5 sm:h-auto sm:rounded-none sm:bg-[#fbf6eb]/70 sm:px-3 sm:text-[13px] ${
                             errors.message ? "border-red-400" : fieldBorder
                           }`}
                         />
@@ -524,103 +556,32 @@ function TextField({
   );
 }
 
-function SelectField({
-  label,
-  value,
-  placeholder,
-  options,
-  onChange,
-}: {
+/** The modal's styling for the shared listbox select. */
+function ModalSelect(props: {
   label: string;
   value: string;
   placeholder: string;
-  options: string[];
+  options: readonly string[];
   onChange: (value: string) => void;
 }) {
-  const [open, setOpen] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const selectedLabel = value || placeholder;
-
-  function chooseOption(option: string) {
-    onChange(option);
-    setOpen(false);
-  }
-
   return (
-    <div
-      ref={wrapperRef}
-      className="relative block min-w-0"
-      onBlur={(event) => {
-        const nextTarget = event.relatedTarget;
-        if (!nextTarget || !event.currentTarget.contains(nextTarget as Node)) {
-          setOpen(false);
-        }
-      }}
-    >
-      <span className="block truncate text-[11px] font-bold text-ink sm:text-xs">
-        {label}
-      </span>
-      <button
-        type="button"
-        onClick={() => setOpen((current) => !current)}
-        onKeyDown={(event) => {
-          if (event.key === "Escape") setOpen(false);
-          if (event.key === "ArrowDown") {
-            event.preventDefault();
-            setOpen(true);
-            const firstOption =
-              wrapperRef.current?.querySelector<HTMLButtonElement>(
-                "[data-select-option]",
-              );
-            firstOption?.focus();
-          }
-        }}
-        className={`${inputClasses} ${fieldBorder} flex min-w-0 items-center justify-between gap-2 text-left transition-all hover:border-forest/55 hover:bg-forest-soft/20 sm:gap-3`}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-      >
-        <span className={`min-w-0 truncate ${value ? "text-ink" : "text-muted/65"}`}>
-          {selectedLabel}
-        </span>
-        <ChevronDown
-          className={`h-4 w-4 shrink-0 text-forest transition-transform duration-200 ${
-            open ? "rotate-180" : ""
-          }`}
-          strokeWidth={1.8}
-        />
-      </button>
-
-      {open && (
-        <div
-          role="listbox"
-          className="absolute left-0 right-0 top-full z-40 mt-1 overflow-hidden border border-forest/35 bg-[#fffaf0] py-1 shadow-[0_14px_28px_rgba(31,36,32,0.18)]"
-        >
-        {options.map((option) => (
-          <button
-            key={option}
-            type="button"
-            role="option"
-            aria-selected={value === option}
-            data-select-option
-            onClick={() => chooseOption(option)}
-            onKeyDown={(event) => {
-              if (event.key === "Escape") {
-                setOpen(false);
-                wrapperRef.current
-                  ?.querySelector<HTMLButtonElement>("[aria-haspopup]")
-                  ?.focus();
-              }
-            }}
-            className={`block w-full px-3 py-2 text-left text-[13px] transition-colors focus:bg-forest-soft focus:text-forest focus:outline-none hover:bg-forest-soft hover:text-forest ${
-              value === option ? "bg-forest-soft/70 text-forest" : "text-ink"
-            }`}
-          >
-            {option}
-          </button>
-        ))}
-        </div>
-      )}
-    </div>
+    <SelectField
+      {...props}
+      labelClassName="block truncate text-[11px] font-bold text-ink sm:text-xs"
+      triggerClassName={`${inputClasses} ${fieldBorder} flex min-w-0 items-center justify-between gap-2 text-left transition-all hover:border-forest/55 hover:bg-forest-soft/20 sm:gap-3`}
+      valueClassName={`min-w-0 truncate ${props.value ? "text-ink" : "text-muted"}`}
+      listboxClassName="absolute left-0 right-0 top-full z-40 mt-1 overflow-auto max-h-56 border border-forest/35 bg-[#fffaf0] py-1 shadow-[0_14px_28px_rgba(31,36,32,0.18)]"
+      chevronClassName="h-4 w-4 shrink-0 text-forest transition-transform duration-200"
+      optionClassName={({ selected, active }) =>
+        `cursor-pointer px-3 py-2 text-left text-[13px] transition-colors ${
+          active
+            ? "bg-forest-soft text-forest"
+            : selected
+              ? "bg-forest-soft/70 text-forest"
+              : "text-ink"
+        }`
+      }
+    />
   );
 }
 
