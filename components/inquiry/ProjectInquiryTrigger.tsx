@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { type MouseEvent, type ReactNode } from "react";
+import {
+  inquiryIntentParam,
+  inquiryServiceParam,
+  serviceSlugFromPath,
+  type InquiryIntent,
+} from "@/lib/inquiry";
+import type { ServiceSlug } from "@/lib/services";
 import { useProjectInquiry } from "./ProjectInquiryProvider";
 
 /**
@@ -20,6 +28,15 @@ import { useProjectInquiry } from "./ProjectInquiryProvider";
  * `source` is carried into the inquiry payload, so a conversion from the
  * homepage hero is distinguishable from one in a service footer. Use a stable
  * snake_case value naming the surface, not the page title.
+ *
+ * The service select is preselected automatically from the page the trigger is
+ * rendered on, so every CTA on `/services/<slug>` files under that service with
+ * no per-button wiring to keep in sync. Pass `service` only to override that,
+ * for example on a case study that should file under the service it proves.
+ *
+ * The slug also rides along in the `href`, so the same preselection survives
+ * the paths that never reach `openInquiry`: cmd-click, no JS, or a crawler
+ * following the link to `/contact`.
  */
 
 type Variant = "primary" | "secondary" | "ghost";
@@ -27,6 +44,10 @@ type Variant = "primary" | "secondary" | "ghost";
 type ProjectInquiryTriggerProps = {
   children: ReactNode;
   source?: string;
+  /** Overrides the service inferred from the current path. */
+  service?: ServiceSlug;
+  /** Named starting context; prefills the message field. */
+  intent?: InquiryIntent;
   variant?: Variant;
   className?: string;
   onOpen?: () => void;
@@ -59,20 +80,29 @@ function isModifiedClick(event: MouseEvent<HTMLAnchorElement>) {
 export default function ProjectInquiryTrigger({
   children,
   source,
+  service,
+  intent,
   variant = "primary",
   className = "",
   onOpen,
 }: ProjectInquiryTriggerProps) {
   const { openInquiry } = useProjectInquiry();
+  const pathname = usePathname();
+  const resolvedService = service ?? serviceSlugFromPath(pathname);
+
+  const params = new URLSearchParams();
+  if (resolvedService) params.set(inquiryServiceParam, resolvedService);
+  if (intent) params.set(inquiryIntentParam, intent);
+  const query = params.toString();
 
   return (
     <Link
-      href="/contact"
+      href={query ? `/contact?${query}` : "/contact"}
       onClick={(event) => {
         if (isModifiedClick(event)) return;
         event.preventDefault();
         onOpen?.();
-        openInquiry(source, event.currentTarget);
+        openInquiry(source, event.currentTarget, resolvedService, intent);
       }}
       className={`${base} ${sizes} ${variants[variant]} ${className}`}
     >

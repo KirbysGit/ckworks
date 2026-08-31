@@ -212,6 +212,11 @@ function SupportRelated() {
       compactMobile
       links={[
         {
+          label: "Keep accessibility from slipping",
+          href: "/services/web-accessibility",
+          note: "New content and components are where hard-won accessibility gets undone.",
+        },
+        {
           label: "Review the analytics behind your site",
           href: "/services/analytics-lead-tracking",
           note: "Support decisions are easier when you can see what pages are doing.",

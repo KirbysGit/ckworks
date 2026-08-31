@@ -10,10 +10,17 @@ import {
   useState,
 } from "react";
 import ProjectInquiryModal from "./ProjectInquiryModal";
+import type { InquiryIntent } from "@/lib/inquiry";
+import type { ServiceSlug } from "@/lib/services";
 import { trackEvent } from "@/lib/analytics";
 
 type InquiryContextValue = {
-  openInquiry: (source?: string, opener?: HTMLElement | null) => void;
+  openInquiry: (
+    source?: string,
+    opener?: HTMLElement | null,
+    service?: ServiceSlug,
+    intent?: InquiryIntent,
+  ) => void;
   closeInquiry: () => void;
 };
 
@@ -23,15 +30,26 @@ export function ProjectInquiryProvider({ children }: { children: ReactNode }) {
   const openerRef = useRef<HTMLElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [source, setSource] = useState<string | undefined>();
+  const [service, setService] = useState<ServiceSlug | undefined>();
+  const [intent, setIntent] = useState<InquiryIntent | undefined>();
   const [debugSuccess, setDebugSuccess] = useState(false);
 
   const openInquiry = useCallback(
-    (nextSource?: string, opener?: HTMLElement | null) => {
+    (
+      nextSource?: string,
+      opener?: HTMLElement | null,
+      nextService?: ServiceSlug,
+      nextIntent?: InquiryIntent,
+    ) => {
       openerRef.current = opener ?? null;
       setDebugSuccess(false);
       setSource(nextSource);
+      setService(nextService);
+      setIntent(nextIntent);
       trackEvent("project_inquiry_opened", {
         source: nextSource ?? "unknown",
+        service: nextService ?? "not_provided",
+        intent: nextIntent ?? "not_provided",
       });
       setIsOpen(true);
     },
@@ -65,6 +83,8 @@ export function ProjectInquiryProvider({ children }: { children: ReactNode }) {
       <ProjectInquiryModal
         isOpen={isOpen}
         source={source}
+        service={service}
+        intent={intent}
         debugSuccess={debugSuccess}
         onClose={closeInquiry}
       />

@@ -27,6 +27,7 @@ import ServiceTimeline from "@/components/services/shared/ServiceTimeline";
 import { getCaseStudy, type CaseStudy } from "@/lib/projects";
 import { webDesignTimeline, type ServiceArea } from "@/lib/services";
 import ServiceFrame from "../shared/ServiceFrame";
+import RelatedLinks from "../shared/RelatedLinks";
 import {
   serviceCenterLabelClassName,
   serviceCenterTitleClassName,
@@ -186,6 +187,7 @@ export default function Page({ service }: { service: ServiceArea }) {
           <WebDesignProcess />
           <WebDesignWork projects={projects} />
           <WebDesignFaq />
+          <WebDesignRelated />
           <WebDesignBottomCta />
         </div>
       </section>
@@ -623,7 +625,7 @@ function WebDesignTransformation() {
             >
               <div className="flex min-h-8 items-center justify-between gap-3">
                 <h3 className="min-w-0 font-serif text-[1.5rem] font-medium leading-tight tracking-[-0.02em] text-ink">
-                  <span className="mr-3 font-sans text-[0.95rem] font-medium tracking-[0.05em] text-forest/75">
+                  <span className="mr-3 font-sans text-[0.95rem] font-medium tracking-[0.05em] text-forest">
                     {String(step.step).padStart(2, "0")}
                   </span>
                   {step.title}
@@ -799,7 +801,7 @@ function StageBrowserHeader({
             ? "gap-1 text-ivory/45"
             : stage === "modern"
               ? "text-ivory/75"
-              : "text-ink/60"
+              : "text-ink/80"
         }`}
       >
         {navItems.map((item) => (
@@ -869,7 +871,7 @@ function StructuredSitePreview() {
         <p className="font-serif text-[1.05rem] font-medium leading-[1.08] text-ink">
           Spaces that feel like home.
         </p>
-        <p className="mt-2 text-[8.5px] leading-[1.4] text-ink/55">
+        <p className="mt-2 text-[8.5px] leading-[1.4] text-ink/75">
           Clear headline, short support copy, and one next step.
         </p>
         <span className="mt-2.5 inline-flex w-fit rounded bg-[#174A31] px-2.5 py-1 text-[8px] font-semibold text-ivory">
@@ -1290,6 +1292,32 @@ function WebDesignFaq() {
         />
       </Reveal>
     </section>
+  );
+}
+
+/**
+ * This page had no contextual links out, so every other service was reachable
+ * from it only through the footer. Accessibility comes first: it is the choice
+ * that is cheapest to make while a site is being designed and most expensive to
+ * retrofit, which is exactly the decision someone reading this page is making.
+ */
+function WebDesignRelated() {
+  return (
+    <RelatedLinks
+      compactMobile
+      links={[
+        {
+          label: "Build accessibility in from the start",
+          href: "/services/web-accessibility",
+          note: "Structure, contrast, and forms are far cheaper to get right before launch.",
+        },
+        {
+          label: "Keep the site working after launch",
+          href: "/services/ongoing-support",
+          note: "Updates, fixes, and improvements once the build is live.",
+        },
+      ]}
+    />
   );
 }
 

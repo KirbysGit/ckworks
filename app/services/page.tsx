@@ -23,7 +23,12 @@ import SchemaMarkup from "@/components/page/SchemaMarkup";
 import AccessibilityOverviewCard from "@/components/services/accessibility/OverviewCard";
 import Reveal from "@/components/ui/Reveal";
 import { createPageMetadata, absoluteUrl } from "@/lib/seo";
-import { serviceAreas, type ServiceArea, type ServiceSlug } from "@/lib/services";
+import {
+  serviceAreas,
+  serviceNumber,
+  type ServiceArea,
+  type ServiceSlug,
+} from "@/lib/services";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Web Design, SEO & Digital Systems",
@@ -34,7 +39,6 @@ export const metadata: Metadata = createPageMetadata({
 
 type ServiceCardConfig = {
   slug: ServiceSlug;
-  number: string;
   className?: string;
   visual:
     | "website"
@@ -52,43 +56,37 @@ const servicesPageContainer =
 const serviceCards: ServiceCardConfig[] = [
   {
     slug: "web-design-development",
-    number: "01",
     visual: "website",
     description:
       "Clean, responsive websites designed around what your customers need to understand and do.",
   },
   {
     slug: "search-ai-visibility",
-    number: "02",
     visual: "search",
     description:
       "CK Works helps your business show up more clearly in search results and AI-driven discovery.",
   },
   {
-    slug: "analytics-lead-tracking",
-    number: "03",
-    visual: "analytics",
-    description:
-      "Understand what's working and track inquiries, calls, and conversions that drive growth.",
-  },
-  {
-    slug: "digital-systems-integrations",
-    number: "04",
-    visual: "systems",
-    description:
-      "Connect forms, CRM, email, payments, and workflows so your tools work together cleanly.",
-  },
-  {
     slug: "web-accessibility",
-    number: "05",
     visual: "accessibility",
     className: "lg:col-span-2",
     description:
       "Accessibility reviews and practical improvements that make websites easier for more people to navigate, understand, and use.",
   },
   {
+    slug: "analytics-lead-tracking",
+    visual: "analytics",
+    description:
+      "Understand what's working and track inquiries, calls, and conversions that drive growth.",
+  },
+  {
+    slug: "digital-systems-integrations",
+    visual: "systems",
+    description:
+      "Connect forms, CRM, email, payments, and workflows so your tools work together cleanly.",
+  },
+  {
     slug: "ongoing-support",
-    number: "06",
     visual: "support",
     className: "lg:col-span-2",
     description:
@@ -228,7 +226,7 @@ function ServiceOverviewCard({
     return (
       <AccessibilityOverviewCard
         service={service}
-        number={card.number}
+        number={serviceNumber(card.slug)}
         description={card.description}
       />
     );
@@ -245,7 +243,7 @@ function ServiceOverviewCard({
             aria-hidden
           />
           <span className="font-serif text-2xl font-medium leading-none tracking-[-0.02em] text-[#A8713B]">
-            {card.number}
+            {serviceNumber(card.slug)}
           </span>
           <h2 className="mt-6 max-w-[21rem] font-serif text-[2.25rem] font-medium leading-[1.02] tracking-[-0.02em] text-ink sm:text-[2.55rem]">
             {service.title}
@@ -301,7 +299,7 @@ function ServiceOverviewCard({
         */}
         <div className="flex items-start justify-between gap-4 md:contents">
           <span className="font-serif text-2xl font-medium leading-none tracking-[-0.02em] text-[#A8713B]">
-            {card.number}
+            {serviceNumber(card.slug)}
           </span>
           <Link
             href={service.href}

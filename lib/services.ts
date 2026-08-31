@@ -449,6 +449,20 @@ export const serviceAreas: ServiceArea[] = [
   },
 ];
 
+/**
+ * Display number for a service, derived from its position in `serviceAreas`.
+ *
+ * The order of that array is the single source of truth for how services are
+ * sequenced across the site. Both the header dropdown and the services index
+ * used to hardcode their own numbers, which is how Web Accessibility ended up
+ * labelled "03" in the nav and "05" on the index at the same time. Read the
+ * number from here rather than writing one down.
+ */
+export function serviceNumber(slug: ServiceSlug): string {
+  const index = serviceAreas.findIndex((service) => service.slug === slug);
+  return String(index + 1).padStart(2, "0");
+}
+
 export function getServiceArea(slug: string) {
   return serviceAreas.find((service) => service.slug === slug);
 }
