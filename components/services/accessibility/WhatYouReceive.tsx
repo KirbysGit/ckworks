@@ -68,15 +68,14 @@ function StackedTitle({ text }: { text: string }) {
 }
 
 /**
- * Borders describe the grid at each breakpoint: stacked rows on mobile, a 2x2
- * with a cross at sm, and one divided row at lg. The lg resets come last so
- * they win over the sm rules at the wide end.
+ * Two across with a cross through the middle up to lg, then one divided row.
+ * `lg:border-t-0` comes after the base rule so it wins at the wide end; both
+ * are border-width utilities, so source order is what decides.
  */
 function cellBorders(index: number) {
   return [
-    "max-sm:border-t max-sm:first:border-t-0",
-    index % 2 === 1 ? "sm:border-l" : "",
-    index > 1 ? "sm:border-t" : "",
+    index % 2 === 1 ? "border-l" : "",
+    index > 1 ? "border-t" : "",
     "lg:border-t-0",
     index > 0 ? "lg:border-l" : "",
   ].join(" ");
@@ -88,7 +87,7 @@ export default function AccessibilityWhatYouReceive() {
       id="what-you-receive"
       className="grid scroll-mt-24 gap-10 border-b border-line py-14 lg:grid-cols-[minmax(0,0.65fr)_minmax(0,1.35fr)] lg:gap-12 lg:py-16"
     >
-      <Reveal className="max-w-md lg:self-center">
+      <Reveal className="mx-auto max-w-md text-center sm:mx-0 sm:text-left lg:self-center">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
           What you receive
         </p>
@@ -98,12 +97,12 @@ export default function AccessibilityWhatYouReceive() {
         </p>
       </Reveal>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4">
         {deliverables.map(({ title, body, icon: Icon }, index) => (
           <Reveal
             key={title}
             delay={index * 80}
-            className={`min-w-0 border-line px-0 py-6 text-center sm:px-5 sm:py-4 lg:px-5 ${cellBorders(index)}`}
+            className={`min-w-0 border-line px-4 py-6 text-center sm:px-5 sm:py-4 lg:px-5 ${cellBorders(index)}`}
           >
             <Icon
               className="mx-auto size-7 text-forest"
@@ -112,7 +111,7 @@ export default function AccessibilityWhatYouReceive() {
             />
             {/* Fixed height so the bodies share a baseline whether the title
                 wraps or not; it does wrap between lg and roughly 1250px. */}
-            <h3 className="mt-5 font-serif text-[1.6rem] font-bold leading-[1.12] tracking-[-0.015em] text-ink">
+            <h3 className="mt-5 font-serif text-[1.6rem] font-semibold leading-[1.12] tracking-[-0.015em] text-ink">
               <StackedTitle text={title} />
             </h3>
             <p className="mx-auto mt-2.5 max-w-[15rem] text-sm leading-6 text-muted">
