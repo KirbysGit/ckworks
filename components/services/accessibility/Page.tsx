@@ -17,6 +17,7 @@ import AccessibilityPublicEntities from "./PublicEntities";
 import AccessibilityRelated from "./Related";
 import AccessibilityToolsAndLimits from "./ToolsAndLimits";
 import AccessibilityWaysOfUsing from "./WaysOfUsing";
+import AccessibilityWhatYouReceive from "./WhatYouReceive";
 import AccessibilityWhatGetsReviewed from "./WhatGetsReviewed";
 
 export default function Page({ service }: { service: ServiceArea }) {
@@ -28,6 +29,7 @@ export default function Page({ service }: { service: ServiceArea }) {
           <AccessibilityWaysOfUsing />
           <AccessibilityWhatGetsReviewed />
           <AccessibilityBarriersToImprovements />
+          <AccessibilityWhatYouReceive />
           <AccessibilityToolsAndLimits />
           <AccessibilityPublicEntities />
           <AccessibilityFaq />

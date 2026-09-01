@@ -262,7 +262,7 @@ function GreenridgeReviewVisual() {
 
 export default function AccessibilityHero() {
   return (
-    <section className="overflow-hidden border-b border-line bg-ivory py-10 sm:py-12 lg:py-16">
+    <section className="overflow-hidden border-b border-line bg-ivory pb-10 pt-8 sm:pb-12 sm:pt-10 lg:pb-16 lg:pt-14">
       <div className={`${serviceContainer} grid items-start gap-12 lg:grid-cols-[0.9fr_1.35fr] lg:gap-20`}>
         {/* Sits between top- and center-aligned. Centering is computed from the
             height difference, and this graphic is roughly twice the height of
