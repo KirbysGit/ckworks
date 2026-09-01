@@ -27,22 +27,22 @@ import { serviceSectionTitleClassName } from "../shared/styles";
 
 const deliverables = [
   {
-    title: "Defined scope",
+    title: "Defined Scope",
     body: "Pages, templates, documents, and journeys reviewed.",
     icon: FileText,
   },
   {
-    title: "Prioritized findings",
+    title: "Prioritized Findings",
     body: "Confirmed barriers organized by user impact.",
     icon: ArrowDownWideNarrow,
   },
   {
-    title: "Practical guidance",
+    title: "Practical Guidance",
     body: "Evidence, WCAG references, and recommended fixes.",
     icon: BookOpenCheck,
   },
   {
-    title: "Next steps",
+    title: "Next Steps",
     body: "What CK Works can address and what should be rechecked.",
     icon: ListTodo,
   },
@@ -112,7 +112,7 @@ export default function AccessibilityWhatYouReceive() {
             />
             {/* Fixed height so the bodies share a baseline whether the title
                 wraps or not; it does wrap between lg and roughly 1250px. */}
-            <h3 className="mt-5 font-serif text-2xl font-semibold leading-[1.12] tracking-[-0.01em] text-ink">
+            <h3 className="mt-5 font-serif text-[1.6rem] font-bold leading-[1.12] tracking-[-0.015em] text-ink">
               <StackedTitle text={title} />
             </h3>
             <p className="mx-auto mt-2.5 max-w-[15rem] text-sm leading-6 text-muted">
