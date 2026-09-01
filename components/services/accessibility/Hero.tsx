@@ -6,7 +6,7 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, BadgeCheck, ChevronDown, ListChecks, LockKeyhole, MoreVertical, ScanSearch, Search } from "lucide-react";
+import { ArrowRight, BadgeCheck, ChevronDown, ListChecks, LockKeyhole, MoreVertical, Search, Users } from "lucide-react";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import { serviceContainer, serviceHeroTitleClassName } from "../shared/styles";
 
@@ -46,7 +46,7 @@ const accessibilityHeroTiming = {
  */
 const heroFacts = [
   { icon: ListChecks, label: "Scope agreed before the work starts" },
-  { icon: ScanSearch, label: "Automated checks plus manual testing" },
+  { icon: Users, label: "Works alongside your team or vendor" },
   { icon: BadgeCheck, label: "Written against WCAG 2.1 Level AA" },
 ] as const;
 

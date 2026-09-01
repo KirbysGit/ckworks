@@ -9,9 +9,9 @@
  * future edits:
  *   - Improve names its own limit. CK Works fixes what it can reach and writes
  *     guidance for the rest; it must never read as "everything gets fixed".
- *   - Review claims automated checks plus hands-on testing, and no specific
- *     assistive technology. Which screen readers, browsers, and test passes CK
- *     Works can consistently provide is still an open delivery decision.
+ *   - Review deliberately does not explain automated versus manual testing. The
+ *     "How these tools help" band owns that distinction; saying it here too made
+ *     the page state the same thing twice within a screen of itself.
  *   - Maintain is an offer, not a guarantee.
  */
 import type { CSSProperties } from "react";
@@ -23,7 +23,7 @@ import AccessibilityReviewScanGraphic from "./ReviewScanGraphic";
 const stages = [
   {
     title: "Review",
-    body: "We work through the pages, templates, and journeys that matter most, combining automated checks with hands-on testing to confirm what is genuinely a barrier.",
+    body: "We work through the agreed pages, templates, and journeys to confirm where people meet barriers that actually stop them.",
     icon: Search,
   },
   {
