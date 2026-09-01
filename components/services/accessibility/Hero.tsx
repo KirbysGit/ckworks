@@ -280,7 +280,7 @@ export default function AccessibilityHero() {
             site work for people using keyboards, screen readers, captions, and
             magnification.
           </p>
-          <ul className="mx-auto mt-5 max-w-md space-y-2 text-left sm:mx-0 sm:mt-7">
+          <ul className="mx-auto mt-5 w-fit max-w-md space-y-2 text-left sm:mx-0 sm:mt-7 sm:w-auto">
             {heroFacts.map(({ icon: Icon, label }, index) => (
               <li
                 key={label}
@@ -301,12 +301,13 @@ export default function AccessibilityHero() {
               </li>
             ))}
           </ul>
-          <div className="ck-rise mx-auto mt-7 flex w-fit flex-row flex-wrap items-center justify-center gap-3 sm:mx-0 sm:w-auto sm:flex-nowrap sm:justify-start" style={{ animationDelay: `${accessibilityHeroTiming.actions}ms` }}>
+          <div className="ck-rise mx-auto mt-7 flex w-fit flex-row items-center justify-center gap-2 sm:mx-0 sm:w-auto sm:justify-start sm:gap-3" style={{ animationDelay: `${accessibilityHeroTiming.actions}ms` }}>
             <ProjectInquiryTrigger source="accessibility_service_hero" className="shrink-0 rounded-md px-4 sm:px-5">
               Request a review <ArrowRight className="size-4" />
             </ProjectInquiryTrigger>
             <Link href="#what-gets-reviewed" className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-md px-2 py-3 text-sm font-semibold text-forest transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest sm:px-3">
-              What gets reviewed
+              <span className="sm:hidden">What&apos;s reviewed</span>
+              <span className="hidden sm:inline">What gets reviewed</span>
               <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>
           </div>

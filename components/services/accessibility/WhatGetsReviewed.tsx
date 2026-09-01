@@ -85,7 +85,7 @@ export default function AccessibilityWhatGetsReviewed() {
             as="article"
             key={title}
             delay={index * 80}
-            className={`flex h-full flex-col items-start border-line px-5 py-8 text-left first:pt-0 last:pb-0 sm:px-7 sm:py-2 sm:first:pt-2 sm:last:pb-2 lg:px-8 ${
+            className={`flex h-full flex-col items-center border-line px-5 py-8 text-center first:pt-0 sm:items-start sm:text-left last:pb-0 sm:px-7 sm:py-2 sm:first:pt-2 sm:last:pb-2 lg:px-8 ${
               index > 0 ? "border-t sm:border-t-0" : ""
             } ${index >= 2 ? "sm:border-t sm:pt-8 lg:border-t-0 lg:pt-2" : ""} ${
               index % 2 === 1 ? "sm:border-l" : ""
@@ -100,7 +100,7 @@ export default function AccessibilityWhatGetsReviewed() {
             <p className="mt-3 flex w-full max-w-[16rem] items-center border-y border-line/80 py-3 text-sm font-medium leading-6 text-ink/80 sm:h-[6.75rem]">
               {body}
             </p>
-            <ul className="mt-5 w-full max-w-[16rem] space-y-2 text-left text-[0.82rem] leading-5 text-ink/75">
+            <ul className="mx-auto mt-5 w-fit max-w-[16rem] space-y-2 text-left text-[0.82rem] leading-5 text-ink/75 sm:mx-0 sm:w-full">
               {checks.map((check) => (
                 <li key={check} className="flex gap-2.5">
                   <span className="mt-[0.5rem] size-1 shrink-0 rounded-full bg-forest" aria-hidden />

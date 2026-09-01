@@ -93,7 +93,7 @@ export default function AccessibilityPublicEntities() {
             </p>
 
             <div
-              className="ck-step mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-5"
+              className="ck-step mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5"
               style={beat(310)}
             >
               <ProjectInquiryTrigger
@@ -101,14 +101,19 @@ export default function AccessibilityPublicEntities() {
                 intent="public-entity"
                 className="rounded-md !bg-ivory !px-5 !py-2.5 !font-semibold !text-forest hover:!bg-white"
               >
-                Request a public-entity accessibility review
+                <span className="sm:hidden">
+                  Request a public-entity review
+                </span>
+                <span className="hidden sm:inline">
+                  Request a public-entity accessibility review
+                </span>
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </ProjectInquiryTrigger>
               <a
                 href="https://www.ada.gov/resources/2024-03-08-web-rule/"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-semibold text-ivory underline decoration-ivory/40 underline-offset-4 transition-colors hover:decoration-ivory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory focus-visible:ring-offset-4 focus-visible:ring-offset-forest"
+                className="-my-3 inline-flex items-center gap-2 py-3 text-xs font-semibold text-ivory underline decoration-ivory/40 underline-offset-4 transition-colors hover:decoration-ivory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory focus-visible:ring-offset-4 focus-visible:ring-offset-forest"
               >
                 Read the DOJ guidance
                 <ExternalLink className="h-3.5 w-3.5" aria-hidden />

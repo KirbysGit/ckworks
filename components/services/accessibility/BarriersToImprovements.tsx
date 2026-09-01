@@ -49,8 +49,8 @@ export default function AccessibilityBarriersToImprovements() {
       id="how-the-work-happens"
       className="scroll-mt-24 border-b border-line py-14 lg:py-16"
     >
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-12">
-        <Reveal className="max-w-md lg:self-start">
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:grid-rows-[auto_auto] lg:gap-x-12 lg:gap-y-8">
+        <Reveal className="max-w-md lg:col-start-1 lg:row-start-1 lg:self-start">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
             How the work happens
           </p>
@@ -63,15 +63,9 @@ export default function AccessibilityBarriersToImprovements() {
             useful than knowing everything at once.
           </p>
 
-          <div
-            className="ck-step mt-6 lg:mt-8"
-            style={{ "--ck-anim-delay": "180ms" } as CSSProperties}
-          >
-            <AccessibilityReviewScanGraphic />
-          </div>
         </Reveal>
 
-        <ol className="grid sm:grid-cols-2 sm:border-l sm:border-line">
+        <ol className="grid sm:grid-cols-2 sm:border-l sm:border-line lg:col-start-2 lg:row-span-2 lg:row-start-1">
           {stages.map(({ title, body, icon: Icon }, index) => (
             <Reveal
               as="li"
@@ -101,6 +95,15 @@ export default function AccessibilityBarriersToImprovements() {
             </Reveal>
           ))}
         </ol>
+
+        {/* Third in the DOM so mobile reads heading, stages, then graphic; the
+            explicit placement keeps it under the copy on desktop. */}
+        <div
+          className="ck-step lg:col-start-1 lg:row-start-2"
+          style={{ "--ck-anim-delay": "180ms" } as CSSProperties}
+        >
+          <AccessibilityReviewScanGraphic />
+        </div>
       </div>
     </section>
   );

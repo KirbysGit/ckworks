@@ -16,7 +16,7 @@
  * vendors, and do not reach for a warning triangle or a failure score.
  */
 import type { CSSProperties } from "react";
-import { Check, Search } from "lucide-react";
+import { Check } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 
 const automatedFinds = [
@@ -31,7 +31,7 @@ export default function AccessibilityToolsAndLimits() {
       <Reveal className="block overflow-hidden rounded-2xl border border-line bg-card px-6 py-7 sm:px-8 sm:py-8 lg:px-10 shadow-soft">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.96fr)_minmax(0,0.96fr)] lg:gap-10">
           <div
-            className="ck-step min-w-0"
+            className="ck-step min-w-0 text-center sm:text-left"
             style={{ "--ck-anim-delay": "0ms" } as CSSProperties}
           >
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-forest">
@@ -45,11 +45,10 @@ export default function AccessibilityToolsAndLimits() {
               whether someone can complete a real task still requires human
               judgment.
             </p>
-            <ScanDiagram />
           </div>
 
           <div
-            className="ck-step min-w-0 lg:border-l lg:border-line lg:pl-10"
+            className="ck-step min-w-0 text-center sm:text-left lg:border-l lg:border-line lg:pl-10"
             style={{ "--ck-anim-delay": "110ms" } as CSSProperties}
           >
             <VerdictPill>Finds patterns</VerdictPill>
@@ -60,7 +59,7 @@ export default function AccessibilityToolsAndLimits() {
               Find detectable, objective failures quickly, and catch regressions
               over time.
             </p>
-            <ul className="mt-6 space-y-3">
+            <ul className="mx-auto mt-6 w-fit space-y-3 text-left sm:mx-0 sm:w-auto">
               {automatedFinds.map(({ term, detail }) => (
                 <li
                   key={term}
@@ -81,7 +80,7 @@ export default function AccessibilityToolsAndLimits() {
           </div>
 
           <div
-            className="ck-step min-w-0 lg:border-l lg:border-line lg:pl-10"
+            className="ck-step min-w-0 text-center sm:text-left lg:border-l lg:border-line lg:pl-10"
             style={{ "--ck-anim-delay": "220ms" } as CSSProperties}
           >
             <VerdictPill>Needs context</VerdictPill>
@@ -107,58 +106,5 @@ function VerdictPill({ children }: { children: string }) {
     <span className="inline-flex items-center rounded-full bg-forest-soft/80 px-3 py-1.5 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-forest">
       {children}
     </span>
-  );
-}
-
-/**
- * A scan running across a page, with one block flagged. Decorative: the columns
- * beside it carry the point, so it holds no text.
- *
- * From `lg` up, the negative bottom margin pulls the panel's own height up past
- * the diagram, so the frame keeps painting downward and the panel's
- * `overflow-hidden` clips it at the card edge. The bottom border is dropped at
- * the same breakpoint: the page should read as continuing past the cut, not as
- * a box that happens to end there.
- *
- * Both are `lg`-only on purpose. Below that the columns stack, so a negative
- * margin would drag the next column up over the diagram instead of running off
- * the card, and a borderless frame would just look unfinished.
- */
-function ScanDiagram() {
-  return (
-    <div className="relative mx-auto mt-5 max-w-[20rem] pr-12 lg:-mb-24" aria-hidden>
-      <div className="rounded-[0.3rem] border border-forest/55 lg:rounded-b-none lg:border-b-0">
-        <div className="flex items-center gap-1.5 border-b border-forest/55 px-2.5 py-2">
-          {[0, 1, 2].map((dot) => (
-            <span
-              key={dot}
-              className="size-1.5 rounded-full border border-forest/55"
-            />
-          ))}
-        </div>
-        <div className="flex items-stretch gap-2 px-2.5 pb-3 pt-3.5">
-          <span className="h-10 flex-[1.6] rounded-[0.15rem] bg-line/55" />
-          <span className="h-10 flex-1 rounded-[0.15rem] bg-line/55" />
-          <span className="h-10 flex-1 rounded-[0.15rem] border border-dashed border-forest" />
-          <span className="h-10 flex-1 rounded-[0.15rem] bg-line/55" />
-        </div>
-        <div className="space-y-2.5 px-2.5 pb-6">
-          {["72%", "88%", "56%"].map((width) => (
-            <span
-              key={width}
-              className="block h-1.5 rounded-full bg-line/55"
-              style={{ width }}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Overruns the frame on the left and stops at the lens centre on the
-          right, so the scan reads as passing through rather than butting up. */}
-      <span className="absolute -left-2.5 right-6 top-[43%] h-px bg-forest/65" />
-      <span className="absolute right-0 top-[43%] flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-forest/65 bg-card">
-        <Search className="size-4 text-forest" strokeWidth={1.6} />
-      </span>
-    </div>
   );
 }
