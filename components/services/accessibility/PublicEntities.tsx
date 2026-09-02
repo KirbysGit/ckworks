@@ -22,6 +22,7 @@
  * never both.
  */
 import type { CSSProperties } from "react";
+import Link from "next/link";
 import {
   ArrowRight,
   Blocks,
@@ -32,7 +33,6 @@ import {
   PanelsTopLeft,
   Smartphone,
 } from "lucide-react";
-import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
 import Reveal from "@/components/ui/Reveal";
 
 const deadlineTiers = [
@@ -96,19 +96,13 @@ export default function AccessibilityPublicEntities() {
               className="ck-step mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5"
               style={beat(310)}
             >
-              <ProjectInquiryTrigger
-                source="accessibility_title_ii_band"
-                intent="public-entity"
-                className="rounded-md !bg-ivory !px-5 !py-2.5 !font-semibold !text-forest hover:!bg-white"
+              <Link
+                href="/services/web-accessibility/ada-title-ii"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-ivory px-5 py-2.5 text-sm font-semibold text-forest transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory focus-visible:ring-offset-4 focus-visible:ring-offset-forest"
               >
-                <span className="sm:hidden">
-                  Request a public-entity review
-                </span>
-                <span className="hidden sm:inline">
-                  Request a public-entity accessibility review
-                </span>
+                Explore ADA Title II support
                 <ArrowRight className="h-4 w-4" aria-hidden />
-              </ProjectInquiryTrigger>
+              </Link>
               <a
                 href="https://www.ada.gov/resources/2024-03-08-web-rule/"
                 target="_blank"
