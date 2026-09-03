@@ -103,7 +103,8 @@ Verified against the repository on 2026-08-19.
 ### City of Greenridge
 
 - **Represents**: a fictional local government and public-service website
-- **Used in**: `components/services/accessibility/Hero.tsx`
+- **Used in**: `components/services/accessibility/Hero.tsx` and
+  `components/services/accessibility/OverviewCard.tsx`
 - **Purpose**: demonstrating an accessibility review of an important public
   journey through visible labels, keyboard focus, and a recoverable form error
 - **Labeling**: the browser visual is captioned "Illustrative accessibility
@@ -118,6 +119,7 @@ them ordinary and reuse them rather than generating new ones.
 
 | Name | Appears in | Role in the demo |
 | --- | --- | --- |
+| Jordan Lee | Web Accessibility hero and services-index card | Resident filling in the City of Greenridge contact form |
 | Sarah Mitchell | Digital Systems, Ongoing Support | Inbound inquiry, kitchen remodeling |
 | Daniel Ortiz | Digital Systems | Second activity row, bathroom remodel |
 | Northfield Co. | Analytics | Recent lead |

@@ -96,17 +96,6 @@ real-user vitals once deployed.
 
 ## Tooling
 
-### No ESLint configuration
-
-**Verified.** `package.json` defines `"lint": "next lint"`, but no ESLint config
-file exists in the repository and there is no `eslintConfig` key in
-`package.json`.
-
-`AGENTS.md` and `agent-workflow.md` both instruct agents to run configured lint,
-which currently cannot be satisfied. Either add a config or soften the
-instruction. Configuring lint is deliberately out of scope for the
-documentation pass and should be its own task.
-
 ### Production builds rewrite `tsconfig.json`
 
 **Verified.** Running `next build` with a custom `NEXT_DIST_DIR` causes Next.js
@@ -133,6 +122,13 @@ deliberate mailbox choice. Confirm with Colin before changing anything.
 
 ## Recently Resolved
 
+- **2026-08-31** — ESLint is configured. `eslint.config.mjs` uses the flat
+  config with `next/core-web-vitals` and `next/typescript`, and the `lint`
+  script calls the ESLint CLI directly rather than the deprecated `next lint`.
+  The repository lints with zero errors.
+- **2026-08-31** — The accessibility findings in `accessibility-audit.md` are
+  resolved and a live axe-core scan passes on every route. See that file for
+  what is still outstanding: a screen reader pass and a zoom/reflow check.
 - **2026-08-20** — Orlando positioning now appears in CK Works own content:
   the homepage hero eyebrow, the About hero, the contact page, and the
   homepage title. It is no longer only the Riverstone demo carrying a local

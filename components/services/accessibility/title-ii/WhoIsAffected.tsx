@@ -37,8 +37,8 @@ const complianceDates = [
 const buildingGraphic = {
   width: 520,
   height: 410,
-  overlap: 72,
-  offsetX: 0,
+  overlap: 84,
+  offsetX: 12,
   offsetY: 0,
 } as const;
 
@@ -51,16 +51,16 @@ export default function WhoIsAffected() {
       className="scroll-mt-24 border-b border-line bg-ivory py-16 sm:py-20 lg:py-24"
     >
       <div
-        className={`${serviceContainer} grid items-center gap-12 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-6 xl:gap-8`}
+        className={`${serviceContainer} grid items-center gap-12 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-6 xl:gap-8 min-[1360px]:grid-cols-[minmax(0,23rem)_minmax(0,1fr)]`}
       >
-        <div className="max-w-[29rem] text-center sm:text-left">
+        <div className="max-w-[32rem] text-center sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
             Who is affected and when
           </p>
           <h2 className="mt-5 font-serif text-[2.7rem] font-semibold leading-[1.03] tracking-[-0.025em] text-ink sm:text-[3.35rem]">
             A shared standard, with different timelines.
           </h2>
-          <p className="mx-auto mt-6 max-w-[27rem] text-sm leading-7 text-ink/78 sm:mx-0 sm:text-base">
+          <p className="mx-auto mt-6 max-w-[30rem] text-sm leading-7 text-ink/78 sm:mx-0 sm:text-base">
             Title II applies to state and local government entities. The rule
             names WCAG 2.1 Level AA as the technical standard for covered web
             content and mobile applications.

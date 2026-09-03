@@ -53,8 +53,12 @@ export default function AppsVendorGraphic() {
           <ChevronDown className="size-2.5 shrink-0 text-muted" />
         </div>
 
-        <div className="grid grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
-          <ul className="space-y-[10px] border-r border-line bg-sand/25 px-2 py-3">
+        <div className="grid grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] xl:grid-cols-[auto_minmax(0,1fr)]">
+          {/* From xl the nav sizes to its own longest label and holds every
+              item on one line. Below that it goes back to a share of the
+              portal: the phone's width is fixed in pixels, so in a narrow
+              column a content-sized nav would starve the panel beside it. */}
+          <ul className="space-y-[10px] border-r border-line bg-sand/25 px-1.5 py-3 xl:whitespace-nowrap">
             {portalNav.map((item, index) => (
               <li
                 key={item}
@@ -69,7 +73,9 @@ export default function AppsVendorGraphic() {
             ))}
           </ul>
 
-          <div className="px-2 py-3">
+          {/* Extra padding on the right: the phone laps over this edge, and without
+              it the account card's button ran under the device. */}
+          <div className="py-3 pl-2 pr-3">
             <p className="text-[0.58rem] font-semibold leading-tight text-ink">
               Welcome back, Alex
             </p>
@@ -116,7 +122,7 @@ export default function AppsVendorGraphic() {
           and the screen below is authored against its native 156px width. */}
       <PhoneMockup
         width={124}
-        className="relative z-10 -ml-1.5 shrink-0 self-center"
+        className="relative z-10 -ml-5 shrink-0 self-center"
         shadowClassName="shadow-[0_9px_18px_-12px_rgba(17,23,20,0.42),0_2px_6px_-5px_rgba(17,23,20,0.32)]"
       >
         <PhoneStatusBar />

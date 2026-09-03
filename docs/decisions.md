@@ -181,3 +181,50 @@ work.
 - The durable content, visual, route, and launch plan lives in
   `docs/web-accessibility-service.md`; it replaces the earlier Title II-first
   concept.
+
+## 2026-08-31: Service Order Has One Source
+
+- The order of `serviceAreas` in `lib/services.ts` is the single source of
+  truth for how services are sequenced everywhere.
+- Displayed numbers come from `serviceNumber(slug)`, never hand-written. The
+  header dropdown and the services index each carried their own hardcoded set,
+  which is how Web Accessibility was labelled "03" in the nav and "05" on the
+  index at the same time.
+- Reordering means editing that one array. Do not add a number to a component.
+
+## 2026-08-31: A CTA Carries Its Own Context
+
+- `ProjectInquiryTrigger` infers the service from the current
+  `/services/<slug>` path, so every CTA on a service page preselects that
+  service with no per-button wiring to fall out of sync.
+- The slug rides in the `href` as well as through React state, so preselection
+  survives cmd-click, no JS, and crawlers.
+- The query parameter carries the slug, not the option label. Slugs are stable;
+  labels are display copy that can be reworded without anyone thinking about
+  links. `serviceOptionForSlug` maps between them.
+- Named intents in `lib/inquiry.ts` prefill the message for a known starting
+  context, keyed by a short slug so the sentence stays out of the URL and both
+  inquiry surfaces resolve the same wording.
+- Prefills only ever fill an empty field. A visitor who has started typing is
+  never overwritten.
+
+## 2026-08-31: One Select, Not One Per Form
+
+- `components/ui/SelectField.tsx` is the listbox select for the whole site. The
+  inquiry modal and the contact form previously carried their own near
+  identical copies, and both were incomplete in the same ways.
+- It follows the APG listbox pattern with `aria-activedescendant`. Options are
+  `li[role="option"]` and are not focusable, so the list is one tab stop rather
+  than one per option.
+- Styling is passed in; behaviour is not. If a third select appears, use this
+  one rather than writing another.
+
+## 2026-08-31: Automated Checks Are A Floor
+
+- A clean axe-core run is the minimum before shipping a page, not evidence of
+  conformance. It cannot judge focus order, whether an alternative is
+  meaningful, whether an error is recoverable, or whether a journey completes.
+- It also does not test SC 1.4.11 non-text contrast at all. The form border
+  failure that produced the `field` token was found by hand.
+- This matters more here than on most sites, because
+  `/services/web-accessibility` makes exactly this argument to visitors.

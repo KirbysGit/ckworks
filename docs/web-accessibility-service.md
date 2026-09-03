@@ -1,9 +1,16 @@
 # Web Accessibility Service Plan
 
-**Status:** Approved planning direction. The central service entry, generic
-service route, navigation plumbing, homepage card, services-index showcase, and
-homepage schema are now present. The bespoke service page described below has
-not been implemented.
+**Status:** Built and live as of 2026-08-31. The service entry, navigation,
+footer, homepage card, services-index showcase, schema, sitemap, inquiry
+options, and the bespoke page at `/services/web-accessibility` are all in
+place, and the launch gate below is closed.
+
+The parent page carries one band the skeleton did not anticipate, "What you
+receive", between the process band and the tools band. It exists because the
+page explained the method and never named the output. Its copy stays inside the
+open delivery decisions listed at the bottom of this file.
+
+The ADA Title II child page remains unbuilt and is the next piece of work.
 
 **Read with:** `AGENTS.md`, `docs/architecture.md`,
 `docs/content-discovery.md`, `docs/design-system.md`, `docs/decisions.md`, and
@@ -241,13 +248,14 @@ to:
 - the homepage `OfferCatalog` service list; and
 - sitemap service URLs.
 
-Manual implementation work remains for:
+All of the manual work this section used to list is done: the band components,
+the bespoke route registration, CTA preselection with analytics properties, and
+the responsive pass over the six-item navigation and services index.
 
-- `components/services/accessibility/Page.tsx` and band-level components;
-- registering the bespoke page in `app/services/[slug]/page.tsx`;
-- accessibility-specific CTA preselection and analytics source properties; and
-- final responsive verification of the six-item navigation and services-index
-  layouts as part of the accessibility page launch pass.
+CTA preselection generalized beyond accessibility. `ProjectInquiryTrigger`
+infers the service from the current `/services/<slug>` path, so every service
+CTA preselects without per-button wiring, and the Title II CTA additionally
+passes `intent="public-entity"` to prefill the message. See `lib/inquiry.ts`.
 
 Nested child pages do not fit the current single-segment `[slug]` route. When
 the Title II page is justified, give it an explicit nested route under

@@ -23,6 +23,7 @@ Use the named Tailwind tokens from `tailwind.config.ts`.
 | `forest` | `#2F5B3F` | Actions, accents, indicators |
 | `forest-soft` | `#DDE8D8` | Low-emphasis green surface |
 | `line` | `#DDD6C8` | Borders and dividers |
+| `field` | `#8A8375` | Form field borders only |
 | `panel` | `#111714` | Rare near-black surface; one use site-wide |
 
 The site is intentionally light-only. Do not add `dark:` variants or a dark
@@ -193,11 +194,22 @@ Defined in `app/globals.css`. All are disabled under `prefers-reduced-motion`.
 | `ck-boot-spin` | One 360° turn, 700ms | Clover (or mark) inside a boot splash |
 | `ck-skeleton` | Fade in, hold, fade out, 900ms | Placeholder shown while "loading" |
 | `ck-skeleton-block` | Looping shimmer sweep | Individual skeleton bars |
+| `ck-scan` | Magnifier along a sampled arc, 13s, one pass then idle | A review sweeping a page mock |
+| `ck-focus-ring` | Border and ring arriving, 460ms | A field taking focus in a demo |
+| `ck-error-border` | Border colour and corner radius, 360ms | A field turning into its error state |
+| `ck-error-in` | Fade down 5px, 380ms | An error message resolving under a field |
 
-`ck-resolve`, `ck-loadbar`, `ck-boot-screen`, `ck-boot-spin`, `ck-skeleton`, `ck-step`, `ck-draw-x`,
-`ck-draw-elbow`, and `ck-draw-arc` take their delay from a `--ck-anim-delay`
+`ck-resolve`, `ck-loadbar`, `ck-boot-screen`, `ck-boot-spin`, `ck-skeleton`,
+`ck-step`, `ck-draw-x`, `ck-draw-elbow`, `ck-draw-arc`, `ck-focus-ring`,
+`ck-error-border`, and `ck-error-in` take their delay from a `--ck-anim-delay`
 custom property rather than `animationDelay`, because they set
 `animation-delay` themselves. The others take a plain `animationDelay`.
+
+`ck-focus-ring`, `ck-error-border`, and `ck-error-in` declare only a `from`
+state and run `backwards`, so the element's own resting style is the finished
+state. That is deliberate: it means a reduced-motion visitor, or a paint that
+lands before the delay elapses, sees the completed state rather than a demo
+frozen half way. Do not add `to` blocks to them.
 `lib/motion.ts` exports `animDelay(ms)` for the former group.
 
 `ck-draw-elbow` is for the one shape a transform cannot animate: a box showing
@@ -316,7 +328,16 @@ reads as intent, several at once reads as noise.
   and a clear close control.
 - Maintain readable contrast for body text, borders, form states, and disabled
   states. Do not rely on color alone to communicate success, error, or status.
-- Treat `prefers-reduced-motion` as a required state, not an afterthought.
+- Treat `prefers-reduced-motion` as a required state, not an afterthought. The
+  `ck-*` classes each opt in through the reduce block at the end of
+  `globals.css`; Framer Motion is covered globally by
+  `components/ui/MotionProvider.tsx`, which sets `reducedMotion="user"`.
+- Form field borders use the `field` token, not `line`. A border that is the
+  only thing identifying an input has to clear 3:1 against its surroundings,
+  and `line` is 1.35:1. `field` measures 3.51:1 on ivory.
+- Focus indicators use full-opacity `forest` with a ring offset, as in
+  `ui/Button.tsx`. An opacity modifier on a ring will not survive a contrast
+  check.
 
 ## Performance Guardrails
 

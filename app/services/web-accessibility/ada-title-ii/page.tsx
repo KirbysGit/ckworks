@@ -8,6 +8,10 @@ import SchemaMarkup from "@/components/page/SchemaMarkup";
 import AdaTitleIiHero from "@/components/services/accessibility/title-ii/Hero";
 import ContentContext from "@/components/services/accessibility/title-ii/ContentContext";
 import CoveredSurfaces from "@/components/services/accessibility/title-ii/CoveredSurfaces";
+import FirstSteps from "@/components/services/accessibility/title-ii/FirstSteps";
+import ReviewProcess from "@/components/services/accessibility/title-ii/ReviewProcess";
+import AdaTitleIiFaq from "@/components/services/accessibility/title-ii/Faq";
+import AdaTitleIiBottomCta from "@/components/services/accessibility/title-ii/BottomCta";
 import WhoIsAffected from "@/components/services/accessibility/title-ii/WhoIsAffected";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
 
@@ -73,6 +77,10 @@ export default function AdaTitleIiPage() {
       <WhoIsAffected />
       <CoveredSurfaces />
       <ContentContext />
+      <FirstSteps />
+      <ReviewProcess />
+      <AdaTitleIiFaq />
+      <AdaTitleIiBottomCta />
     </SiteLayout>
   );
 }

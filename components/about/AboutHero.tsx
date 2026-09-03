@@ -194,7 +194,7 @@ function StorefrontVisual() {
             } as CSSProperties
           }
         >
-          <PhoneFrame size="lg">
+          <PhoneFrame>
             <FieldAndForgePhone />
           </PhoneFrame>
         </div>

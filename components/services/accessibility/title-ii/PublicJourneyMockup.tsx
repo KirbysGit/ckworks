@@ -130,23 +130,38 @@ export default function PublicJourneyMockup() {
             </div>
           </div>
 
-          <div className="hidden px-7 py-10 sm:block">
-            <p className="text-base font-semibold leading-tight tracking-[-0.01em] text-ink">
-              A complete public journey.
-            </p>
-            <ol className="mt-6">
-              {journeySteps.map((step, index) => (
-                <li
-                  key={step}
-                  className="grid grid-cols-[1.5rem_1fr] items-center gap-3 border-t border-line py-5 first:border-t-0 first:pt-0"
-                >
-                  <span className="text-lg font-semibold text-forest">
-                    {index + 1}
-                  </span>
-                  <span className="text-xs leading-5 text-ink">{step}</span>
-                </li>
-              ))}
-            </ol>
+          <div className="hidden flex-col sm:flex">
+            <div className="px-7 pb-8 pt-10">
+              <p className="text-base font-semibold leading-tight tracking-[-0.01em] text-ink">
+                A complete public journey.
+              </p>
+              <ol className="mt-6 border-b border-line">
+                {journeySteps.map((step, index) => (
+                  <li
+                    key={step}
+                    className="grid grid-cols-[1.5rem_1fr] items-center gap-3 border-t border-line py-5 first:border-t-0 first:pt-0"
+                  >
+                    <span className="text-lg font-semibold text-forest">
+                      {index + 1}
+                    </span>
+                    <span className="text-xs leading-5 text-ink">{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* The question the three steps are there to raise. `mt-auto`
+                drops it to the foot of the column, so it fills the space the
+                list leaves rather than floating under it, and the panel's own
+                overflow clips it into the rounded corner. */}
+            <div className="mt-auto border-t border-line bg-forest-soft/45 px-7 py-7">
+              <p className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-forest">
+                Accessibility check
+              </p>
+              <p className="mt-3 border-l-2 border-forest/70 pl-3 font-serif text-[1.05rem] italic leading-[1.35] text-ink">
+                Can every resident complete this journey?
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -15,6 +15,11 @@ type FAQSectionProps = {
   title?: ReactNode;
   description?: ReactNode;
   className?: string;
+  /**
+   * Which answer is open on first render. Defaults to the first, which suits
+   * a short list; pass `null` where every answer should start collapsed.
+   */
+  defaultOpenIndex?: number | null;
 };
 
 export default function FAQSection({
@@ -23,8 +28,9 @@ export default function FAQSection({
   title = "A few useful questions.",
   description = "Common questions about working with CK Works, the process, and the results you can expect.",
   className = "",
+  defaultOpenIndex = 0,
 }: FAQSectionProps) {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(defaultOpenIndex);
 
   if (faqs.length === 0) return null;
 

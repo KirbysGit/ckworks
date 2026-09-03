@@ -126,14 +126,12 @@ closing CTA.
 
 ## In Progress
 
-- **Web Accessibility service planning.** The broad parent-service model, V1
-  page skeleton, future ADA Title II child-page boundary, integration map, and
-  launch gate are documented in
-  [`web-accessibility-service.md`](web-accessibility-service.md). The central
-  service entry, homepage card, and full-width services-index showcase now
-  exist, and the generic service route, navigation, footer, inquiry options,
-  metadata, schema, and sitemap inherit that entry. The bespoke service
-  experience and accessibility-specific CTA analytics remain planned.
+- **ADA Title II child page.** The parent Web Accessibility page is built and
+  live, including its contained Title II band. The dedicated
+  `/services/web-accessibility/ada-title-ii` page is the next piece and is
+  scoped in [`web-accessibility-service.md`](web-accessibility-service.md).
+  Note it does not fit the single-segment `[slug]` route and needs an explicit
+  nested route rather than another `ServiceSlug`.
 - **Service section extraction.** Each bespoke service now has its own
   `components/services/<service>/Page.tsx`. The next pass is splitting the
   largest local visual groups into section and `visuals/` files without mixing

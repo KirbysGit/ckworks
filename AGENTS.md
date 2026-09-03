@@ -134,9 +134,10 @@ Read this file before making changes. For deeper context, use the documents in
 - For visual changes, check the intended desktop and mobile layout before
   calling work complete.
 - Run `npx tsc --noEmit --pretty false` after TypeScript changes when practical.
-- Run configured lint and focused tests when a change touches their scope. Note
-  that no ESLint configuration currently exists, so `npm run lint` cannot be
-  satisfied yet; see `docs/backlog.md`.
+- Run `npm run lint` and focused tests when a change touches their scope. The
+  repository lints with zero errors; keep it that way. The remaining warnings
+  are pre-existing `no-img-element` cases, one of which is a false positive in
+  `app/opengraph-image.tsx`, where `ImageResponse` requires a raw `<img>`.
 - Do not run `npm run build` during active local visual work unless Colin asks.
 - Do not modify `.env.local`, secrets, production settings, analytics
   configuration, or unrelated files without an explicit reason.

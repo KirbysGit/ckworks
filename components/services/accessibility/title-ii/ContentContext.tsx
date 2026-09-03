@@ -1,8 +1,8 @@
 /**
  * Pairs the Title II content-and-exceptions framing with one layered document
- * composition. The open space at the right of the papers is intentionally
- * reserved for future handwritten annotations.
+ * composition, including the Greenridge seals and handwritten review notes.
  */
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { serviceContainer } from "@/components/services/shared/styles";
 
@@ -30,15 +30,23 @@ const paperLines = {
   ],
 } satisfies Record<string, readonly PlaceholderSection[]>;
 
-// These three positions own the paper stack. Keep the right edge open so
-// future annotations can be added without rebuilding the composition.
+// These positions own the paper stack and its handwritten review notes.
+// The notes use artwork that already includes its arrow, so each needs one
+// plain position/width control rather than a separate connector.
 const paperLayout = {
   archived:
-    "left-[2%] top-[3%] h-[72%] w-[48%] -rotate-[0.8deg] sm:left-[4%] sm:w-[46%]",
+    "left-[1%] top-[2%] h-[60%] w-[49%] -rotate-[0.35deg] sm:left-[3%] sm:w-[47%]",
   vendor:
-    "left-[21%] top-[16%] h-[70%] w-[51%] rotate-[0.45deg] sm:left-[23%] sm:w-[49%]",
+    "left-[21%] top-[12%] h-[60%] w-[52%] rotate-[0.2deg] sm:left-[23%] sm:w-[50%]",
   notice:
-    "left-[40%] top-[35%] h-[62%] w-[48%] -rotate-[0.25deg] sm:left-[43%] sm:w-[45%]",
+    "left-[40%] top-[31%] h-[64%] w-[48%] -rotate-[0.12deg] sm:left-[42%] sm:w-[45%]",
+} as const;
+
+const annotationLayout = {
+  maintains:
+    "right-[-1%] top-[10%] w-[31%] sm:right-[-2%] sm:top-[9%] sm:w-[31%]",
+  current:
+    "right-[-1%] top-[43%] w-[24%] sm:right-[-8%] sm:top-[41%] sm:w-[24%]",
 } as const;
 
 function PlaceholderLines({
@@ -72,10 +80,14 @@ function PlaceholderLines({
 
 function SealMark() {
   return (
-    <span className="grid size-[clamp(1.7rem,5cqw,2.35rem)] shrink-0 place-items-center rounded-full border border-current/40 p-1">
-      <span className="grid size-full place-items-center rounded-full border border-current/25 font-serif text-[clamp(0.42rem,1cqw,0.55rem)] font-bold tracking-[-0.04em]">
-        CK
-      </span>
+    <span className="relative block size-[clamp(2rem,6cqw,2.8rem)] shrink-0">
+      <Image
+        src="/images/services/svg/ada-greenridge-medallion.svg"
+        alt=""
+        fill
+        sizes="48px"
+        className="object-contain"
+      />
     </span>
   );
 }
@@ -102,9 +114,11 @@ function PaperFormat({ variant }: { variant: PaperVariant }) {
   }
 
   return (
-    <div className="mt-[clamp(0.9rem,3cqw,1.4rem)] flex items-center gap-[clamp(0.65rem,2.2cqw,1rem)] opacity-55">
-      <SealMark />
-      <div className="min-w-0 flex-1 space-y-[clamp(0.45rem,1.25cqw,0.6rem)]">
+    <div className="mt-[clamp(0.9rem,3cqw,1.4rem)] flex items-center gap-[clamp(0.65rem,2.2cqw,1rem)]">
+      <span className={variant === "archived" ? "opacity-55" : "opacity-80"}>
+        <SealMark />
+      </span>
+      <div className="min-w-0 flex-1 space-y-[clamp(0.45rem,1.25cqw,0.6rem)] opacity-55">
         <span className="block h-px w-full bg-current/45" />
         <span className="block h-px w-[72%] bg-current/35" />
         {variant === "notice" ? (
@@ -166,11 +180,11 @@ function Paper({
 function PaperStack() {
   return (
     <figure
-      className="mx-auto w-full max-w-[45rem]"
+      className="mx-auto w-full max-w-[40rem]"
       aria-label="Illustrative stack of archived, vendor-managed, and current public documents"
     >
       <div
-        className="relative h-[29rem] w-full [container-type:inline-size] sm:h-[34rem] lg:h-[37rem]"
+        className="relative h-[30rem] w-full [container-type:inline-size] sm:h-[34rem] lg:h-[36rem]"
         aria-hidden="true"
       >
         <Paper
@@ -193,9 +207,26 @@ function PaperStack() {
           className={paperLayout.notice}
           variant="notice"
         />
+        <Image
+          src="/images/services/svg/ada-who-maintains.svg"
+          alt=""
+          width={954}
+          height={409}
+          sizes="(min-width: 1024px) 250px, 34vw"
+          className={`absolute h-auto ${annotationLayout.maintains}`}
+        />
+        <Image
+          src="/images/services/svg/ada-still-used-today.svg"
+          alt=""
+          width={792}
+          height={388}
+          sizes="(min-width: 1024px) 220px, 30vw"
+          className={`absolute h-auto ${annotationLayout.current}`}
+        />
       </div>
-      <figcaption className="text-center text-xs leading-5 text-muted sm:text-sm">
-        Context determines what needs evaluation.
+      <figcaption className="mt-4 flex items-center justify-center gap-2 text-center text-xs leading-5 text-muted sm:ml-[42%] sm:justify-start sm:text-left sm:text-sm">
+        <span className="h-px w-6 shrink-0 bg-forest" aria-hidden="true" />
+        <span>Context determines what needs evaluation.</span>
       </figcaption>
     </figure>
   );

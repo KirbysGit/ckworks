@@ -156,10 +156,10 @@ function PageStructurePanel() {
 
 function ContactFormPanel() {
   const fields = [
-    { label: "Name", value: "Jane Smith", active: false, tall: false },
+    { label: "Name", value: "Jordan Lee", active: false, tall: false },
     {
       label: "Email",
-      value: "jane@example.com",
+      value: "jordan@example.com",
       active: true,
       tall: false,
     },

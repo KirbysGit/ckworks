@@ -34,8 +34,7 @@ The `components/` root is deliberately empty. A component belongs in the
 smallest folder that accurately describes its owner. Do not reintroduce root
 files just to avoid deciding where a component belongs.
 
-`components/services/` owns bespoke service experiences. As of 2026-08-07,
-the five top-level page experiences live there and
+`components/services/` owns bespoke service experiences. All six live there and
 `app/services/[slug]/page.tsx` only owns route resolution and metadata.
 
 ## Current Feature Ownership
@@ -76,13 +75,14 @@ implementation, or repeated page bands.
 Use `components/ui/` for compact primitives with broad reuse. Current contents:
 
 - `Button`
-- `Card`
 - `DeviceFrame`
 - `DrawUnderline`
 - `Logo`
+- `MotionProvider`
 - `Reveal`
 - `SectionHeader`
 - `SectionLabel`
+- `SelectField`
 
 Keep these focused. They should not know page copy or service-specific data.
 
@@ -133,6 +133,20 @@ components/services/
     Page.tsx
   search-visibility/
     Page.tsx
+  accessibility/
+    Page.tsx
+    Hero.tsx
+    WaysOfUsing.tsx
+    WhatGetsReviewed.tsx
+    BarriersToImprovements.tsx
+    WhatYouReceive.tsx
+    ToolsAndLimits.tsx
+    PublicEntities.tsx
+    Faq.tsx
+    Related.tsx
+    BottomCta.tsx
+    ReviewScanGraphic.tsx
+    OverviewCard.tsx
   analytics/
     Page.tsx
   systems/
@@ -143,9 +157,13 @@ components/services/
     ServiceFrame.tsx
     GenericServicePage.tsx
     ProjectWorkCard.tsx
+    RelatedLinks.tsx
     ServiceTimeline.tsx
     styles.ts
 ```
+
+`accessibility/` is the band-per-file shape the other services are heading
+toward. Its `Page.tsx` composes named bands and holds no markup of its own.
 
 Use a subfolder only when it gives the filename context. Inside
 `web-design/`, `Hero.tsx` is clearer than `WebDesignServiceHero.tsx`.
@@ -161,9 +179,8 @@ laptop or phone.
 
 ## Service Page Modularization Plan
 
-`app/services/[slug]/page.tsx` is now a route shell. The five bespoke pages
-were extracted in a behavior-preserving pass, so the next work happens inside
-the relevant service folder.
+`app/services/[slug]/page.tsx` is now a route shell. The six bespoke pages live
+in their own folders, so the next work happens inside the relevant one.
 
 1. Keep route lookup, metadata, and service selection in the route file.
 2. Keep layout, service-view tracking, and schema in `shared/ServiceFrame.tsx`.

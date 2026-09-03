@@ -8,11 +8,10 @@ import type { ReactNode } from "react";
  * language — `docs/design-system.md` asks for established mockups to be reused
  * rather than near-duplicated. Shell only: pass the screen as children.
  *
- * `size` swaps the radii, bezel thickness, and base proportions. "lg" carries
- * the hero's full chrome treatment; "sm" preserves its phone silhouette with
- * a quieter, card-scale shell that does not turn into a glossy capsule.
+ The laptop's `size` swaps radii, bezel thickness, and base proportions.
+ * The phone has no sizes: there is one device, and `PhoneMockup` scales it.
  * The Web Design hero can adopt these once its entrance choreography is
- * untangled — its `ck-lift` wrappers already sit outside the frame markup.
+ * untangled, since its `ck-lift` wrappers already sit outside the frame markup.
  */
 
 type Size = "sm" | "lg";
@@ -105,109 +104,121 @@ export function LaptopFrame({
 }
 
 /**
- * "sm" is sized in container units so a phone dropped into a narrow column
- * stays a phone — radii, bezel, and notch all track the device width instead
- * of holding fixed pixels and swamping the screen. "lg" keeps the hero's
- * original pixel values, where the width is known and generous.
+ * The phone is the Web Design hero device, and there is only one of it.
+ *
+ * It used to carry a second "sm" preset that respecified the shell in
+ * container units for narrow columns. That preset was a different phone: flat
+ * graphite rim, no metallic sweep, no detailed island. Worse, its `cqw` values
+ * resolved against the viewport rather than the device, because an element
+ * cannot query its own container. Both problems are gone: the geometry below is
+ * the hero's, in its own pixels, and `PhoneMockup` reaches other sizes by
+ * scaling it rather than by describing it again.
+ *
+ * The wrapper stays a query container because screen content is authored in
+ * `cqw` (see `FieldAndForgePhone` on the About hero). Container queries measure
+ * layout width, not visual width, so that content is unaffected by scaling and
+ * one set of values works at every size.
  */
-const phoneSizing = {
-  sm: {
-    // At this scale, the hero's broad metallic sweep overwhelms the screen.
-    // Keep the same dark, layered device language, but reduce it to a thin
-    // graphite rim and one subtle light catch near the top edge.
-    shell:
-      "border border-black/85 bg-[#080A08] shadow-[0_15px_26px_-15px_rgba(17,23,20,0.78),0_5px_10px_-8px_rgba(17,23,20,0.52)]",
-    sheen:
-      "inset-[0.75cqw] rounded-[16.25cqw] bg-[radial-gradient(circle_at_24%_7%,rgba(255,255,255,0.22),transparent_17%),linear-gradient(180deg,rgba(255,255,255,0.08),transparent_16%,rgba(0,0,0,0.2)_100%)] opacity-75",
-    button: "top-[28%] h-[13%] w-[1.5cqw]",
-    inner:
-      "rounded-[15.5cqw] p-[1.45cqw]",
-    innerSurface:
-      "bg-[#030403] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.13),inset_-1px_-2px_3px_rgba(0,0,0,0.8)]",
-    outer: "rounded-[17cqw] p-[1.15cqw]",
-    screen: "rounded-[13.5cqw]",
-    notch: "h-[9.5cqw] w-[32cqw]",
-    notchRadius: "rounded-b-[4cqw]",
-    speaker: "top-[3.6cqw] h-[1cqw] w-[11.5cqw]",
-    notchOffset: "top-0",
-    detailedNotch: false,
-  },
-  lg: {
-    shell:
-      "bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] shadow-[0_18px_38px_-18px_rgba(17,23,20,0.7),0_6px_14px_-8px_rgba(17,23,20,0.58)]",
-    sheen:
-      "inset-[1px] rounded-[2.2rem] bg-[radial-gradient(circle_at_30%_7%,rgba(255,255,255,0.38),transparent_24%),linear-gradient(160deg,rgba(255,255,255,0.16),transparent_35%,rgba(0,0,0,0.42)_74%)] opacity-70",
-    innerSurface:
-      "bg-[linear-gradient(145deg,#030403_0%,#0C0F0C_46%,#252B25_58%,#050605_100%)] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.16),inset_-2px_-2px_4px_rgba(0,0,0,0.82)]",
-    outer: "rounded-[2.3rem] p-[2px]",
-    button: "top-24 h-11 w-[3px]",
-    inner: "rounded-[2.15rem] p-[4px]",
-    screen: "rounded-[1.75rem]",
-    notch: "h-[14px] w-[62px]",
-    notchRadius: "rounded-b-[8px]",
-    notchOffset: "top-[2px]",
-    speaker: "top-[9px] h-[2px] w-[22px]",
-    detailedNotch: true,
-  },
-} as const;
+
+/**
+ * The hero's own drop shadow. It is sized for a full-scale device standing on
+ * its own; a smaller phone set against another mockup wants something tighter,
+ * since the shadow does not scale with the frame and spills onto its neighbour.
+ */
+export const phoneShadow =
+  "shadow-[0_18px_38px_-18px_rgba(17,23,20,0.7),0_6px_14px_-8px_rgba(17,23,20,0.58)]";
+
+/** Shell width at native scale: the hero's 10.5rem. */
+export const phoneNativeWidth = 168;
+/** Screen height at native scale: the hero's 19.5rem. */
+export const phoneNativeScreenHeight = 312;
+/** Screen height plus the 12px of outer and inner bezel above and below it. */
+export const phoneNativeHeight = phoneNativeScreenHeight + 12;
 
 export function PhoneFrame({
   children,
-  size = "sm",
   className = "",
+  shadowClassName = phoneShadow,
 }: {
   children: ReactNode;
-  size?: Size;
   className?: string;
+  shadowClassName?: string;
 }) {
-  const s = phoneSizing[size];
-
   return (
-    // The outer shell is the query container, so every part of the phone —
-    // bezel, radii, notch, and the screen content — scales from one width.
-    <div
-      className={`relative [container-type:inline-size] ${s.shell} ${s.outer} ${className}`}
-    >
-      <span
-        className={`pointer-events-none absolute ${s.sheen}`}
-        aria-hidden
-      />
-      <span
-        className={`absolute -right-[2px] rounded-r-full bg-[linear-gradient(180deg,#313630,#090A09)] ${s.button}`}
-        aria-hidden
-      />
-
+    <div className={`[container-type:inline-size] ${className}`}>
       <div
-        className={`relative ${s.innerSurface} ${s.inner}`}
+        className={`relative rounded-[2.3rem] bg-[linear-gradient(145deg,#050605_0%,#181B18_30%,#6F746C_43%,#FFF9EA_49%,#3C423B_56%,#060706_74%,#161A16_100%)] p-[2px] ${shadowClassName}`}
       >
-        <div
-          className={`relative overflow-hidden bg-card shadow-[inset_0_0_0_1px_rgba(31,36,32,0.05)] ${s.screen}`}
-        >
-          {children}
-        </div>
-
-        {/* Island lives on the inner bezel, not the screen, so the ivory
-            screen edge and inner highlight cannot show above it. */}
-        <div
-          className={`pointer-events-none absolute left-1/2 z-30 -translate-x-1/2 ${s.notchOffset} ${s.notch}`}
+        <span
+          className="pointer-events-none absolute inset-[1px] rounded-[2.2rem] bg-[radial-gradient(circle_at_30%_7%,rgba(255,255,255,0.38),transparent_24%),linear-gradient(160deg,rgba(255,255,255,0.16),transparent_35%,rgba(0,0,0,0.42)_74%)] opacity-70"
           aria-hidden
-        >
+        />
+        <span
+          className="absolute -right-[2px] top-24 h-11 w-[3px] rounded-r-full bg-[linear-gradient(180deg,#313630,#090A09)]"
+          aria-hidden
+        />
+
+        <div className="relative rounded-[2.15rem] bg-[linear-gradient(145deg,#030403_0%,#0C0F0C_46%,#252B25_58%,#050605_100%)] p-[4px] shadow-[inset_1px_1px_1px_rgba(255,255,255,0.16),inset_-2px_-2px_4px_rgba(0,0,0,0.82)]">
+          <div className="relative overflow-hidden rounded-[1.75rem] bg-card shadow-[inset_0_0_0_1px_rgba(31,36,32,0.05)]">
+            {children}
+          </div>
+
+          {/* Island lives on the inner bezel, not the screen, so the ivory
+              screen edge and inner highlight cannot show above it. */}
           <div
-            className={`relative h-full w-full bg-[#050605] ${s.notchRadius} ${
-              s.detailedNotch ? "shadow-[0_1px_0_rgba(5,6,5,0.95)]" : ""
-            }`}
+            className="pointer-events-none absolute left-1/2 top-[2px] z-30 h-[14px] w-[62px] -translate-x-1/2"
+            aria-hidden
           >
-            {s.detailedNotch && (
-              <>
-                <span className="absolute -left-[8px] top-0 h-2 w-2 rounded-br-lg shadow-[8px_0_0_0_#050605]" />
-                <span className="absolute -right-[8px] top-0 h-2 w-2 rounded-bl-lg shadow-[-8px_0_0_0_#050605]" />
-              </>
-            )}
-            <span
-              className={`absolute left-1/2 -translate-x-1/2 rounded-full bg-white/16 ${s.speaker}`}
-            />
+            <div className="relative h-full w-full rounded-b-[8px] bg-[#050605] shadow-[0_1px_0_rgba(5,6,5,0.95)]">
+              <span className="absolute -left-[8px] top-0 h-2 w-2 rounded-br-lg shadow-[8px_0_0_0_#050605]" />
+              <span className="absolute -right-[8px] top-0 h-2 w-2 rounded-bl-lg shadow-[-8px_0_0_0_#050605]" />
+              <span className="absolute left-1/2 top-[9px] h-[2px] w-[22px] -translate-x-1/2 rounded-full bg-white/16" />
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The same phone at an arbitrary width.
+ *
+ * Nothing about the device is redescribed: it is built at native size and
+ * scaled, so bezel gradients, corner radii, the side button, the island, and
+ * the status chrome all keep their exact proportions. The wrapper reserves the
+ * scaled footprint so surrounding layout still measures correctly, and screen
+ * content is authored against the native 156px screen at every size.
+ */
+export function PhoneMockup({
+  children,
+  width,
+  className = "",
+  shadowClassName,
+}: {
+  children: ReactNode;
+  width: number;
+  className?: string;
+  shadowClassName?: string;
+}) {
+  const scale = width / phoneNativeWidth;
+
+  return (
+    <div
+      className={className}
+      style={{ width, height: phoneNativeHeight * scale }}
+    >
+      <div
+        style={{
+          width: phoneNativeWidth,
+          height: phoneNativeHeight,
+          transform: `scale(${scale})`,
+          transformOrigin: "top left",
+        }}
+      >
+        <PhoneFrame shadowClassName={shadowClassName}>
+          <div className="h-[19.5rem] overflow-hidden bg-card">{children}</div>
+        </PhoneFrame>
       </div>
     </div>
   );

@@ -27,6 +27,8 @@ shared working system for coding agents and future contributors.
 - [backlog.md](backlog.md) - verified issues, investigations, and next work
 - [demo-registry.md](demo-registry.md) - fictional brands, people, and demo data
 - [project-registry.md](project-registry.md) - real builds and allowed claims
+- [accessibility-audit.md](accessibility-audit.md) - the site's own WCAG audit,
+  what is fixed, and what is still unverified
 - [web-accessibility-service.md](web-accessibility-service.md) - approved
   service model, V1 page skeleton, future Title II split, and integration map
 
