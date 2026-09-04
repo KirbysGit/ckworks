@@ -14,6 +14,8 @@
  * Each graphic is decorative. The numbered label and description carry the
  * meaning, so nothing here depends on the illustration being understood.
  */
+import type { CSSProperties } from "react";
+import Reveal from "@/components/ui/Reveal";
 import {
   serviceCenterLabelClassName,
   serviceCenterTitleClassName,
@@ -81,18 +83,14 @@ export default function CoveredSurfaces() {
         {/* Same centred label and title scale as every other service section
             (Analytics, Search, Support, and the parent Accessibility page), so
             this one does not sit at its own size. */}
-        <div className="mx-auto max-w-5xl text-center">
+        <Reveal className="mx-auto max-w-5xl text-center">
           <p className={serviceCenterLabelClassName}>What the rule reaches</p>
           <h2 className={serviceCenterTitleClassName}>
             Four surfaces, one obligation.
           </h2>
-          <p className="mx-auto mt-6 max-w-[38rem] text-sm leading-7 text-ink/78 sm:text-base">
-            Websites, documents, applications, and outside systems can all shape
-            whether someone can use a public service.
-          </p>
-        </div>
+        </Reveal>
 
-        <div className="mt-12 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:grid-rows-[auto_auto] lg:gap-x-0 lg:gap-y-7">
+        <Reveal className="mx-auto mt-8 grid w-full max-w-[76rem] gap-x-10 gap-y-14 sm:grid-cols-2 lg:mt-10 lg:grid-cols-4 lg:grid-rows-[auto_auto] lg:gap-x-0 lg:gap-y-7">
           {surfaces.map(
             ({ number, title, body, Graphic }, index) => {
             // The band and the labels take the same edge padding, so every
@@ -107,14 +105,20 @@ export default function CoveredSurfaces() {
             // `lg:contents` dissolves the card at desktop so its graphic and
             // its label become grid items in their own rows. Below lg the
             // article stays a normal stacked card.
-            <article key={number} className="flex min-w-0 flex-col lg:contents">
+            <article
+              key={number}
+              className="mx-auto flex w-full max-w-[20rem] min-w-0 flex-col sm:mx-0 sm:max-w-none lg:contents"
+            >
               {/* Row one: an uninterrupted band. No dividers and no column
                   padding here, so each graphic is free to take the width it
                   wants and lean into its neighbour. Bottom-aligned on a shared
                   baseline so four different natural heights still hand off to
                   one row of labels. */}
               <div
-                className={`flex min-w-0 items-end lg:h-full ${graphicCell[index]} ${edge}`}
+                className={`ck-step flex min-w-0 items-end lg:h-full ${graphicCell[index]} ${edge}`}
+                style={
+                  { "--ck-anim-delay": `${index * 110}ms` } as CSSProperties
+                }
               >
                 <div className="w-full">
                   <Graphic />
@@ -129,20 +133,23 @@ export default function CoveredSurfaces() {
                   rather than the title being shaved down to fit. Bolder text
                   is also wider, so raising the weight moves these numbers. */}
               <div
-                className={`flex min-w-0 flex-col ${labelCell[index]} ${edge} ${
+                className={`ck-step flex min-w-0 flex-col ${labelCell[index]} ${edge} ${
                   index > 0 ? "lg:border-l lg:border-line" : ""
                 }`}
+                style={
+                  { "--ck-anim-delay": `${140 + index * 110}ms` } as CSSProperties
+                }
               >
               <div className="mt-7 flex items-baseline gap-3 lg:mt-0 lg:max-xl:min-h-[2.6rem]">
                 <span className="text-[1.2rem] font-bold leading-none text-forest lg:text-[clamp(0.95rem,1.4vw,1.2rem)]">
                   {number}
                 </span>
-                <h3 className="font-serif text-[1.36rem] font-semibold leading-tight tracking-[-0.015em] text-ink lg:text-[clamp(0.95rem,1.55vw,1.36rem)] xl:whitespace-nowrap">
+                <h3 className="font-serif text-[1.36rem] font-bold leading-tight tracking-[-0.015em] text-ink lg:text-[clamp(0.95rem,1.55vw,1.36rem)] xl:whitespace-nowrap">
                   {title}
                 </h3>
               </div>
 
-              <p className="mt-4 border-t border-line pt-4 text-[0.95rem] font-semibold leading-[1.85] text-ink/80">
+              <p className="mt-4 border-t border-line pt-4 text-[0.95rem] font-medium leading-[1.85] text-ink/80">
                 {body[0]}
                 <br />
                 {body[1]}
@@ -152,7 +159,7 @@ export default function CoveredSurfaces() {
             );
             },
           )}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

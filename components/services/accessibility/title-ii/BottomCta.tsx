@@ -11,13 +11,14 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProjectInquiryTrigger from "@/components/inquiry/ProjectInquiryTrigger";
+import Reveal from "@/components/ui/Reveal";
 import { serviceContainer } from "@/components/services/shared/styles";
 
 export default function AdaTitleIiBottomCta() {
   return (
     <section className="bg-ivory py-16 sm:py-20 lg:py-24">
       <div className={serviceContainer}>
-        <div className="flex flex-col gap-5 rounded-xl border border-line bg-card px-6 py-7 text-center shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left">
+        <Reveal className="flex flex-col gap-5 rounded-xl border border-line bg-card px-6 py-7 text-center shadow-soft sm:px-8 sm:py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left">
           <div className="mx-auto max-w-xl lg:mx-0">
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted">
               Public-entity accessibility
@@ -49,7 +50,7 @@ export default function AdaTitleIiBottomCta() {
               Explore the general accessibility service
             </Link>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

@@ -3,6 +3,7 @@
  * It stays decorative: the real page copy carries the meaning, while this
  * mockup shows why a complete public workflow matters.
  */
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import { ChevronRight, LockKeyhole, MoreVertical, Search } from "lucide-react";
 
@@ -55,6 +56,19 @@ const startWithNote = {
   top: "48%",
   offsetX: 0,
   offsetY: 0,
+} as const;
+
+/**
+ * Beats after the mockup itself has risen (the Hero starts that at 180ms and it
+ * settles around 700). The note lands first, then the connector draws from the
+ * row it points at to the step it produces, so the line reads as a consequence
+ * of the click rather than a decoration that was always there.
+ */
+const mockupTiming = {
+  note: 880,
+  connectorStart: 1180,
+  connectorLine: 1280,
+  connectorEnd: 1960,
 } as const;
 
 export default function PublicJourneyMockup() {
@@ -158,8 +172,8 @@ export default function PublicJourneyMockup() {
               <p className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-forest">
                 Accessibility check
               </p>
-              <p className="mt-3 border-l-2 border-forest/70 pl-3 font-serif text-[1.05rem] italic leading-[1.35] text-ink">
-                Can every resident complete this journey?
+              <p className="mt-3 border-l-2 border-forest/70 pl-3 text-sm font-semibold leading-5 text-ink">
+                Can every resident complete these steps?
               </p>
             </div>
           </div>
@@ -181,6 +195,7 @@ function StartWithNote() {
         left,
         top,
         transform: `translate(${offsetX}px, ${offsetY}px)`,
+        animationDelay: `${mockupTiming.note}ms`,
       }}
       aria-hidden="true"
     >
@@ -215,26 +230,35 @@ function JourneyConnector() {
         viewBox={`0 0 ${width} ${height}`}
         className="h-full w-full overflow-visible"
       >
+        {/* `transform-box: fill-box` so the dots scale about themselves. An
+            SVG shape's transform origin is the viewBox corner by default,
+            which turns ck-pop into a slide. */}
         <circle
           cx={start.x}
           cy={start.y}
           r={dotRadius}
           fill="currentColor"
-          className="text-forest"
+          className="ck-pop text-forest [transform-box:fill-box] [transform-origin:center]"
+          style={{ animationDelay: `${mockupTiming.connectorStart}ms` }}
         />
         <path
           d={`M${lineStartX} ${start.y} C${bendX} ${start.y} ${bendX} ${end.y} ${end.x} ${end.y}`}
           fill="none"
           stroke="currentColor"
           strokeWidth={strokeWidth}
-          className="text-forest"
+          pathLength={1}
+          className="ck-draw-path text-forest"
+          style={
+            { "--ck-anim-delay": `${mockupTiming.connectorLine}ms` } as CSSProperties
+          }
         />
         <circle
           cx={end.x}
           cy={end.y}
           r={dotRadius}
           fill="currentColor"
-          className="text-forest"
+          className="ck-pop text-forest [transform-box:fill-box] [transform-origin:center]"
+          style={{ animationDelay: `${mockupTiming.connectorEnd}ms` }}
         />
       </svg>
     </span>

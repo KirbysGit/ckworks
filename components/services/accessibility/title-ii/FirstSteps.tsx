@@ -9,8 +9,14 @@
  * The numerals sit on a rule that runs the width of the row, so the four steps
  * read as one sequence rather than four cards. The rule is decoration, and the
  * ordered list carries the sequence for assistive technology.
+ *
+ * They are set in the site's display-numeral face rather than the body serif.
+ * Cormorant's default figures are old-style, which puts the zero at x-height
+ * and leaves the one without a flag, so "01" read as "OI".
  */
+import type { CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
+import Reveal from "@/components/ui/Reveal";
 import {
   serviceCenterLabelClassName,
   serviceCenterTitleClassName,
@@ -47,21 +53,25 @@ export default function FirstSteps() {
       className="scroll-mt-24 border-b border-line bg-ivory py-16 sm:py-20 lg:py-24"
     >
       <div className={serviceContainer}>
-        <div className="mx-auto max-w-5xl text-center">
+        <Reveal className="mx-auto max-w-5xl text-center">
           <p className={serviceCenterLabelClassName}>
             Preparing your organization
           </p>
           <h2 className={serviceCenterTitleClassName}>
             A practical place to begin.
           </h2>
-        </div>
+        </Reveal>
 
-        <ol className="mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-x-0 lg:gap-y-0">
-          {steps.map(({ number, title, body }) => (
-            <li key={number} className="min-w-0 text-center">
+        <Reveal as="ol" className="mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-x-0 lg:gap-y-0">
+          {steps.map(({ number, title, body }, index) => (
+            <li
+              key={number}
+              className="ck-step min-w-0 text-center"
+              style={{ "--ck-anim-delay": `${index * 120}ms` } as CSSProperties}
+            >
               <div className="flex items-center">
                 <span className="h-px flex-1 bg-line" aria-hidden />
-                <span className="px-5 font-serif text-[2.5rem] font-medium leading-none text-forest sm:text-[2.9rem]">
+                <span className="px-5 font-source-serif-display text-[2.5rem] font-semibold leading-none tabular-nums text-forest sm:text-[2.9rem]">
                   {number}
                 </span>
                 <span className="h-px flex-1 bg-line" aria-hidden />
@@ -75,9 +85,9 @@ export default function FirstSteps() {
               </p>
             </li>
           ))}
-        </ol>
+        </Reveal>
 
-        <div className="mt-14 text-center lg:mt-16">
+        <Reveal delay={160} className="mt-14 text-center lg:mt-16">
           <a
             href="https://www.ada.gov/resources/web-rule-first-steps/"
             target="_blank"
@@ -91,7 +101,7 @@ export default function FirstSteps() {
             These are practical starting points; each public entity may require
             additional preparation.
           </p>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

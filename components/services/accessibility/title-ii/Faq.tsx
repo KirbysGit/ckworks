@@ -17,6 +17,7 @@
  * pre-opening, and an open first answer reads as the important one.
  */
 import FAQSection from "@/components/page/FAQSection";
+import Reveal from "@/components/ui/Reveal";
 import { serviceContainer } from "@/components/services/shared/styles";
 
 const titleIiFaqs = [
@@ -49,12 +50,14 @@ export default function AdaTitleIiFaq() {
       className="scroll-mt-24 border-b border-line bg-ivory py-16 sm:py-20 lg:py-24"
     >
       <div className={serviceContainer}>
+        <Reveal>
         <FAQSection
           faqs={[...titleIiFaqs]}
           defaultOpenIndex={null}
           title="Questions from public entities."
           description="Common questions about who the rule covers, what a review includes, and where the boundaries are."
         />
+        </Reveal>
       </div>
     </section>
   );

@@ -5,6 +5,7 @@
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { serviceContainer } from "@/components/services/shared/styles";
+import Reveal from "@/components/ui/Reveal";
 
 type PlaceholderSection = readonly string[];
 type PaperVariant = "archived" | "vendor" | "notice";
@@ -37,9 +38,9 @@ const paperLayout = {
   archived:
     "left-[1%] top-[2%] h-[60%] w-[49%] -rotate-[0.35deg] sm:left-[3%] sm:w-[47%]",
   vendor:
-    "left-[21%] top-[12%] h-[60%] w-[52%] rotate-[0.2deg] sm:left-[23%] sm:w-[50%]",
+    "left-[19%] top-[12%] h-[60%] w-[52%] rotate-[0.2deg] sm:left-[21%] sm:w-[50%]",
   notice:
-    "left-[40%] top-[31%] h-[64%] w-[48%] -rotate-[0.12deg] sm:left-[42%] sm:w-[45%]",
+    "left-[36%] top-[31%] h-[64%] w-[48%] -rotate-[0.12deg] sm:left-[38%] sm:w-[45%]",
 } as const;
 
 const annotationLayout = {
@@ -213,7 +214,7 @@ function PaperStack() {
           width={954}
           height={409}
           sizes="(min-width: 1024px) 250px, 34vw"
-          className={`absolute h-auto ${annotationLayout.maintains}`}
+          className={`absolute z-20 h-auto ${annotationLayout.maintains}`}
         />
         <Image
           src="/images/services/svg/ada-still-used-today.svg"
@@ -224,10 +225,6 @@ function PaperStack() {
           className={`absolute h-auto ${annotationLayout.current}`}
         />
       </div>
-      <figcaption className="mt-4 flex items-center justify-center gap-2 text-center text-xs leading-5 text-muted sm:ml-[42%] sm:justify-start sm:text-left sm:text-sm">
-        <span className="h-px w-6 shrink-0 bg-forest" aria-hidden="true" />
-        <span>Context determines what needs evaluation.</span>
-      </figcaption>
     </figure>
   );
 }
@@ -241,7 +238,7 @@ export default function ContentContext() {
       <div
         className={`${serviceContainer} grid items-center gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12 xl:gap-20`}
       >
-        <div className="mx-auto max-w-[35rem] text-center sm:mx-0 sm:text-left">
+        <Reveal className="mx-auto max-w-[35rem] text-center sm:mx-0 sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
             Content, vendors, and exceptions
           </p>
@@ -274,9 +271,11 @@ export default function ContentContext() {
             Read current DOJ guidance
             <ArrowUpRight className="size-4" aria-hidden />
           </a>
-        </div>
+        </Reveal>
 
-        <PaperStack />
+        <Reveal delay={140}>
+          <PaperStack />
+        </Reveal>
       </div>
     </section>
   );

@@ -9,8 +9,10 @@
  * This is also the page's link back to the parent service, which the plan
  * requires in both directions.
  */
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import Reveal from "@/components/ui/Reveal";
 import { serviceContainer } from "@/components/services/shared/styles";
 
 const steps = [
@@ -43,7 +45,7 @@ export default function ReviewProcess() {
       <div
         className={`${serviceContainer} grid gap-12 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-0`}
       >
-        <div className="max-w-[34rem] lg:pr-12 xl:pr-16">
+        <Reveal className="max-w-[34rem] lg:pr-12 xl:pr-16">
           <p className="text-xs font-semibold uppercase tracking-[0.26em] text-forest">
             Technical accessibility support
           </p>
@@ -65,16 +67,19 @@ export default function ReviewProcess() {
               aria-hidden
             />
           </Link>
-        </div>
+        </Reveal>
 
-        <div className="min-w-0 lg:border-l lg:border-line lg:pl-12 xl:pl-16">
+        <Reveal delay={120} className="min-w-0 lg:border-l lg:border-line lg:pl-12 xl:pl-16">
           <ol>
             {steps.map(({ number, tag, title, body }, index) => (
               <li
                 key={number}
-                className={`grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-5 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-x-6 ${
-                  index > 0 ? "mt-8 border-t border-line pt-8" : ""
+                className={`ck-step grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-5 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-x-6 ${
+                  index > 0 ? "mt-6 border-t border-line pt-6" : ""
                 }`}
+                style={
+                  { "--ck-anim-delay": `${index * 130}ms` } as CSSProperties
+                }
               >
                 <span className="font-serif text-[1.3rem] font-medium leading-none text-forest sm:text-[1.45rem]">
                   {number}
@@ -84,7 +89,7 @@ export default function ReviewProcess() {
                   <h3 className="font-serif text-[1.6rem] font-medium leading-tight tracking-[-0.015em] text-ink sm:text-[1.9rem]">
                     {title}
                   </h3>
-                  <p className="mt-3 text-sm font-medium leading-7 text-ink/75">
+                  <p className="mt-2 text-sm font-medium leading-6 text-ink/75">
                     {body}
                   </p>
                 </div>
@@ -97,7 +102,10 @@ export default function ReviewProcess() {
           </ol>
 
           {/* Same limit the hero states, in the same words. */}
-          <p className="mt-10 flex items-start gap-4 rounded-lg bg-sand/45 px-5 py-5 text-sm leading-7 text-ink/78">
+          <p
+            className="ck-step mt-7 flex items-start gap-4 rounded-lg border border-forest/20 bg-forest-soft/70 px-5 py-4 text-sm leading-6 text-ink/80"
+            style={{ "--ck-anim-delay": "430ms" } as CSSProperties}
+          >
             <span
               className="grid size-6 shrink-0 translate-y-[3px] place-items-center rounded-full bg-forest font-serif text-[0.85rem] font-semibold leading-none text-ivory"
               aria-hidden
@@ -108,7 +116,7 @@ export default function ReviewProcess() {
             certification, or a guarantee that every barrier has been
             identified.
           </p>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

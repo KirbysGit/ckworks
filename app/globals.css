@@ -281,6 +281,18 @@
   }
 }
 
+/*
+ * Draws an SVG path on from its start. The path must carry pathLength="1", so
+ * a single keyframe serves any length: the dash covers the whole path and the
+ * offset walks back to zero. Like ck-draw-arc it declares no `to` and no
+ * resting offset, so cancelling the animation leaves the path fully drawn.
+ */
+@keyframes ck-draw-path {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
 /* One item arriving as part of a sequence. Shorter throw than ck-rise. */
 @keyframes ck-step {
   from {
@@ -636,6 +648,14 @@
     animation-delay: var(--ck-anim-delay);
   }
 
+  /* Above-the-fold only, for the same reason as ck-draw-arc. */
+  .ck-draw-path {
+    --ck-anim-delay: 0ms;
+    stroke-dasharray: 1;
+    animation: ck-draw-path 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--ck-anim-delay);
+  }
+
   /* Applied by <Reveal> only after JS confirms the element is off-screen. */
   .ck-reveal {
     opacity: 0;
@@ -709,6 +729,11 @@
 
   /* Cancelling the animation is enough — the element's own dasharray is drawn. */
   .ck-draw-arc {
+    animation: none !important;
+  }
+
+  /* Same: dashoffset falls back to 0, which is the fully drawn path. */
+  .ck-draw-path {
     animation: none !important;
   }
 
